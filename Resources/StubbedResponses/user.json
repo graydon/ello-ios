@@ -239,8 +239,7 @@
                             "service": "youtube",
                             "id": "3kEpZWGgJks",
                             "url": "https://www.youtube.com/watch?v=3kEpZWGgJks",
-                            "thumbnail_large_url": "https://img.youtube.com/vi/3kEpZWGgJks/0.jpg",
-                            "thumbnail_small_url": "https://img.youtube.com/vi/3kEpZWGgJks/default.jpg"
+                            "thumbnail_large_url": "https://img.youtube.com/vi/3kEpZWGgJks/0.jpg"
                         }
                     }
                 ],
@@ -255,8 +254,7 @@
                             "service": "youtube",
                             "id": "3kEpZWGgJks",
                             "url": "https://www.youtube.com/watch?v=3kEpZWGgJks",
-                            "thumbnail_large_url": "https://img.youtube.com/vi/3kEpZWGgJks/0.jpg",
-                            "thumbnail_small_url": "https://img.youtube.com/vi/3kEpZWGgJks/default.jpg"
+                            "thumbnail_large_url": "https://img.youtube.com/vi/3kEpZWGgJks/0.jpg"
                         }
                     },
                     {
@@ -309,8 +307,7 @@
                             "service": "soundcloud",
                             "id": "playlists/4505547",
                             "url": "https://soundcloud.com/18-squeeler/sets/piggy-p-this-little-piggy-went",
-                            "thumbnail_large_url": "https://i1.sndcdn.com/artworks-000044546042-cfnuhy-t500x500.jpg",
-                            "thumbnail_small_url": "https://i1.sndcdn.com/artworks-000044546042-cfnuhy-large.jpg"
+                            "thumbnail_large_url": "https://i1.sndcdn.com/artworks-000044546042-cfnuhy-t500x500.jpg"
                         }
                     }
                 ],
@@ -325,8 +322,7 @@
                             "service": "soundcloud",
                             "id": "playlists/4505547",
                             "url": "https://soundcloud.com/18-squeeler/sets/piggy-p-this-little-piggy-went",
-                            "thumbnail_large_url": "https://i1.sndcdn.com/artworks-000044546042-cfnuhy-t500x500.jpg",
-                            "thumbnail_small_url": "https://i1.sndcdn.com/artworks-000044546042-cfnuhy-large.jpg"
+                            "thumbnail_large_url": "https://i1.sndcdn.com/artworks-000044546042-cfnuhy-t500x500.jpg"
                         }
                     }
                 ],
