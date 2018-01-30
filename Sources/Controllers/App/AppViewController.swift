@@ -187,16 +187,17 @@ class AppViewController: BaseElloViewController {
         internalWebObserver = NotificationObserver(notification: InternalWebNotification) { [weak self] url in
             self?.navigateToDeepLink(url)
         }
-        apiOutOfDateObserver = NotificationObserver(notification: ErrorStatusCode.status410.notification) { [weak self] error in
+        apiOutOfDateObserver = NotificationObserver(notification: AuthenticationNotifications.outOfDateAPI) { [weak self] _ in
+            guard let `self` = self else { return }
             let message = InterfaceString.App.OldVersion
             let alertController = AlertViewController(message: message)
 
             let action = AlertAction(title: InterfaceString.OK, style: .dark, handler: nil)
             alertController.addAction(action)
 
-            self?.present(alertController, animated: true, completion: nil)
-            self?.apiOutOfDateObserver?.removeObserver()
-            postNotification(AuthenticationNotifications.invalidToken, value: false)
+            self.present(alertController, animated: true, completion: nil)
+            self.apiOutOfDateObserver?.removeObserver()
+            self.userLoggedOut()
         }
     }
 
@@ -463,20 +464,18 @@ extension AppViewController {
         }
     }
 
-    func forceLogOut(_ shouldAlert: Bool) {
+    func forceLogOut() {
         logOutCurrentUser()
 
         if isLoggedIn() {
             removeViewController {
-                if shouldAlert {
-                    let message = InterfaceString.App.LoggedOut
-                    let alertController = AlertViewController(message: message)
+                let message = InterfaceString.App.LoggedOut
+                let alertController = AlertViewController(message: message)
 
-                    let action = AlertAction(title: InterfaceString.OK, style: .dark, handler: nil)
-                    alertController.addAction(action)
+                let action = AlertAction(title: InterfaceString.OK, style: .dark, handler: nil)
+                alertController.addAction(action)
 
-                    self.present(alertController, animated: true, completion: nil)
-                }
+                self.present(alertController, animated: true, completion: nil)
             }
         }
     }

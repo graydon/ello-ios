@@ -18,10 +18,10 @@ class AnonymousAuthService {
                     success()
                 default:
                     let elloError = ElloProvider.generateElloError(moyaResponse.data, statusCode: moyaResponse.statusCode)
-                    failure(elloError, moyaResponse.statusCode)
+                    failure(elloError)
                 }
             case let .failure(error):
-                failure(error as NSError, nil)
+                failure(error)
             }
         }
     }

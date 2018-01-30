@@ -3,7 +3,7 @@
 //
 
 enum ErrorStatusCode: Int {
-    case status401_Unauthorized = 401
+    case status401 = 401
     case status403 = 403
     case status404 = 404
     case status410 = 410
@@ -16,14 +16,5 @@ enum ErrorStatusCode: Int {
 
     var defaultData: Data {
         return stubbedData(String(self.rawValue))
-    }
-
-    var notification: TypedNotification<NSError> {
-        switch self {
-        case .statusUnknown:
-            return TypedNotification(name: "ElloProviderNotificationUnknown")
-        default:
-            return TypedNotification(name: "ElloProviderNotification\(self.rawValue)")
-        }
     }
 }

@@ -56,14 +56,14 @@ class ElloProviderSpec: QuickSpec {
 
                             it("posts a notification with a status of 401") {
 
-                                ElloProvider_Specs.errorStatusCode = .status401_Unauthorized
+                                ElloProvider_Specs.errorStatusCode = .status401
 
                                 var loadedJSONAbles: [JSONAble]?
                                 var loadedError: Swift.Error?
                                 var object: NSError?
                                 var handled = false
 
-                                let testObserver = NotificationObserver(notification: ErrorStatusCode.status401_Unauthorized.notification) { error in
+                                let testObserver = NotificationObserver(notification: ErrorStatusCode.status401.notification) { error in
                                     object = error
                                     handled = true
                                 }

@@ -70,10 +70,12 @@ extension JSONAble {
                 linksMap?["ids"] as? [String]
         else { return [] }
 
+        let collection = (linksMap?["type"] as? String) ?? identifier
+
         var arr = [JSONAble]()
         ElloLinkedStore.shared.readConnection.read { transaction in
             for key in ids {
-                if let jsonable = transaction.object(forKey: key, inCollection: identifier) as? JSONAble {
+                if let jsonable = transaction.object(forKey: key, inCollection: collection) as? JSONAble {
                     arr.append(jsonable)
                 }
             }

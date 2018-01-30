@@ -30,7 +30,7 @@ class ReAuthService {
                     success()
                 default:
                     let elloError = ElloProvider.generateElloError(data, statusCode: statusCode)
-                    failure(elloError, statusCode)
+                    failure(elloError)
                 }
             case .failure:
                 noNetwork()
@@ -54,7 +54,7 @@ class ReAuthService {
                         success()
                     default:
                         let elloError = ElloProvider.generateElloError(data, statusCode: statusCode)
-                        failure(elloError, statusCode)
+                        failure(elloError)
                     }
                 case .failure:
                     noNetwork()
@@ -62,7 +62,8 @@ class ReAuthService {
             }
         }
         else {
-            ElloProvider.failedToSendRequest(failure)
+            let elloError = NSError.networkError("Failed to send request", code: ElloErrorCode.networkFailure)
+            failure(elloError)
         }
     }
 

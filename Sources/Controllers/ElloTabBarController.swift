@@ -208,7 +208,9 @@ extension ElloTabBarController {
 
         _ = Application.shared() // this is lame but we need Application to initialize to observe it's notifications
 
-        systemLoggedOutObserver = NotificationObserver(notification: AuthenticationNotifications.invalidToken, block: systemLoggedOut)
+        systemLoggedOutObserver = NotificationObserver(notification: AuthenticationNotifications.invalidToken) { [weak self] _ in
+            self?.systemLoggedOut()
+        }
 
         streamLoadedObserver = NotificationObserver(notification: StreamLoadedNotifications.streamLoaded) { [weak self] streamKind in
             switch streamKind {
@@ -271,8 +273,8 @@ extension ElloTabBarController {
         }
     }
 
-    func systemLoggedOut(_ shouldAlert: Bool) {
-        appViewController?.forceLogOut(shouldAlert)
+    func systemLoggedOut() {
+        appViewController?.forceLogOut()
     }
 }
 

@@ -109,9 +109,11 @@ extension ElloLinkedStore {
             guard let mappingType = MappingType(rawValue: type) else { continue }
 
             for object: [String: Any] in typeObjects {
-                guard let id = object["id"] as? String else { continue }
+                guard
+                    let id = object["id"] as? String,
+                    let jsonable = mappingType.fromJSON?(object)
+                else { continue }
 
-                let jsonable = mappingType.fromJSON(object)
                 self.saveObject(jsonable, id: id, type: mappingType)
             }
         }
