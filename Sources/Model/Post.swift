@@ -15,7 +15,6 @@ final class Post: JSONAble, Authorable, Groupable {
     let id: String
     let createdAt: Date
     let authorId: String
-    let href: String
     let token: String
     let isAdultContent: Bool
     let contentWarning: String
@@ -24,6 +23,7 @@ final class Post: JSONAble, Authorable, Groupable {
     var isLoved: Bool
     var isWatching: Bool
     let summary: [Regionable]
+
     var content: [Regionable]?
     var body: [Regionable]?
     var repostContent: [Regionable]?
@@ -46,10 +46,8 @@ final class Post: JSONAble, Authorable, Groupable {
         return ElloLinkedStore.shared.getObject(self.authorId, type: .usersType) as? User
     }
     var categories: [Category] {
-        guard let categories = getLinkArray("categories") as? [Category] else {
-            return []
-        }
-        return categories
+        let categories = getLinkArray("categories") as? [Category]
+        return categories ?? []
     }
     var category: Category? {
         return categories.first
@@ -90,7 +88,6 @@ final class Post: JSONAble, Authorable, Groupable {
     init(id: String,
         createdAt: Date,
         authorId: String,
-        href: String,
         token: String,
         isAdultContent: Bool,
         contentWarning: String,
@@ -104,7 +101,6 @@ final class Post: JSONAble, Authorable, Groupable {
         self.id = id
         self.createdAt = createdAt
         self.authorId = authorId
-        self.href = href
         self.token = token
         self.isAdultContent = isAdultContent
         self.contentWarning = contentWarning
@@ -140,7 +136,6 @@ final class Post: JSONAble, Authorable, Groupable {
         self.id = decoder.decodeKey("id")
         self.createdAt = decoder.decodeKey("createdAt")
         self.authorId = decoder.decodeKey("authorId")
-        self.href = decoder.decodeKey("href")
         self.token = decoder.decodeKey("token")
         self.isAdultContent = decoder.decodeKey("isAdultContent")
         self.contentWarning = decoder.decodeKey("contentWarning")
@@ -181,7 +176,6 @@ final class Post: JSONAble, Authorable, Groupable {
         coder.encodeObject(id, forKey: "id")
         coder.encodeObject(createdAt, forKey: "createdAt")
         coder.encodeObject(authorId, forKey: "authorId")
-        coder.encodeObject(href, forKey: "href")
         coder.encodeObject(token, forKey: "token")
         coder.encodeObject(isAdultContent, forKey: "isAdultContent")
         coder.encodeObject(contentWarning, forKey: "contentWarning")
@@ -222,7 +216,6 @@ final class Post: JSONAble, Authorable, Groupable {
             id: json["id"].stringValue,
             createdAt: createdAt,
             authorId: json["author_id"].stringValue,
-            href: json["href"].stringValue,
             token: json["token"].stringValue,
             isAdultContent: json["is_adult_content"].boolValue,
             contentWarning: json["content_warning"].stringValue,

@@ -44,7 +44,6 @@ extension User: Stubbable {
 
         let user =  User(
             id: (values["id"] as? String) ?? generateID(),
-            href: (values["href"] as? String) ?? "href",
             username: (values["username"] as? String) ?? "username",
             name: (values["name"] as? String) ?? "name",
             experimentalFeatures: (values["experimentalFeatures"] as? Bool) ?? false,
@@ -93,7 +92,6 @@ extension User: Stubbable {
             user.externalLinksList = [ExternalLink(url: URL(string: "http://ello.co")!, text: "ello.co")]
         }
         user.coverImage = values["coverImage"] as? Asset
-        user.backgroundPosition = (values["backgroundPosition"] as? String)
         user.onboardingVersion = (values["onboardingVersion"] as? Int)
         // links / nested resources
         if let posts = values["posts"] as? [Post] {
@@ -279,7 +277,6 @@ extension Post: Stubbable {
             id: (values["id"] as? String) ?? generateID(),
             createdAt: (values["createdAt"] as? Date) ?? Globals.now,
             authorId: author.id,
-            href: (values["href"] as? String) ?? "sample-href",
             token: (values["token"] as? String) ?? "sample-token",
             isAdultContent: (values["isAdultContent"] as? Bool) ?? false,
             contentWarning: (values["contentWarning"] as? String) ?? "",

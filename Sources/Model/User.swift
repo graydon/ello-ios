@@ -19,42 +19,10 @@ let UserVersion: Int = 8
 final class User: JSONAble {
 
     let id: String
-    let href: String
     let username: String
     let name: String
-    var displayName: String {
-        if name.isEmpty {
-            return atName
-        }
-        return name
-    }
     let experimentalFeatures: Bool
     var relationshipPriority: RelationshipPriority
-    var isFeatured: Bool {
-        return (categories?.count ?? 0) > 0
-    }
-    var avatar: Asset? // required, but kinda optional due to it being nested in json
-    var identifiableBy: String?
-    var postsCount: Int?
-    var lovesCount: Int?
-    var followersCount: String? // string due to this returning "∞" for the ello user
-    var followingCount: Int?
-    var formattedShortBio: String?
-    var externalLinksList: [ExternalLink]?
-    var coverImage: Asset?
-    var backgroundPosition: String?
-    var onboardingVersion: Int?
-    var totalViewsCount: Int?
-    var formattedTotalCount: String? {
-        guard let count = totalViewsCount else { return nil }
-
-        if count < 1000 {
-            return "<1K"
-        }
-        return count.numberToHuman(rounding: 1, showZero: true)
-    }
-    var location: String?
-
     @objc var postsAdultContent: Bool
     @objc var viewsAdultContent: Bool
     @objc var hasCommentingEnabled: Bool
@@ -64,29 +32,52 @@ final class User: JSONAble {
     @objc var isCollaborateable: Bool
     @objc var isHireable: Bool
 
-    var posts: [Post]? { return getLinkArray("posts") as? [Post] }
+    var avatar: Asset?
+    var identifiableBy: String?
+    var postsCount: Int?
+    var lovesCount: Int?
+    var followersCount: String? // string due to this returning "∞" for the ello user
+    var followingCount: Int?
+    var formattedShortBio: String?
+    var externalLinksList: [ExternalLink]?
+    var coverImage: Asset?
+    var onboardingVersion: Int?
+    var totalViewsCount: Int?
+    var location: String?
+
     var categories: [Category]? { return getLinkArray("categories") as? [Category] }
     private var _badges: [Badge]?
     var badges: [Badge] {
-        get {
-            guard let badges = _badges, badges.count > 0 else { return [] }
-            return badges
-        }
+        get { return _badges ?? [] }
         set { _badges = newValue }
     }
-
-    // computed
-    var atName: String { return "@\(username)"}
-    var isCurrentUser: Bool { return self.profile != nil }
-    // profile
     var profile: Profile?
 
+    // computed
+    var isCurrentUser: Bool { return self.profile != nil }
+    var atName: String { return "@\(username)"}
+    var displayName: String {
+        if name.isEmpty {
+            return atName
+        }
+        return name
+    }
     var shareLink: String {
         return "\(ElloURI.baseURL)/\(username)"
     }
+    var isFeatured: Bool {
+        return (categories?.count ?? 0) > 0
+    }
+    var formattedTotalCount: String? {
+        guard let count = totalViewsCount else { return nil }
+
+        if count < 1000 {
+            return "<1K"
+        }
+        return count.numberToHuman(rounding: 1, showZero: true)
+    }
 
     init(id: String,
-        href: String,
         username: String,
         name: String,
         experimentalFeatures: Bool,
@@ -101,7 +92,6 @@ final class User: JSONAble {
         isHireable: Bool)
     {
         self.id = id
-        self.href = href
         self.username = username
         self.name = name
         self.experimentalFeatures = experimentalFeatures
@@ -122,7 +112,6 @@ final class User: JSONAble {
     required init(coder: NSCoder) {
         let decoder = Coder(coder)
         self.id = decoder.decodeKey("id")
-        self.href = decoder.decodeKey("href")
         self.username = decoder.decodeKey("username")
         self.name = decoder.decodeKey("name")
         self.experimentalFeatures = decoder.decodeKey("experimentalFeatures")
@@ -167,7 +156,6 @@ final class User: JSONAble {
             self.externalLinksList = externalLinksList.flatMap { ExternalLink.fromDict($0) }
         }
         self.coverImage = decoder.decodeOptionalKey("coverImage")
-        self.backgroundPosition = decoder.decodeOptionalKey("backgroundPosition")
         self.onboardingVersion = decoder.decodeOptionalKey("onboardingVersion")
         self.totalViewsCount = decoder.decodeOptionalKey("totalViewsCount")
         self.location = decoder.decodeOptionalKey("location")
@@ -180,7 +168,6 @@ final class User: JSONAble {
     class func empty(id: String = UUID().uuidString) -> User {
         return User(
             id: id,
-            href: "",
             username: "",
             name: "",
             experimentalFeatures: false,
@@ -199,8 +186,6 @@ final class User: JSONAble {
         let encoder = Coder(coder)
 
         encoder.encodeObject(id, forKey: "id")
-
-        encoder.encodeObject(href, forKey: "href")
         encoder.encodeObject(username, forKey: "username")
         encoder.encodeObject(name, forKey: "name")
         encoder.encodeObject(experimentalFeatures, forKey: "experimentalFeatures")
@@ -213,7 +198,6 @@ final class User: JSONAble {
         encoder.encodeObject(hasLovesEnabled, forKey: "hasLovesEnabled")
         encoder.encodeObject(isCollaborateable, forKey: "isCollaborateable")
         encoder.encodeObject(isHireable, forKey: "isHireable")
-
         encoder.encodeObject(avatar, forKey: "avatar")
         encoder.encodeObject(identifiableBy, forKey: "identifiableBy")
         encoder.encodeObject(postsCount, forKey: "postsCount")
@@ -223,7 +207,6 @@ final class User: JSONAble {
         encoder.encodeObject(formattedShortBio, forKey: "formattedShortBio")
         encoder.encodeObject(externalLinksList?.map { $0.toDict() }, forKey: "externalLinksList")
         encoder.encodeObject(coverImage, forKey: "coverImage")
-        encoder.encodeObject(backgroundPosition, forKey: "backgroundPosition")
         encoder.encodeObject(onboardingVersion, forKey: "onboardingVersion")
         encoder.encodeObject(totalViewsCount, forKey: "totalViewsCount")
         encoder.encodeObject(location, forKey: "location")
@@ -254,7 +237,6 @@ final class User: JSONAble {
 
         let user = User(
             id: json["id"].stringValue,
-            href: json["href"].stringValue,
             username: json["username"].stringValue,
             name: json["name"].stringValue,
             experimentalFeatures: json["experimental_features"].boolValue,
@@ -273,11 +255,9 @@ final class User: JSONAble {
         user.identifiableBy = json["identifiable_by"].stringValue
         user.postsCount = json["posts_count"].int
         user.lovesCount = json["loves_count"].int
-        user.followersCount = json["followers_count"].stringValue
+        user.followersCount = json["followers_count"].string
         user.followingCount = json["following_count"].int
         user.formattedShortBio = json["formatted_short_bio"].string
-        user.coverImage = Asset.parseAsset("user_cover_image_\(user.id)", node: data["cover_image"] as? [String: Any])
-        user.backgroundPosition = json["background_positiion"].stringValue
         user.onboardingVersion = json["web_onboarding_version"].string.flatMap { Int($0) }
         user.totalViewsCount = json["total_views_count"].int
         user.location = json["location"].string
@@ -405,7 +385,8 @@ extension User {
 }
 
 extension User: JSONSaveable {
-    var uniqueId: String? { return "User-\(id)" }
+    var uniqueId: String? { return User.uniqueId(id) }
     var tableId: String? { return id }
 
+    class func uniqueId(_ id: String) -> String { return "User-\(id)" }
 }

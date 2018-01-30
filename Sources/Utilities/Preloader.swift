@@ -48,12 +48,6 @@ struct Preloader {
             else if let comment = jsonable as? ElloComment {
                 preloadImagesInRegions(comment.content)
             }
-            // user's posts image regions
-            else if let user = jsonable as? User,
-                let posts = user.posts
-            {
-                preloadImages(posts)
-            }
             // categories
             else if let category = jsonable as? Category,
                 let url = category.tileURL
