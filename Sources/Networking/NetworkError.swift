@@ -20,6 +20,9 @@ extension NSError {
         if let error: Any = error {
             userInfo = [NSLocalizedFailureReasonErrorKey: error]
         }
+        else {
+            userInfo = [NSLocalizedFailureReasonErrorKey: "\(code)"]
+        }
         return NSError(domain: ElloErrorDomain, code: code.rawValue, userInfo: userInfo)
     }
 

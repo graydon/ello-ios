@@ -63,21 +63,4 @@ enum AuthState {
     func canTransitionTo(_ state: AuthState) -> Bool {
         return nextStates.contains(state)
     }
-
-    func supports(_ target: ElloAPI) -> Bool {
-        if !target.requiresAnyToken {
-            return true
-        }
-
-        if isTransitioning {
-            return false
-        }
-
-        if isAuthenticated {
-            return true
-        }
-
-        return target.supportsAnonymousToken && self == .anonymous
-    }
-
 }

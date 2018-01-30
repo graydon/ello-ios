@@ -83,7 +83,7 @@ class NotificationsGeneratorSpec: QuickSpec {
 
             describe("reloadAnnouncements()") {
                 it("does not trigger when identical announcements are found") {
-                    ElloProvider.sharedProvider = ElloProvider.DefaultProvider()
+                    ElloProvider.moya = ElloProvider.DefaultProvider()
                     subject.load()
                     let prevItems = destination.announcementItems
                     subject.reloadAnnouncements()

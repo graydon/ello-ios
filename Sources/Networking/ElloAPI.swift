@@ -232,7 +232,7 @@ indirect enum ElloAPI {
     }
 }
 
-extension ElloAPI {
+extension ElloAPI: AuthenticationEndpoint {
     var supportsAnonymousToken: Bool {
         switch self {
         case .artistInvites,
@@ -344,19 +344,23 @@ extension ElloAPI: Moya.TargetType {
         }
     }
 
+    var defaultPrefix: String {
+        return "/api/v2"
+    }
+
     var path: String {
         switch self {
         case .amazonCredentials:
-            return "/api/\(ElloAPI.apiVersion)/assets/credentials"
+            return "\(defaultPrefix)/assets/credentials"
         case .amazonLoggingCredentials:
-            return "/api/\(ElloAPI.apiVersion)/assets/logging"
+            return "\(defaultPrefix)/assets/logging"
         case .announcements,
              .announcementsNewContent:
-            return "/api/\(ElloAPI.apiVersion)/most_recent_announcements"
+            return "\(defaultPrefix)/most_recent_announcements"
         case .artistInvites, .artistInviteSubmissions:
-            return "/api/\(ElloAPI.apiVersion)/artist_invites"
+            return "\(defaultPrefix)/artist_invites"
         case let .artistInviteDetail(id):
-            return "/api/\(ElloAPI.apiVersion)/artist_invites/\(id)"
+            return "\(defaultPrefix)/artist_invites/\(id)"
         case .markAnnouncementAsRead:
             return "\(ElloAPI.announcements.path)/mark_last_read_announcement"
         case .anonymousCredentials,
@@ -368,122 +372,122 @@ extension ElloAPI: Moya.TargetType {
         case let .customRequest(request, _):
             return request.url.path
         case .editorials:
-            return "/api/\(ElloAPI.apiVersion)/editorials"
+            return "\(defaultPrefix)/editorials"
         case .resetPassword:
-            return "/api/\(ElloAPI.apiVersion)/reset_password"
+            return "\(defaultPrefix)/reset_password"
         case .requestPasswordReset:
-            return "/api/\(ElloAPI.apiVersion)/forgot-password"
+            return "\(defaultPrefix)/forgot-password"
         case .availability:
-            return "/api/\(ElloAPI.apiVersion)/availability"
+            return "\(defaultPrefix)/availability"
         case let .commentDetail(postId, commentId):
-            return "/api/\(ElloAPI.apiVersion)/posts/\(postId)/comments/\(commentId)"
+            return "\(defaultPrefix)/posts/\(postId)/comments/\(commentId)"
         case .categories:
-            return "/api/\(ElloAPI.apiVersion)/categories"
+            return "\(defaultPrefix)/categories"
         case let .category(slug):
-            return "/api/\(ElloAPI.apiVersion)/categories/\(slug)"
+            return "\(defaultPrefix)/categories/\(slug)"
         case let .categoryPosts(slug):
-            return "/api/\(ElloAPI.apiVersion)/categories/\(slug)/posts/recent"
+            return "\(defaultPrefix)/categories/\(slug)/posts/recent"
         case let .createComment(parentPostId, _):
-            return "/api/\(ElloAPI.apiVersion)/posts/\(parentPostId)/comments"
+            return "\(defaultPrefix)/posts/\(parentPostId)/comments"
         case let .createLove(postId):
-            return "/api/\(ElloAPI.apiVersion)/posts/\(postId)/loves"
+            return "\(defaultPrefix)/posts/\(postId)/loves"
         case .createPost,
              .rePost:
-            return "/api/\(ElloAPI.apiVersion)/posts"
+            return "\(defaultPrefix)/posts"
         case let .createWatchPost(postId):
-            return "/api/\(ElloAPI.apiVersion)/posts/\(postId)/watches"
+            return "\(defaultPrefix)/posts/\(postId)/watches"
         case let .deleteComment(postId, commentId):
-            return "/api/\(ElloAPI.apiVersion)/posts/\(postId)/comments/\(commentId)"
+            return "\(defaultPrefix)/posts/\(postId)/comments/\(commentId)"
         case let .deleteLove(postId):
-            return "/api/\(ElloAPI.apiVersion)/posts/\(postId)/love"
+            return "\(defaultPrefix)/posts/\(postId)/love"
         case let .deletePost(postId):
-            return "/api/\(ElloAPI.apiVersion)/posts/\(postId)"
+            return "\(defaultPrefix)/posts/\(postId)"
         case let .deleteSubscriptions(tokenData):
             return "\(ElloAPI.currentUserProfile.path)/push_subscriptions/apns/\(tokenStringFromData(tokenData))"
         case let .deleteWatchPost(postId):
-            return "/api/\(ElloAPI.apiVersion)/posts/\(postId)/watch"
+            return "\(defaultPrefix)/posts/\(postId)/watch"
         case let .discover(type):
             switch type {
             case .featured:
-                return "/api/\(ElloAPI.apiVersion)/categories/posts/recent"
+                return "\(defaultPrefix)/categories/posts/recent"
             default:
-                return "/api/\(ElloAPI.apiVersion)/discover/posts/\(type.slug)"
+                return "\(defaultPrefix)/discover/posts/\(type.slug)"
             }
         case .emojiAutoComplete:
-            return "/api/\(ElloAPI.apiVersion)/emoji/autocomplete"
+            return "\(defaultPrefix)/emoji/autocomplete"
         case .findFriends:
-            return "/api/\(ElloAPI.apiVersion)/profile/find_friends"
+            return "\(defaultPrefix)/profile/find_friends"
         case let .flagComment(postId, commentId, kind):
-            return "/api/\(ElloAPI.apiVersion)/posts/\(postId)/comments/\(commentId)/flag/\(kind)"
+            return "\(defaultPrefix)/posts/\(postId)/comments/\(commentId)/flag/\(kind)"
         case let .flagPost(postId, kind):
-            return "/api/\(ElloAPI.apiVersion)/posts/\(postId)/flag/\(kind)"
+            return "\(defaultPrefix)/posts/\(postId)/flag/\(kind)"
         case let .flagUser(userId, kind):
-            return "/api/\(ElloAPI.apiVersion)/users/\(userId)/flag/\(kind)"
+            return "\(defaultPrefix)/users/\(userId)/flag/\(kind)"
         case .followingNewContent,
              .following:
-            return "/api/\(ElloAPI.apiVersion)/following/posts/recent"
+            return "\(defaultPrefix)/following/posts/recent"
         case let .hire(userId, _):
-            return "/api/\(ElloAPI.apiVersion)/users/\(userId)/hire_me"
+            return "\(defaultPrefix)/users/\(userId)/hire_me"
         case let .collaborate(userId, _):
-            return "/api/\(ElloAPI.apiVersion)/users/\(userId)/collaborate"
+            return "\(defaultPrefix)/users/\(userId)/collaborate"
         case let .infiniteScroll(query, api):
             return api.pagingPath ?? query.path
         case .invitations,
              .inviteFriends:
-            return "/api/\(ElloAPI.apiVersion)/invitations"
+            return "\(defaultPrefix)/invitations"
         case .join:
-            return "/api/\(ElloAPI.apiVersion)/join"
+            return "\(defaultPrefix)/join"
         case let .loves(userId):
-            return "/api/\(ElloAPI.apiVersion)/users/\(userId)/loves"
+            return "\(defaultPrefix)/users/\(userId)/loves"
         case .locationAutoComplete:
-            return "/api/\(ElloAPI.apiVersion)/profile/location_autocomplete"
+            return "\(defaultPrefix)/profile/location_autocomplete"
         case .notificationsNewContent,
              .notificationsStream:
-            return "/api/\(ElloAPI.apiVersion)/notifications"
+            return "\(defaultPrefix)/notifications"
         case .pagePromotionals:
-            return "/api/\(ElloAPI.apiVersion)/page_promotionals"
+            return "\(defaultPrefix)/page_promotionals"
         case let .postComments(postId):
-            return "/api/\(ElloAPI.apiVersion)/posts/\(postId)/comments"
+            return "\(defaultPrefix)/posts/\(postId)/comments"
         case let .postDetail(postParam):
-            return "/api/\(ElloAPI.apiVersion)/posts/\(postParam)"
+            return "\(defaultPrefix)/posts/\(postParam)"
         case .postViews, .promotionalViews:
-            return "/api/\(ElloAPI.apiVersion)/post_views"
+            return "\(defaultPrefix)/post_views"
         case let .postLovers(postId):
-            return "/api/\(ElloAPI.apiVersion)/posts/\(postId)/lovers"
+            return "\(defaultPrefix)/posts/\(postId)/lovers"
         case let .postReplyAll(postId):
-            return "/api/\(ElloAPI.apiVersion)/posts/\(postId)/commenters_usernames"
+            return "\(defaultPrefix)/posts/\(postId)/commenters_usernames"
         case let .postRelatedPosts(postId):
-            return "/api/\(ElloAPI.apiVersion)/posts/\(postId)/related"
+            return "\(defaultPrefix)/posts/\(postId)/related"
         case let .postReposters(postId):
-            return "/api/\(ElloAPI.apiVersion)/posts/\(postId)/reposters"
+            return "\(defaultPrefix)/posts/\(postId)/reposters"
         case .currentUserProfile,
              .profileUpdate,
              .profileDelete:
-            return "/api/\(ElloAPI.apiVersion)/profile"
+            return "\(defaultPrefix)/profile"
         case .currentUserBlockedList:
-            return "/api/\(ElloAPI.apiVersion)/profile/blocked"
+            return "\(defaultPrefix)/profile/blocked"
         case .currentUserMutedList:
-            return "/api/\(ElloAPI.apiVersion)/profile/muted"
+            return "\(defaultPrefix)/profile/muted"
         case .profileToggles:
             return "\(ElloAPI.currentUserProfile.path)/settings"
         case let .pushSubscriptions(tokenData):
             return "\(ElloAPI.currentUserProfile.path)/push_subscriptions/apns/\(tokenStringFromData(tokenData))"
         case let .relationship(userId, relationship):
-            return "/api/\(ElloAPI.apiVersion)/users/\(userId)/add/\(relationship)"
+            return "\(defaultPrefix)/users/\(userId)/add/\(relationship)"
         case .relationshipBatch:
-            return "/api/\(ElloAPI.apiVersion)/relationships/batches"
+            return "\(defaultPrefix)/relationships/batches"
         case .searchForPosts:
-            return "/api/\(ElloAPI.apiVersion)/posts"
+            return "\(defaultPrefix)/posts"
         case .searchForUsers:
-            return "/api/\(ElloAPI.apiVersion)/users"
+            return "\(defaultPrefix)/users"
         case let .updatePost(postId, _):
-            return "/api/\(ElloAPI.apiVersion)/posts/\(postId)"
+            return "\(defaultPrefix)/posts/\(postId)"
         case let .updateComment(postId, commentId, _):
-            return "/api/\(ElloAPI.apiVersion)/posts/\(postId)/comments/\(commentId)"
+            return "\(defaultPrefix)/posts/\(postId)/comments/\(commentId)"
         case .userCategories:
             return "\(ElloAPI.currentUserProfile.path)/followed_categories"
         case let .userStream(userParam):
-            return "/api/\(ElloAPI.apiVersion)/users/\(userParam)"
+            return "\(defaultPrefix)/users/\(userParam)"
         case let .userStreamFollowers(userId):
             return "\(ElloAPI.userStream(userParam: userId).path)/followers"
         case let .userStreamFollowing(userId):
@@ -491,7 +495,7 @@ extension ElloAPI: Moya.TargetType {
         case let .userStreamPosts(userId):
             return "\(ElloAPI.userStream(userParam: userId).path)/posts"
         case .userNameAutoComplete:
-            return "/api/\(ElloAPI.apiVersion)/users/autocomplete"
+            return "\(defaultPrefix)/users/autocomplete"
         }
     }
 
@@ -641,7 +645,7 @@ extension ElloAPI: Moya.TargetType {
     }
 
     var parameterEncoding: Moya.ParameterEncoding {
-        if self.method == .get || self.method == .head {
+        if method == .get || method == .head {
             return URLEncoding.default
         }
         else {
@@ -670,7 +674,7 @@ extension ElloAPI: Moya.TargetType {
             assigned["X-iOS-Build-Number"] = buildNumber
         }
 
-        if self.requiresAnyToken, let authToken = AuthToken().tokenWithBearer {
+        if requiresAnyToken, let authToken = AuthToken().tokenWithBearer {
             assigned += [
                 "Authorization": authToken,
             ]

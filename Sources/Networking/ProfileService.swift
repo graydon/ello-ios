@@ -2,7 +2,6 @@
 ///  ProfileService.swift
 //
 
-import Moya
 import SwiftyJSON
 import PromiseKit
 
@@ -65,7 +64,7 @@ struct ProfileService {
     {
         var avatarURL: URL?
         var coverImageURL: URL?
-        var error: Swift.Error?
+        var error: Error?
         let (promise, resolve, reject) = Promise<UploadBothSuccess>.pending()
 
         let bothImages = after(2) {

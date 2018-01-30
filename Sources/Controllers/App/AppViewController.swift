@@ -495,7 +495,7 @@ extension AppViewController {
 
     private func logOutCurrentUser() {
         PushNotificationController.shared.deregisterStoredToken()
-        ElloProvider.shared.logout()
+        AuthenticationManager.shared.logout()
         GroupDefaults.resetOnLogout()
         UIApplication.shared.applicationIconBadgeNumber = 0
         URLCache.shared.removeAllCachedResponses()

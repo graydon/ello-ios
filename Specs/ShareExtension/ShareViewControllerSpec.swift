@@ -19,7 +19,7 @@ class ShareViewControllerSpec: QuickSpec {
             describe("presentationAnimationDidFinish()"){
                 context("logged out") {
                     beforeEach {
-                        ElloProvider.shared.logout()
+                        AuthenticationManager.shared.logout()
                     }
 
                     it("shows the login alert") {
@@ -32,7 +32,7 @@ class ShareViewControllerSpec: QuickSpec {
                 context("logged in") {
                     beforeEach {
                         let data = ElloAPI.anonymousCredentials.sampleData
-                        ElloProvider.shared.authenticated(isPasswordBased: true)
+                        AuthenticationManager.shared.authenticated(isPasswordBased: true)
                         AuthToken.storeToken(data, isPasswordBased: true, email: "hi@everyone.com", password: "123456")
                     }
 

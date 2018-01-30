@@ -74,7 +74,7 @@ class HireViewControllerSpec: QuickSpec {
             }
             describe("submit(body:\"test\") failure") {
                 beforeEach {
-                    ElloProvider.sharedProvider = ElloProvider.ErrorStubbingProvider()
+                    ElloProvider.moya = ElloProvider.ErrorStubbingProvider()
                     subject.submit(body: "test!")
                     showController(subject)
                 }

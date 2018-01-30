@@ -20,6 +20,7 @@ func getlog() -> [(String, String)] {
 
 
 typealias Block = () -> Void
+typealias ErrorBlock = (Error) -> Void
 typealias BoolBlock = (Bool) -> Void
 typealias AfterBlock = () -> Block
 typealias ThrottledBlock = (@escaping Block) -> Void

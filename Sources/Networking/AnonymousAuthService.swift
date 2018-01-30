@@ -6,14 +6,14 @@ import Moya
 
 class AnonymousAuthService {
 
-    func authenticateAnonymously(success: @escaping Block, failure: @escaping ElloFailureCompletion, noNetwork: Block) {
+    func authenticateAnonymously(success: @escaping Block, failure: @escaping ErrorBlock, noNetwork: Block) {
         let endpoint: ElloAPI = .anonymousCredentials
-        ElloProvider.sharedProvider.request(endpoint) { (result) in
+        ElloProvider.moya.request(endpoint) { (result) in
             switch result {
             case let .success(moyaResponse):
                 switch moyaResponse.statusCode {
                 case 200...299:
-                    ElloProvider.shared.authenticated(isPasswordBased: false)
+                    AuthenticationManager.shared.authenticated(isPasswordBased: false)
                     AuthToken.storeToken(moyaResponse.data, isPasswordBased: false)
                     success()
                 default:

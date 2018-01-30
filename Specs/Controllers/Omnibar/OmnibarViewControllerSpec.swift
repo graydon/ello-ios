@@ -144,7 +144,7 @@ class OmnibarViewControllerSpec: QuickSpec {
 
                 describe("testing the submission in flight") {
                     it("disables interaction while submitting the post") {
-                        ElloProvider.sharedProvider = ElloProvider.DelayedStubbingProvider()
+                        ElloProvider.moya = ElloProvider.DelayedStubbingProvider()
                         let text = NSAttributedString(string: "test")
                         let regions = [OmnibarRegion.attributedText(text)]
 
@@ -182,7 +182,7 @@ class OmnibarViewControllerSpec: QuickSpec {
                     let postId = (commentJSON["comments"] as! [String: Any])["post_id"] as! String
                     post = Post.stub(["id": postId, "watching": false])
 
-                    ElloProvider.sharedProvider = ElloProvider.RecordedStubbingProvider([
+                    ElloProvider.moya = ElloProvider.RecordedStubbingProvider([
                         RecordedResponse(endpoint: .postDetail(postParam: postId), response: .networkResponse(200,
                             // the id of this stubbed post must match the postId above ("52" last time I checked)
                             stubbedData("post_detail__watching"))

@@ -12,7 +12,7 @@ class ReauthenticationSpec: QuickSpec {
         describe("Reauthentication") {
 
             it("should reauth with refresh token after 401") {
-                ElloProvider.sharedProvider = ElloProvider.RecordedStubbingProvider([
+                ElloProvider.moya = ElloProvider.RecordedStubbingProvider([
                     RecordedResponse(endpoint: .following, response: .networkResponse(401, Data())),
                 ])
                 var succeeded = false
@@ -31,7 +31,7 @@ class ReauthenticationSpec: QuickSpec {
             }
 
             it("should reauth with user/pass after 401") {
-                ElloProvider.sharedProvider = ElloProvider.RecordedStubbingProvider([
+                ElloProvider.moya = ElloProvider.RecordedStubbingProvider([
                     RecordedResponse(endpoint: .following, response: .networkResponse(401, Data())),
                     RecordedResponse(endpoint: .reAuth(token: ""), response: .networkResponse(401, Data())),
                 ])
@@ -52,7 +52,7 @@ class ReauthenticationSpec: QuickSpec {
 
             it("should reauth with token after NetworkFailure") {
                 let networkError = NSError.networkError("Failed to send request", code: ElloErrorCode.networkFailure)
-                ElloProvider.sharedProvider = ElloProvider.RecordedStubbingProvider([
+                ElloProvider.moya = ElloProvider.RecordedStubbingProvider([
                     RecordedResponse(endpoint: .following, response: .networkResponse(401, Data())),
                     RecordedResponse(endpoint: .reAuth(token: ""), response: .networkError(networkError)),
                     RecordedResponse(endpoint: .reAuth(token: ""), response: .networkError(networkError)),
@@ -73,7 +73,7 @@ class ReauthenticationSpec: QuickSpec {
             }
 
             it("should logout after failed reauth 401") {
-                ElloProvider.sharedProvider = ElloProvider.RecordedStubbingProvider([
+                ElloProvider.moya = ElloProvider.RecordedStubbingProvider([
                     RecordedResponse(endpoint: .following, response: .networkResponse(401, Data())),
                     RecordedResponse(endpoint: .reAuth(token: ""), response: .networkResponse(401, Data())),
                     RecordedResponse(endpoint: .auth(email: "", password: ""), response: .networkResponse(404, Data())),

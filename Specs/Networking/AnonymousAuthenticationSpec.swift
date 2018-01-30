@@ -15,7 +15,7 @@ class AnonymousAuthenticationSpec: QuickSpec {
             }
 
             it("should request anonymous credentials when no credentials are available") {
-                ElloProvider.shared.authState = .noToken
+                AuthenticationManager.shared.specs(setAuthState: .noToken)
 
                 var succeeded = false
                 var failed = false
@@ -33,7 +33,7 @@ class AnonymousAuthenticationSpec: QuickSpec {
             }
 
             it("should request anonymous credentials initially when no credentials are available") {
-                ElloProvider.shared.authState = .initial
+                AuthenticationManager.shared.specs(setAuthState: .initial)
 
                 var succeeded = false
                 var failed = false
@@ -51,7 +51,7 @@ class AnonymousAuthenticationSpec: QuickSpec {
             }
 
             it("should fail requests that need authentication when anonymous credentials are available") {
-                ElloProvider.shared.authState = .anonymous
+                AuthenticationManager.shared.specs(setAuthState: .anonymous)
 
                 var succeeded = false
                 var failed = false
@@ -67,10 +67,10 @@ class AnonymousAuthenticationSpec: QuickSpec {
             }
 
             it("should fail anonymous requests when anonymous credentials are invalid") {
-                ElloProvider.sharedProvider = ElloProvider.RecordedStubbingProvider([
+                ElloProvider.moya = ElloProvider.RecordedStubbingProvider([
                     RecordedResponse(endpoint: .availability(content: [:]), response: .networkResponse(401, Data())),
                 ])
-                ElloProvider.shared.authState = .anonymous
+                AuthenticationManager.shared.specs(setAuthState: .anonymous)
 
                 var succeeded = false
                 var failed = false

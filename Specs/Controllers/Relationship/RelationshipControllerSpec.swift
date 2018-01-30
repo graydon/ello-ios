@@ -45,7 +45,7 @@ class RelationshipControllerSpec: QuickSpec {
                 }
 
                 it("fails") {
-                    ElloProvider.sharedProvider = ElloProvider.ErrorStubbingProvider()
+                    ElloProvider.moya = ElloProvider.ErrorStubbingProvider()
 
                     var expectedStatus: RelationshipRequestStatus = .success
 

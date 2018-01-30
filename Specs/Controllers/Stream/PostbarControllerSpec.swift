@@ -113,25 +113,25 @@ class PostbarControllerSpec: QuickSpec {
                 }
 
                 it("should disable the cell during submission") {
-                    ElloProvider.sharedProvider = ElloProvider.DelayedStubbingProvider()
+                    ElloProvider.moya = ElloProvider.DelayedStubbingProvider()
                     cell.isUserInteractionEnabled = true
                     subject.watchPostTapped(true, cell: cell)
                     expect(cell.isUserInteractionEnabled) == false
                 }
                 it("should set the cell.watching property") {
-                    ElloProvider.sharedProvider = ElloProvider.DelayedStubbingProvider()
+                    ElloProvider.moya = ElloProvider.DelayedStubbingProvider()
                     cell.isWatching = false
                     subject.watchPostTapped(true, cell: cell)
                     expect(cell.isWatching) == true
                 }
                 it("should enable the cell after failure") {
-                    ElloProvider.sharedProvider = ElloProvider.ErrorStubbingProvider()
+                    ElloProvider.moya = ElloProvider.ErrorStubbingProvider()
                     cell.isUserInteractionEnabled = false
                     subject.watchPostTapped(true, cell: cell)
                     expect(cell.isUserInteractionEnabled) == true
                 }
                 it("should restore the cell.watching property after failure") {
-                    ElloProvider.sharedProvider = ElloProvider.ErrorStubbingProvider()
+                    ElloProvider.moya = ElloProvider.ErrorStubbingProvider()
                     cell.isWatching = false
                     subject.watchPostTapped(true, cell: cell)
                     expect(cell.isWatching) == false

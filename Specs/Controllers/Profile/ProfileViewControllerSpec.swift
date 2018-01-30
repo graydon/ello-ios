@@ -126,7 +126,7 @@ class ProfileViewControllerSpec: QuickSpec {
                 for (collaborateable, hireable, collaborateButton, hireButtonVisible, mentionButtonVisible) in expectations {
                     context("collaborateable \(collaborateable) and hireable \(hireable) affect profile buttons") {
                         beforeEach {
-                            ElloProvider.sharedProvider = ElloProvider.RecordedStubbingProvider([
+                            ElloProvider.moya = ElloProvider.RecordedStubbingProvider([
                                 RecordedResponse(endpoint: .userStream(userParam: "any"), responseClosure: { _ in
                                     let data = stubbedData("users_user_details")
                                     var json = try! JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
@@ -173,7 +173,7 @@ class ProfileViewControllerSpec: QuickSpec {
                 var screen: ProfileScreen!
 
                 beforeEach {
-                    ElloProvider.sharedProvider = ElloProvider.RecordedStubbingProvider([
+                    ElloProvider.moya = ElloProvider.RecordedStubbingProvider([
                         RecordedResponse(endpoint: .userStream(userParam: "50"), response: .networkResponse(200,
                             stubbedData("profile__no_sharing")
                             )),
@@ -275,7 +275,7 @@ class ProfileViewControllerSpec: QuickSpec {
                     subject.currentUser = currentUser
                     showController(subject)
                     user = subject.user!
-                    ElloProvider.sharedProvider = ElloProvider.ErrorStubbingProvider()
+                    ElloProvider.moya = ElloProvider.ErrorStubbingProvider()
                 }
 
                 describe("@moreButton") {

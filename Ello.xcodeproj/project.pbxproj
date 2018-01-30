@@ -440,6 +440,9 @@
 		1D06D6CA1E43B771004FA878 /* GroupDefaultsSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D06D6C91E43B771004FA878 /* GroupDefaultsSpec.swift */; };
 		1D06D6CC1E43B7DD004FA878 /* AppDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D06D6CB1E43B7DD004FA878 /* AppDefaults.swift */; };
 		1D08320F1AAA54880076C67D /* TypedNotificationSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D08320E1AAA54880076C67D /* TypedNotificationSpec.swift */; };
+		1D0DF8B82021198500019875 /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D0DF8B72021198500019875 /* AuthenticationManager.swift */; };
+		1D0DF8BB20211E8C00019875 /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D0DF8B72021198500019875 /* AuthenticationManager.swift */; };
+		1D0DF8BC20211E8D00019875 /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D0DF8B72021198500019875 /* AuthenticationManager.swift */; };
 		1D104FD01F3CEBCD00B5487A /* ElloTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F6AE691A4339EF00493660 /* ElloTextField.swift */; };
 		1D104FD11F3CEC5900B5487A /* ValidationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7152B31D6E4FCE005998FE /* ValidationState.swift */; };
 		1D104FD21F3CEC6E00B5487A /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12384EBA1C56B3C200608BD8 /* UIViewExtensions.swift */; };
@@ -753,7 +756,7 @@
 		1D7152E71D7639F8005998FE /* OnboardingProfileProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7152E61D7639F8005998FE /* OnboardingProfileProtocols.swift */; };
 		1D7152E91D763EA4005998FE /* ImagePickerSheetConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7152E81D763EA4005998FE /* ImagePickerSheetConfig.swift */; };
 		1D73AB8A1C56A01E00D708B9 /* SafariActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D73AB881C569EB600D708B9 /* SafariActivity.swift */; };
-		1D73AB901C57C85600D708B9 /* AuthStateSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D73AB8F1C57C85600D708B9 /* AuthStateSpec.swift */; };
+		1D73AB901C57C85600D708B9 /* AuthenticationManagerSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D73AB8F1C57C85600D708B9 /* AuthenticationManagerSpec.swift */; };
 		1D73AB921C58145600D708B9 /* AnonymousAuthenticationSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D73AB911C58145600D708B9 /* AnonymousAuthenticationSpec.swift */; };
 		1D7750F01AB9F0D900D92191 /* BaseElloViewControllerSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7750EF1AB9F0D900D92191 /* BaseElloViewControllerSpec.swift */; };
 		1D7750F21ABA48F200D92191 /* Tmp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7750F11ABA48F200D92191 /* Tmp.swift */; };
@@ -1656,6 +1659,7 @@
 		1D06D6C91E43B771004FA878 /* GroupDefaultsSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupDefaultsSpec.swift; sourceTree = "<group>"; };
 		1D06D6CB1E43B7DD004FA878 /* AppDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDefaults.swift; sourceTree = "<group>"; };
 		1D08320E1AAA54880076C67D /* TypedNotificationSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypedNotificationSpec.swift; sourceTree = "<group>"; };
+		1D0DF8B72021198500019875 /* AuthenticationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationManager.swift; sourceTree = "<group>"; };
 		1D15C2761C7D12890013B192 /* InterfaceImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InterfaceImage.swift; sourceTree = "<group>"; };
 		1D15C2771C7D12890013B192 /* InterfaceString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InterfaceString.swift; sourceTree = "<group>"; };
 		1D1AF6221A83ED7F00E06C93 /* PostDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostDetailViewController.swift; sourceTree = "<group>"; };
@@ -1858,7 +1862,7 @@
 		1D7152E61D7639F8005998FE /* OnboardingProfileProtocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingProfileProtocols.swift; sourceTree = "<group>"; };
 		1D7152E81D763EA4005998FE /* ImagePickerSheetConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePickerSheetConfig.swift; sourceTree = "<group>"; };
 		1D73AB881C569EB600D708B9 /* SafariActivity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SafariActivity.swift; sourceTree = "<group>"; };
-		1D73AB8F1C57C85600D708B9 /* AuthStateSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthStateSpec.swift; sourceTree = "<group>"; };
+		1D73AB8F1C57C85600D708B9 /* AuthenticationManagerSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationManagerSpec.swift; sourceTree = "<group>"; };
 		1D73AB911C58145600D708B9 /* AnonymousAuthenticationSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnonymousAuthenticationSpec.swift; sourceTree = "<group>"; };
 		1D7750EF1AB9F0D900D92191 /* BaseElloViewControllerSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseElloViewControllerSpec.swift; sourceTree = "<group>"; };
 		1D7750F11ABA48F200D92191 /* Tmp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tmp.swift; sourceTree = "<group>"; };
@@ -2416,6 +2420,7 @@
 				1207C94B1C73FEE000939ADB /* APIKeys.swift */,
 				1DDC23521F32886E00E68B0E /* ArtistInviteService.swift */,
 				1207C94C1C73FEE000939ADB /* AsyncOperation.swift */,
+				1D0DF8B72021198500019875 /* AuthenticationManager.swift */,
 				1207C94D1C73FEE000939ADB /* AuthState.swift */,
 				1207C94E1C73FEE000939ADB /* AuthToken.swift */,
 				1207C94F1C73FEE000939ADB /* AutoCompleteService.swift */,
@@ -2438,6 +2443,7 @@
 				1207C95B1C73FEE000939ADB /* ElloURI.swift */,
 				1207C95C1C73FEE000939ADB /* ErrorStatusCode.swift */,
 				1D59EF911D6624DC0029C106 /* HireService.swift */,
+				1D447F141F3BCAD700013384 /* ImageRegionData.swift */,
 				1207C95D1C73FEE000939ADB /* InviteService.swift */,
 				123DEBEE1D3D4B71007B5F86 /* LoadingToken.swift */,
 				1207C95E1C73FEE000939ADB /* LovesService.swift */,
@@ -2459,7 +2465,6 @@
 				1207C96B1C73FEE000939ADB /* S3UploadingService.swift */,
 				1207C96C1C73FEE000939ADB /* StreamService.swift */,
 				1207C96D1C73FEE000939ADB /* UserService.swift */,
-				1D447F141F3BCAD700013384 /* ImageRegionData.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -2876,7 +2881,6 @@
 				1291CE2C1C6A912300EB5A55 /* ShareExtension */,
 				124BBEDE1BDFEDE900CBDF69 /* AppDelegateSpec.swift */,
 				12D14C5A1A4375A100C6F8E8 /* Controllers */,
-				1DC428591BBB020100D5E38B /* Environment */,
 				12D14C5B1A4375A800C6F8E8 /* Extensions */,
 				123D84C11AA6B2F5004A67C5 /* Fakes */,
 				12D14C5C1A4375B100C6F8E8 /* Helpers */,
@@ -2985,7 +2989,7 @@
 			children = (
 				1D73AB911C58145600D708B9 /* AnonymousAuthenticationSpec.swift */,
 				12706B9A1D3EC1D80028C9BE /* AsyncOperationSpec.swift */,
-				1D73AB8F1C57C85600D708B9 /* AuthStateSpec.swift */,
+				1D73AB8F1C57C85600D708B9 /* AuthenticationManagerSpec.swift */,
 				12D14C641A43761A00C6F8E8 /* AuthTokenSpec.swift */,
 				12BF3CC01B66D68000CF4AE0 /* DateFormattingSpec.swift */,
 				12D14C651A43761A00C6F8E8 /* ElloAPISpec.swift */,
@@ -3863,13 +3867,6 @@
 				12D14C7A1A43763B00C6F8E8 /* NotificationsViewControllerSpec.swift */,
 			);
 			path = Notifications;
-			sourceTree = "<group>";
-		};
-		1DC428591BBB020100D5E38B /* Environment */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Environment;
 			sourceTree = "<group>";
 		};
 		1DC78A4E1F21300800BE2413 /* ArtistInvites */ = {
@@ -5116,6 +5113,7 @@
 				122D1B4C1C60232D001386CE /* TypedNotifications.swift in Sources */,
 				122B30AE1C6A3FBB00C1B9D8 /* Activity.swift in Sources */,
 				1D9309CD1EBCEBAF0099FCF8 /* Badge.swift in Sources */,
+				1D0DF8BB20211E8C00019875 /* AuthenticationManager.swift in Sources */,
 				122B30BC1C6A3FBB00C1B9D8 /* JSONAble.swift in Sources */,
 				1207C9AA1C752FF000939ADB /* MultipartRequestBuilder.swift in Sources */,
 				120E64151E327D6300CAF03E /* JWT.swift in Sources */,
@@ -5241,7 +5239,7 @@
 				1D2178E81DD52477002A54CB /* CategoryCardListViewSpec.swift in Sources */,
 				1DA18E491DB959B2000231CC /* ProfileHeaderGhostCellSpec.swift in Sources */,
 				1D447E681F338A2000013384 /* ProfileStatsSizeCalculatorSpec.swift in Sources */,
-				1D73AB901C57C85600D708B9 /* AuthStateSpec.swift in Sources */,
+				1D73AB901C57C85600D708B9 /* AuthenticationManagerSpec.swift in Sources */,
 				122034791DEC8B8A0059E633 /* SimpleMessageCellSpec.swift in Sources */,
 				F87A101E1AF1700F00A48E7F /* PushNotificationControllerSpec.swift in Sources */,
 				1264FEFA1B0E4C3D0011B646 /* StreamImageCellPresenterSpec.swift in Sources */,
@@ -5710,6 +5708,7 @@
 				122B30D41C6A3FBC00C1B9D8 /* Love.swift in Sources */,
 				12D43A461AC864CC0039F54F /* StreamToggleCellPresenter.swift in Sources */,
 				12A1D8291DAC036300A327D6 /* ProfileAvatarPresenter.swift in Sources */,
+				1D0DF8B82021198500019875 /* AuthenticationManager.swift in Sources */,
 				1D2F65A91D185AB90099D036 /* DiscoverType.swift in Sources */,
 				1D7A28D81A97BE490050E8A2 /* ElloWebViewHelper.swift in Sources */,
 				122B30C61C6A3FBC00C1B9D8 /* AddressBookError.swift in Sources */,
@@ -5970,6 +5969,7 @@
 				1D447EC71F3BC64F00013384 /* Username.swift in Sources */,
 				1D447EDC1F3BC70600013384 /* ResponseConfig.swift in Sources */,
 				1D447F0E1F3BCA1D00013384 /* Mapper.swift in Sources */,
+				1D0DF8BC20211E8D00019875 /* AuthenticationManager.swift in Sources */,
 				1D447EE51F3BC78F00013384 /* Badge.swift in Sources */,
 				1D447F1A1F3BCC3100013384 /* AnonymousAuthService.swift in Sources */,
 				1D447EEC1F3BC7BE00013384 /* APIKeys.swift in Sources */,

@@ -22,9 +22,9 @@ extension ElloProvider {
         return elloError
     }
 
-    static func failedToMapObjects(request: ElloRequestFuture) {
+    static func failedToMapObjects(_ reject: ErrorBlock) {
         let jsonMappingError = ElloNetworkError(attrs: nil, code: ElloNetworkError.CodeType.unknown, detail: "Failed to map objects", messages: nil, status: nil, title: "Failed to map objects")
         let elloError = NSError.networkError(jsonMappingError, code: ElloErrorCode.jsonMapping)
-        request.reject(elloError)
+        reject(elloError)
     }
 }

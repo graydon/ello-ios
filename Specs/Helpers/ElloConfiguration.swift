@@ -61,9 +61,9 @@ class ElloConfiguration: QuickConfiguration {
             keychain.isPasswordBased = true
             AuthToken.sharedKeychain = keychain
 
-            ElloProvider.shared.authState = .authenticated
-            ElloProvider.shared.queue = nil
-            ElloProvider.sharedProvider = ElloProvider.StubbingProvider()
+            AuthenticationManager.shared.specs(setAuthState: .authenticated)
+            AuthenticationManager.shared.queue = nil
+            ElloProvider.moya = ElloProvider.StubbingProvider()
         }
         config.afterEach {
             ElloProvider_Specs.errorStatusCode = .status404
@@ -74,7 +74,7 @@ class ElloConfiguration: QuickConfiguration {
         }
         config.afterSuite {
             AuthToken.sharedKeychain = ElloKeychain()
-            ElloProvider.sharedProvider = ElloProvider.DefaultProvider()
+            ElloProvider.moya = ElloProvider.DefaultProvider()
             UserDefaults.standard.setValue(true, forKey: "_UIConstraintBasedLayoutLogUnsatisfiable")
         }
     }

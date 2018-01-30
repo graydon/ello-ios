@@ -174,7 +174,7 @@ class OnboardingProfileViewControllerSpec: QuickSpec {
             context("only submits changed data") {
                 var props: [String: Any] = [:]
                 beforeEach {
-                    ElloProvider.sharedProvider = ElloProvider.RecordedStubbingProvider([
+                    ElloProvider.moya = ElloProvider.RecordedStubbingProvider([
                         RecordedResponse(endpoint: .profileUpdate(body: [:]), responseClosure: { target in
                                 if case let .profileUpdate(body) = target {
                                     props = body

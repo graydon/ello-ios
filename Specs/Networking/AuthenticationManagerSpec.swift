@@ -1,5 +1,5 @@
 ////
-///  AuthStateSpec.swift
+///  AuthenticationManagerSpec.swift
 //
 
 @testable import Ello
@@ -7,10 +7,10 @@ import Quick
 import Nimble
 
 
-class AuthStateSpec: QuickSpec {
+class AuthenticationManagerSpec: QuickSpec {
     override func spec() {
-        describe("AuthState") {
-            describe("supports(AuthState)") {
+        describe("AuthenticationManager") {
+            describe("canMakeRequest(ElloAPI)") {
                 let noTokenReqd: [ElloAPI] = [.auth(email: "", password: ""), .reAuth(token: ""), .anonymousCredentials]
                 let anonymous: [ElloAPI] = [.availability(content: [:]), .join(email: "", username: "", password: "", invitationCode: nil), .categories]
                 let authdOnly: [ElloAPI] = [.amazonCredentials, .currentUserProfile, .pushSubscriptions(token: Data())]
@@ -30,12 +30,16 @@ class AuthStateSpec: QuickSpec {
                 for (state, supported, unsupported) in expectations {
                     for supportedEndpoint in supported {
                         it("\(state) should support \(supportedEndpoint)") {
-                            expect(state.supports(supportedEndpoint)) == true
+                            let manager = AuthenticationManager.shared
+                            manager.specs(setAuthState: state)
+                            expect(manager.canMakeRequest(supportedEndpoint)) == true
                         }
                     }
                     for unsupportedEndpoint in unsupported {
                         it("\(state) should not support \(unsupportedEndpoint)") {
-                            expect(state.supports(unsupportedEndpoint)) == false
+                            let manager = AuthenticationManager.shared
+                            manager.specs(setAuthState: state)
+                            expect(manager.canMakeRequest(unsupportedEndpoint)) == false
                         }
                     }
                 }

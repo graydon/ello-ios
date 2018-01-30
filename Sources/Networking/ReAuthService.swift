@@ -7,7 +7,7 @@ import Moya
 
 class ReAuthService {
 
-    func reAuthenticateToken(success: @escaping Block, failure: @escaping ElloFailureCompletion, noNetwork: @escaping Block) {
+    func reAuthenticateToken(success: @escaping Block, failure: @escaping ErrorBlock, noNetwork: @escaping Block) {
         let endpoint: ElloAPI
         let token = AuthToken()
         let refreshToken = token.refreshToken
@@ -18,7 +18,7 @@ class ReAuthService {
             endpoint = .anonymousCredentials
         }
 
-        ElloProvider.sharedProvider.request(endpoint) { (result) in
+        ElloProvider.moya.request(endpoint) { (result) in
             switch result {
             case let .success(moyaResponse):
                 let statusCode = moyaResponse.statusCode
@@ -38,11 +38,11 @@ class ReAuthService {
         }
     }
 
-    func reAuthenticateUserCreds(success: @escaping Block, failure: @escaping ElloFailureCompletion, noNetwork: @escaping Block) {
+    func reAuthenticateUserCreds(success: @escaping Block, failure: @escaping ErrorBlock, noNetwork: @escaping Block) {
         var token = AuthToken()
         if let email = token.username, let password = token.password {
             let endpoint: ElloAPI = .auth(email: email, password: password)
-            ElloProvider.sharedProvider.request(endpoint) { (result) in
+            ElloProvider.moya.request(endpoint) { (result) in
                 switch result {
                 case let .success(moyaResponse):
                     let statusCode = moyaResponse.statusCode
