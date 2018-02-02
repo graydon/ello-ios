@@ -152,5 +152,10 @@ class ValidatorSpec: QuickSpec {
                 }
             }
         }
+        context("specs are done") {
+            it("grep_me") {
+                expect(true) == true
+            }
+        }
     }
 }
