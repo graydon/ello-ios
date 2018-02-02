@@ -72,7 +72,7 @@ final class Announcement: JSONAble, Groupable {
         super.encode(with: coder)
     }
 
-    override class func fromJSON(_ data: [String: Any]) -> JSONAble {
+    class func fromJSON(_ data: [String: Any]) -> Announcement {
         let json = JSON(data)
         let id = json["id"].stringValue
         let isStaffPreview = json["is_staff_preview"].boolValue

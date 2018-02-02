@@ -122,7 +122,7 @@ final class ArtistInvite: JSONAble, Groupable {
         super.encode(with: coder)
     }
 
-    override class func fromJSON(_ data: [String: Any]) -> JSONAble {
+    class func fromJSON(_ data: [String: Any]) -> ArtistInvite {
         let json = JSON(data)
 
         let id = json["id"].stringValue

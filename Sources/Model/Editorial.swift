@@ -97,7 +97,7 @@ final class Editorial: JSONAble, Groupable {
         super.encode(with: coder)
     }
 
-    override class func fromJSON(_ data: [String: Any]) -> JSONAble {
+    class func fromJSON(_ data: [String: Any]) -> Editorial {
         let json = JSON(data)
         let id = json["id"].stringValue
         let kind = Kind(rawValue: json["kind"].stringValue) ?? .unknown

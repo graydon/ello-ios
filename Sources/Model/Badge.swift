@@ -81,7 +81,7 @@ final class Badge: JSONAble {
         super.encode(with: coder)
     }
 
-    override class func fromJSON(_ data: [String: Any]) -> JSONAble {
+    class func fromJSON(_ data: [String: Any]) -> Badge {
         let json = JSON(data)
         return Badge(
             slug: json["slug"].stringValue,

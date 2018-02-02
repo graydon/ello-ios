@@ -54,7 +54,7 @@ final class Attachment: JSONAble {
 
 // MARK: JSONAble
 
-    override class func fromJSON(_ data: [String: Any]) -> JSONAble {
+    class func fromJSON(_ data: [String: Any]) -> Attachment {
         let json = JSON(data)
         var url = json["url"].stringValue
         if url.hasPrefix("//") {

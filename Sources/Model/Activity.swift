@@ -92,7 +92,7 @@ final class Activity: JSONAble {
 
 // MARK: JSONAble
 
-    override class func fromJSON(_ data: [String: Any]) -> JSONAble {
+    class func fromJSON(_ data: [String: Any]) -> Activity {
         let json = JSON(data)
         let id = json["created_at"].stringValue
         var createdAt: Date

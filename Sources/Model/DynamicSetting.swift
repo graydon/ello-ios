@@ -39,7 +39,7 @@ final class DynamicSetAnother: JSONAble {
         super.encode(with: coder)
     }
 
-    override class func fromJSON(_ data: [String: Any]) -> JSONAble {
+    class func fromJSON(_ data: [String: Any]) -> DynamicSetAnother {
         let json = JSON(data)
         let when: Bool? = json["when"].bool
         let key: String = json["key"].stringValue
@@ -108,7 +108,7 @@ final class DynamicSetting: JSONAble {
         return nil
     }
 
-    override class func fromJSON(_ data: [String: Any]) -> DynamicSetting {
+    class func fromJSON(_ data: [String: Any]) -> DynamicSetting {
         let json = JSON(data)
         let label = json["label"].stringValue
         let key = json["key"].stringValue
@@ -133,7 +133,7 @@ final class DynamicSetting: JSONAble {
         if let jsonSetsAnother = json["sets_another"].array {
             setsAnother = jsonSetsAnother.flatMap { json in
                 if let val = json.object as? [String: Any] {
-                    return DynamicSetAnother.fromJSON(val) as? DynamicSetAnother
+                    return DynamicSetAnother.fromJSON(val)
                 }
                 return nil
             }

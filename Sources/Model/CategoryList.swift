@@ -33,14 +33,13 @@ class CategoryList: JSONAble {
         super.encode(with: coder)
     }
 
-    override class func fromJSON(_ data: [String: Any]) -> JSONAble {
+    class func fromJSON(_ data: [String: Any]) -> CategoryList {
         let json = JSON(data)
         let categories: [Category]
         if let jsonCategories = json["categories"].array {
             let unsorted: [(order: Int, category: Category)] = jsonCategories.flatMap { json in
-                if let val = json.object as? [String: Any],
-                    let category = Category.fromJSON(val) as? Category
-                {
+                if let val = json.object as? [String: Any] {
+                    let category = Category.fromJSON(val)
                     return (order: json["order"].intValue, category: category)
                 }
                 return nil

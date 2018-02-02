@@ -68,7 +68,7 @@ final class Love: JSONAble, PostActionable {
 
 // MARK: JSONAble
 
-    override class func fromJSON(_ data: [String: Any]) -> JSONAble {
+    class func fromJSON(_ data: [String: Any]) -> Love {
         let json = JSON(data)
         var createdAt: Date
         var updatedAt: Date

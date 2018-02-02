@@ -2,8 +2,6 @@
 ///  SearchString.swift
 //
 
-import SwiftyJSON
-
 let SearchStringVersion: Int = 1
 
 @objc(SearchString)
@@ -27,9 +25,8 @@ final class SearchString: JSONAble {
         super.encode(with: coder)
     }
 
-    override class func fromJSON(_ data: [String: Any]) -> JSONAble {
-        let json = JSON(data)
-        return SearchString(text: json["text"].string ?? "")
+    class func fromJSON(_ data: [String: Any]) -> SearchString {
+        return SearchString(text: (data["text"] as? String) ?? "")
     }
 
 }

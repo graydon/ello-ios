@@ -150,7 +150,7 @@ final class Category: JSONAble, Groupable {
         return other
     }
 
-    override class func fromJSON(_ data: [String: Any]) -> JSONAble {
+    class func fromJSON(_ data: [String: Any]) -> Category {
         let json = JSON(data)
         let id = json["id"].stringValue
         let name = json["name"].stringValue
@@ -164,7 +164,7 @@ final class Category: JSONAble, Groupable {
         if let assetJson = json["tile_image"].object as? [String: Any],
             let attachmentJson = DeviceScreen.isRetina ? (assetJson["large"] as? [String: Any]) : (assetJson["small"] as? [String: Any])
         {
-            tileImage = Attachment.fromJSON(attachmentJson) as? Attachment
+            tileImage = Attachment.fromJSON(attachmentJson)
         }
         else {
             tileImage = nil

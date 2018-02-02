@@ -34,7 +34,7 @@ final class Availability: JSONAble {
         super.init(coder: coder)
     }
 
-    override class func fromJSON(_ data: [String: Any]) -> JSONAble {
+    class func fromJSON(_ data: [String: Any]) -> Availability {
         let json = JSON(data)
         let username = json["username"].boolValue
         let email = json["email"].boolValue

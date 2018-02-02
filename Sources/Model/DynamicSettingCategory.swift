@@ -32,7 +32,7 @@ final class DynamicSettingCategory: JSONAble {
         super.encode(with: coder.coder)
     }
 
-    override class func fromJSON(_ data: [String: Any]) -> DynamicSettingCategory {
+    class func fromJSON(_ data: [String: Any]) -> DynamicSettingCategory {
         let json = JSON(data)
         let label = json["label"].stringValue
         let settings: [DynamicSetting] = json["items"].arrayValue.map { DynamicSetting.fromJSON($0.object as! [String: Any]) }

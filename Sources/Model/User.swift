@@ -232,7 +232,7 @@ final class User: JSONAble {
         return other
     }
 
-    override class func fromJSON(_ data: [String: Any]) -> JSONAble {
+    class func fromJSON(_ data: [String: Any]) -> User {
         let json = JSON(data)
 
         let user = User(
@@ -275,7 +275,7 @@ final class User: JSONAble {
         user.links = data["links"] as? [String: Any]
 
         if json["relationship_priority"].string == "self" {
-            user.profile = Profile.fromJSON(data) as? Profile
+            user.profile = Profile.fromJSON(data)
         }
 
         return user

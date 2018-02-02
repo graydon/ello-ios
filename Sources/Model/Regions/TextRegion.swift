@@ -38,7 +38,7 @@ final class TextRegion: JSONAble, Regionable {
 
 // MARK: JSONAble
 
-    override class func fromJSON(_ data: [String: Any]) -> JSONAble {
+    class func fromJSON(_ data: [String: Any]) -> TextRegion {
         let json = JSON(data)
         let content = json["data"].stringValue
         return TextRegion(content: content)

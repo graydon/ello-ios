@@ -72,7 +72,7 @@ final class EmbedRegion: JSONAble, Regionable {
 
     // MARK: JSONAble
 
-    override class func fromJSON(_ data: [String: Any]) -> JSONAble {
+    class func fromJSON(_ data: [String: Any]) -> EmbedRegion {
         let json = JSON(data)
         let thumbnailLargeUrl = json["data"]["thumbnail_large_url"].string.flatMap { URL(string: $0) }
 

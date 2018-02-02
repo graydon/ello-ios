@@ -52,7 +52,7 @@ final class ImageRegion: JSONAble, Regionable {
 
 // MARK: JSONAble
 
-    override class func fromJSON(_ data: [String: Any]) -> JSONAble {
+    class func fromJSON(_ data: [String: Any]) -> ImageRegion {
         let json = JSON(data)
 
         var url: URL?

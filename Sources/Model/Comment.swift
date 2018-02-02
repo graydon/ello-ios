@@ -83,7 +83,7 @@ final class ElloComment: JSONAble, Authorable, Groupable {
 
 // MARK: JSONAble
 
-    override class func fromJSON(_ data: [String: Any]) -> JSONAble {
+    class func fromJSON(_ data: [String: Any]) -> ElloComment {
         let json = JSON(data)
         // create comment
         var createdAt: Date

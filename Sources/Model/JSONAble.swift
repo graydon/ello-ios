@@ -2,7 +2,6 @@
 ///  JSONAble.swift
 //
 
-let JSONAbleVersion = 1
 
 protocol JSONSaveable {
     var uniqueId: String? { get }
@@ -29,10 +28,6 @@ class JSONAble: NSObject, NSCoding {
         let coder = Coder(encoder)
         coder.encodeObject(links, forKey: "links")
         coder.encodeObject(version, forKey: "version")
-    }
-
-    class func fromJSON(_ data: [String: Any]) -> JSONAble {
-        return JSONAble(version: JSONAbleVersion)
     }
 
     func merge(_ other: JSONAble) -> JSONAble {

@@ -83,7 +83,7 @@ final class PagePromotional: JSONAble {
         super.encode(with: coder)
     }
 
-    override class func fromJSON(_ data: [String: Any]) -> JSONAble {
+    class func fromJSON(_ data: [String: Any]) -> PagePromotional {
         let json = JSON(data)
         let id = json["id"].stringValue
         let header = json["header"].stringValue

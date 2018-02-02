@@ -18,7 +18,7 @@ class BadgesService {
                 var badges: [String: Badge] = [:]
                 for json in badgesJson {
                     guard let slug = json["slug"] as? String else { continue }
-                    badges[slug] = Badge.fromJSON(json as [String: Any]) as? Badge
+                    badges[slug] = Badge.fromJSON(json as [String: Any])
                 }
 
                 Badge.badges = badges

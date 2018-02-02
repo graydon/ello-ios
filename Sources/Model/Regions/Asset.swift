@@ -203,7 +203,7 @@ final class Asset: JSONAble {
 
 // MARK: JSONAble
 
-    override class func fromJSON(_ data: [String: Any]) -> JSONAble {
+    class func fromJSON(_ data: [String: Any]) -> Asset {
         let json = JSON(data)
         return parseAsset(json["id"].stringValue, node: data["attachment"] as? [String: Any])
     }
@@ -213,35 +213,35 @@ final class Asset: JSONAble {
         guard let node = node else { return asset }
 
         if let optimized = node["optimized"] as? [String: Any] {
-            asset.optimized = Attachment.fromJSON(optimized) as? Attachment
+            asset.optimized = Attachment.fromJSON(optimized)
         }
         if let smallScreen = node["small_screen"] as? [String: Any] {
-            asset.smallScreen = Attachment.fromJSON(smallScreen) as? Attachment
+            asset.smallScreen = Attachment.fromJSON(smallScreen)
         }
         if let ldpi = node["ldpi"] as? [String: Any] {
-            asset.ldpi = Attachment.fromJSON(ldpi) as? Attachment
+            asset.ldpi = Attachment.fromJSON(ldpi)
         }
         if let mdpi = node["mdpi"] as? [String: Any] {
-            asset.mdpi = Attachment.fromJSON(mdpi) as? Attachment
+            asset.mdpi = Attachment.fromJSON(mdpi)
         }
         if let hdpi = node["hdpi"] as? [String: Any] {
-            asset.hdpi = Attachment.fromJSON(hdpi) as? Attachment
+            asset.hdpi = Attachment.fromJSON(hdpi)
         }
         if let xhdpi = node["xhdpi"] as? [String: Any] {
-            asset.xhdpi = Attachment.fromJSON(xhdpi) as? Attachment
+            asset.xhdpi = Attachment.fromJSON(xhdpi)
         }
         if let original = node["original"] as? [String: Any] {
-            asset.original = Attachment.fromJSON(original) as? Attachment
+            asset.original = Attachment.fromJSON(original)
         }
         // optional avatar
         if let large = node["large"] as? [String: Any] {
-            asset.large = Attachment.fromJSON(large) as? Attachment
+            asset.large = Attachment.fromJSON(large)
         }
         if let regular = node["regular"] as? [String: Any] {
-            asset.regular = Attachment.fromJSON(regular) as? Attachment
+            asset.regular = Attachment.fromJSON(regular)
         }
         if let small = node["small"] as? [String: Any] {
-            asset.small = Attachment.fromJSON(small) as? Attachment
+            asset.small = Attachment.fromJSON(small)
         }
         return asset
     }

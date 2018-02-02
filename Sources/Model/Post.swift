@@ -189,7 +189,7 @@ final class Post: JSONAble, Authorable, Groupable {
 
 // MARK: JSONAble
 
-    override class func fromJSON(_ data: [String: Any]) -> JSONAble {
+    class func fromJSON(_ data: [String: Any]) -> Post {
         let json = JSON(data)
         let repostContent = RegionParser.regions("repost_content", json: json)
         var createdAt: Date

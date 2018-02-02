@@ -16,7 +16,6 @@ class PreloaderSpec: QuickSpec {
         var asset: Asset!
         var imageRegion: ImageRegion!
         var oneImagePost: Post!
-        var imagePostWithSummary: Post!
         var twoImagePost: Post!
         var threeImagePost: Post!
         var oneImageComment: ElloComment!
@@ -94,12 +93,6 @@ class PreloaderSpec: QuickSpec {
                 "author": user1
             ])
 
-            imagePostWithSummary = Post.stub([
-                "content": [imageRegion, imageRegion],
-                "summary": [imageRegion],
-                "author": user1
-            ])
-
             twoImagePost = Post.stub([
                 "content": [imageRegion, imageRegion],
                 "author": user2
@@ -148,42 +141,6 @@ class PreloaderSpec: QuickSpec {
                 subject.preloadImages([oneImageComment, threeImageComment])
 
                 expect(fakeManager.downloads.count) == 6
-            }
-
-            it("preloads user's posts image assets and avatars") {
-                let user: User = stub([
-                    "avatar": avatarAsset1,
-                    "posts": [twoImagePost, threeImagePost]
-                ])
-
-                subject.preloadImages([user])
-
-                expect(fakeManager.downloads.count) == 8
-            }
-
-            xit("loads hdpi for single column StreamKinds") {
-                StreamKind.following.setIsGridView(false)
-                subject.preloadImages([oneImagePost])
-
-                // grab the second image, first is the avatar of post's author
-                expect(fakeManager.downloads[1].absoluteString) == "http://www.example.com/hdpi.jpg"
-            }
-
-            xit("loads hpdi for grid layout StreamKinds") {
-                subject.preloadImages([imagePostWithSummary])
-
-                // grab the second image, first is the avatar of post's author
-                expect(fakeManager.downloads[1].absoluteString) == "http://www.example.com/hdpi.jpg"
-            }
-
-            xit("loads regular for avatars") {
-                let user: User = stub([
-                    "avatar": avatarAsset1,
-                ])
-
-                subject.preloadImages([user])
-
-                expect(fakeManager.downloads.first?.absoluteString) == "http://www.example.com/regular.jpg"
             }
         }
     }

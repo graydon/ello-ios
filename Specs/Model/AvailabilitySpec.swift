@@ -12,7 +12,7 @@ class AvailabilitySpec: QuickSpec {
         describe("Availability") {
             it("converts from JSON") {
                 let parsedAvailability = stubbedJSONData("availability", "availability")
-                let availability = Availability.fromJSON(parsedAvailability) as! Availability
+                let availability = Availability.fromJSON(parsedAvailability)
 
                 expect(availability.isUsernameAvailable).to(beTrue())
                 expect(availability.isEmailAvailable).to(beTrue())

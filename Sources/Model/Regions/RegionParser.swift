@@ -18,11 +18,11 @@ struct RegionParser {
             let regionable: Regionable
             switch kind {
             case .text:
-                regionable = TextRegion.fromJSON(contentDict) as! TextRegion
+                regionable = TextRegion.fromJSON(contentDict)
             case .image:
-                regionable = ImageRegion.fromJSON(contentDict) as! ImageRegion
+                regionable = ImageRegion.fromJSON(contentDict)
             case .embed:
-                regionable = EmbedRegion.fromJSON(contentDict) as! EmbedRegion
+                regionable = EmbedRegion.fromJSON(contentDict)
             default:
                 return nil
             }

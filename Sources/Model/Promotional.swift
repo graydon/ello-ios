@@ -50,7 +50,7 @@ final class Promotional: JSONAble {
         super.encode(with: coder)
     }
 
-    override class func fromJSON(_ data: [String: Any]) -> JSONAble {
+    class func fromJSON(_ data: [String: Any]) -> Promotional {
         let json = JSON(data)
         let id = json["id"].stringValue
         let userId = json["user_id"].stringValue

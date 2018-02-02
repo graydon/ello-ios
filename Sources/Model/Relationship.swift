@@ -52,7 +52,7 @@ final class Relationship: JSONAble {
 
 // MARK: JSONAble
 
-    override class func fromJSON(_ data: [String: Any]) -> JSONAble {
+    class func fromJSON(_ data: [String: Any]) -> Relationship {
         let json = JSON(data)
         var createdAt: Date
         if let date = json["created_at"].stringValue.toDate() {
