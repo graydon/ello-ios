@@ -110,8 +110,6 @@ final class NotificationsGenerator: StreamGenerator {
                     else { return }
 
                     self.notificationActivities = notificationActivities
-                    // setting primaryJSONAble also triggers the "done loading" code
-                    self.destination?.setPrimary(jsonable: JSONAble(version: JSONAbleVersion))
                     self.destination?.setPagingConfig(responseConfig: responseConfig)
 
                     self.loadExtraNotificationContent(notificationActivities)
@@ -134,7 +132,6 @@ final class NotificationsGenerator: StreamGenerator {
                         .ignoreErrors()
                 case .empty:
                     let noContentItem = StreamCellItem(type: .emptyStream(height: 282))
-                    self.destination?.setPrimary(jsonable: JSONAble(version: JSONAbleVersion))
                     self.destination?.replacePlaceholder(type: .notifications, items: [noContentItem]) {
                         self.destination?.isPagingEnabled = false
                     }

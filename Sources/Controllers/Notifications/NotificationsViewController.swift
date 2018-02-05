@@ -231,6 +231,9 @@ extension NotificationsViewController: StreamDestination {
             let jsonables = items.map { $0.jsonable }
             track(jsonables: jsonables)
         }
+        else if type == .notifications {
+            streamViewController.doneLoading()
+        }
 
         streamViewController.replacePlaceholder(type: type, items: items, completion: completion)
     }
@@ -240,7 +243,6 @@ extension NotificationsViewController: StreamDestination {
     }
 
     func setPrimary(jsonable: JSONAble) {
-        self.streamViewController.doneLoading()
     }
 
     func setPagingConfig(responseConfig: ResponseConfig) {
