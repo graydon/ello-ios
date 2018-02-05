@@ -387,8 +387,7 @@ extension TextRegion: Stubbable {
 
 extension ImageRegion: Stubbable {
     class func stub(_ values: [String: Any]) -> ImageRegion {
-        let imageRegion = ImageRegion(alt: (values["alt"] as? String) ?? "imageRegion")
-        imageRegion.url = urlFromValue(values["url"])
+        let imageRegion = ImageRegion(url: urlFromValue(values["url"]))
         imageRegion.buyButtonURL = urlFromValue(values["buyButtonURL"])
         if let asset = values["asset"] as? Asset {
             imageRegion.addLinkObject("assets", key: asset.id, type: .assetsType)

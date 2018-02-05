@@ -198,8 +198,7 @@ class PostEditingService {
 
                 promise
                     .then { url -> Void in
-                        let imageRegion = ImageRegion(alt: nil)
-                        imageRegion.url = url
+                        let imageRegion = ImageRegion(url: url)
                         imageRegion.buyButtonURL = buyButtonURL
 
                         if let url = url {

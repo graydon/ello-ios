@@ -15,7 +15,6 @@ class ImageRegionSpec: QuickSpec {
                 let region = ImageRegion.fromJSON(imageRegionData) as! ImageRegion
 
                 expect(region.url!.absoluteString) == "https://example.com/test.jpg"
-                expect(region.alt) == "region-alt.jpeg"
 
                 let asset = region.asset!
                 expect(asset.id) == "85"
@@ -50,7 +49,6 @@ class ImageRegionSpec: QuickSpec {
                 let region = ImageRegion.fromJSON(imageRegionData) as! ImageRegion
 
                 expect(region.url!.absoluteString) == "https://example.com/test.jpg"
-                expect(region.alt) == "region-alt.jpeg"
             }
 
             it("parses buy-button region correctly") {
@@ -59,7 +57,6 @@ class ImageRegionSpec: QuickSpec {
 
                 expect(region.url!.absoluteString) == "https://example.com/test.jpg"
                 expect(region.buyButtonURL!.absoluteString) == "https://amazon.com"
-                expect(region.alt) == "region-alt.jpeg"
 
                 let asset = region.asset!
                 expect(asset.id) == "85"

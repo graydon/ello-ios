@@ -58,7 +58,6 @@ class NotificationSpec: QuickSpec {
 
                 expect(NotificationAttributedTitle.from(notification: notification).string) == "@foo reposted your post."
                 expect(notification.textRegion?.content) == "<p>summary1!</p><br/><p>summary2!</p>"
-                expect(notification.imageRegion?.alt) == imageRegion1.alt
             }
 
             it("converts comment summary and parent post to Notification") {
@@ -126,7 +125,6 @@ class NotificationSpec: QuickSpec {
 
                 expect(NotificationAttributedTitle.from(notification: notification).string) == "@foo mentioned you in a comment."
                 expect(notification.textRegion?.content) == "<p>summary1!</p><br/><p>summary2!</p><br/><p>comment summary1!</p><br/><p>comment summary2!</p>"
-                expect(notification.imageRegion?.alt) == commentRegion1.alt
             }
         }
     }
