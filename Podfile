@@ -54,7 +54,7 @@ def common_pods
   pod 'Moya', '8.0.3'
   pod 'KeychainAccess', '~> 3.0'
   pod 'SwiftyUserDefaults', '~> 3.0'
-  pod 'SwiftyJSON', '~> 3.1'
+  pod 'SwiftyJSON', '~> 4.0'
   pod 'JWTDecode', '~> 2.0'
   pod 'WebLinking', git: 'https://github.com/kylef/WebLinking.swift'
   pod 'Analytics', '~> 3.0'

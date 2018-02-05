@@ -71,10 +71,11 @@ struct AuthToken {
     }
 
     static func storeToken(_ data: Data, isPasswordBased: Bool, email: String? = nil, password: String? = nil) {
+        guard let json = try? JSON(data: data) else { return }
+
         var authToken = AuthToken()
         authToken.isPasswordBased = isPasswordBased
 
-        let json = JSON(data: data)
         if let email = email {
             authToken.username = email
         }

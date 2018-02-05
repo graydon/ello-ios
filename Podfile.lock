@@ -75,7 +75,7 @@ PODS:
   - SSPullToRefresh (1.2.4)
   - SVGKit (2.0.1):
     - CocoaLumberjack (~> 2.x)
-  - SwiftyJSON (3.1.4)
+  - SwiftyJSON (4.0.0)
   - SwiftyUserDefaults (3.0.0)
   - TimeAgoInWords (3.0.0)
   - WebLinking (1.1.0)
@@ -150,7 +150,7 @@ DEPENDENCIES:
   - SnapKit (from `https://github.com/ello/SnapKit`)
   - SSPullToRefresh (~> 1.2)
   - SVGKit (from `https://github.com/ello/SVGKit`)
-  - SwiftyJSON (~> 3.1)
+  - SwiftyJSON (~> 4.0)
   - SwiftyUserDefaults (~> 3.0)
   - TimeAgoInWords (from `https://github.com/ello/TimeAgoInWords`)
   - WebLinking (from `https://github.com/kylef/WebLinking.swift`)
@@ -254,12 +254,12 @@ SPEC CHECKSUMS:
   SnapKit: 66bf0e9c5e02fdb6d2a549adb845ab4440d3ccfe
   SSPullToRefresh: 369e862c1d6528c7a354fc85cd4763d4e670e9af
   SVGKit: 2afbeaf2c2be4615476951284750c3ddb790d0c7
-  SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
+  SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
   SwiftyUserDefaults: 0f1d45fc3aafb9064dac661e367f8f83fe21a4b4
   TimeAgoInWords: 85c5f962523d61f7ca34d3b83c70afb28cd257e2
   WebLinking: 3f71787c14a225148e8be29fe6e7c98597cbc459
   YapDatabase: 861c720d5850a59f9e5c0bad0fd95334012b9dc9
 
-PODFILE CHECKSUM: a32e9aa15f24ce592cd0f666a177e87bd906a519
+PODFILE CHECKSUM: 04606cba7573d7fa0e483ab569cfecb5a08c24fd
 
 COCOAPODS: 1.1.1

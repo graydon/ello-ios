@@ -39,11 +39,11 @@ struct AutoCompleteService {
     }
 
     static var emojis: [(name: String, url: String)] = []
-    static func loadEmojiJSON(_ defaultJSON: String) {
-        let data = stubbedData(defaultJSON)
-        let json = JSON(data: data)
+    static func loadEmojiJSON(_ jsonFile: String) {
+        let data = stubbedData(jsonFile)
 
-        if let emojis = json["emojis"].object as? [[String: String]]
+        if let json = try? JSON(data: data),
+            let emojis = json["emojis"].object as? [[String: String]]
         {
             self.emojis = emojis.map {
                 var name = ""
