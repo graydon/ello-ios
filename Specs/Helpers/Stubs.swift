@@ -306,11 +306,7 @@ extension Post: Stubbable {
         post.body = (values["body"] as? [Regionable]) ?? [stubbedTextRegion]
         post.content = (values["content"] as? [Regionable]) ?? [stubbedTextRegion]
         post.repostContent = (values["repostContent"] as? [Regionable])
-        post.repostId = (values["repostId"] as? String)
         post.artistInviteId = (values["artistInviteId"] as? String)
-        post.repostPath = (values["repostPath"] as? String)
-        post.repostViaId = (values["repostViaId"] as? String)
-        post.repostViaPath = (values["repostViaPath"] as? String)
         post.viewsCount = values["viewsCount"] as? Int
         post.commentsCount = values["commentsCount"] as? Int
         post.repostsCount = values["repostsCount"] as? Int

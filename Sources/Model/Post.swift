@@ -27,10 +27,6 @@ final class Post: JSONAble, Authorable, Groupable {
     var content: [Regionable]?
     var body: [Regionable]?
     var repostContent: [Regionable]?
-    var repostId: String?
-    var repostPath: String?
-    var repostViaId: String?
-    var repostViaPath: String?
     var artistInviteId: String?
     var viewsCount: Int?
     var commentsCount: Int?
@@ -153,10 +149,6 @@ final class Post: JSONAble, Authorable, Groupable {
         self.content = decoder.decodeOptionalKey("content")
         self.body = decoder.decodeOptionalKey("body")
         self.repostContent = decoder.decodeOptionalKey("repostContent")
-        self.repostId = decoder.decodeOptionalKey("repostId")
-        self.repostPath = decoder.decodeOptionalKey("repostPath")
-        self.repostViaId = decoder.decodeOptionalKey("repostViaId")
-        self.repostViaPath = decoder.decodeOptionalKey("repostViaPath")
         self.artistInviteId = decoder.decodeOptionalKey("artistInviteId")
         self.viewsCount = decoder.decodeOptionalKey("viewsCount")
         self.commentsCount = decoder.decodeOptionalKey("commentsCount")
@@ -184,10 +176,6 @@ final class Post: JSONAble, Authorable, Groupable {
         coder.encodeObject(content, forKey: "content")
         coder.encodeObject(body, forKey: "body")
         coder.encodeObject(repostContent, forKey: "repostContent")
-        coder.encodeObject(repostId, forKey: "repostId")
-        coder.encodeObject(repostPath, forKey: "repostPath")
-        coder.encodeObject(repostViaId, forKey: "repostViaId")
-        coder.encodeObject(repostViaPath, forKey: "repostViaPath")
         coder.encodeObject(artistInviteId, forKey: "artistInviteId")
         coder.encodeObject(isReposted, forKey: "reposted")
         coder.encodeObject(isLoved, forKey: "loved")
@@ -228,10 +216,6 @@ final class Post: JSONAble, Authorable, Groupable {
         post.content = RegionParser.regions("content", json: json, isRepostContent: repostContent.count > 0)
         post.body = RegionParser.regions("body", json: json, isRepostContent: repostContent.count > 0)
         post.repostContent = repostContent
-        post.repostId = json["repost_id"].string
-        post.repostPath = json["repost_path"].string
-        post.repostViaId = json["repost_via_id"].string
-        post.repostViaPath = json["repost_via_path"].string
         post.artistInviteId = json["artist_invite_id"].string
         post.viewsCount = json["views_count"].int
         post.commentsCount = json["comments_count"].int
