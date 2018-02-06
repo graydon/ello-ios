@@ -86,22 +86,23 @@ class DebugController: UIViewController, UITableViewDataSource, UITableViewDeleg
             }
         }
 
-        addAction(name: "Artist Invites preview") {
-            appController.closeDebugController {
-                let vc = ArtistInvitesViewController(usage: .loggedOut)
-                self.navigationController?.pushViewController(vc, animated: true)
-            }
-        }
-
-        addAction(name: "Editorials preview") { [unowned self] in
-            let vc = EditorialsViewController(usage: .loggedOut)
-            self.navigationController?.pushViewController(vc, animated: true)
-        }
-
         addAction(name: "Logout") {
             appController.closeDebugController {
                 appController.userLoggedOut()
             }
+        }
+
+        addAction(name: "Test auth token - refresh") {
+            var token = AuthToken()
+            token.token = ""
+            appController.closeDebugController()
+        }
+
+        addAction(name: "Test auth token - u/p") {
+            var token = AuthToken()
+            token.token = ""
+            token.refreshToken = ""
+            appController.closeDebugController()
         }
 
         addAction(name: "Debug Tracking") {
