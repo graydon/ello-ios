@@ -200,18 +200,12 @@ class SearchScreen: StreamableScreen, SearchScreenProtocol {
 
         super.keyboardWillChange(keyboard, animated: animated)
     }
-
-    override func didMoveToSuperview() {
-        super.didMoveToSuperview()
-        searchField.becomeFirstResponder()
-    }
-
 }
 
 extension SearchScreen {
 
-    func showNavBars() {
-        elloAnimate {
+    func showNavBars(animated: Bool) {
+        elloAnimate(animated: animated) {
             self.searchControlsContainerTop.update(offset: ElloNavigationBar.Size.height)
             if Globals.isIphoneX {
                 self.updateSearchControlsHeight(Size.searchControlsHeight)
@@ -221,8 +215,8 @@ extension SearchScreen {
         }
     }
 
-    func hideNavBars() {
-        elloAnimate {
+    func hideNavBars(animated: Bool) {
+        elloAnimate(animated: animated) {
             self.searchControlsContainerTop.update(offset: 0)
             if Globals.isIphoneX {
                 self.updateSearchControlsHeight(Size.searchControlsTallHeight)
@@ -249,6 +243,9 @@ extension SearchScreen {
         performSearch()
     }
 
+    func activateSearchField() {
+        searchField.becomeFirstResponder()
+    }
 }
 
 extension SearchScreen {

@@ -19,6 +19,7 @@ class SearchViewController: StreamableViewController {
 
     var searchText: String?
     var isPostSearch = true
+    var isRecentlyVisible = false
 
     private var _mockScreen: SearchScreenProtocol?
     var screen: SearchScreenProtocol {
@@ -33,6 +34,15 @@ class SearchViewController: StreamableViewController {
         self.view = screen
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        if isRecentlyVisible {
+            isRecentlyVisible = false
+            screen.activateSearchField()
+        }
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -42,6 +52,8 @@ class SearchViewController: StreamableViewController {
         streamViewController.isPullToRefreshEnabled = false
 
         updateInsets()
+
+        isRecentlyVisible = true
     }
 
     func searchForPosts(_ terms: String) {
@@ -52,17 +64,17 @@ class SearchViewController: StreamableViewController {
         return screen.viewForStream()
     }
 
-    override func showNavBars() {
-        super.showNavBars()
-        positionNavBar(screen.navigationBar, visible: true, withConstraint: screen.navigationBarTopConstraint)
-        screen.showNavBars()
+    override func showNavBars(animated: Bool) {
+        super.showNavBars(animated: animated)
+        positionNavBar(screen.navigationBar, visible: true, withConstraint: screen.navigationBarTopConstraint, animated: animated)
+        screen.showNavBars(animated: animated)
         updateInsets()
     }
 
-    override func hideNavBars() {
-        super.hideNavBars()
-        positionNavBar(screen.navigationBar, visible: false, withConstraint: screen.navigationBarTopConstraint)
-        screen.hideNavBars()
+    override func hideNavBars(animated: Bool) {
+        super.hideNavBars(animated: animated)
+        positionNavBar(screen.navigationBar, visible: false, withConstraint: screen.navigationBarTopConstraint, animated: animated)
+        screen.hideNavBars(animated: animated)
         updateInsets()
     }
 
@@ -79,7 +91,7 @@ extension SearchViewController: SearchScreenDelegate {
     }
 
     func searchFieldCleared() {
-        showNavBars()
+        showNavBars(animated: false)
         searchText = ""
         streamViewController.removeAllCellItems()
         streamViewController.loadingToken.cancelInitialPage()

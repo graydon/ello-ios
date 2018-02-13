@@ -148,22 +148,23 @@ final class ProfileViewController: StreamableViewController {
         super.didSetCurrentUser()
     }
 
-    override func showNavBars() {
-        super.showNavBars()
-        positionNavBar(screen.navigationBar, visible: true, withConstraint: screen.navigationBarTopConstraint)
-        updateInsets()
+    override func showNavBars(animated: Bool) {
+        super.showNavBars(animated: animated)
+        positionNavBar(screen.navigationBar, visible: true, withConstraint: screen.navigationBarTopConstraint, animated: animated)
+        screen.showNavBars(animated: animated)
 
-        screen.showNavBars()
+        updateInsets()
     }
 
-    override func hideNavBars() {
-        super.hideNavBars()
-        positionNavBar(screen.navigationBar, visible: false, withConstraint: screen.navigationBarTopConstraint)
-        updateInsets()
+    override func hideNavBars(animated: Bool) {
+        super.hideNavBars(animated: animated)
+        positionNavBar(screen.navigationBar, visible: false, withConstraint: screen.navigationBarTopConstraint, animated: animated)
 
         let offset = self.streamViewController.collectionView.contentOffset
         let currentUser = (self.user?.id == self.currentUser?.id && self.user?.id != nil)
         screen.hideNavBars(offset, isCurrentUser: currentUser)
+
+        updateInsets()
     }
 
     private func updateInsets() {

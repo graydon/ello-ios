@@ -297,10 +297,10 @@ extension AppViewController {
         {
             for loggedOutController in loggedOutControllers {
                 if navigationBarsVisible {
-                    loggedOutController.showNavBars()
+                    loggedOutController.showNavBars(animated: true)
                 }
                 else {
-                    loggedOutController.hideNavBars()
+                    loggedOutController.hideNavBars(animated: true)
                 }
             }
         }
@@ -447,9 +447,10 @@ extension AppViewController {
     }
 
     private func prepareToShowViewController(_ newViewController: UIViewController) {
-        view.addSubview(newViewController.view)
         newViewController.view.frame = self.view.bounds
         newViewController.view.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        newViewController.view.layoutIfNeeded()
+        view.addSubview(newViewController.view)
     }
 
 }

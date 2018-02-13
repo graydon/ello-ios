@@ -64,15 +64,15 @@ class EditorialsViewController: StreamableViewController {
         updateInsets(navBar: screen.navigationBar)
     }
 
-    override func showNavBars() {
-        super.showNavBars()
-        positionNavBar(screen.navigationBar, visible: true, withConstraint: screen.navigationBarTopConstraint)
+    override func showNavBars(animated: Bool) {
+        super.showNavBars(animated: animated)
+        positionNavBar(screen.navigationBar, visible: true, withConstraint: screen.navigationBarTopConstraint, animated: animated)
         updateInsets()
     }
 
-    override func hideNavBars() {
-        super.hideNavBars()
-        positionNavBar(screen.navigationBar, visible: false, withConstraint: screen.navigationBarTopConstraint)
+    override func hideNavBars(animated: Bool) {
+        super.hideNavBars(animated: animated)
+        positionNavBar(screen.navigationBar, visible: false, withConstraint: screen.navigationBarTopConstraint, animated: animated)
         updateInsets()
     }
 }

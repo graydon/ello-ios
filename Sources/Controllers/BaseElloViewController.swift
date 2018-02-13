@@ -76,7 +76,7 @@ class BaseElloViewController: UIViewController, HasAppController, ControllerThat
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        updateNavBars()
+        updateNavBars(animated: false)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -86,7 +86,7 @@ class BaseElloViewController: UIViewController, HasAppController, ControllerThat
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        updateNavBars()
+        // updateNavBars(animated: false)
     }
 
     override func trackScreenAppeared() {
@@ -97,28 +97,26 @@ class BaseElloViewController: UIViewController, HasAppController, ControllerThat
         }
     }
 
-    func updateNavBars() {
+    func updateNavBars(animated: Bool) {
         guard let navigationBarsVisible = navigationBarsVisible else { return }
 
         postNotification(StatusBarNotifications.statusBarVisibility, value: navigationBarsVisible)
-        UIView.setAnimationsEnabled(false)
         if navigationBarsVisible {
-            showNavBars()
+            showNavBars(animated: animated)
         }
         else {
-            hideNavBars()
+            hideNavBars(animated: animated)
         }
-        UIView.setAnimationsEnabled(true)
     }
 
-    func showNavBars() {
+    func showNavBars(animated: Bool) {
         guard updatesBottomBar else { return }
-        bottomBarController?.setNavigationBarsVisible(true, animated: true)
+        bottomBarController?.setNavigationBarsVisible(true, animated: animated)
     }
 
-    func hideNavBars() {
+    func hideNavBars(animated: Bool) {
         guard updatesBottomBar else { return }
-        bottomBarController?.setNavigationBarsVisible(false, animated: true)
+        bottomBarController?.setNavigationBarsVisible(false, animated: animated)
     }
 
     func didSetCurrentUser() {

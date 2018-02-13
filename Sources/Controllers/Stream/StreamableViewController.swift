@@ -62,8 +62,8 @@ class StreamableViewController: BaseElloViewController {
 
         setupStreamController()
         scrollLogic = ElloScrollLogic(
-            onShow: { [weak self] in self?.showNavBars() },
-            onHide: { [weak self] in self?.hideNavBars() }
+            onShow: { [weak self] in self?.showNavBars(animated: true) },
+            onHide: { [weak self] in self?.hideNavBars(animated: true) }
         )
 
         for tapToShow in [tapToShowTop, tapToShowBottom] {
@@ -104,27 +104,26 @@ class StreamableViewController: BaseElloViewController {
         }
     }
 
-    override func updateNavBars() {
-        super.updateNavBars()
+    override func updateNavBars(animated: Bool) {
+        super.updateNavBars(animated: animated)
         if let navigationBarsVisible = navigationBarsVisible {
             scrollLogic.isShowing = navigationBarsVisible
         }
     }
 
-    override func showNavBars() {
+    override func showNavBars(animated: Bool) {
         guard updatesBottomBar else { return }
-        super.showNavBars()
+        super.showNavBars(animated: animated)
         tapToShowTop.isUserInteractionEnabled = true
         tapToShowBottom.isUserInteractionEnabled = true
     }
 
-    override func hideNavBars() {
+    override func hideNavBars(animated: Bool) {
         guard updatesBottomBar else { return }
-        super.hideNavBars()
+        super.hideNavBars(animated: animated)
         tapToShowTop.isUserInteractionEnabled = true
         tapToShowBottom.isUserInteractionEnabled = true
     }
-
 
     func updateInsets(navBar: UIView?, navigationBarsVisible visible: Bool? = nil) {
         updateInsets(maxY: navBar?.frame.maxY ?? 0, navigationBarsVisible: visible)
@@ -164,7 +163,7 @@ class StreamableViewController: BaseElloViewController {
         streamViewController.contentInset = contentInset
     }
 
-    func positionNavBar(_ navBar: UIView, visible: Bool, withConstraint navigationBarTopConstraint: NSLayoutConstraint? = nil, animated: Bool = true) {
+    func positionNavBar(_ navBar: UIView, visible: Bool, withConstraint navigationBarTopConstraint: NSLayoutConstraint? = nil, animated: Bool) {
         let upAmount: CGFloat
         if visible {
             upAmount = 0
@@ -199,7 +198,7 @@ extension StreamableViewController {
     @objc
     func tapToShowTapped() {
         scrollLogic.isShowing = true
-        showNavBars()
+        showNavBars(animated: true)
     }
 }
 

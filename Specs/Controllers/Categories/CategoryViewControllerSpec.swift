@@ -24,7 +24,7 @@ class CategoryViewControllerSpec: QuickSpec {
         func set(categoriesInfo: [CategoryCardListView.CategoryInfo], animated: Bool, completion: @escaping Block) {
             categoryTitles = categoriesInfo.map { $0.title }
         }
-        func animateCategoriesList(navBarVisible: Bool) {}
+        func toggleCategoriesList(navBarVisible: Bool, animated: Bool) {}
         func scrollToCategory(index: Int) {
             scrollTo = index
         }

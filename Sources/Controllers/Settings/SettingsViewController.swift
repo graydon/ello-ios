@@ -34,8 +34,8 @@ class SettingsViewController: BaseElloViewController {
         super.init(nibName: nil, bundle: nil)
 
         scrollLogic = ElloScrollLogic(
-                onShow: { [weak self] in self?.showNavBars() },
-                onHide: { [weak self] in self?.hideNavBars() }
+                onShow: { [weak self] in self?.showNavBars(animated: true) },
+                onHide: { [weak self] in self?.hideNavBars(animated: true) }
             )
 
         self.currentUser = currentUser
@@ -88,13 +88,13 @@ class SettingsViewController: BaseElloViewController {
         keyboardWillHideObserver = nil
     }
 
-    override func showNavBars() {
-        super.showNavBars()
+    override func showNavBars(animated: Bool) {
+        super.showNavBars(animated: animated)
         screen.showNavBars(animated: true)
     }
 
-    override func hideNavBars() {
-        super.hideNavBars()
+    override func hideNavBars(animated: Bool) {
+        super.hideNavBars(animated: animated)
         screen.hideNavBars(animated: true)
     }
 

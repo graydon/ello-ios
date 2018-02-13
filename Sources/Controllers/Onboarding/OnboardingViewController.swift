@@ -215,6 +215,7 @@ extension OnboardingViewController {
         screen.controllerContainer.addSubview(viewController.view)
         viewController.view.frame = screen.controllerContainer.bounds
         viewController.view.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        viewController.view.layoutIfNeeded()
         viewController.didMove(toParentViewController: self)
 
         visibleViewController = viewController

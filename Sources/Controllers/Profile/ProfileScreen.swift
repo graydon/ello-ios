@@ -351,8 +351,8 @@ class ProfileScreen: StreamableScreen, ProfileScreenProtocol {
         coverImageView.image = nil
     }
 
-    func showNavBars() {
-        elloAnimate {
+    func showNavBars(animated: Bool) {
+        elloAnimate(animated: animated) {
             let effectsTop = self.navigationBar.frame.height
             let effectsHeight = Size.profileButtonsContainerViewHeight
 

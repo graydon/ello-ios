@@ -47,21 +47,21 @@ class OnboardingInviteViewController: StreamableViewController {
         return screen.viewForStream()
     }
 
-    override func showNavBars() {
+    override func showNavBars(animated: Bool) {
         guard onboardingViewController == nil else { return }
 
-        super.showNavBars()
+        super.showNavBars(animated: animated)
 
-        positionNavBar(screen.navigationBar, visible: true, withConstraint: screen.navigationBarTopConstraint)
+        positionNavBar(screen.navigationBar, visible: true, withConstraint: screen.navigationBarTopConstraint, animated: animated)
         updateInsets()
     }
 
-    override func hideNavBars() {
+    override func hideNavBars(animated: Bool) {
         guard onboardingViewController == nil else { return }
 
-        super.hideNavBars()
+        super.hideNavBars(animated: animated)
 
-        positionNavBar(screen.navigationBar, visible: false, withConstraint: screen.navigationBarTopConstraint)
+        positionNavBar(screen.navigationBar, visible: false, withConstraint: screen.navigationBarTopConstraint, animated: animated)
         updateInsets()
     }
 

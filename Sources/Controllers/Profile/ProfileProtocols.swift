@@ -13,7 +13,7 @@ protocol ProfileScreenDelegate: class {
 protocol ProfileScreenProtocol: StreamableScreenProtocol {
     func disableButtons()
     func enableButtons()
-    func showNavBars()
+    func showNavBars(animated: Bool)
     func hideNavBars(_ offset: CGPoint, isCurrentUser: Bool)
     func configureButtonsForNonCurrentUser(isHireable: Bool, isCollaborateable: Bool)
     func configureButtonsForCurrentUser()

@@ -74,15 +74,15 @@ final class PostDetailViewController: StreamableViewController {
         super.didSetCurrentUser()
     }
 
-    override func showNavBars() {
-        super.showNavBars()
-        positionNavBar(navigationBar, visible: true)
+    override func showNavBars(animated: Bool) {
+        super.showNavBars(animated: animated)
+        positionNavBar(navigationBar, visible: true, animated: animated)
         updateInsets()
     }
 
-    override func hideNavBars() {
-        super.hideNavBars()
-        positionNavBar(navigationBar, visible: false)
+    override func hideNavBars(animated: Bool) {
+        super.hideNavBars(animated: animated)
+        positionNavBar(navigationBar, visible: false, animated: animated)
         updateInsets()
     }
 
@@ -240,7 +240,7 @@ extension PostDetailViewController: PostDetailStreamDestination {
         setupNavigationItems()
 
         if isAuthorOfPost() {
-            showNavBars()
+            showNavBars(animated: true)
         }
     }
 

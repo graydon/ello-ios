@@ -109,17 +109,17 @@ class NotificationsViewController: StreamableViewController, NotificationsScreen
         streamViewController.reloadClosure = { [weak self] in self?.reload(showSpinner: false) }
     }
 
-    override func showNavBars() {
-        super.showNavBars()
+    override func showNavBars(animated: Bool) {
+        super.showNavBars(animated: animated)
         screen.navBarVisible = true
-        positionNavBar(screen.filterBar, visible: true)
+        positionNavBar(screen.filterBar, visible: true, animated: animated)
         updateInsets()
     }
 
-    override func hideNavBars() {
-        super.hideNavBars()
+    override func hideNavBars(animated: Bool) {
+        super.hideNavBars(animated: animated)
         screen.navBarVisible = false
-        positionNavBar(screen.filterBar, visible: false)
+        positionNavBar(screen.filterBar, visible: false, animated: animated)
         updateInsets()
     }
 

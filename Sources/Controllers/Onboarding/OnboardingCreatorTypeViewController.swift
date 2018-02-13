@@ -74,8 +74,8 @@ class OnboardingCreatorTypeViewController: BaseElloViewController {
             }
     }
 
-    override func updateNavBars() {
-        super.updateNavBars()
+    override func updateNavBars(animated: Bool) {
+        super.updateNavBars(animated: animated)
 
         if bottomBarController?.bottomBarVisible == true {
             screen.bottomInset = ElloTabBar.Size.height

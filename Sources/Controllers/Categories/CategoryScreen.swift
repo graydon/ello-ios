@@ -121,7 +121,7 @@ class CategoryScreen: HomeSubviewScreen, CategoryScreenProtocol {
         categoryCardList.isHidden = true
 
         categoryCardList.snp.makeConstraints { make in
-            categoryCardTopConstraint = make.top.equalTo(navigationBar.snp.bottom).constraint
+            categoryCardTopConstraint = make.top.equalTo(self).constraint
             make.leading.trailing.equalTo(self)
             make.height.equalTo(CategoryCardListView.Size.height)
         }
@@ -203,8 +203,8 @@ class CategoryScreen: HomeSubviewScreen, CategoryScreenProtocol {
         }.always(completion)
     }
 
-    func animateCategoriesList(navBarVisible: Bool) {
-        elloAnimate {
+    func toggleCategoriesList(navBarVisible: Bool, animated: Bool) {
+        elloAnimate(animated: animated) {
             let categoryCardListTop: CGFloat
             if navBarVisible {
                 categoryCardListTop = self.navigationBar.frame.height

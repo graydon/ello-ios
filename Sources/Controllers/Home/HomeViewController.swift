@@ -106,6 +106,10 @@ extension HomeViewController: HomeResponder {
     private func showController(_ viewController: UIViewController) {
         guard visibleViewController != viewController else { return }
 
+        viewController.view.frame = screen.controllerContainer.bounds
+        viewController.view.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        viewController.view.layoutIfNeeded()
+
         if let visibleViewController = visibleViewController {
             screen.controllerContainer.insertSubview(viewController.view, aboveSubview: visibleViewController.view)
             visibleViewController.view.removeFromSuperview()
@@ -113,9 +117,6 @@ extension HomeViewController: HomeResponder {
         else {
             screen.controllerContainer.addSubview(viewController.view)
         }
-
-        viewController.view.frame = screen.controllerContainer.bounds
-        viewController.view.autoresizingMask = [.flexibleHeight, .flexibleWidth]
 
         visibleViewController = viewController
     }

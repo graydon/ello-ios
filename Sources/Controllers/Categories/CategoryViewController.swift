@@ -113,17 +113,17 @@ final class CategoryViewController: StreamableViewController {
         }
     }
 
-    override func showNavBars() {
-        super.showNavBars()
-        positionNavBar(screen.navigationBar, visible: true, withConstraint: screen.navigationBarTopConstraint)
-        screen.animateCategoriesList(navBarVisible: true)
+    override func showNavBars(animated: Bool) {
+        super.showNavBars(animated: animated)
+        positionNavBar(screen.navigationBar, visible: true, withConstraint: screen.navigationBarTopConstraint, animated: animated)
+        screen.toggleCategoriesList(navBarVisible: true, animated: animated)
         updateInsets()
     }
 
-    override func hideNavBars() {
-        super.hideNavBars()
-        positionNavBar(screen.navigationBar, visible: false, withConstraint: screen.navigationBarTopConstraint)
-        screen.animateCategoriesList(navBarVisible: false)
+    override func hideNavBars(animated: Bool) {
+        super.hideNavBars(animated: animated)
+        positionNavBar(screen.navigationBar, visible: false, withConstraint: screen.navigationBarTopConstraint, animated: animated)
+        screen.toggleCategoriesList(navBarVisible: false, animated: animated)
         updateInsets()
     }
 

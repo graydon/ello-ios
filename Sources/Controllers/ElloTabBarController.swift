@@ -374,9 +374,10 @@ private extension ElloTabBarController {
 
     func showViewController(_ showViewController: UIViewController) {
         tabBar.selectedTab = selectedTab
-        view.insertSubview(showViewController.view, belowSubview: tabBar)
         showViewController.view.frame = tabBar.frame.fromBottom().grow(up: view.frame.height - tabBar.frame.height)
         showViewController.view.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        showViewController.view.layoutIfNeeded()
+        view.insertSubview(showViewController.view, belowSubview: tabBar)
     }
 
     func transitionControllers(_ hideViewController: UIViewController, _ showViewController: UIViewController) {
