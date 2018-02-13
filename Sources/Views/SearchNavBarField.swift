@@ -12,7 +12,7 @@ class SearchNavBarField: UITextField {
 
         static private func calculateInsets() -> UIEdgeInsets {
             var insets = UIEdgeInsets(top: 7, left: 7, bottom: 7, right: 7)
-            insets.top += BlackBar.Size.height
+            insets.top += StatusBar.Size.height
             return insets
         }
 

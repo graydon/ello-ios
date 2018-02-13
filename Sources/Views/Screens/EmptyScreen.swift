@@ -7,7 +7,7 @@ import SnapKit
 
 class EmptyScreen: Screen {
     var blackBarIsVisible: Bool {
-        get { return !blackBar.isHidden }
+        get { return !statusBar.isHidden }
         set {
             if newValue {
                 blackBarHeightConstraint.deactivate()
@@ -15,16 +15,16 @@ class EmptyScreen: Screen {
             else {
                 blackBarHeightConstraint.activate()
             }
-            blackBar.isHidden = !newValue
+            statusBar.isHidden = !newValue
         }
     }
-    let blackBar = BlackBar()
+    let statusBar = StatusBar()
     private var blackBarHeightConstraint: Constraint!
 
     override func arrange() {
-        addSubview(blackBar)
+        addSubview(statusBar)
 
-        blackBar.snp.makeConstraints { make in
+        statusBar.snp.makeConstraints { make in
             make.leading.trailing.top.equalTo(self)
             blackBarHeightConstraint = make.height.equalTo(0).priority(Priority.required).constraint
         }

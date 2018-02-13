@@ -45,6 +45,11 @@ class AppViewController: BaseElloViewController {
     var visibleViewController: UIViewController?
 
     var statusBarShouldBeVisible: Bool { return alertStatusBarIsVisible ?? statusBarIsVisible }
+
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return visibleViewController?.preferredStatusBarStyle ?? .lightContent
+    }
+
     private var statusBarIsVisible = true {
         didSet {
             if oldValue != statusBarIsVisible {

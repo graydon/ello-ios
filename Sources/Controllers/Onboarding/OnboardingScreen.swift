@@ -81,7 +81,7 @@ class OnboardingScreen: EmptyScreen {
 
         controllerContainer.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self)
-            make.top.equalTo(blackBar.snp.bottom)
+            make.top.equalTo(statusBar.snp.bottom)
             make.bottom.equalTo(buttonContainer.snp.top)
         }
     }

@@ -27,16 +27,6 @@ class LoginViewController: BaseElloViewController {
                 self.screen.showError(errorTitle)
             }
     }
-
-    override func showNavBars() {
-        super.showNavBars()
-        screen.blackBarIsVisible = true
-    }
-
-    override func hideNavBars() {
-        super.hideNavBars()
-        screen.blackBarIsVisible = false
-    }
 }
 
 extension LoginViewController: LoginScreenDelegate {

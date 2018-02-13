@@ -9,6 +9,10 @@ import PINRemoteImage
 class ElloTabBarController: BaseElloViewController, BottomBarController {
     override func trackerName() -> String? { return nil }
 
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return visibleViewController?.preferredStatusBarStyle ?? .default
+    }
+
     let tabBar = ElloTabBar()
     var newNotificationsAvailable: Bool {
         set { notificationsDot?.isHidden = !newValue }

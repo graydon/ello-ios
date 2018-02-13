@@ -25,13 +25,13 @@ class ElloNavigationBar: UIView {
         static let backButtonMargins = calculateButtonMargins()
 
         static private func calculateHeight() -> CGFloat {
-            return Size.navigationHeight + BlackBar.Size.height
+            return Size.navigationHeight + StatusBar.Size.height
         }
         static private func calculateLargeHeight() -> CGFloat {
-            return 105 + BlackBar.Size.height
+            return 105 + StatusBar.Size.height
         }
         static private func calculateDiscoverHeight() -> CGFloat {
-            return 142 + BlackBar.Size.height
+            return 142 + StatusBar.Size.height
         }
         static private func calculateButtonMargins() -> UIEdgeInsets {
             if Globals.isIphoneX {
@@ -170,6 +170,7 @@ class ElloNavigationBar: UIView {
     private var rightTrailingConstraint: Constraint!
 
     private let persistentBackButton = PersistentBackButton()
+    private let statusBar = StatusBar()
 
     var showBackButton: Bool = false {
         didSet { updateBackButton() }
@@ -230,10 +231,8 @@ class ElloNavigationBar: UIView {
         persistentBackButton.isHidden = true
         persistentBackButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
 
-        let bar = BlackBar()
-
         addSubview(titleLabel)
-        addSubview(bar)
+        addSubview(statusBar)
         addSubview(navigationContainer)
         navigationContainer.addSubview(leftButtonContainer)
         navigationContainer.addSubview(rightButtonContainer)
@@ -244,12 +243,12 @@ class ElloNavigationBar: UIView {
             make.trailing.lessThanOrEqualTo(rightButtonContainer.snp.leading).priority(Priority.required)
         }
 
-        bar.snp.makeConstraints { make in
+        statusBar.snp.makeConstraints { make in
             make.top.leading.trailing.equalTo(self)
         }
 
         navigationContainer.snp.makeConstraints { make in
-            make.top.equalTo(bar.snp.bottom)
+            make.top.equalTo(statusBar.snp.bottom)
             make.height.equalTo(Size.navigationHeight)
             make.leading.trailing.equalTo(self)
         }

@@ -110,13 +110,13 @@ class OmnibarScreen: Screen, OmnibarScreenProtocol {
                 toolbarPinToTopConstraint.deactivate()
                 toolbarPinToNavConstraint.activate()
                 navigationBar.isHidden = false
-                blackBar.isHidden = true
+                statusBar.isHidden = true
             }
             else {
                 toolbarPinToTopConstraint.activate()
                 toolbarPinToNavConstraint.deactivate()
                 navigationBar.isHidden = true
-                blackBar.isHidden = false
+                statusBar.isHidden = false
             }
 
             setNeedsLayout()
@@ -133,7 +133,7 @@ class OmnibarScreen: Screen, OmnibarScreenProtocol {
 // MARK: views and private vars
     var autoCompleteVC = AutoCompleteViewController()
 
-    let blackBar = BlackBar()
+    let statusBar = StatusBar()
     let navigationBar = ElloNavigationBar()
 
 // MARK: toolbar buttons
@@ -240,8 +240,8 @@ class OmnibarScreen: Screen, OmnibarScreenProtocol {
             make.height.equalTo(ElloNavigationBar.Size.height)
         }
 
-        addSubview(blackBar)
-        blackBar.snp.makeConstraints { make in
+        addSubview(statusBar)
+        statusBar.snp.makeConstraints { make in
             make.leading.trailing.top.equalTo(self)
         }
     }
@@ -279,7 +279,7 @@ class OmnibarScreen: Screen, OmnibarScreenProtocol {
         addSubview(toolbarContainer)
         toolbarContainer.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self)
-            toolbarPinToTopConstraint = make.top.equalTo(self).offset(BlackBar.Size.height + Size.margins.top).constraint
+            toolbarPinToTopConstraint = make.top.equalTo(self).offset(StatusBar.Size.height + Size.margins.top).constraint
             toolbarPinToNavConstraint = make.top.equalTo(navigationBar.snp.bottom).constraint
         }
         toolbarContainer.addSubview(cancelButton)

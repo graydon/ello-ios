@@ -43,6 +43,7 @@ class CredentialsScreen: EmptyScreen {
         backButton.setImages(.backChevron, style: .white)
         backButton.contentMode = .center
         layer.masksToBounds = true
+        statusBar.backgroundColor = .clear
     }
 
     override func arrange() {
@@ -59,7 +60,7 @@ class CredentialsScreen: EmptyScreen {
 
         scrollView.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self)
-            make.top.equalTo(blackBar.snp.bottom)
+            make.top.equalTo(statusBar.snp.bottom)
             make.bottom.equalTo(continueBackground.snp.top)
         }
 

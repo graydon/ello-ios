@@ -40,16 +40,6 @@ class JoinViewController: BaseElloViewController {
     private func showLoginScreen(_ email: String, _ password: String) {
         appViewController?.showLoginScreen()
     }
-
-    override func showNavBars() {
-        super.showNavBars()
-        screen.blackBarIsVisible = true
-    }
-
-    override func hideNavBars() {
-        super.hideNavBars()
-        screen.blackBarIsVisible = false
-    }
 }
 
 extension JoinViewController: JoinScreenDelegate {

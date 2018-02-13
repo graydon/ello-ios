@@ -78,8 +78,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func setupGlobalStyles() {
-        UIApplication.shared.statusBarStyle = .lightContent
-
         let attributes: [NSAttributedStringKey: Any] = [
             .foregroundColor: UIColor.greyA,
             .font: UIFont.defaultFont(12),

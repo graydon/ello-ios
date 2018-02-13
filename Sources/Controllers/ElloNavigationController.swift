@@ -17,6 +17,10 @@ class ElloNavigationController: UINavigationController, ControllerThatMightHaveT
 
     var backGesture: UIScreenEdgePanGestureRecognizer?
 
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return visibleViewController?.preferredStatusBarStyle ?? .default
+    }
+
     func didSetCurrentUser() {
         for controller in self.viewControllers {
             guard let controller = controller as? ControllerThatMightHaveTheCurrentUser else { return }

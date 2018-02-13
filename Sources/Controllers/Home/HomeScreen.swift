@@ -96,7 +96,7 @@ extension HomeScreenNavBar {
 
         logoButton.snp.makeConstraints { make in
             make.centerX.equalTo(navigationBar)
-            make.top.equalTo(navigationBar).offset(BlackBar.Size.height + HomeScreenNavBarSize.typeOffset)
+            make.top.equalTo(navigationBar).offset(StatusBar.Size.height + HomeScreenNavBarSize.typeOffset)
         }
 
         tabBar.snp.makeConstraints { make in

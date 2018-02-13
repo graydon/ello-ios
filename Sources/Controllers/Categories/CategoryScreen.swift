@@ -140,7 +140,7 @@ class CategoryScreen: HomeSubviewScreen, CategoryScreenProtocol {
             else {
                 insets = SearchNavBarField.Size.searchInsets
             }
-            insets.top -= BlackBar.Size.height
+            insets.top -= StatusBar.Size.height
             insets.bottom -= 1
             make.bottom.equalTo(navigationBar).inset(insets)
             make.height.equalTo(Size.navigationBarHeight - insets.top - insets.bottom)

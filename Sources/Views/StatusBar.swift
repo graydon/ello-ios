@@ -1,8 +1,8 @@
 ////
-///  BlackBar.swift
+///  StatusBar.swift
 //
 
-class BlackBar: View {
+class StatusBar: View {
     struct Size {
         static let height: CGFloat = calculateHeight()
 

@@ -115,7 +115,7 @@ class SearchScreen: StreamableScreen, SearchScreenProtocol {
 
         backButton.snp.makeConstraints { make in
             make.leading.bottom.equalTo(navigationBar)
-            make.top.equalTo(navigationBar).offset(BlackBar.Size.height)
+            make.top.equalTo(navigationBar).offset(StatusBar.Size.height)
             make.width.equalTo(Size.buttonWidth)
         }
 
@@ -130,7 +130,7 @@ class SearchScreen: StreamableScreen, SearchScreenProtocol {
         gridListHiddenConstraint.deactivate()
 
         gridListButton.snp.makeConstraints { make in
-            make.top.equalTo(navigationBar).offset(BlackBar.Size.height)
+            make.top.equalTo(navigationBar).offset(StatusBar.Size.height)
             make.bottom.equalTo(navigationBar)
             make.trailing.equalTo(navigationBar).offset(-Size.buttonMargin)
             make.width.equalTo(Size.buttonWidth)

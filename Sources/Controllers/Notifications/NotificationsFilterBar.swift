@@ -9,7 +9,7 @@ class NotificationsFilterBar: UIView {
         static let buttonPadding: CGFloat = 1
 
         static private func calculateHeight() -> CGFloat {
-            return 44 + BlackBar.Size.height
+            return 44 + StatusBar.Size.height
         }
     }
 
@@ -21,8 +21,8 @@ class NotificationsFilterBar: UIView {
         super.init(frame: frame)
         backgroundColor = .white
 
-        let blackBar = BlackBar(frame: CGRect(x: 0, y: 0, width: frame.width, height: 20))
-        self.addSubview(blackBar)
+        let statusBar = StatusBar(frame: CGRect(x: 0, y: 0, width: frame.width, height: 20))
+        self.addSubview(statusBar)
     }
 
     required init?(coder: NSCoder) {
@@ -36,7 +36,7 @@ class NotificationsFilterBar: UIView {
         let buttons = self.buttons
         if buttons.count > 0 {
             var x: CGFloat = 0
-            let y: CGFloat = BlackBar.Size.height
+            let y: CGFloat = StatusBar.Size.height
             let w: CGFloat = (self.frame.size.width - Size.buttonPadding * CGFloat(buttons.count - 1)) / CGFloat(buttons.count)
             for button in buttons {
                 let frame = CGRect(x: x, y: y, width: w, height: self.frame.size.height - y)

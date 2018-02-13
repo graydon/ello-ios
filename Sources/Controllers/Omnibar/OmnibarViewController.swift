@@ -171,7 +171,6 @@ class OmnibarViewController: BaseElloViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         postNotification(StatusBarNotifications.statusBarVisibility, value: true)
-        UIApplication.shared.statusBarStyle = .lightContent
 
         if let previousTab = elloTabBarController?.previousTab {
             self.previousTab = previousTab
@@ -330,9 +329,6 @@ extension OmnibarViewController: OmnibarScreenDelegate {
     }
 
     func omnibarPresentController(_ controller: UIViewController) {
-        if !(controller is AlertViewController) {
-            UIApplication.shared.statusBarStyle = .lightContent
-        }
         self.present(controller, animated: true, completion: nil)
     }
 

@@ -528,7 +528,7 @@
 		1D273A361D08A480009FD393 /* BlockUserModalConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D273A351D08A480009FD393 /* BlockUserModalConfig.swift */; };
 		1D2896531FA25CBE004661C1 /* CommentHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D2896521FA25CBD004661C1 /* CommentHeaderCell.swift */; };
 		1D2896551FA2640E004661C1 /* CommentHeaderCellPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D2896541FA2640E004661C1 /* CommentHeaderCellPresenter.swift */; };
-		1D2B50BB1D272A6400F6CE90 /* BlackBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D2B50BA1D272A6400F6CE90 /* BlackBar.swift */; };
+		1D2B50BB1D272A6400F6CE90 /* StatusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D2B50BA1D272A6400F6CE90 /* StatusBar.swift */; };
 		1D2B50BD1D2C2FC000F6CE90 /* CategoryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D2B50BC1D2C2FC000F6CE90 /* CategoryService.swift */; };
 		1D2B6A7C1BE3FB0900D27DC9 /* AvatarButtonSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D2B6A7B1BE3FB0900D27DC9 /* AvatarButtonSpec.swift */; };
 		1D2C12AA1D4FD727007C4981 /* OmnibarScreenSnapshotSpecs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D2C12A91D4FD727007C4981 /* OmnibarScreenSnapshotSpecs.swift */; };
@@ -1755,7 +1755,7 @@
 		1D273A351D08A480009FD393 /* BlockUserModalConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockUserModalConfig.swift; sourceTree = "<group>"; };
 		1D2896521FA25CBD004661C1 /* CommentHeaderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentHeaderCell.swift; sourceTree = "<group>"; };
 		1D2896541FA2640E004661C1 /* CommentHeaderCellPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentHeaderCellPresenter.swift; sourceTree = "<group>"; };
-		1D2B50BA1D272A6400F6CE90 /* BlackBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlackBar.swift; sourceTree = "<group>"; };
+		1D2B50BA1D272A6400F6CE90 /* StatusBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusBar.swift; sourceTree = "<group>"; };
 		1D2B50BC1D2C2FC000F6CE90 /* CategoryService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryService.swift; sourceTree = "<group>"; };
 		1D2B6A7B1BE3FB0900D27DC9 /* AvatarButtonSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AvatarButtonSpec.swift; sourceTree = "<group>"; };
 		1D2C12A91D4FD727007C4981 /* OmnibarScreenSnapshotSpecs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OmnibarScreenSnapshotSpecs.swift; sourceTree = "<group>"; };
@@ -3446,7 +3446,7 @@
 				762EE9EA1A840E4A00A3B805 /* AvatarButton.swift */,
 				1DBD0BBA1F950AB400DF9FC5 /* Base */,
 				1289F3971AF17937008A938C /* BasicIcon.swift */,
-				1D2B50BA1D272A6400F6CE90 /* BlackBar.swift */,
+				1D2B50BA1D272A6400F6CE90 /* StatusBar.swift */,
 				1DA18E571DD12FE8000231CC /* CategoryCardListView.swift */,
 				12B291371DDF5E9F0056C52E /* CategoryCardView.swift */,
 				1D7152AF1D6E4782005998FE /* ClearTextField.swift */,
@@ -5779,7 +5779,7 @@
 				1275351D1B73D155006B9A0F /* DateExtensions.swift in Sources */,
 				1D80877E2032596C0081E8FE /* SettingsProtocols.swift in Sources */,
 				12F6AE241A43389B00493660 /* LoginViewController.swift in Sources */,
-				1D2B50BB1D272A6400F6CE90 /* BlackBar.swift in Sources */,
+				1D2B50BB1D272A6400F6CE90 /* StatusBar.swift in Sources */,
 				1D98563B1C6D7D3300C1BF78 /* DrawerAnimators.swift in Sources */,
 				EAF43D8E1AB0B5AC0016E110 /* InviteCache.swift in Sources */,
 				1D493C6C200EADF0002BB6C2 /* LoveAnimation.swift in Sources */,

@@ -8,7 +8,7 @@ protocol DrawerResponder: class {
 
 class DrawerViewController: BaseElloViewController {
     let tableView = UITableView()
-    let navigationBar = ElloNavigationBar()
+    let navigationBar = UIView()
 
     var isLoggingOut = false
 
@@ -83,6 +83,7 @@ private extension DrawerViewController {
 
         navigationBar.snp.makeConstraints { make in
             make.leading.trailing.top.equalTo(self.view)
+            make.height.equalTo(ElloNavigationBar.Size.height)
         }
 
         tableView.snp.makeConstraints { make in
