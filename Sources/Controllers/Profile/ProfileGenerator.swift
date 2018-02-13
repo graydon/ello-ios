@@ -63,8 +63,8 @@ final class ProfileGenerator: StreamGenerator {
         }
         setInitialUser(doneOperation)
         loadUser(doneOperation, reload: reload)
-        if let username = username {
-            loadUserPosts(username: username, doneOperation, reload: reload)
+        if let username = username, APIKeys.shared.hasGraphQL {
+            gqlLoadUserPosts(username: username, doneOperation, reload: reload)
         }
         else {
             loadUserPosts(doneOperation, reload: reload)
@@ -148,7 +148,7 @@ private extension ProfileGenerator {
         return fakeConfig
     }
 
-    func loadUserPosts(username: String, _ doneOperation: AsyncOperation, reload: Bool) {
+    func gqlLoadUserPosts(username: String, _ doneOperation: AsyncOperation, reload: Bool) {
         let displayPostsOperation = AsyncOperation()
         displayPostsOperation.addDependency(doneOperation)
         queue.addOperation(displayPostsOperation)
