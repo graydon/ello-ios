@@ -13,9 +13,7 @@ class SearchToggleButton: Button {
     private let line = UIView()
     override var isSelected: Bool {
         didSet {
-            elloAnimate {
-                self.updateLineColor()
-            }
+            self.updateLineColor()
         }
     }
 
@@ -31,6 +29,12 @@ class SearchToggleButton: Button {
         line.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalTo(self)
             make.height.equalTo(Size.lineHeight)
+        }
+    }
+
+    func setSelected(_ selected: Bool, animated: Bool) {
+        elloAnimate(animated: animated) {
+            self.isSelected = selected
         }
     }
 

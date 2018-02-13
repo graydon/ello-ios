@@ -272,8 +272,8 @@ extension SearchScreen {
 
     @objc
     func onPostsTapped() {
-        postsToggleButton.isSelected = true
-        peopleToggleButton.isSelected = false
+        postsToggleButton.setSelected(true, animated: true)
+        peopleToggleButton.setSelected(false, animated: true)
         var searchFieldText = searchField.text ?? ""
         if searchFieldText == "@" {
             searchFieldText = ""
@@ -286,8 +286,8 @@ extension SearchScreen {
 
     @objc
     func onPeopleTapped() {
-        peopleToggleButton.isSelected = true
-        postsToggleButton.isSelected = false
+        postsToggleButton.setSelected(false, animated: true)
+        peopleToggleButton.setSelected(true, animated: true)
         var searchFieldText = searchField.text ?? ""
         if searchFieldText == "" {
             searchFieldText = "@"
