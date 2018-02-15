@@ -201,6 +201,7 @@ extension Profile: Stubbable {
         let notifyOfNewFollowersViaEmail: Bool = (values["notifyOfNewFollowersViaEmail"] as? Bool) ?? true
         let notifyOfRepostsViaEmail: Bool = (values["notifyOfRepostsViaEmail"] as? Bool) ?? true
         let notifyOfWhatYouMissedViaEmail: Bool = (values["notifyOfWhatYouMissedViaEmail"] as? Bool) ?? true
+        let notifyOfApprovedSubmissionsFromFollowingViaEmail: Bool = (values["notifyOfApprovedSubmissionsFromFollowingViaEmail"] as? Bool) ?? true
         let subscribeToUsersEmailList: Bool = (values["subscribeToUsersEmailList"] as? Bool) ?? true
         let subscribeToDailyEllo: Bool = (values["subscribeToDailyEllo"] as? Bool) ?? true
         let subscribeToWeeklyEllo: Bool = (values["subscribeToWeeklyEllo"] as? Bool) ?? true
@@ -244,6 +245,7 @@ extension Profile: Stubbable {
             notifyOfNewFollowersViaEmail: notifyOfNewFollowersViaEmail,
             notifyOfRepostsViaEmail: notifyOfRepostsViaEmail,
             notifyOfWhatYouMissedViaEmail: notifyOfWhatYouMissedViaEmail,
+            notifyOfApprovedSubmissionsFromFollowingViaEmail: notifyOfApprovedSubmissionsFromFollowingViaEmail,
             subscribeToUsersEmailList: subscribeToUsersEmailList,
             subscribeToDailyEllo: subscribeToDailyEllo,
             subscribeToWeeklyEllo: subscribeToWeeklyEllo,
