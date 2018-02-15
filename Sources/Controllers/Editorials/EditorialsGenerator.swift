@@ -11,7 +11,7 @@ final class EditorialsGenerator: StreamGenerator {
     private var localToken: String = ""
     private var loadingToken = LoadingToken()
 
-    init(currentUser: User?, destination: StreamDestination?) {
+    init(currentUser: User?, destination: StreamDestination) {
         self.currentUser = currentUser
         self.destination = destination
     }

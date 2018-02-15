@@ -13,7 +13,7 @@ final class ArtistInviteAdminGenerator: StreamGenerator {
     private var localToken: String = ""
     private var loadingToken = LoadingToken()
 
-    init(artistInvite: ArtistInvite, stream: ArtistInvite.Stream, currentUser: User?, destination: StreamDestination?) {
+    init(artistInvite: ArtistInvite, stream: ArtistInvite.Stream, currentUser: User?, destination: StreamDestination) {
         self.artistInvite = artistInvite
         self.stream = stream
         self.currentUser = currentUser

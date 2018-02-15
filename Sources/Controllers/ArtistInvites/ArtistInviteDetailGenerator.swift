@@ -14,7 +14,7 @@ final class ArtistInviteDetailGenerator: StreamGenerator {
     private var localToken: String = ""
     private var loadingToken = LoadingToken()
 
-    init(artistInviteId: String, currentUser: User?, destination: StreamDestination?) {
+    init(artistInviteId: String, currentUser: User?, destination: StreamDestination) {
         self.artistInviteId = artistInviteId
         self.streamKind = .artistInviteSubmissions
         self.currentUser = currentUser

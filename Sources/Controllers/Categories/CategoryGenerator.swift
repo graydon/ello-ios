@@ -44,11 +44,7 @@ final class CategoryGenerator: StreamGenerator {
         return items
     }
 
-    init(slug: String?,
-        currentUser: User?,
-        streamKind: StreamKind,
-        destination: StreamDestination?
-        )
+    init(slug: String?, currentUser: User?, streamKind: StreamKind, destination: StreamDestination)
     {
         self.slug = slug
         self.currentUser = currentUser
