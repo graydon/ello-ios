@@ -171,8 +171,6 @@ final class ProfileViewController: StreamableViewController {
         updateInsets(navBar: screen.topInsetView)
     }
 
-    // MARK: private
-
     private func loadProfile() {
         generator?.load()
     }
