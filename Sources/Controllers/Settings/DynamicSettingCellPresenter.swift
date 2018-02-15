@@ -27,6 +27,7 @@ struct DynamicSettingCellPresenter {
         cell.setting = setting
         cell.title = setting.label
         cell.info = setting.info
+        cell.value = currentUser.propertyForSettingsKey(key: setting.key)
         cell.isEnabled = isVisible(setting: setting, currentUser: currentUser)
     }
 }
