@@ -5,16 +5,16 @@
 import SwiftyJSON
 
 // Version 2: allowInOnboarding
-// Version 3: usesPagePromo
+// Version 3: usesPagePromo (removed)
 // Version 4: isCreatorType
 let CategoryVersion = 4
 
 
 @objc(Category)
 final class Category: JSONAble, Groupable {
-    static let featured = Category(id: "meta1", name: InterfaceString.Discover.Featured, slug: "featured", order: 0, allowInOnboarding: false, isCreatorType: false, usesPagePromo: true, level: .meta, tileImage: nil)
-    static let trending = Category(id: "meta2", name: InterfaceString.Discover.Trending, slug: "trending", order: 1, allowInOnboarding: false, isCreatorType: false, usesPagePromo: true, level: .meta, tileImage: nil)
-    static let recent = Category(id: "meta3", name: InterfaceString.Discover.Recent, slug: "recent", order: 2, allowInOnboarding: false, isCreatorType: false, usesPagePromo: true, level: .meta, tileImage: nil)
+    static let featured = Category(id: "meta1", name: InterfaceString.Discover.Featured, slug: "featured", order: 0, allowInOnboarding: false, isCreatorType: false, level: .meta, tileImage: nil)
+    static let trending = Category(id: "meta2", name: InterfaceString.Discover.Trending, slug: "trending", order: 1, allowInOnboarding: false, isCreatorType: false, level: .meta, tileImage: nil)
+    static let recent = Category(id: "meta3", name: InterfaceString.Discover.Recent, slug: "recent", order: 2, allowInOnboarding: false, isCreatorType: false, level: .meta, tileImage: nil)
 
     let id: String
     var groupId: String { return "Category-\(id)" }
@@ -32,7 +32,7 @@ final class Category: JSONAble, Groupable {
     let isCreatorType: Bool
     let level: CategoryLevel
     var isMeta: Bool { return level == .meta }
-    var usesPagePromo: Bool
+    var usesPagePromo: Bool { return level == .meta }
     var hasPromotionalData: Bool {
         return body != nil
     }
@@ -71,7 +71,6 @@ final class Category: JSONAble, Groupable {
         order: Int,
         allowInOnboarding: Bool,
         isCreatorType: Bool,
-        usesPagePromo: Bool,
         level: CategoryLevel,
         tileImage: Attachment?)
     {
@@ -81,7 +80,6 @@ final class Category: JSONAble, Groupable {
         self.order = order
         self.allowInOnboarding = allowInOnboarding
         self.isCreatorType = isCreatorType
-        self.usesPagePromo = usesPagePromo
         self.level = level
         self.tileImage = tileImage
         super.init(version: CategoryVersion)
@@ -100,12 +98,6 @@ final class Category: JSONAble, Groupable {
         }
         else {
             allowInOnboarding = true
-        }
-        if version > 2 {
-            usesPagePromo = decoder.decodeKey("usesPagePromo")
-        }
-        else {
-            usesPagePromo = level == .meta
         }
         if version > 3 {
             isCreatorType = decoder.decodeKey("isCreatorType")
@@ -130,7 +122,6 @@ final class Category: JSONAble, Groupable {
         encoder.encodeObject(order, forKey: "order")
         encoder.encodeObject(allowInOnboarding, forKey: "allowInOnboarding")
         encoder.encodeObject(isCreatorType, forKey: "isCreatorType")
-        encoder.encodeObject(usesPagePromo, forKey: "usesPagePromo")
         encoder.encodeObject(level.rawValue, forKey: "level")
         encoder.encodeObject(tileImage, forKey: "tileImage")
         encoder.encodeObject(isSponsored, forKey: "isSponsored")
@@ -152,14 +143,7 @@ final class Category: JSONAble, Groupable {
 
     class func fromJSON(_ data: [String: Any]) -> Category {
         let json = JSON(data)
-        let id = json["id"].stringValue
-        let name = json["name"].stringValue
-        let slug = json["slug"].stringValue
-        let order = json["order"].intValue
-        let allowInOnboarding = json["allow_in_onboarding"].bool ?? true
-        let isCreatorType = json["is_creator_type"].bool ?? true
         let level: CategoryLevel = CategoryLevel(rawValue: json["level"].stringValue) ?? .unknown
-        let usesPagePromo = json["uses_page_promotionals"].bool ?? (level == .meta)
         let tileImage: Attachment?
         if let assetJson = json["tile_image"].object as? [String: Any],
             let attachmentJson = DeviceScreen.isRetina ? (assetJson["large"] as? [String: Any]) : (assetJson["small"] as? [String: Any])
@@ -170,20 +154,23 @@ final class Category: JSONAble, Groupable {
             tileImage = nil
         }
 
-        let isSponsored = json["is_sponsored"].bool
-        let body = json["description"].string
-        let header = json["header"].string
-        let ctaCaption = json["cta_caption"].string
-        let ctaURL = json["cta_href"].string.flatMap { URL(string: $0) }
+        let category = Category(
+            id: json["id"].stringValue,
+            name: json["name"].stringValue,
+            slug: json["slug"].stringValue,
+            order: json["order"].intValue,
+            allowInOnboarding: json["allow_in_onboarding"].bool ?? true,
+            isCreatorType: json["is_creator_type"].bool ?? true,
+            level: level,
+            tileImage: tileImage
+            )
 
-        let category = Category(id: id, name: name, slug: slug, order: order, allowInOnboarding: allowInOnboarding, isCreatorType: isCreatorType, usesPagePromo: usesPagePromo, level: level, tileImage: tileImage)
-
+        category.isSponsored = json["is_sponsored"].bool
+        category.body = json["description"].string
+        category.header = json["header"].string
+        category.ctaCaption = json["cta_caption"].string
+        category.ctaURL = json["cta_href"].string.flatMap { URL(string: $0) }
         category.links = data["links"] as? [String: Any]
-        category.isSponsored = isSponsored
-        category.body = body
-        category.header = header
-        category.ctaCaption = ctaCaption
-        category.ctaURL = ctaURL
 
         return category
     }

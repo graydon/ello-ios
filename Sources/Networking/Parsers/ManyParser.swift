@@ -11,22 +11,15 @@ class ManyParser<T> {
     }
 
     let parser: Parser
-    let resultsKey: String
 
-    init(_ resultsKey: String, _ parser: Parser) {
+    init(_ parser: Parser) {
         self.parser = parser
-        self.resultsKey = resultsKey
     }
 
-    func parse(json: JSON) throws -> (PageConfig, [T]) {
-        let results = json[resultsKey]
-        guard let objects = results.array else {
+    func parse(json: JSON) throws -> [T] {
+        guard let objects = json.array else {
             throw Error.notAnArray
         }
-
-        let next = json["next"].string
-        let isLastPage = json["isLastPage"].bool
-        let config = PageConfig(next: next, isLastPage: isLastPage)
 
         var db: Parser.Database = [:]
         var ids: [Parser.Identifier] = []
@@ -50,10 +43,10 @@ class ManyParser<T> {
         }
 
         if let many = many as? [T] {
-            return (config, many)
+            return many
         }
         else {
-            return (config, [T]())
+            return [T]()
         }
     }
 }

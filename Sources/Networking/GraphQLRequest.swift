@@ -148,8 +148,12 @@ class GraphQLRequest<T>: AuthenticationEndpoint {
             query += "query(\(queryVariables()))"
         }
 
-        query += "{\(endpointName)(\(endpointVariables())){\(body)}}"
-        // print("query:\n\(query)")
+        query += "{\(endpointName)"
+        if variables.count > 0 {
+            query += "(\(endpointVariables()))"
+        }
+        query += "{\(body)}}"
+        print("query:\n\(query)")
 
         var httpBody: [String: Any] = [
             "query": query,
@@ -241,7 +245,7 @@ class GraphQLRequest<T>: AuthenticationEndpoint {
             ElloProvider.failedToMapObjects(reject)
             return
         }
-        // print("json:\n\(json)")
+        print("json:\n\(json)")
         resolve(json)
     }
 

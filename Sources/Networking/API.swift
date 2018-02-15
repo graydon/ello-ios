@@ -8,10 +8,38 @@ import SwiftyJSON
 
 
 struct API {
+    func subscribedCategories() -> Promise<[Category]> {
+        let request = GraphQLRequest(
+            endpointName: "categoryNav",
+            parser: ManyParser<Category>(CategoryParser()).parse,
+            fragments: """
+                fragment imageProps on Image {
+                  url
+                  metadata { height width type size }
+                }
+
+                fragment tshirtImages on TshirtImageVersions {
+                  large { ...imageProps }
+                }
+                """,
+            body: """
+                id
+                name
+                slug
+                order
+                allowInOnboarding
+                isCreatorType
+                level
+                tileImage { ...tshirtImages }
+                """
+            )
+        return request.execute()
+    }
+
     func userPosts(username: String, before: String? = nil) -> Promise<(PageConfig, [Post])> {
         let request = GraphQLRequest(
             endpointName: "userPostStream",
-            parser: ManyParser<Post>("posts", PostParser()).parse,
+            parser: PageParser<Post>("posts", PostParser()).parse,
             variables: [
                 (.string("username", username)),
                 (.optionalString("before", before)),
