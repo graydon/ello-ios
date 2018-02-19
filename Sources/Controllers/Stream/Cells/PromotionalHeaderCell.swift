@@ -385,41 +385,25 @@ extension PromotionalHeaderCell.Config {
 
 extension PromotionalHeaderCell.Config {
 
-    init(category: Category) {
+    init(pageHeader: PageHeader) {
         self.init()
 
-        style = .category
-        title = category.name
-        body = category.body
-        tracking = category.slug
-        isSponsored = category.isSponsored
-        callToAction = category.ctaCaption
-        callToActionURL = category.ctaURL
-
-        if let promotional = category.randomPromotional {
-            imageURL = promotional.image?.oneColumnAttachment?.url
-            user = promotional.user
-        }
-    }
-
-    init(pagePromotional: PagePromotional) {
-        self.init()
-
-        if pagePromotional.isEditorial {
+        if pageHeader.kind == .editorial {
             style = .editorial
         }
-        else if pagePromotional.isArtistInvite {
+        else if pageHeader.kind == .artistInvite {
             style = .artistInvite
         }
         else {
             style = .page
         }
-        title = pagePromotional.header
-        body = pagePromotional.subheader
+
+        title = pageHeader.header
+        body = pageHeader.subheader
         tracking = "general"
-        imageURL = pagePromotional.tileURL
-        user = pagePromotional.user
-        callToAction = pagePromotional.ctaCaption
-        callToActionURL = pagePromotional.ctaURL
+        imageURL = pageHeader.tileURL
+        user = pageHeader.user
+        callToAction = pageHeader.ctaCaption
+        callToActionURL = pageHeader.ctaURL
     }
 }

@@ -8,6 +8,28 @@ import SwiftyJSON
 
 
 struct API {
+    enum PageHeaderKind {
+        case category(String)
+        case artistInvites
+        case editorials
+        case generic
+
+        var apiKind: String {
+            switch self {
+            case .category: return "CATEGORY"
+            case .editorials: return "EDITORIAL"
+            case .artistInvites: return "ARTIST_INVITE"
+            case .generic: return "GENERIC"
+            }
+        }
+
+        var slug: String? {
+            switch self {
+            case let .category(slug): return slug
+            default: return nil
+            }
+        }
+    }
     func subscribedCategories() -> Promise<[Category]> {
         let request = GraphQLRequest(
             endpointName: "categoryNav",
@@ -36,6 +58,59 @@ struct API {
         return request.execute()
     }
 
+    func pageHeaders(kind: PageHeaderKind) -> Promise<[PageHeader]> {
+        let request = GraphQLRequest(
+            endpointName: "pageHeaders",
+            parser: ManyParser<PageHeader>(PageHeaderParser()).parse,
+            variables: [
+                (.enum("kind", "PageHeaderKind", kind.apiKind)),
+                (.optionalString("slug", kind.slug)),
+            ],
+            fragments: """
+                fragment imageProps on Image {
+                  url
+                  metadata { height width type size }
+                }
+
+                fragment responsiveImages on ResponsiveImageVersions {
+                  mdpi { ...imageProps }
+                  hdpi { ...imageProps }
+                  xhdpi { ...imageProps }
+                  optimized { ...imageProps }
+                }
+
+                fragment tshirtImages on TshirtImageVersions {
+                  regular { ...imageProps }
+                  large { ...imageProps }
+                  original { ...imageProps }
+                }
+
+                fragment userProps on User {
+                  id
+                  username
+                  name
+                  avatar {
+                    ...tshirtImages
+                  }
+                  coverImage {
+                    ...responsiveImages
+                  }
+                }
+                """,
+            body: """
+                id
+                postToken
+                kind
+                header
+                subheader
+                image { ...responsiveImages }
+                ctaLink { text url }
+                user { ...userProps }
+                """
+            )
+        return request.execute()
+    }
+
     func userPosts(username: String, before: String? = nil) -> Promise<(PageConfig, [Post])> {
         let request = GraphQLRequest(
             endpointName: "userPostStream",
@@ -51,7 +126,6 @@ struct API {
                 }
 
                 fragment tshirtImages on TshirtImageVersions {
-                  small { ...imageProps }
                   regular { ...imageProps }
                   large { ...imageProps }
                   original { ...imageProps }
@@ -59,13 +133,12 @@ struct API {
 
                 fragment responsiveImages on ResponsiveImageVersions {
                   mdpi { ...imageProps }
-                  ldpi { ...imageProps }
                   hdpi { ...imageProps }
                   xhdpi { ...imageProps }
                   optimized { ...imageProps }
                 }
 
-                fragment authorSummary on User {
+                fragment userProps on User {
                   id
                   username
                   name
@@ -103,7 +176,7 @@ struct API {
                   token
                   createdAt
                   summary { ...contentProps }
-                  author { ...authorSummary }
+                  author { ...userProps }
                   assets { ...assetProps }
                   postStats { lovesCount commentsCount viewsCount repostsCount }
                   currentUserState { watching loved reposted }

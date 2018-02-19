@@ -128,7 +128,7 @@ func prepareForSnapshot(_ subject: Snapshotable, size: CGSize) {
     view.layoutIfNeeded()
 
     // wtf is up w/ ios 11 / xcode 9?
-    let allClearSubviews = view.findAllSubviews { return $0.backgroundColor == nil }
+    let allClearSubviews: [UIView] = view.findAllSubviews { return $0.backgroundColor == nil }
     allClearSubviews.forEach { v in
         v.backgroundColor = .clear
     }

@@ -13,6 +13,8 @@ class GraphQLRequest<T>: AuthenticationEndpoint {
         case optionalFloat(String, Float?)
         case bool(String, Bool)
         case optionalBool(String, Bool?)
+        case `enum`(String, String, String)
+        case optionalEnum(String, String, String?)
 
         var name: String {
             switch self {
@@ -24,6 +26,8 @@ class GraphQLRequest<T>: AuthenticationEndpoint {
             case let .optionalFloat(name, _): return name
             case let .bool(name, _): return name
             case let .optionalBool(name, _): return name
+            case let .`enum`(name, _, _): return name
+            case let .optionalEnum(name, _, _): return name
             }
         }
 
@@ -37,6 +41,8 @@ class GraphQLRequest<T>: AuthenticationEndpoint {
             case .optionalFloat: return "Float"
             case .bool: return "Bool!"
             case .optionalBool: return "Bool"
+            case let .`enum`(_, type, _): return "\(type)!"
+            case let .optionalEnum(_, type, _): return type
             }
         }
 
@@ -50,6 +56,8 @@ class GraphQLRequest<T>: AuthenticationEndpoint {
             case let .optionalFloat(_, value): return value
             case let .bool(_, value): return value
             case let .optionalBool(_, value): return value
+            case let .`enum`(_, _, value): return value
+            case let .optionalEnum(_, _, value): return value
             }
         }
     }
@@ -141,18 +149,18 @@ class GraphQLRequest<T>: AuthenticationEndpoint {
         var query: String = ""
 
         if let fragments = fragments {
-            query += fragments
+            query += fragments + "\n"
         }
 
         if variables.count > 0 {
-            query += "query(\(queryVariables()))"
+            query += "query(\(queryVariables()))\n"
         }
 
-        query += "{\(endpointName)"
+        query += "{\n\(endpointName)"
         if variables.count > 0 {
             query += "(\(endpointVariables()))"
         }
-        query += "{\(body)}}"
+        query += "\n  {\n\(body)\n  }\n}"
         print("query:\n\(query)")
 
         var httpBody: [String: Any] = [

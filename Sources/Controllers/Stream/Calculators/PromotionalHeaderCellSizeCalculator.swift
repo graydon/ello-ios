@@ -37,13 +37,8 @@ class PromotionalHeaderCellSizeCalculator: NSObject {
         }
     }
 
-    static func calculateCategoryHeight(_ category: Category, cellWidth: CGFloat) -> CGFloat {
-        let config = PromotionalHeaderCell.Config(category: category)
-        return PromotionalHeaderCellSizeCalculator.calculateHeight(config, htmlHeight: nil, cellWidth: cellWidth)
-    }
-
-    static func calculatePagePromotionalHeight(_ pagePromotional: PagePromotional, htmlHeight: CGFloat?, cellWidth: CGFloat) -> CGFloat {
-        let config = PromotionalHeaderCell.Config(pagePromotional: pagePromotional)
+    static func calculatePageHeaderHeight(_ pageHeader: PageHeader, htmlHeight: CGFloat?, cellWidth: CGFloat) -> CGFloat {
+        let config = PromotionalHeaderCell.Config(pageHeader: pageHeader)
         return PromotionalHeaderCellSizeCalculator.calculateHeight(config, htmlHeight: htmlHeight, cellWidth: cellWidth)
     }
 
@@ -125,15 +120,12 @@ class PromotionalHeaderCellSizeCalculator: NSObject {
         }
 
         var calcHeight: CGFloat?
-        if let category = item.jsonable as? Category {
-            calcHeight = PromotionalHeaderCellSizeCalculator.calculateCategoryHeight(category, cellWidth: cellWidth)
-        }
-        else if let pagePromotional = item.jsonable as? PagePromotional {
-            if pagePromotional.isCategory {
-                calcHeight = PromotionalHeaderCellSizeCalculator.calculatePagePromotionalHeight(pagePromotional, htmlHeight: nil, cellWidth: cellWidth)
+        if let pageHeader = item.jsonable as? PageHeader {
+            if pageHeader.kind == .category {
+                calcHeight = PromotionalHeaderCellSizeCalculator.calculatePageHeaderHeight(pageHeader, htmlHeight: nil, cellWidth: cellWidth)
             }
             else {
-                let text = pagePromotional.subheader
+                let text = pageHeader.subheader
                 let html = StreamTextCellHTML.editorialHTML(text)
                 webView.loadHTMLString(html, baseURL: URL(string: "/"))
             }
@@ -161,11 +153,11 @@ extension PromotionalHeaderCellSizeCalculator: UIWebViewDelegate {
     func webViewDidFinishLoad(_ webView: UIWebView) {
         guard
             let item = cellItem,
-            let pagePromotional = item.jsonable as? PagePromotional
+            let pageHeader = item.jsonable as? PageHeader
         else { return }
 
         let textHeight = webView.windowContentSize()?.height
-        let calcHeight = PromotionalHeaderCellSizeCalculator.calculatePagePromotionalHeight(pagePromotional, htmlHeight: textHeight, cellWidth: cellWidth)
+        let calcHeight = PromotionalHeaderCellSizeCalculator.calculatePageHeaderHeight(pageHeader, htmlHeight: textHeight, cellWidth: cellWidth)
         let minHeight: CGFloat
         if Globals.isIpad {
             minHeight = Size.minIpadHeight

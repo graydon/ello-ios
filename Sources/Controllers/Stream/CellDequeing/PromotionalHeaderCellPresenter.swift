@@ -13,10 +13,10 @@ struct PromotionalHeaderCellPresenter {
     {
         guard
             let cell = cell as? PromotionalHeaderCell,
-            let category = streamCellItem.jsonable as? Category
+            let pageHeader = streamCellItem.jsonable as? PageHeader
         else { return }
 
-        let config = PromotionalHeaderCell.Config(category: category)
-        cell.config = config
+       let config = PromotionalHeaderCell.Config(pageHeader: pageHeader)
+       cell.config = config
     }
 }

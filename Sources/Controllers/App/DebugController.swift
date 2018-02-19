@@ -87,9 +87,9 @@ class DebugController: UIViewController, UITableViewDataSource, UITableViewDeleg
         }
 
         addAction(name: "GraphQL test") {
-            API().subscribedCategories()
-                .then { categories -> Void in
-                    print(categories)
+            API().pageHeaders(kind: .category("art"))
+                .then { response -> Void in
+                    print(response)
                 }
                 .catch { error in
                     print(error)

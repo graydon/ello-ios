@@ -36,16 +36,14 @@ private extension ArtistInvitesGenerator {
     }
 
     func loadArtistInvitePromotionals() {
-        PagePromotionalService().loadArtistInvitePromotionals()
-            .then { promotionals -> Void in
-                guard let promotionals = promotionals else { return }
+        API().pageHeaders(kind: .artistInvites)
+            .then { pageHeaders -> Void in
+                guard let pageHeader = pageHeaders.randomItem() else { return }
 
-                if let pagePromotional = promotionals.randomItem() {
-                    self.destination?.replacePlaceholder(type: .promotionalHeader, items: [
-                        StreamCellItem(jsonable: pagePromotional, type: .pagePromotionalHeader),
-                        StreamCellItem(type: .spacer(height: ArtistInviteBubbleCell.Size.bubbleMargins.bottom)),
-                    ])
-                }
+                self.destination?.replacePlaceholder(type: .promotionalHeader, items: [
+                    StreamCellItem(jsonable: pageHeader, type: .promotionalHeader),
+                    StreamCellItem(type: .spacer(height: ArtistInviteBubbleCell.Size.bubbleMargins.bottom)),
+                ])
             }
             .ignoreErrors()
     }

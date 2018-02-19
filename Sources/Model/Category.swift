@@ -21,21 +21,12 @@ final class Category: JSONAble, Groupable {
     let name: String
     let slug: String
     var tileURL: URL? { return tileImage?.url }
-    var isSponsored: Bool?
-    var body: String?
-    var header: String?
-    var ctaCaption: String?
-    var ctaURL: URL?
     let tileImage: Attachment?
     let order: Int
     let allowInOnboarding: Bool
     let isCreatorType: Bool
     let level: CategoryLevel
     var isMeta: Bool { return level == .meta }
-    var usesPagePromo: Bool { return level == .meta }
-    var hasPromotionalData: Bool {
-        return body != nil
-    }
     var shareLink: String {
         return "\(ElloURI.baseURL)/discover/\(slug)"
     }
@@ -44,20 +35,6 @@ final class Category: JSONAble, Groupable {
         switch level {
         case .meta: return .discover(type: DiscoverType(rawValue: slug)!)
         default: return .categoryPosts(slug: slug)
-        }
-    }
-
-    var promotionals: [Promotional]? { return getLinkArray("promotionals") as? [Promotional] }
-    private var _randomPromotional: Promotional?
-    var randomPromotional: Promotional? {
-        get {
-            if _randomPromotional == nil {
-                _randomPromotional = promotionals?.randomItem()
-            }
-            return _randomPromotional
-        }
-        set {
-            _randomPromotional = newValue
         }
     }
 
@@ -106,11 +83,6 @@ final class Category: JSONAble, Groupable {
             isCreatorType = false
         }
         tileImage = decoder.decodeOptionalKey("tileImage")
-        isSponsored = decoder.decodeOptionalKey("isSponsored")
-        body = decoder.decodeOptionalKey("body")
-        header = decoder.decodeOptionalKey("header")
-        ctaCaption = decoder.decodeOptionalKey("ctaCaption")
-        ctaURL = decoder.decodeOptionalKey("ctaURL")
         super.init(coder: coder)
     }
 
@@ -124,30 +96,14 @@ final class Category: JSONAble, Groupable {
         encoder.encodeObject(isCreatorType, forKey: "isCreatorType")
         encoder.encodeObject(level.rawValue, forKey: "level")
         encoder.encodeObject(tileImage, forKey: "tileImage")
-        encoder.encodeObject(isSponsored, forKey: "isSponsored")
-        encoder.encodeObject(body, forKey: "body")
-        encoder.encodeObject(header, forKey: "header")
-        encoder.encodeObject(ctaCaption, forKey: "ctaCaption")
-        encoder.encodeObject(ctaURL, forKey: "ctaURL")
         super.encode(with: coder)
-    }
-
-    override func merge(_ other: JSONAble) -> JSONAble {
-        if let other = other as? Category {
-            if other.links?["promotionals"] == nil, let promotionals = promotionals, promotionals.count > 0 {
-                other.addLinkArray("promotionals", array: promotionals.map { $0.id }, type: .promotionalsType)
-            }
-        }
-        return other
     }
 
     class func fromJSON(_ data: [String: Any]) -> Category {
         let json = JSON(data)
         let level: CategoryLevel = CategoryLevel(rawValue: json["level"].stringValue) ?? .unknown
         let tileImage: Attachment?
-        if let assetJson = json["tile_image"].object as? [String: Any],
-            let attachmentJson = DeviceScreen.isRetina ? (assetJson["large"] as? [String: Any]) : (assetJson["small"] as? [String: Any])
-        {
+        if let attachmentJson = json["tile_image"]["large"].object as? [String: Any] {
             tileImage = Attachment.fromJSON(attachmentJson)
         }
         else {
@@ -165,11 +121,6 @@ final class Category: JSONAble, Groupable {
             tileImage: tileImage
             )
 
-        category.isSponsored = json["is_sponsored"].bool
-        category.body = json["description"].string
-        category.header = json["header"].string
-        category.ctaCaption = json["cta_caption"].string
-        category.ctaURL = json["cta_href"].string.flatMap { URL(string: $0) }
         category.links = data["links"] as? [String: Any]
 
         return category

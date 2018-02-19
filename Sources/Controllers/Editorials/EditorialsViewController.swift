@@ -186,6 +186,14 @@ extension EditorialsViewController: StreamDestination {
     }
 
     func replacePlaceholder(type: StreamCellType.PlaceholderType, items: [StreamCellItem], completion: @escaping Block) {
+        if type == .promotionalHeader,
+            let pageHeader = items.flatMap({ $0.jsonable as? PageHeader }).first,
+            let trackingPostToken = pageHeader.postToken
+        {
+            let trackViews: ElloAPI = .promotionalViews(tokens: [trackingPostToken])
+            ElloProvider.shared.request(trackViews).ignoreErrors()
+        }
+
         streamViewController.replacePlaceholder(type: type, items: items) {
             if self.streamViewController.hasCellItems(for: .promotionalHeader) && !self.streamViewController.hasCellItems(for: .editorials) {
                 self.streamViewController.replacePlaceholder(type: .editorials, items: [StreamCellItem(type: .streamLoading)])

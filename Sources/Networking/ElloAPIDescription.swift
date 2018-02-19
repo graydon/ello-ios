@@ -191,7 +191,6 @@ extension ElloAPI: CustomStringConvertible, CustomDebugStringConvertible {
         case .markAnnouncementAsRead: return "markAnnouncementAsRead"
         case .notificationsNewContent: return "notificationsNewContent"
         case .notificationsStream: return "notificationsStream"
-        case .pagePromotionals: return "pagePromotionals"
         case .postComments: return "postComments"
         case .postDetail: return "postDetail"
         case .postLovers: return "postLovers"

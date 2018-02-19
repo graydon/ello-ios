@@ -11,19 +11,16 @@ let AssetVersion = 1
 final class Asset: JSONAble {
     enum AttachmentType {
         case optimized
-        case ldpi
         case mdpi
         case hdpi
         case xhdpi
         case original
         case large
         case regular
-        case small
     }
 
     let id: String
     var optimized: Attachment?
-    var ldpi: Attachment?
     var mdpi: Attachment?
     var hdpi: Attachment?
     var xhdpi: Attachment?
@@ -46,18 +43,15 @@ final class Asset: JSONAble {
     }
     var large: Attachment?
     var regular: Attachment?
-    var small: Attachment?
     var allAttachments: [(AttachmentType, Attachment)] {
         let possibles: [(AttachmentType, Attachment?)] = [
             (.optimized, optimized),
-            (.ldpi, ldpi),
             (.mdpi, mdpi),
             (.hdpi, hdpi),
             (.xhdpi, xhdpi),
             (.original, original),
             (.large, large),
             (.regular, regular),
-            (.small, small)
         ]
         return possibles.flatMap { type, attachment in
             return attachment.map { (type, $0) }
@@ -116,14 +110,12 @@ final class Asset: JSONAble {
 
         let attachment = Attachment(url: url)
         self.optimized = attachment
-        self.ldpi = attachment
         self.mdpi = attachment
         self.hdpi = attachment
         self.xhdpi = attachment
         self.original = attachment
         self.large = attachment
         self.regular = attachment
-        self.small = attachment
     }
 
     convenience init(url: URL, gifData: Data, posterImage: UIImage) {
@@ -166,7 +158,6 @@ final class Asset: JSONAble {
         let decoder = Coder(coder)
         self.id = decoder.decodeKey("id")
         self.optimized = decoder.decodeOptionalKey("optimized")
-        self.ldpi = decoder.decodeOptionalKey("ldpi")
         self.mdpi = decoder.decodeOptionalKey("mdpi")
         self.hdpi = decoder.decodeOptionalKey("hdpi")
         self.xhdpi = decoder.decodeOptionalKey("xhdpi")
@@ -174,7 +165,6 @@ final class Asset: JSONAble {
         // optional avatar
         self.large = decoder.decodeOptionalKey("large")
         self.regular = decoder.decodeOptionalKey("regular")
-        self.small = decoder.decodeOptionalKey("small")
         super.init(coder: coder)
     }
 
@@ -182,7 +172,6 @@ final class Asset: JSONAble {
         let coder = Coder(encoder)
         coder.encodeObject(id, forKey: "id")
         coder.encodeObject(optimized, forKey: "optimized")
-        coder.encodeObject(ldpi, forKey: "ldpi")
         coder.encodeObject(mdpi, forKey: "mdpi")
         coder.encodeObject(hdpi, forKey: "hdpi")
         coder.encodeObject(xhdpi, forKey: "xhdpi")
@@ -190,7 +179,6 @@ final class Asset: JSONAble {
         // optional avatar
         coder.encodeObject(large, forKey: "large")
         coder.encodeObject(regular, forKey: "regular")
-        coder.encodeObject(small, forKey: "small")
         super.encode(with: coder.coder)
     }
 
@@ -205,33 +193,21 @@ final class Asset: JSONAble {
         let asset = Asset(id: id)
         guard let node = node else { return asset }
 
-        if let optimized = node["optimized"] as? [String: Any] {
-            asset.optimized = Attachment.fromJSON(optimized)
-        }
-        if let ldpi = node["ldpi"] as? [String: Any] {
-            asset.ldpi = Attachment.fromJSON(ldpi)
-        }
-        if let mdpi = node["mdpi"] as? [String: Any] {
-            asset.mdpi = Attachment.fromJSON(mdpi)
-        }
-        if let hdpi = node["hdpi"] as? [String: Any] {
-            asset.hdpi = Attachment.fromJSON(hdpi)
-        }
-        if let xhdpi = node["xhdpi"] as? [String: Any] {
-            asset.xhdpi = Attachment.fromJSON(xhdpi)
-        }
-        if let original = node["original"] as? [String: Any] {
-            asset.original = Attachment.fromJSON(original)
-        }
-        // optional avatar
-        if let large = node["large"] as? [String: Any] {
-            asset.large = Attachment.fromJSON(large)
-        }
-        if let regular = node["regular"] as? [String: Any] {
-            asset.regular = Attachment.fromJSON(regular)
-        }
-        if let small = node["small"] as? [String: Any] {
-            asset.small = Attachment.fromJSON(small)
+        let attachments: [(String, AttachmentType)] = [
+            ("optimized", .optimized),
+            ("mdpi", .mdpi),
+            ("hdpi", .hdpi),
+            ("xhdpi", .xhdpi),
+            ("original", .original),
+            ("large", .large),
+            ("regular", .regular),
+        ]
+        for (name, type) in attachments {
+            guard let attachment = node[name] as? [String: Any],
+                attachment["url"] as? String != nil,
+                attachment["metadata"] as? [String: Any] != nil
+            else { continue }
+            asset.replace(attachmentType: type, with: Attachment.fromJSON(attachment))
         }
         return asset
     }
@@ -241,14 +217,12 @@ extension Asset {
     func replace(attachmentType: AttachmentType, with attachment: Attachment?) {
         switch attachmentType {
         case .optimized:    optimized = attachment
-        case .ldpi:         ldpi = attachment
         case .mdpi:         mdpi = attachment
         case .hdpi:         hdpi = attachment
         case .xhdpi:        xhdpi = attachment
         case .original:     original = attachment
         case .large:        large = attachment
         case .regular:      regular = attachment
-        case .small:        small = attachment
         }
     }
 }

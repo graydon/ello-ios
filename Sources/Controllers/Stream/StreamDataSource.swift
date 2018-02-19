@@ -623,8 +623,8 @@ extension StreamDataSource {
             return $0.type == .profileHeader
         }
 
-        let categoryHeaderItems = cellItems.filter {
-            return $0.type == .categoryPromotionalHeader || $0.type == .pagePromotionalHeader
+        let pageHeaderItems = cellItems.filter {
+            return $0.type == .promotionalHeader
         }
         let editorialItems = cellItems.filter {
             return $0.jsonable is Editorial
@@ -645,7 +645,7 @@ extension StreamDataSource {
         notificationSizeCalculator.processCells(notificationElements, withWidth: withWidth, completion: afterAll())
         announcementSizeCalculator.processCells(announcementElements, withWidth: withWidth, completion: afterAll())
         profileHeaderSizeCalculator.processCells(profileHeaderItems, withWidth: withWidth, columnCount: columnCount, completion: afterAll())
-        categoryHeaderSizeCalculator.processCells(categoryHeaderItems, withWidth: withWidth, completion: afterAll())
+        categoryHeaderSizeCalculator.processCells(pageHeaderItems, withWidth: withWidth, completion: afterAll())
         editorialDownloader.processCells(editorialItems, completion: afterAll())
         artistInviteCalculator.processCells(artistInviteItems, withWidth: withWidth, hasCurrentUser: true, completion: afterAll())
         done()

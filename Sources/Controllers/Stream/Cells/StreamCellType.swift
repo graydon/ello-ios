@@ -26,7 +26,6 @@ enum StreamCellType: Equatable {
     case badge
     case categoryCard
     case categoryList
-    case categoryPromotionalHeader
     case commentHeader
     case createComment
     case editorial(Editorial.Kind)
@@ -41,10 +40,10 @@ enum StreamCellType: Equatable {
     case noPosts
     case notification
     case onboardingInviteFriends
-    case pagePromotionalHeader
     case placeholder
     case profileHeader
     case profileHeaderGhost
+    case promotionalHeader
     case revealController(label: String, Any)
     case search(placeholder: String)
     case seeMoreComments
@@ -103,7 +102,6 @@ enum StreamCellType: Equatable {
         .badge,
         .categoryCard,
         .categoryList,
-        .categoryPromotionalHeader,
         .commentHeader,
         .createComment,
         .editorial(.external),
@@ -123,10 +121,10 @@ enum StreamCellType: Equatable {
         .noPosts,
         .notification,
         .onboardingInviteFriends,
-        .pagePromotionalHeader,
         .placeholder,
         .profileHeader,
         .profileHeaderGhost,
+        .promotionalHeader,
         .revealController(label: "", Void()),
         .search(placeholder: ""),
         .seeMoreComments,
@@ -174,7 +172,6 @@ enum StreamCellType: Equatable {
         case .badge: return BadgeCell.reuseIdentifier
         case .categoryCard: return CategoryCardCell.reuseIdentifier
         case .categoryList: return CategoryListCell.reuseIdentifier
-        case .categoryPromotionalHeader, .pagePromotionalHeader: return PromotionalHeaderCell.reuseIdentifier
         case .commentHeader: return CommentHeaderCell.reuseIdentifier
         case .streamHeader: return StreamHeaderCell.reuseIdentifier
         case .createComment: return StreamCreateCommentCell.reuseIdentifier
@@ -192,6 +189,7 @@ enum StreamCellType: Equatable {
         case .placeholder: return "Placeholder"
         case .profileHeader: return ProfileHeaderCell.reuseIdentifier
         case .profileHeaderGhost: return ProfileHeaderGhostCell.reuseIdentifier
+        case .promotionalHeader: return PromotionalHeaderCell.reuseIdentifier
         case .revealController: return RevealControllerCell.reuseIdentifier
         case .search: return SearchStreamCell.reuseIdentifier
         case .seeMoreComments: return StreamSeeMoreCommentsCell.reuseIdentifier
@@ -242,7 +240,6 @@ enum StreamCellType: Equatable {
         case .badge: return BadgeCellPresenter.configure
         case .categoryCard: return CategoryCardCellPresenter.configure
         case .categoryList: return CategoryListCellPresenter.configure
-        case .categoryPromotionalHeader: return PromotionalHeaderCellPresenter.configure
         case .commentHeader: return CommentHeaderCellPresenter.configure
         case .streamHeader: return StreamHeaderCellPresenter.configure
         case .createComment: return StreamCreateCommentCellPresenter.configure
@@ -256,8 +253,8 @@ enum StreamCellType: Equatable {
         case .inviteFriends, .onboardingInviteFriends: return StreamInviteFriendsCellPresenter.configure
         case .noPosts: return NoPostsCellPresenter.configure
         case .notification: return NotificationCellPresenter.configure
-        case .pagePromotionalHeader: return PagePromotionalHeaderCellPresenter.configure
         case .profileHeader: return ProfileHeaderCellPresenter.configure
+        case .promotionalHeader: return PromotionalHeaderCellPresenter.configure
         case .revealController: return RevealControllerCellPresenter.configure
         case .search: return SearchStreamCellPresenter.configure
         case .selectableCategoryCard: return CategoryCardCellPresenter.configure
@@ -285,7 +282,6 @@ enum StreamCellType: Equatable {
         case .badge: return BadgeCell.self
         case .categoryCard: return CategoryCardCell.self
         case .categoryList: return CategoryListCell.self
-        case .categoryPromotionalHeader, .pagePromotionalHeader: return PromotionalHeaderCell.self
         case .commentHeader: return CommentHeaderCell.self
         case .streamHeader: return StreamHeaderCell.self
         case .createComment: return StreamCreateCommentCell.self
@@ -302,6 +298,7 @@ enum StreamCellType: Equatable {
         case .placeholder: return UICollectionViewCell.self
         case .profileHeader: return ProfileHeaderCell.self
         case .profileHeaderGhost: return ProfileHeaderGhostCell.self
+        case .promotionalHeader: return PromotionalHeaderCell.self
         case .revealController: return RevealControllerCell.self
         case .search: return SearchStreamCell.self
         case .seeMoreComments: return StreamSeeMoreCommentsCell.self
@@ -388,13 +385,12 @@ enum StreamCellType: Equatable {
              .artistInviteControls,
              .artistInviteGuide,
              .artistInviteHeader,
-             .categoryPromotionalHeader,
              .embed,
              .image,
-             .pagePromotionalHeader,
              .placeholder,
              .profileHeader,
              .profileHeaderGhost,
+             .promotionalHeader,
              .text,
              .unknown:
             return 0
@@ -429,7 +425,6 @@ enum StreamCellType: Equatable {
              .artistInviteSubmissionsButton,
              .badge,
              .categoryList,
-             .categoryPromotionalHeader,
              .commentHeader,
              .createComment,
              .editorial,
@@ -442,9 +437,9 @@ enum StreamCellType: Equatable {
              .noPosts,
              .notification,
              .onboardingInviteFriends,
-             .pagePromotionalHeader,
              .profileHeader,
              .profileHeaderGhost,
+             .promotionalHeader,
              .revealController,
              .search,
              .seeMoreComments,
@@ -497,7 +492,6 @@ enum StreamCellType: Equatable {
             .badge,
             .categoryCard,
             .categoryList,
-            .categoryPromotionalHeader,
             .commentHeader,
             .createComment,
             .editorial(.external),
@@ -513,10 +507,10 @@ enum StreamCellType: Equatable {
             .loadMoreComments,
             .noPosts,
             .notification,
-            .pagePromotionalHeader,
             .placeholder,
             .profileHeader,
             .profileHeaderGhost,
+            .promotionalHeader,
             .revealController(label: "", Void()),
             .search(placeholder: ""),
             .selectableCategoryCard,

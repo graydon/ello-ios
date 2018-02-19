@@ -91,14 +91,8 @@ class ElloDataSource: NSObject {
             return repostAuthor
         }
 
-        if case .pagePromotionalHeader = item.type,
-            let user = (item.jsonable as? PagePromotional)?.user
-        {
-            return user
-        }
-
-        if case .categoryPromotionalHeader = item.type,
-            let user = (item.jsonable as? Category)?.randomPromotional?.user
+        if case .promotionalHeader = item.type,
+            let user = (item.jsonable as? PageHeader)?.user
         {
             return user
         }

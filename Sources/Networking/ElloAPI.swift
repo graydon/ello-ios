@@ -61,7 +61,6 @@ indirect enum ElloAPI {
     case locationAutoComplete(terms: String)
     case notificationsNewContent(createdAt: Date?)
     case notificationsStream(category: String?)
-    case pagePromotionals
     case postComments(postId: String)
     case postDetail(postParam: String)
     case postViews(streamId: String?, streamKind: String, postIds: Set<String>, currentUserId: String?)
@@ -149,8 +148,6 @@ indirect enum ElloAPI {
             return .artistInviteSubmissionsType
         case .editorials:
             return .editorials
-        case .pagePromotionals:
-            return .pagePromotionalsType
         case .postReplyAll:
             return .usernamesType
         case .currentUserBlockedList,
@@ -247,7 +244,6 @@ extension ElloAPI: AuthenticationEndpoint {
              .editorials,
              .join,
              .loves,
-             .pagePromotionals,
              .postComments,
              .postDetail,
              .postLovers,
@@ -444,8 +440,6 @@ extension ElloAPI: Moya.TargetType {
         case .notificationsNewContent,
              .notificationsStream:
             return "\(defaultPrefix)/notifications"
-        case .pagePromotionals:
-            return "\(defaultPrefix)/page_promotionals"
         case let .postComments(postId):
             return "\(defaultPrefix)/posts/\(postId)/comments"
         case let .postDetail(postParam):
@@ -589,8 +583,6 @@ extension ElloAPI: Moya.TargetType {
             return stubbedData("users_getting_a_list_for_autocompleted_locations")
         case .notificationsStream:
             return stubbedData("activity_streams_notifications")
-        case .pagePromotionals:
-            return stubbedData("page_promotionals")
         case .postComments:
             return stubbedData("posts_loading_more_post_comments")
         case .postDetail,
@@ -812,10 +804,6 @@ extension ElloAPI: Moya.TargetType {
                 params["category"] = category
             }
             return params
-        case .pagePromotionals:
-            return [
-                "include_extras": true,
-            ]
         case .postDetail:
             return [
                 "comment_count": 0,
