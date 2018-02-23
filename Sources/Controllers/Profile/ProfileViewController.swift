@@ -105,7 +105,7 @@ final class ProfileViewController: StreamableViewController {
         let screen = ProfileScreen()
         screen.delegate = self
         screen.clipsToBounds = true
-        self.view = screen
+        view = screen
         viewContainer = screen.streamContainer
     }
 
@@ -332,7 +332,7 @@ extension ProfileViewController {
 extension ProfileViewController: PostsTappedResponder {
     func onPostsTapped() {
         guard
-            let indexPath = streamViewController.collectionViewDataSource.firstIndexPath(forPlaceholderType: .streamPosts)
+            let indexPath = streamViewController.collectionViewDataSource.firstIndexPath(forPlaceholderType: .streamItems)
         else { return }
 
         streamViewController.collectionView.scrollToItem(at: indexPath, at: UICollectionViewScrollPosition.top, animated: true)
@@ -436,8 +436,8 @@ extension ProfileViewController: StreamDestination {
 
     func replacePlaceholder(type: StreamCellType.PlaceholderType, items: [StreamCellItem], completion: @escaping Block) {
         streamViewController.replacePlaceholder(type: type, items: items) {
-            if self.streamViewController.hasCellItems(for: .profileHeader) && !self.streamViewController.hasCellItems(for: .streamPosts) {
-                self.streamViewController.replacePlaceholder(type: .streamPosts, items: [StreamCellItem(type: .streamLoading)])
+            if self.streamViewController.hasCellItems(for: .profileHeader) && !self.streamViewController.hasCellItems(for: .streamItems) {
+                self.streamViewController.replacePlaceholder(type: .streamItems, items: [StreamCellItem(type: .streamLoading)])
             }
 
             completion()

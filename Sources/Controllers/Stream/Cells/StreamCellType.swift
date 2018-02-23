@@ -61,7 +61,7 @@ enum StreamCellType: Equatable {
     case userListItem
 
     enum PlaceholderType {
-        case streamPosts
+        case streamItems
         case promotionalHeader
 
         case categoryList
@@ -71,6 +71,7 @@ enum StreamCellType: Equatable {
         case notifications
 
         case editorials
+
         case artistInvites
         case artistInviteSubmissionsButton
         case artistInviteDetails
@@ -87,8 +88,6 @@ enum StreamCellType: Equatable {
         case postReposters
         case postSocialPadding
         case postRelatedPosts
-
-        case cellNotFound
     }
 
     static let all: [StreamCellType] = [

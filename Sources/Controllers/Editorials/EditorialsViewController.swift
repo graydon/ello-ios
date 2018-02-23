@@ -49,7 +49,7 @@ class EditorialsViewController: StreamableViewController {
 
         screen.navigationBar.title = ""
 
-        self.view = screen
+        view = screen
         viewContainer = screen.streamContainer
     }
 

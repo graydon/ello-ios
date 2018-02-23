@@ -20,7 +20,7 @@ class OnboardingInterestsViewController: StreamableViewController {
 
     override func loadView() {
         let screen = Screen()
-        self.view = screen
+        view = screen
         viewContainer = screen
     }
 

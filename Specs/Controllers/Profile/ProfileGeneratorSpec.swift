@@ -25,7 +25,7 @@ class ProfileGeneratorSpec: QuickSpec {
             switch type {
             case .profileHeader:
                 headerItems = items
-            case .streamPosts:
+            case .streamItems:
                 postItems = items
             default:
                 otherPlaceholderLoaded = true

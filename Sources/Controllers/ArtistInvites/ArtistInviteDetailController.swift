@@ -56,7 +56,7 @@ class ArtistInviteDetailController: StreamableViewController {
         screen.navigationBar.leftItems = [.back]
         screen.navigationBar.rightItems = [.share]
 
-        self.view = screen
+        view = screen
         viewContainer = screen.streamContainer
     }
 

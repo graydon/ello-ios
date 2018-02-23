@@ -26,7 +26,7 @@ class SettingsCredentialsViewController: BaseElloViewController {
     override func loadView() {
         let screen = SettingsCredentialsScreen()
         screen.delegate = self
-        self.view = screen
+        view = screen
     }
 
     override func viewDidLoad() {

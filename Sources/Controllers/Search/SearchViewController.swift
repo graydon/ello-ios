@@ -31,7 +31,7 @@ class SearchViewController: StreamableViewController {
         let screen = SearchScreen()
         screen.delegate = self
         screen.showsFindFriends = currentUser != nil
-        self.view = screen
+        view = screen
     }
 
     override func viewDidAppear(_ animated: Bool) {

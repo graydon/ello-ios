@@ -313,9 +313,8 @@ class StreamDataSource: ElloDataSource {
 
                 if let indexPath = indexPath {
                     let items = StreamCellItemParser().parse([jsonable], streamKind: streamKind, currentUser: currentUser)
-                    let postCreatedPlaceholder: StreamCellType.PlaceholderType = .streamPosts
                     for item in items {
-                        item.placeholderType = postCreatedPlaceholder
+                        item.placeholderType = .streamItems
                     }
                     calculateCellItems(items, withWidth: Globals.windowSize.width) {
                         let indexPaths = self.insertStreamCellItems(items, startingIndexPath: indexPath)

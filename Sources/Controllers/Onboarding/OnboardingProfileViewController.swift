@@ -33,7 +33,7 @@ class OnboardingProfileViewController: UIViewController, HasAppController {
     override func loadView() {
         let screen = OnboardingProfileScreen()
         screen.delegate = self
-        self.view = screen
+        view = screen
     }
 }
 

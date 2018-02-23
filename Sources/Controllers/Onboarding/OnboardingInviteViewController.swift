@@ -27,7 +27,7 @@ class OnboardingInviteViewController: StreamableViewController {
 
     override func loadView() {
         let screen = StreamableScreen()
-        self.view = screen
+        view = screen
         viewContainer = screen
     }
 

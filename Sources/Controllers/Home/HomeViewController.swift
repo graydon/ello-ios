@@ -46,7 +46,7 @@ class HomeViewController: BaseElloViewController, HomeScreenDelegate {
         let screen = HomeScreen()
         screen.delegate = self
 
-        self.view = screen
+        view = screen
     }
 
     override func viewDidLoad() {

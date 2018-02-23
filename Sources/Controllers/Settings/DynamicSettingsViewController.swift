@@ -24,7 +24,7 @@ class DynamicSettingsViewController: BaseElloViewController {
         let screen = DynamicSettingsScreen(settings: category.settings)
         screen.delegate = self
         screen.title = category.label
-        self.view = screen
+        view = screen
     }
 
     override func didSetCurrentUser() {

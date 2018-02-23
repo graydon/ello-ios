@@ -41,7 +41,7 @@ class LoggedOutViewController: BaseElloViewController, BottomBarController {
     override func loadView() {
         let screen = LoggedOutScreen()
         screen.delegate = self
-        self.view = screen
+        view = screen
     }
 
     override func viewWillAppear(_ animated: Bool) {

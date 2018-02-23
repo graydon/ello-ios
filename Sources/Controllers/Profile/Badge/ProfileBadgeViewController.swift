@@ -24,7 +24,7 @@ final class ProfileBadgeViewController: BaseElloViewController {
     override func loadView() {
         let screen = ProfileBadgeScreen(title: badge.name, caption: badge.caption)
         screen.delegate = self
-        self.view = screen
+        view = screen
     }
 }
 

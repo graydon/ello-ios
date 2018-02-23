@@ -33,7 +33,7 @@ class BlockUserModalViewController: BaseElloViewController, BlockUserModalScreen
 
     override func loadView() {
         let screen = BlockUserModalScreen(config: config)
-        self.view = screen
+        view = screen
     }
 
     override func viewDidAppear(_ animated: Bool) {

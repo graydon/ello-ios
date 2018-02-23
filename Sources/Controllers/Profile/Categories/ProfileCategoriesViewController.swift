@@ -24,7 +24,7 @@ final class ProfileCategoriesViewController: BaseElloViewController {
     override func loadView() {
         let screen = ProfileCategoriesScreen(categories: categories)
         screen.delegate = self
-        self.view = screen
+        view = screen
     }
 }
 

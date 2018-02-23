@@ -33,7 +33,7 @@ class OnboardingCreatorTypeViewController: BaseElloViewController {
         screen.delegate = self
         screen.showIntroText = false
 
-        self.view = screen
+        view = screen
     }
 
     override func viewDidLoad() {

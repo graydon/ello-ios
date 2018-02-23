@@ -80,7 +80,7 @@ final class CategoryGenerator: StreamGenerator {
 
     func toggleGrid() {
         guard let posts = posts else { return }
-        destination?.replacePlaceholder(type: .streamPosts, items: parse(jsonables: posts))
+        destination?.replacePlaceholder(type: .streamItems, items: parse(jsonables: posts))
     }
 
 }
@@ -90,7 +90,7 @@ private extension CategoryGenerator {
     func setPlaceHolders() {
         destination?.setPlaceholders(items: [
             StreamCellItem(type: .placeholder, placeholderType: .promotionalHeader),
-            StreamCellItem(type: .placeholder, placeholderType: .streamPosts)
+            StreamCellItem(type: .placeholder, placeholderType: .streamItems)
         ])
     }
 

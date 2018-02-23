@@ -31,7 +31,7 @@ class ForgotPasswordResetViewController: BaseElloViewController {
     override func loadView() {
         let screen = ForgotPasswordResetScreen()
         screen.delegate = self
-        self.view = screen
+        view = screen
     }
 }
 

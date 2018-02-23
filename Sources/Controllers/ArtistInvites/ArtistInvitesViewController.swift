@@ -52,7 +52,7 @@ class ArtistInvitesViewController: StreamableViewController {
             screen.navigationBar.leftItems = [.burger]
         }
 
-        self.view = screen
+        view = screen
         viewContainer = screen.streamContainer
     }
 

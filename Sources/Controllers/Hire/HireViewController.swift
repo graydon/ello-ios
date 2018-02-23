@@ -53,7 +53,7 @@ class HireViewController: BaseElloViewController {
         screen.navigationBar.leftItems = [.back]
         screen.delegate = self
         screen.recipient = user.displayName
-        self.view = screen
+        view = screen
     }
 
     override func viewWillAppear(_ animated: Bool) {

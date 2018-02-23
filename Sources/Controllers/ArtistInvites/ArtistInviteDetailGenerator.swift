@@ -45,7 +45,7 @@ private extension ArtistInviteDetailGenerator {
             StreamCellItem(type: .placeholder, placeholderType: .artistInviteDetails),
             StreamCellItem(type: .placeholder, placeholderType: .artistInviteAdmin),
             StreamCellItem(type: .placeholder, placeholderType: .artistInviteSubmissionsHeader),
-            StreamCellItem(type: .placeholder, placeholderType: .streamPosts),
+            StreamCellItem(type: .placeholder, placeholderType: .streamItems),
         ])
     }
 
@@ -72,7 +72,7 @@ private extension ArtistInviteDetailGenerator {
         self.artistInviteDetails = artistInviteItems.filter { $0.placeholderType == .artistInviteDetails }
         destination?.replacePlaceholder(type: .artistInvites, items: headers)
 
-        let postsSpinner = StreamCellItem(type: .streamLoading, placeholderType: .streamPosts)
+        let postsSpinner = StreamCellItem(type: .streamLoading, placeholderType: .streamItems)
         destination?.replacePlaceholder(type: .artistInviteDetails, items: [postsSpinner])
 
         loadSubmissions(artistInvite)
@@ -115,7 +115,7 @@ private extension ArtistInviteDetailGenerator {
                     self.destination?.replacePlaceholder(type: .artistInviteSubmissionsButton, items: [button])
 
                     let items = self.parse(jsonables: posts)
-                    self.destination?.replacePlaceholder(type: .streamPosts, items: items)
+                    self.destination?.replacePlaceholder(type: .streamItems, items: items)
 
                     self.destination?.isPagingEnabled = responseConfig.nextQuery != nil
                 }
@@ -132,13 +132,13 @@ private extension ArtistInviteDetailGenerator {
     func showEmptySubmissions() {
         destination?.replacePlaceholder(type: .artistInviteSubmissionsButton, items: [])
         destination?.replacePlaceholder(type: .artistInviteSubmissionsHeader, items: [])
-        destination?.replacePlaceholder(type: .streamPosts, items: [])
+        destination?.replacePlaceholder(type: .streamItems, items: [])
     }
 
     func showSubmissionsError() {
         let error = NSAttributedString(label: InterfaceString.ArtistInvites.SubmissionsError, style: .error)
         let item = StreamCellItem(type: .header(error))
-        destination?.replacePlaceholder(type: .streamPosts, items: [item])
+        destination?.replacePlaceholder(type: .streamItems, items: [item])
     }
 
     func loadAdminTools(_ artistInvite: ArtistInvite) {

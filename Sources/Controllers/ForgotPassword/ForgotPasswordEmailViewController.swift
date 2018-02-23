@@ -12,7 +12,7 @@ class ForgotPasswordEmailViewController: BaseElloViewController {
     override func loadView() {
         let screen = ForgotPasswordEmailScreen()
         screen.delegate = self
-        self.view = screen
+        view = screen
     }
 }
 

@@ -77,14 +77,14 @@ class StreamDataSourceSpec: QuickSpec {
 
             context("replacePlaceholder(type:items:)") {
                 beforeEach {
-                    subject.appendStreamCellItems([StreamCellItem(type: .placeholder, placeholderType: .streamPosts)])
+                    subject.appendStreamCellItems([StreamCellItem(type: .placeholder, placeholderType: .streamItems)])
                 }
                 it("replaces a placeholder with items") {
                     let newItems = [
                         StreamCellItem(type: .streamHeader),
                         StreamCellItem(type: .streamHeader),
                     ]
-                    subject.replacePlaceholder(type: .streamPosts, items: newItems)
+                    subject.replacePlaceholder(type: .streamItems, items: newItems)
                     expect(subject.allStreamCellItems) == newItems
                 }
 
@@ -93,9 +93,9 @@ class StreamDataSourceSpec: QuickSpec {
                         StreamCellItem(type: .streamHeader),
                         StreamCellItem(type: .streamHeader),
                     ]
-                    subject.replacePlaceholder(type: .streamPosts, items: newItems)
+                    subject.replacePlaceholder(type: .streamItems, items: newItems)
                     for item in subject.allStreamCellItems {
-                        expect(item.placeholderType) == StreamCellType.PlaceholderType.streamPosts
+                        expect(item.placeholderType) == StreamCellType.PlaceholderType.streamItems
                     }
                 }
 
@@ -104,13 +104,13 @@ class StreamDataSourceSpec: QuickSpec {
                         StreamCellItem(type: .streamHeader),
                         StreamCellItem(type: .streamHeader),
                     ]
-                    subject.replacePlaceholder(type: .streamPosts, items: newItems)
+                    subject.replacePlaceholder(type: .streamItems, items: newItems)
                     expect(subject.allStreamCellItems.count) == 2
 
-                    subject.replacePlaceholder(type: .streamPosts, items: [])
+                    subject.replacePlaceholder(type: .streamItems, items: [])
                     expect(subject.allStreamCellItems.count) == 1
                     expect(subject.allStreamCellItems[0].type) == StreamCellType.placeholder
-                    expect(subject.allStreamCellItems[0].placeholderType) == StreamCellType.PlaceholderType.streamPosts
+                    expect(subject.allStreamCellItems[0].placeholderType) == StreamCellType.PlaceholderType.streamItems
                 }
 
                 it("ignores replacements if the placeholder is not in the data source") {
@@ -122,7 +122,7 @@ class StreamDataSourceSpec: QuickSpec {
 
                     expect(subject.allStreamCellItems.count) == 1
                     expect(subject.allStreamCellItems[0].type) == StreamCellType.placeholder
-                    expect(subject.allStreamCellItems[0].placeholderType) == StreamCellType.PlaceholderType.streamPosts
+                    expect(subject.allStreamCellItems[0].placeholderType) == StreamCellType.PlaceholderType.streamItems
                 }
             }
 
@@ -152,7 +152,7 @@ class StreamDataSourceSpec: QuickSpec {
             context("hasCellItems(for:)") {
                 beforeEach {
                     subject.appendStreamCellItems([
-                        StreamCellItem(type: .placeholder, placeholderType: .streamPosts),
+                        StreamCellItem(type: .placeholder, placeholderType: .streamItems),
                         StreamCellItem(jsonable: Post.stub([:]), type: .streamHeader, placeholderType: .postHeader),
                         StreamCellItem(jsonable: ElloComment.stub([:]), type: .streamHeader, placeholderType: .postComments),
                         StreamCellItem(jsonable: ElloComment.stub([:]), type: .streamHeader, placeholderType: .postComments),
@@ -164,7 +164,7 @@ class StreamDataSourceSpec: QuickSpec {
                 }
 
                 it("returns false if data only includes a placeholder item") {
-                    expect(subject.hasCellItems(for: .streamPosts)) == false
+                    expect(subject.hasCellItems(for: .streamItems)) == false
                 }
 
                 it("returns true if data includes one item of placeholderType") {
@@ -261,8 +261,8 @@ class StreamDataSourceSpec: QuickSpec {
                     ]
 
                     let postItems = [
-                        StreamCellItem(type: .streamHeader, placeholderType: .streamPosts),
-                        StreamCellItem(type: .streamFooter, placeholderType: .streamPosts),
+                        StreamCellItem(type: .streamHeader, placeholderType: .streamItems),
+                        StreamCellItem(type: .streamFooter, placeholderType: .streamItems),
                     ]
 
                     subject.appendStreamCellItems(profileHeaderItems + postItems)
@@ -276,7 +276,7 @@ class StreamDataSourceSpec: QuickSpec {
                 }
 
                 it("returns the correct indexPaths for profile posts") {
-                    let postIndexPaths = subject.indexPaths(forPlaceholderType: .streamPosts)
+                    let postIndexPaths = subject.indexPaths(forPlaceholderType: .streamItems)
 
                     expect(postIndexPaths[0].item) == 2
                     expect(postIndexPaths[1].item) == 3

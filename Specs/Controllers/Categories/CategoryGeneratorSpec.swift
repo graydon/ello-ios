@@ -83,7 +83,7 @@ class CategoryDestination: CategoryStreamDestination {
         switch type {
         case .promotionalHeader:
             headerItems = items
-        case .streamPosts:
+        case .streamItems:
             postItems = items
         default:
             otherPlaceHolderLoaded = true

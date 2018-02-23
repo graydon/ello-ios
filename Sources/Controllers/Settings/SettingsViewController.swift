@@ -49,7 +49,7 @@ class SettingsViewController: BaseElloViewController {
     override func loadView() {
         let screen = SettingsScreen()
         screen.delegate = self
-        self.view = screen
+        view = screen
     }
 
     override func didSetCurrentUser() {

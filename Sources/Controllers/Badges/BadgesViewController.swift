@@ -29,7 +29,7 @@ class BadgesViewController: StreamableViewController {
         let screen = BadgesScreen()
         screen.navigationBar.leftItems = [.back]
 
-        self.view = screen
+        view = screen
         viewContainer = screen.streamContainer
     }
 

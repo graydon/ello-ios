@@ -30,7 +30,7 @@ class JoinViewController: BaseElloViewController {
         let screen = JoinScreen()
         screen.delegate = self
         screen.isOnePasswordAvailable = OnePasswordExtension.shared().isAppExtensionAvailable()
-        self.view = screen
+        view = screen
     }
 
     private func showOnboardingScreen(_ user: User) {

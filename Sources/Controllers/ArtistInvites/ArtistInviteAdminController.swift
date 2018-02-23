@@ -50,7 +50,7 @@ class ArtistInviteAdminController: StreamableViewController {
         screen.navigationBar.title = ""
         screen.navigationBar.leftItems = [.back]
 
-        self.view = screen
+        view = screen
         viewContainer = screen.streamContainer
     }
 
@@ -101,7 +101,7 @@ extension ArtistInviteAdminController: ArtistInviteAdminScreenDelegate {
         guard let stream = stream else { return }
 
         screen.selectedSubmissionsStatus = stream.submissionsStatus
-        replacePlaceholder(type: .streamPosts, items: [StreamCellItem(type: .streamLoading)])
+        replacePlaceholder(type: .streamItems, items: [StreamCellItem(type: .streamLoading)])
         generator.stream = stream
         streamViewController.scrollToTop(animated: true)
         streamViewController.streamKind = generator.streamKind

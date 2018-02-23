@@ -16,7 +16,7 @@ class LoginViewController: BaseElloViewController {
         let screen = LoginScreen()
         screen.delegate = self
         screen.isOnePasswordAvailable = OnePasswordExtension.shared().isAppExtensionAvailable()
-        self.view = screen
+        view = screen
     }
 
     private func loadCurrentUser() {

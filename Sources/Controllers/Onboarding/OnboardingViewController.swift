@@ -98,7 +98,7 @@ class OnboardingViewController: BaseElloViewController {
     override func loadView() {
         let screen = OnboardingScreen()
         screen.delegate = self
-        self.view = screen
+        view = screen
     }
 
     override func viewDidLoad() {
