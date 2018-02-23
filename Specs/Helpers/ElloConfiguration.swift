@@ -64,6 +64,7 @@ class ElloConfiguration: QuickConfiguration {
             AuthenticationManager.shared.specs(setAuthState: .authenticated)
             AuthenticationManager.shared.queue = nil
             ElloProvider.moya = ElloProvider.StubbingProvider()
+            API.sharedManager = StubbedManager()
         }
         config.afterEach {
             ElloProvider_Specs.errorStatusCode = .status404

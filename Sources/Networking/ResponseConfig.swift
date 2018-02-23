@@ -33,4 +33,10 @@ class ResponseConfig: CustomStringConvertible {
             || nextQuery?.queryItems == nil
             || nextQuery == nil
     }
+
+    convenience init(pageConfig: PageConfig) {
+        self.init()
+        nextQuery = URLComponents(string: ElloURI.baseURL)
+        totalPagesRemaining = pageConfig.isLastPage == true ? "0" : "1"
+    }
 }

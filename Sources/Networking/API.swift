@@ -8,6 +8,8 @@ import SwiftyJSON
 
 
 struct API {
+    static var sharedManager: RequestManager = ElloManager()
+
     enum PageHeaderKind {
         case category(String)
         case artistInvites
@@ -30,30 +32,70 @@ struct API {
             }
         }
     }
+
+    func globalPostStream(before: String? = nil) -> GraphQLRequest<(PageConfig, [Post])> {
+        let request = GraphQLRequest(
+            endpointName: "globalPostStream",
+            parser: PageParser<Post>("posts", PostParser()).parse,
+            variables: [
+                (.enum("kind", "StreamKind", "FEATURED")),
+                (.optionalString("before", before)),
+            ],
+            fragments: [Fragment.postStream],
+            body: Fragment.postStreamBody
+            )
+        return request
+    }
+
+    func categoryPostStream(categorySlug: String, before: String? = nil) -> GraphQLRequest<(PageConfig, [Post])> {
+        let request = GraphQLRequest(
+            endpointName: "categoryPostStream",
+            parser: PageParser<Post>("posts", PostParser()).parse,
+            variables: [
+                (.enum("kind", "StreamKind", "FEATURED")),
+                (.string("slug", categorySlug)),
+                (.optionalString("before", before)),
+            ],
+            fragments: [Fragment.postStream],
+            body: Fragment.postStreamBody
+            )
+        return request
+    }
+
+    func subscribedPostStream(before: String? = nil) -> GraphQLRequest<(PageConfig, [Post])> {
+        let request = GraphQLRequest(
+            endpointName: "subscribedPostStream",
+            parser: PageParser<Post>("posts", PostParser()).parse,
+            variables: [
+                (.enum("kind", "StreamKind", "FEATURED")),
+                (.optionalString("before", before)),
+            ],
+            fragments: [Fragment.postStream],
+            body: Fragment.postStreamBody
+            )
+        return request
+    }
+
+    func allCategories() -> GraphQLRequest<[Category]> {
+        let request = GraphQLRequest(
+            endpointName: "allCategories",
+            parser: ManyParser<Category>(CategoryParser()).parse,
+            fragments: [
+                Fragment.tshirtProps,
+            ],
+            body: Fragment.categoriesBody
+            )
+        return request
+    }
+
     func subscribedCategories() -> GraphQLRequest<[Category]> {
         let request = GraphQLRequest(
             endpointName: "categoryNav",
             parser: ManyParser<Category>(CategoryParser()).parse,
-            fragments: """
-                fragment imageProps on Image {
-                  url
-                  metadata { height width type size }
-                }
-
-                fragment tshirtImages on TshirtImageVersions {
-                  large { ...imageProps }
-                }
-                """,
-            body: """
-                id
-                name
-                slug
-                order
-                allowInOnboarding
-                isCreatorType
-                level
-                tileImage { ...tshirtImages }
-                """
+            fragments: [
+                Fragment.tshirtProps,
+            ],
+            body: Fragment.categoriesBody
             )
         return request
     }
@@ -66,46 +108,19 @@ struct API {
                 (.enum("kind", "PageHeaderKind", kind.apiKind)),
                 (.optionalString("slug", kind.slug)),
             ],
-            fragments: """
-                fragment imageProps on Image {
-                  url
-                  metadata { height width type size }
-                }
-
-                fragment responsiveImages on ResponsiveImageVersions {
-                  mdpi { ...imageProps }
-                  hdpi { ...imageProps }
-                  xhdpi { ...imageProps }
-                  optimized { ...imageProps }
-                }
-
-                fragment tshirtImages on TshirtImageVersions {
-                  regular { ...imageProps }
-                  large { ...imageProps }
-                  original { ...imageProps }
-                }
-
-                fragment userProps on User {
-                  id
-                  username
-                  name
-                  avatar {
-                    ...tshirtImages
-                  }
-                  coverImage {
-                    ...responsiveImages
-                  }
-                }
-                """,
+            fragments: [
+                Fragment.responsiveProps,
+                Fragment.pageHeaderUserProps,
+            ],
             body: """
                 id
                 postToken
                 kind
                 header
                 subheader
-                image { ...responsiveImages }
+                image { ...responsiveProps }
                 ctaLink { text url }
-                user { ...userProps }
+                user { ...pageHeaderUserProps }
                 """
             )
         return request
@@ -119,81 +134,8 @@ struct API {
                 (.string("username", username)),
                 (.optionalString("before", before)),
             ],
-            fragments: """
-                fragment imageProps on Image {
-                  url
-                  metadata { height width type size }
-                }
-
-                fragment tshirtImages on TshirtImageVersions {
-                  regular { ...imageProps }
-                  large { ...imageProps }
-                  original { ...imageProps }
-                }
-
-                fragment responsiveImages on ResponsiveImageVersions {
-                  mdpi { ...imageProps }
-                  hdpi { ...imageProps }
-                  xhdpi { ...imageProps }
-                  optimized { ...imageProps }
-                }
-
-                fragment userProps on User {
-                  id
-                  username
-                  name
-                  currentUserState { relationshipPriority }
-                  settings {
-                    hasCommentingEnabled hasLovesEnabled hasRepostingEnabled hasSharingEnabled
-                    isCollaborateable isHireable
-                  }
-                  avatar {
-                    ...tshirtImages
-                  }
-                  coverImage {
-                    ...responsiveImages
-                  }
-                }
-
-                fragment contentProps on ContentBlocks {
-                  linkUrl
-                  kind
-                  data
-                  links { assets }
-                }
-
-                fragment assetProps on Asset {
-                  id
-                  attachment { ...responsiveImages }
-                }
-
-                fragment postContent on Post {
-                  content { ...contentProps }
-                }
-
-                fragment postSummary on Post {
-                  id
-                  token
-                  createdAt
-                  summary { ...contentProps }
-                  author { ...userProps }
-                  assets { ...assetProps }
-                  postStats { lovesCount commentsCount viewsCount repostsCount }
-                  currentUserState { watching loved reposted }
-                }
-                """,
-            body: """
-                next isLastPage
-                posts {
-                    ...postSummary
-                    ...postContent
-                    repostContent { ...contentProps }
-                    currentUserState { loved reposted watching }
-                    repostedSource {
-                        ...postSummary
-                    }
-                }
-                """
+            fragments: [Fragment.postStream],
+            body: Fragment.postStreamBody
             )
         return request
     }

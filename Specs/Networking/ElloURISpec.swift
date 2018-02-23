@@ -20,7 +20,8 @@ class ElloURISpec: QuickSpec {
                 it("can be constructed with ello-staging and http") {
                     let testingKeys = APIKeys(
                         key: "", secret: "", segmentKey: "",
-                        domain: "http://ello-staging.herokuapp.com"
+                        domain: "http://ello-staging.herokuapp.com",
+                        hasGraphQL: false
                         )
                     APIKeys.shared = testingKeys
                     expect(ElloURI.baseURL).to(equal("http://ello-staging.herokuapp.com"))
@@ -29,7 +30,8 @@ class ElloURISpec: QuickSpec {
                 it("can be constructed with ello.co and https") {
                     let testingKeys = APIKeys(
                         key: "", secret: "", segmentKey: "",
-                        domain: "https://ello.co"
+                        domain: "https://ello.co",
+                        hasGraphQL: false
                         )
                     APIKeys.shared = testingKeys
                     expect(ElloURI.baseURL).to(equal("https://ello.co"))
@@ -78,7 +80,8 @@ class ElloURISpec: QuickSpec {
                 beforeEach {
                     let testingKeys = APIKeys(
                         key: "", secret: "", segmentKey: "",
-                        domain: "https://ello-staging.herokuapp.com"
+                        domain: "https://ello-staging.herokuapp.com",
+                        hasGraphQL: false
                         )
                     APIKeys.shared = testingKeys
                 }
