@@ -27,14 +27,6 @@ class CategoryListCell: CollectionViewCell {
     private var buttonCategoryLookup: [UIButton: CategoryInfo] = [:]
     private var categoryButtons: [UIButton] = []
 
-    private class func buttonTitle(_ category: String) -> NSAttributedString {
-        let attributedString = NSAttributedString(string: category, attributes: [
-            .font: UIFont.defaultFont(),
-            .foregroundColor: UIColor.black
-        ])
-        return attributedString
-    }
-
     override func style() {
         backgroundColor = .white
     }
@@ -58,7 +50,7 @@ class CategoryListCell: CollectionViewCell {
             buttonCategoryLookup[button] = categoryInfo
             button.backgroundColor = .greyF2
             button.addTarget(self, action: #selector(categoryButtonTapped(_:)), for: .touchUpInside)
-            let attributedString = CategoryListCell.buttonTitle(categoryInfo.title)
+            let attributedString = NSAttributedString(label: categoryInfo.title, style: .white)
             button.setAttributedTitle(attributedString, for: .normal)
 
             return button

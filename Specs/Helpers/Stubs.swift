@@ -496,7 +496,6 @@ extension Asset: Stubbable {
         asset.original = (values["original"] as? Attachment) ?? defaultAttachment
         asset.large = (values["large"] as? Attachment) ?? defaultAttachment
         asset.regular = (values["regular"] as? Attachment) ?? defaultAttachment
-        asset.small = (values["small"] as? Attachment) ?? defaultAttachment
         ElloLinkedStore.shared.setObject(asset, forKey: asset.id, type: .assetsType)
         return asset
     }
@@ -565,6 +564,7 @@ extension PageHeader: Stubbable {
             subheader: (values["subheader"] as? String) ?? "Default Subheader",
             ctaCaption: (values["ctaCaption"] as? String) ?? "Default CTA Caption",
             ctaURL: urlFromValue(values["ctaURL"]),
+            isSponsored: (values["isSponsored"] as? Bool) ?? false,
             image: values["image"] as? Asset,
             kind: (values["kind"] as? PageHeader.Kind) ?? .generic
         )

@@ -267,6 +267,12 @@ extension StyledButton.Style {
         titleColor: .white,
         underline: true
         )
+    static let whiteBoldUnderlined = StyledButton.Style(
+        backgroundColor: .clear,
+        titleColor: .white,
+        font: .defaultBoldFont(),
+        underline: true
+        )
     static let grayUnderlined = StyledButton.Style(
         backgroundColor: .clear,
         titleColor: .greyA,

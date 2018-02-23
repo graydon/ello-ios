@@ -8,8 +8,8 @@ import Photos
 
 var Globals = GlobalFactory()
 
-func overrideGlobals(_ global: GlobalFactory?) {
-    Globals = global ?? GlobalFactory()
+func overrideGlobals(_ global: GlobalFactory) {
+    Globals = global
 }
 
 

@@ -49,8 +49,7 @@ struct StreamHeaderCellPresenter {
         }
 
         let isSubmission: Bool
-        if
-            case .discover(.featured) = streamKind,
+        if streamKind.showsSubmission,
             post.artistInviteId != nil
         {
             isSubmission = true

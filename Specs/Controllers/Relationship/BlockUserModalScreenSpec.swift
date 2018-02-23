@@ -8,7 +8,19 @@ import Nimble
 
 
 class BlockUserModalScreenSpec: QuickSpec {
-    class FakeBlockUserModalController: UIViewController, BlockUserModalDelegate {
+    class FakeBlockUserModalController: UIViewController, RelationshipResponder {
+        func relationshipTapped(_ userId: String, prev prevRelationshipPriority: RelationshipPriorityWrapper, relationshipPriority: RelationshipPriorityWrapper, complete: @escaping RelationshipChangeCompletion) {
+            //
+        }
+
+        func launchBlockModal(_ userId: String, userAtName: String, relationshipPriority: RelationshipPriorityWrapper, changeClosure: @escaping RelationshipChangeClosure) {
+            //
+        }
+
+        func updateRelationship(_ currentUserId: String, userId: String, prev prevRelationshipPriority: RelationshipPriorityWrapper, relationshipPriority: RelationshipPriorityWrapper, complete: @escaping RelationshipChangeCompletion) {
+            //
+        }
+
         var relationshipPriority: RelationshipPriority?
         var calledFlagTapped = false
         var calledCloseModal = false
@@ -25,7 +37,7 @@ class BlockUserModalScreenSpec: QuickSpec {
     }
 
     override func spec() {
-        describe("BlockUserModalScreen") {
+        fdescribe("BlockUserModalScreen") {
             var subject: BlockUserModalScreen!
             var controller: FakeBlockUserModalController!
             var muteButton: UIButton!

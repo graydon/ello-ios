@@ -81,6 +81,12 @@ enum StreamKind {
         }
     }
 
+    var showsSubmission: Bool {
+        switch self {
+        case .allCategories: return true
+        default: return false
+        }
+    }
     var showsCategory: Bool {
         if case let .discover(type) = self, type == .featured {
             return true

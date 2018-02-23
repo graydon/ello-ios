@@ -23,6 +23,7 @@ class PageHeaderParser: IdParser {
             subheader: json["subheader"].stringValue,
             ctaCaption: json["ctaLink"]["text"].stringValue,
             ctaURL: json["ctaLink"]["url"].string.flatMap { URL(string: $0) },
+            isSponsored: json["isSponsored"].boolValue,
             image: image,
             kind: kind
         )

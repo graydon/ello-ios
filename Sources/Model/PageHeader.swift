@@ -23,6 +23,7 @@ final class PageHeader: JSONAble {
     let subheader: String
     let ctaCaption: String
     let ctaURL: URL?
+    var isSponsored: Bool
     let image: Asset?
     var tileURL: URL? { return image?.oneColumnAttachment?.url }
     var kind: Kind
@@ -38,6 +39,7 @@ final class PageHeader: JSONAble {
         subheader: String,
         ctaCaption: String,
         ctaURL: URL?,
+        isSponsored: Bool,
         image: Asset?,
         kind: Kind
     ) {
@@ -47,6 +49,7 @@ final class PageHeader: JSONAble {
         self.subheader = subheader
         self.ctaCaption = ctaCaption
         self.ctaURL = ctaURL
+        self.isSponsored = isSponsored
         self.image = image
         self.kind = kind
         super.init(version: PageHeader.Version)
@@ -60,6 +63,7 @@ final class PageHeader: JSONAble {
         subheader = decoder.decodeKey("subheader")
         ctaCaption = decoder.decodeKey("ctaCaption")
         ctaURL = decoder.decodeOptionalKey("ctaURL")
+        isSponsored = decoder.decodeKey("isSponsored")
         image = decoder.decodeOptionalKey("image")
         let kindString: String = decoder.decodeKey("kind")
         kind = Kind(rawValue: kindString) ?? .generic
@@ -74,6 +78,7 @@ final class PageHeader: JSONAble {
         encoder.encodeObject(subheader, forKey: "subheader")
         encoder.encodeObject(ctaCaption, forKey: "ctaCaption")
         encoder.encodeObject(ctaURL, forKey: "ctaURL")
+        encoder.encodeObject(isSponsored, forKey: "isSponsored")
         encoder.encodeObject(image, forKey: "image")
         encoder.encodeObject(kind.rawValue, forKey: "kind")
         super.encode(with: coder)

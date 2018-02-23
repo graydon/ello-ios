@@ -66,7 +66,7 @@ class DeepLinkingSpec: QuickSpec {
                     DeepLinking.showSettings(navVC: fakeNavController, currentUser: fakeCurrentUser)
 
                     expect(fakeNavController.pushCalled) == true
-                    expect(fakeNavController.pushedVC).to(beAnInstanceOf(SettingsContainerViewController.self))
+                    expect(fakeNavController.pushedVC).to(beAnInstanceOf(SettingsViewController.self))
                 }
             }
 
