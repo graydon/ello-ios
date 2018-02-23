@@ -88,6 +88,7 @@ class DebugController: UIViewController, UITableViewDataSource, UITableViewDeleg
 
         addAction(name: "GraphQL test") {
             API().pageHeaders(kind: .category("art"))
+                .execute()
                 .then { response -> Void in
                     print(response)
                 }

@@ -115,6 +115,7 @@ private extension CategoryGenerator {
         }
 
         API().pageHeaders(kind: kind)
+            .execute()
             .then { pageHeaders -> Void in
                 guard self.loadingToken.isValidInitialPageLoadingToken(self.localToken) else { return }
 

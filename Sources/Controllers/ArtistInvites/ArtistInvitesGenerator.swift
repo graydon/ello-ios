@@ -37,6 +37,7 @@ private extension ArtistInvitesGenerator {
 
     func loadArtistInvitePromotionals() {
         API().pageHeaders(kind: .artistInvites)
+            .execute()
             .then { pageHeaders -> Void in
                 guard let pageHeader = pageHeaders.randomItem() else { return }
 

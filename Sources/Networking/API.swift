@@ -30,7 +30,7 @@ struct API {
             }
         }
     }
-    func subscribedCategories() -> Promise<[Category]> {
+    func subscribedCategories() -> GraphQLRequest<[Category]> {
         let request = GraphQLRequest(
             endpointName: "categoryNav",
             parser: ManyParser<Category>(CategoryParser()).parse,
@@ -55,10 +55,10 @@ struct API {
                 tileImage { ...tshirtImages }
                 """
             )
-        return request.execute()
+        return request
     }
 
-    func pageHeaders(kind: PageHeaderKind) -> Promise<[PageHeader]> {
+    func pageHeaders(kind: PageHeaderKind) -> GraphQLRequest<[PageHeader]> {
         let request = GraphQLRequest(
             endpointName: "pageHeaders",
             parser: ManyParser<PageHeader>(PageHeaderParser()).parse,
@@ -108,10 +108,10 @@ struct API {
                 user { ...userProps }
                 """
             )
-        return request.execute()
+        return request
     }
 
-    func userPosts(username: String, before: String? = nil) -> Promise<(PageConfig, [Post])> {
+    func userPosts(username: String, before: String? = nil) -> GraphQLRequest<(PageConfig, [Post])> {
         let request = GraphQLRequest(
             endpointName: "userPostStream",
             parser: PageParser<Post>("posts", PostParser()).parse,
@@ -195,6 +195,6 @@ struct API {
                 }
                 """
             )
-        return request.execute()
+        return request
     }
 }

@@ -83,6 +83,7 @@ final class ProfileGenerator: StreamGenerator {
         else { return nil }
 
         return API().userPosts(username: username, before: next)
+            .execute()
             .then { newPageConfig, posts -> [JSONAble] in
                 self.destination?.setPagingConfig(responseConfig: self.createFakeConfig(pageConfig: newPageConfig))
                 self.pageConfig = newPageConfig
@@ -148,6 +149,7 @@ private extension ProfileGenerator {
         queue.addOperation(displayPostsOperation)
 
         API().userPosts(username: username)
+            .execute()
             .then { pageConfig, posts -> Void in
                 guard self.loadingToken.isValidInitialPageLoadingToken(self.localToken) else { return }
 

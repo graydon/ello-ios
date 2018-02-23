@@ -60,6 +60,7 @@ private extension EditorialsGenerator {
 
     func loadEditorialPromotionals() {
         API().pageHeaders(kind: .editorials)
+            .execute()
             .then { pageHeaders -> Void in
                 guard let pageHeader = pageHeaders.randomItem() else { return }
 
