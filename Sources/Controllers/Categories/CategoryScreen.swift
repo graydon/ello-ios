@@ -261,39 +261,28 @@ class CategoryScreen: HomeSubviewScreen, CategoryScreenProtocol {
         let gridButtonAlpha: CGFloat
         switch show {
         case .onlyGridToggle:
-            shareHiddenConstraint.activate()
-            shareVisibleConstraint.deactivate()
-            allHiddenConstraint.deactivate()
             shareButtonAlpha = 0
             gridButtonAlpha = 1
         case .all:
-            shareHiddenConstraint.deactivate()
-            shareVisibleConstraint.activate()
-            allHiddenConstraint.deactivate()
             shareButtonAlpha = 1
             gridButtonAlpha = 1
         case .none:
-            shareHiddenConstraint.deactivate()
-            shareVisibleConstraint.deactivate()
-            allHiddenConstraint.activate()
             shareButtonAlpha = 0
             gridButtonAlpha = 0
         }
 
+        shareHiddenConstraint.set(isActivated: show == .onlyGridToggle)
+        shareVisibleConstraint.set(isActivated: show == .all)
+        allHiddenConstraint.set(isActivated: show == .none)
+
         backButton.isHidden = !backVisible
-        if backVisible {
-            backHiddenConstraint.deactivate()
-            backVisibleConstraint.activate()
-        }
-        else {
-            backHiddenConstraint.activate()
-            backVisibleConstraint.deactivate()
-        }
+        backVisibleConstraint.set(isActivated: backVisible)
+        backHiddenConstraint.set(isActivated: !backVisible)
 
         elloAnimate(animated: animated) {
-            self.navigationBar.layoutIfNeeded()
             self.shareButton.alpha = shareButtonAlpha
             self.gridListButton.alpha = gridButtonAlpha
+            self.navigationBar.layoutIfNeeded()
         }
     }
 

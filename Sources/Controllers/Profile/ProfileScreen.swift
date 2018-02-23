@@ -272,38 +272,19 @@ class ProfileScreen: StreamableScreen, ProfileScreenProtocol {
     }
 
     func configureButtonsForNonCurrentUser(isHireable: Bool, isCollaborateable: Bool) {
-        if isHireable && isCollaborateable {
-            hireLeftConstraint.deactivate()
-            hireRightConstraint.activate()
-        }
-        else if isHireable {
-            hireLeftConstraint.activate()
-            hireRightConstraint.deactivate()
-        }
-        else if isCollaborateable {
-            hireLeftConstraint.activate()
-            hireRightConstraint.deactivate()
-        }
+        let showBoth = isHireable && isCollaborateable
+        let showOne = !showBoth && (isHireable || isCollaborateable)
+        hireLeftConstraint.set(isActivated: showOne)
+        hireRightConstraint.set(isActivated: showBoth)
 
-        if isHireable {
-            relationshipCollabConstraint.deactivate()
-            relationshipHireConstraint.activate()
-            relationshipMentionConstraint.deactivate()
-        }
-        else if isCollaborateable {
-            relationshipCollabConstraint.activate()
-            relationshipHireConstraint.deactivate()
-            relationshipMentionConstraint.deactivate()
-        }
-        else {
-            relationshipHireConstraint.deactivate()
-            relationshipCollabConstraint.deactivate()
-            relationshipMentionConstraint.activate()
-        }
+        relationshipHireConstraint.set(isActivated: isHireable)
+        relationshipCollabConstraint.set(isActivated: !isHireable && isCollaborateable)
+        relationshipMentionConstraint.set(isActivated: !(isHireable || isCollaborateable))
 
         collaborateButton.isHidden = !isCollaborateable
         hireButton.isHidden = !isHireable
         mentionButton.isHidden = isHireable || isCollaborateable
+
         relationshipControl.isHidden = false
         editButton.isHidden = true
         inviteButton.isHidden = true
@@ -398,16 +379,10 @@ extension ProfileScreen: ArrangeNavBackButton {
     }
 
     private func updateBackButton() {
-        if hasBackButton && showBackButton {
-            persistentBackButton.alpha = 1
-            showBackButtonConstraint.activate()
-            hideBackButtonConstraint.deactivate()
-        }
-        else {
-            persistentBackButton.alpha = 0
-            showBackButtonConstraint.deactivate()
-            hideBackButtonConstraint.activate()
-        }
+        let showButton = hasBackButton && showBackButton
+        showBackButtonConstraint.set(isActivated: showButton)
+        hideBackButtonConstraint.set(isActivated: !showButton)
+        persistentBackButton.alpha = showButton ? 1 : 0
         profileButtonsEffect.layoutIfNeeded()
     }
 }

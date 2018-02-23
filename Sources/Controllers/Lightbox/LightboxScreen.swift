@@ -361,18 +361,18 @@ class LightboxScreen: Screen, LightboxScreenProtocol {
     }
 
     private func showToolbar() {
+        self.toolbarVisibleConstraint.activate()
+        self.toolbarHiddenConstraint.deactivate()
         elloAnimate {
-            self.toolbarVisibleConstraint.activate()
-            self.toolbarHiddenConstraint.deactivate()
             self.toolbar.frame.origin.y = self.frame.height - self.toolbar.frame.height - Globals.bestBottomMargin
             self.toolbarBlackBar.frame.origin.y = self.toolbar.frame.maxY
         }
     }
 
     private func hideToolbar() {
+        self.toolbarVisibleConstraint.deactivate()
+        self.toolbarHiddenConstraint.activate()
         elloAnimate {
-            self.toolbarVisibleConstraint.deactivate()
-            self.toolbarHiddenConstraint.activate()
             self.toolbar.frame.origin.y = self.frame.height
             self.toolbarBlackBar.frame.origin.y = self.toolbar.frame.maxY
         }

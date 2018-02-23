@@ -22,30 +22,12 @@ class ProfileHeaderCompactView: ProfileHeaderLayoutView {
                 let totalCountHeight = calculatedCellHeights?.profileTotalCount
             else { return }
 
-            if badgesHeight == 0 {
-                totalCountFullConstraint.activate()
-                totalCountHalfConstraint.deactivate()
-                totalCountVerticalGreyLine.isHidden = true
-                badgesView.isHidden = true
-            }
-            else if totalCountHeight == 0 {
-                totalCountFullConstraint.deactivate()
-                totalCountHalfConstraint.activate()
-                badgesFullConstraint.activate()
-                badgesHalfConstraint.deactivate()
-
-                totalCountVerticalGreyLine.isHidden = true
-                totalCountView.isHidden = true
-            }
-            else {
-                totalCountFullConstraint.deactivate()
-                totalCountHalfConstraint.activate()
-                badgesFullConstraint.deactivate()
-                badgesHalfConstraint.activate()
-
-                totalCountVerticalGreyLine.isHidden = false
-                badgesView.isHidden = false
-            }
+            totalCountFullConstraint.set(isActivated: badgesHeight == 0)
+            totalCountHalfConstraint.set(isActivated: badgesHeight != 0)
+            badgesFullConstraint.set(isActivated: totalCountHeight == 0)
+            badgesHalfConstraint.set(isActivated: totalCountHeight != 0)
+            totalCountVerticalGreyLine.isHidden = badgesHeight == 0 || totalCountHeight == 0
+            badgesView.isHidden = badgesHeight == 0 || totalCountHeight == 0
         }
     }
 
