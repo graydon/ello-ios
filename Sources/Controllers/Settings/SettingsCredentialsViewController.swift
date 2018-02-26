@@ -6,7 +6,7 @@ class SettingsCredentialsViewController: BaseElloViewController {
     private var _mockScreen: SettingsCredentialsScreenProtocol?
     var screen: SettingsCredentialsScreenProtocol {
         set(screen) { _mockScreen = screen }
-        get { return _mockScreen ?? self.view as! SettingsCredentialsScreen }
+        get { return fetchScreen(_mockScreen) }
     }
 
     var keyboardWillShowObserver: NotificationObserver?

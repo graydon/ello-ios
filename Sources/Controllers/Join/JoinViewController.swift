@@ -8,7 +8,7 @@ class JoinViewController: BaseElloViewController {
     private var _mockScreen: JoinScreenProtocol?
     var screen: JoinScreenProtocol {
         set(screen) { _mockScreen = screen }
-        get { return _mockScreen ?? self.view as! JoinScreen }
+        get { return fetchScreen(_mockScreen) }
     }
 
     var invitationCode: String?

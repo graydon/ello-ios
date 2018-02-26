@@ -6,7 +6,7 @@ class DynamicSettingsViewController: BaseElloViewController {
     private var _mockScreen: DynamicSettingsScreenProtocol?
     var screen: DynamicSettingsScreenProtocol {
         set(screen) { _mockScreen = screen }
-        get { return _mockScreen ?? self.view as! DynamicSettingsScreen }
+        get { return fetchScreen(_mockScreen) }
     }
 
     let category: DynamicSettingCategory

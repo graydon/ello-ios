@@ -24,7 +24,7 @@ final class CategoryViewController: StreamableViewController {
     private var _mockScreen: CategoryScreenProtocol?
     var screen: CategoryScreenProtocol {
         set(screen) { _mockScreen = screen }
-        get { return _mockScreen ?? self.view as! CategoryScreen }
+        get { return fetchScreen(_mockScreen) }
     }
 
     var category: Category?

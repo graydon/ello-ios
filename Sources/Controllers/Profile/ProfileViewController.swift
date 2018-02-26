@@ -22,7 +22,7 @@ final class ProfileViewController: StreamableViewController {
     private var _mockScreen: ProfileScreenProtocol?
     var screen: ProfileScreenProtocol {
         set(screen) { _mockScreen = screen }
-        get { return _mockScreen ?? self.view as! ProfileScreen }
+        get { return fetchScreen(_mockScreen) }
     }
 
     var user: User?
@@ -141,11 +141,11 @@ final class ProfileViewController: StreamableViewController {
     }
 
     override func didSetCurrentUser() {
+        super.didSetCurrentUser()
         generator?.currentUser = currentUser
-        if user?.id == currentUser?.id {
+        if user?.id == currentUser?.id && isViewLoaded {
             reloadEntireProfile()
         }
-        super.didSetCurrentUser()
     }
 
     override func showNavBars(animated: Bool) {
@@ -176,7 +176,9 @@ final class ProfileViewController: StreamableViewController {
     }
 
     private func reloadEntireProfile() {
-        screen.resetCoverImage()
+        if isViewLoaded {
+            screen.resetCoverImage()
+        }
         generator?.load(reload: true)
     }
 
@@ -291,6 +293,8 @@ extension ProfileViewController {
     }
 
     func updateCachedImages(user: User) {
+        guard isViewLoaded else { return }
+
         if let cachedCoverImage = cachedImage(.coverImage) {
             screen.coverImage = cachedCoverImage
         }

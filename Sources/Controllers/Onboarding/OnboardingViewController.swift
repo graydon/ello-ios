@@ -19,7 +19,7 @@ class OnboardingViewController: BaseElloViewController {
     private var _mockScreen: OnboardingScreenProtocol?
     var screen: OnboardingScreenProtocol {
         set(screen) { _mockScreen = screen }
-        get { return _mockScreen ?? self.view as! OnboardingScreen }
+        get { return fetchScreen(_mockScreen) }
     }
 
     var inviteFriendsController: OnboardingInviteViewController? {
@@ -208,8 +208,6 @@ extension OnboardingViewController {
     }
 
     private func showFirstViewController(_ viewController: UIViewController) {
-        prepareOnboardingController(viewController)
-
         viewController.willMove(toParentViewController: nil)
         addChildViewController(viewController)
         screen.controllerContainer.addSubview(viewController.view)
@@ -217,6 +215,8 @@ extension OnboardingViewController {
         viewController.view.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         viewController.view.layoutIfNeeded()
         viewController.didMove(toParentViewController: self)
+
+        prepareOnboardingController(viewController)
 
         visibleViewController = viewController
         visibleViewControllerIndex = 0

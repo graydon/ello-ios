@@ -9,7 +9,7 @@ class LoginViewController: BaseElloViewController {
     private var _mockScreen: LoginScreenProtocol?
     var screen: LoginScreenProtocol {
         set(screen) { _mockScreen = screen }
-        get { return _mockScreen ?? self.view as! LoginScreen }
+        get { return fetchScreen(_mockScreen) }
     }
 
     override func loadView() {

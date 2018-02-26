@@ -16,7 +16,7 @@ class BlockUserModalViewController: BaseElloViewController, BlockUserModalScreen
     private var _mockScreen: BlockUserModalScreenProtocol?
     var screen: BlockUserModalScreenProtocol {
         set(screen) { _mockScreen = screen }
-        get { return _mockScreen ?? self.view as! BlockUserModalScreen }
+        get { return fetchScreen(_mockScreen) }
     }
 
     required init(config: BlockUserModalConfig) {

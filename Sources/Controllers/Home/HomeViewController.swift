@@ -31,7 +31,7 @@ class HomeViewController: BaseElloViewController, HomeScreenDelegate {
     private var _mockScreen: HomeScreenProtocol?
     var screen: HomeScreenProtocol {
         set(screen) { _mockScreen = screen }
-        get { return _mockScreen ?? self.view as! HomeScreen }
+        get { return fetchScreen(_mockScreen) }
     }
 
     override func didSetCurrentUser() {

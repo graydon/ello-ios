@@ -6,7 +6,7 @@ class ForgotPasswordResetViewController: BaseElloViewController {
     private var _mockScreen: ForgotPasswordResetScreenProtocol?
     var screen: ForgotPasswordResetScreenProtocol {
         set(screen) { _mockScreen = screen }
-        get { return _mockScreen ?? self.view as! ForgotPasswordResetScreen }
+        get { return fetchScreen(_mockScreen) }
     }
 
     let authToken: String

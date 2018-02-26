@@ -24,7 +24,7 @@ class SearchViewController: StreamableViewController {
     private var _mockScreen: SearchScreenProtocol?
     var screen: SearchScreenProtocol {
         set(screen) { _mockScreen = screen }
-        get { return _mockScreen ?? self.view as! SearchScreen }
+        get { return fetchScreen(_mockScreen) }
     }
 
     override func loadView() {

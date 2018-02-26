@@ -12,7 +12,7 @@ class ArtistInviteAdminController: StreamableViewController {
     private var _mockScreen: ArtistInviteAdminScreenProtocol?
     var screen: ArtistInviteAdminScreenProtocol {
         set(screen) { _mockScreen = screen }
-        get { return _mockScreen ?? self.view as! ArtistInviteAdminScreen }
+        get { return fetchScreen(_mockScreen) }
     }
     var generator: ArtistInviteAdminGenerator!
 
@@ -38,8 +38,8 @@ class ArtistInviteAdminController: StreamableViewController {
     }
 
     override func didSetCurrentUser() {
-        generator.currentUser = currentUser
         super.didSetCurrentUser()
+        generator.currentUser = currentUser
     }
 
     override func loadView() {

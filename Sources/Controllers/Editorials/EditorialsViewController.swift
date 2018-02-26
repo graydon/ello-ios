@@ -10,7 +10,7 @@ class EditorialsViewController: StreamableViewController {
     private var _mockScreen: EditorialsScreenProtocol?
     var screen: EditorialsScreenProtocol {
         set(screen) { _mockScreen = screen }
-        get { return _mockScreen ?? self.view as! EditorialsScreen }
+        get { return fetchScreen(_mockScreen) }
     }
     var generator: EditorialsGenerator!
 
@@ -35,8 +35,8 @@ class EditorialsViewController: StreamableViewController {
     }
 
     override func didSetCurrentUser() {
-        generator.currentUser = currentUser
         super.didSetCurrentUser()
+        generator.currentUser = currentUser
     }
 
     override func loadView() {

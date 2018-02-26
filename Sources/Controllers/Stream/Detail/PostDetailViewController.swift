@@ -70,8 +70,8 @@ final class PostDetailViewController: StreamableViewController {
     }
 
     override func didSetCurrentUser() {
-        generator.currentUser = currentUser
         super.didSetCurrentUser()
+        generator.currentUser = currentUser
     }
 
     override func showNavBars(animated: Bool) {

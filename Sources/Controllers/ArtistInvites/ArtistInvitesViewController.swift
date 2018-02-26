@@ -10,7 +10,7 @@ class ArtistInvitesViewController: StreamableViewController {
     private var _mockScreen: StreamableScreenProtocol?
     var screen: StreamableScreenProtocol {
         set(screen) { _mockScreen = screen }
-        get { return _mockScreen ?? self.view as! ArtistInvitesScreen }
+        get { return fetchScreen(_mockScreen) }
     }
     var generator: ArtistInvitesGenerator!
 
@@ -36,11 +36,11 @@ class ArtistInvitesViewController: StreamableViewController {
     }
 
     override func didSetCurrentUser() {
+        super.didSetCurrentUser()
         generator.currentUser = currentUser
         if currentUser != nil, isViewLoaded {
             screen.navigationBar.leftItems = [.burger]
         }
-        super.didSetCurrentUser()
     }
 
     override func loadView() {

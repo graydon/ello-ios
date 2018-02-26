@@ -6,7 +6,7 @@ class SettingsViewController: BaseElloViewController {
     private var _mockScreen: SettingsScreenProtocol?
     var screen: SettingsScreenProtocol {
         set(screen) { _mockScreen = screen }
-        get { return _mockScreen ?? self.view as! SettingsScreen }
+        get { return fetchScreen(_mockScreen) }
     }
 
     let generator: SettingsGenerator
