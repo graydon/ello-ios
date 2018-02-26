@@ -107,8 +107,7 @@ private extension ArtistInviteDetailGenerator {
                     self.showEmptySubmissions()
                 }
                 else {
-                    let header = NSAttributedString(label: InterfaceString.ArtistInvites.Submissions, style: .header)
-                    let submissionsHeader = StreamCellItem(type: .header(header))
+                    let submissionsHeader = StreamCellItem(type: .header(InterfaceString.ArtistInvites.Submissions))
                     self.destination?.replacePlaceholder(type: .artistInviteSubmissionsHeader, items: [submissionsHeader])
 
                     let button = StreamCellItem(type: .artistInviteSubmissionsButton)
@@ -136,8 +135,7 @@ private extension ArtistInviteDetailGenerator {
     }
 
     func showSubmissionsError() {
-        let error = NSAttributedString(label: InterfaceString.ArtistInvites.SubmissionsError, style: .error)
-        let item = StreamCellItem(type: .header(error))
+        let item = StreamCellItem(type: .error(message: InterfaceString.ArtistInvites.SubmissionsError))
         destination?.replacePlaceholder(type: .streamItems, items: [item])
     }
 
@@ -146,8 +144,7 @@ private extension ArtistInviteDetailGenerator {
             artistInvite.hasAdminLinks
         else { return }
 
-        let header = NSAttributedString(label: "Admin Controls", style: .header)
-        let submissionsHeader = StreamCellItem(type: .header(header))
+        let submissionsHeader = StreamCellItem(type: .header("Admin Controls"))
         let spacer = StreamCellItem(type: .spacer(height: 30))
 
         let unapprovedButton: StreamCellItem? = artistInvite.unapprovedSubmissionsStream.map { StreamCellItem(type: .revealController(label: InterfaceString.ArtistInvites.AdminUnapprovedStream, $0)) }

@@ -33,7 +33,7 @@ enum StreamCellType: Equatable {
     case emptyStream(height: CGFloat)
     case error(message: String)
     case fullWidthSpacer(height: CGFloat)
-    case header(NSAttributedString?)
+    case header(String)
     case image(data: Regionable?)
     case inviteFriends
     case loadMoreComments
@@ -113,7 +113,7 @@ enum StreamCellType: Equatable {
         .emptyStream(height: 282),
         .error(message: ""),
         .fullWidthSpacer(height: 0),
-        .header(nil),
+        .header(""),
         .image(data: nil),
         .inviteFriends,
         .loadMoreComments,
@@ -502,7 +502,7 @@ enum StreamCellType: Equatable {
             .emptyStream(height: 282),
             .error(message: ""),
             .fullWidthSpacer(height: 0),
-            .header(nil),
+            .header(""),
             .loadMoreComments,
             .noPosts,
             .notification,

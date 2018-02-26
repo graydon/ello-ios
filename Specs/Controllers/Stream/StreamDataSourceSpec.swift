@@ -1320,7 +1320,7 @@ class StreamDataSourceSpec: QuickSpec {
                         StreamCellItem(type: .spacer(height: 10)),
                         StreamCellItem(type: .fullWidthSpacer(height: 10)),
                         StreamCellItem(type: .streamLoading),
-                        StreamCellItem(type: .header(nil)),
+                        StreamCellItem(type: .header("")),
                         StreamCellItem(type: .tallHeader(nil)),
                         StreamCellItem(type: .toggle),
                         StreamCellItem(type: .unknown),

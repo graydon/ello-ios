@@ -69,8 +69,7 @@ private extension ArtistInviteAdminGenerator {
     }
 
     func showEmptySubmissions() {
-        let header = NSAttributedString(label: InterfaceString.ArtistInvites.AdminEmpty, style: .header)
-        let headerItem = StreamCellItem(type: .header(header))
+        let headerItem = StreamCellItem(type: .header(InterfaceString.ArtistInvites.AdminEmpty))
         destination?.replacePlaceholder(type: .streamItems, items: [headerItem])
     }
 }
