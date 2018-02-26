@@ -133,7 +133,7 @@ class StreamCollectionViewLayout: UICollectionViewLayout {
 
         var attributes = UICollectionViewLayoutAttributes()
 
-        let width = collectionView!.frame.size.width - sectionInset.left - sectionInset.right
+        let width = collectionView!.frame.size.width - sectionInset.sides
 
         let spaceColumCount = CGFloat(columnCount-1)
 

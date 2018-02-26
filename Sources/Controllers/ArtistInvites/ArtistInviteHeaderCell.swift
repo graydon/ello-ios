@@ -37,7 +37,7 @@ class ArtistInviteHeaderCell: CollectionViewCell, ArtistInviteConfigurableCell {
     private let dateLabel = StyledLabel(style: .artistInviteDetailInfo)
 
     static func calculateDynamicHeights(title: String, inviteType: String, cellWidth: CGFloat) -> CGFloat {
-        let textWidth = cellWidth - Size.textMargins.left - Size.textMargins.right
+        let textWidth = cellWidth - Size.textMargins.sides
         let height1 = NSAttributedString(label: title, style: .artistInviteTitle, lineBreakMode: .byWordWrapping).heightForWidth(textWidth)
         let height2 = NSAttributedString(label: inviteType, style: .artistInviteDetailInfo, lineBreakMode: .byWordWrapping).heightForWidth(textWidth)
         return height1 + height2

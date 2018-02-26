@@ -172,8 +172,8 @@ extension BlockUserModalScreen {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        let modalWidth = frame.width - Size.outerMargins.left - Size.outerMargins.right
-        let innerWidth = modalWidth - Size.innerMargins.left - Size.innerMargins.right
+        let modalWidth = frame.width - Size.outerMargins.sides
+        let innerWidth = modalWidth - Size.innerMargins.sides
         let titleWidth = innerWidth - Size.closeButtonSize - Size.innerMargins.right
         titleLabel.preferredMaxLayoutWidth = titleWidth
         muteLabel.preferredMaxLayoutWidth = innerWidth

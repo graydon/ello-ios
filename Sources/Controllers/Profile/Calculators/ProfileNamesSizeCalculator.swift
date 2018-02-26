@@ -19,7 +19,7 @@ struct ProfileNamesSizeCalculator {
         let nameFont = ProfileNamesView.nameFont
         let usernameFont = ProfileNamesView.usernameFont
 
-        let viewWidth = maxWidth - ProfileNamesView.Size.outerMargins.left - ProfileNamesView.Size.outerMargins.right
+        let viewWidth = maxWidth - ProfileNamesView.Size.outerMargins.sides
         let maxSize = CGSize(width: viewWidth, height: CGFloat.greatestFiniteMagnitude)
 
         let nameSize: CGSize
@@ -41,7 +41,7 @@ struct ProfileNamesSizeCalculator {
             ], context: nil).size.integral
 
         let (height, _) = ProfileNamesView.preferredHeight(nameSize: nameSize, usernameSize: usernameSize, maxWidth: maxWidth)
-        let totalHeight = height + ProfileNamesView.Size.outerMargins.top + ProfileNamesView.Size.outerMargins.bottom
+        let totalHeight = height + ProfileNamesView.Size.outerMargins.tops
         resolve(totalHeight)
         return promise
     }

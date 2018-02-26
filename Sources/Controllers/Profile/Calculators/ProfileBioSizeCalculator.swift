@@ -39,7 +39,7 @@ class ProfileBioSizeCalculator: NSObject {
         guard webViewHeight > 0 else {
             return 0
         }
-        return webViewHeight + ProfileBioView.Size.margins.top + ProfileBioView.Size.margins.bottom
+        return webViewHeight + ProfileBioView.Size.margins.tops
     }
 
 }

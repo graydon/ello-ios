@@ -35,38 +35,7 @@ extension UIEdgeInsets {
         self.init(top: all, left: all, bottom: all, right: all)
     }
 
+    var sides: CGFloat { return left + right }
+    var tops: CGFloat { return top + bottom }
 }
 
-extension UIEdgeInsets {
-    init(topMargin: CGFloat) {
-        self.init(top: -topMargin, left: 0, bottom: 0, right: 0)
-    }
-
-    init(leftMargin: CGFloat) {
-        self.init(top: 0, left: -leftMargin, bottom: 0, right: 0)
-    }
-
-    init(bottomMargin: CGFloat) {
-        self.init(top: 0, left: 0, bottom: -bottomMargin, right: 0)
-    }
-
-    init(rightMargin: CGFloat) {
-        self.init(top: 0, left: 0, bottom: 0, right: -rightMargin)
-    }
-
-    init(topMargins: CGFloat) {
-        self.init(top: -topMargins, left: 0, bottom: -topMargins, right: 0)
-    }
-
-    init(sideMargins: CGFloat) {
-        self.init(top: 0, left: -sideMargins, bottom: 0, right: -sideMargins)
-    }
-
-    init(topMargins: CGFloat, sideMargins: CGFloat) {
-        self.init(top: -topMargins, left: -sideMargins, bottom: -topMargins, right: -sideMargins)
-    }
-
-    init(margins: CGFloat) {
-        self.init(top: -margins, left: -margins, bottom: -margins, right: -margins)
-    }
-}

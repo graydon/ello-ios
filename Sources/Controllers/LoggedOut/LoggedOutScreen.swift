@@ -105,12 +105,12 @@ class LoggedOutScreen: Screen, LoggedOutScreenProtocol {
 
         joinButton.snp.makeConstraints { make in
             make.leading.bottom.equalTo(bottomBarView).inset(Size.buttonInsets)
-            make.height.equalTo(Size.bottomBarHeight - Size.buttonInsets.top - Size.buttonInsets.bottom)
+            make.height.equalTo(Size.bottomBarHeight - Size.buttonInsets.tops)
         }
 
         loginButton.snp.makeConstraints { make in
             make.trailing.bottom.equalTo(bottomBarView).inset(Size.buttonInsets)
-            make.height.equalTo(Size.bottomBarHeight - Size.buttonInsets.top - Size.buttonInsets.bottom)
+            make.height.equalTo(Size.bottomBarHeight - Size.buttonInsets.tops)
             make.leading.equalTo(joinButton.snp.trailing).offset(Size.buttonSpacing)
             make.width.equalTo(Size.loginButtonWidth)
         }

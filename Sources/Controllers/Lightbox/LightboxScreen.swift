@@ -165,9 +165,9 @@ class LightboxScreen: Screen, LightboxScreenProtocol {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        let imageWidth = frame.width - Size.insets.left - Size.insets.right - 2 * Size.lilBits
-        let imageHeight = frame.height - Size.insets.top - Size.insets.bottom
-        imagesContainer.frame.size.width = imageWidth * 3 + Size.insets.left + Size.insets.right
+        let imageWidth = frame.width - Size.insets.sides - 2 * Size.lilBits
+        let imageHeight = frame.height - Size.insets.tops
+        imagesContainer.frame.size.width = imageWidth * 3 + Size.insets.sides
         imagesContainer.frame.size.height = frame.height
         imagesContainer.frame.origin.x = -imageWidth + Size.lilBits + gestureDeltaX
         imagesContainer.frame.origin.y = 0
@@ -274,7 +274,7 @@ class LightboxScreen: Screen, LightboxScreenProtocol {
             }
 
             let shouldLoadMore = -gestureDeltaX >= maxX && canLoadMore()
-            let imageWidth = frame.width - Size.insets.left - Size.insets.right - 2 * Size.lilBits
+            let imageWidth = frame.width - Size.insets.sides - 2 * Size.lilBits
             if let delta = delta {
                 switch delta {
                 case .prev:

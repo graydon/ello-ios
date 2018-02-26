@@ -13,7 +13,7 @@ class ProfileNamesView: ProfileBaseView {
 
     static func preferredHeight(nameSize: CGSize, usernameSize: CGSize, maxWidth: CGFloat) -> (CGFloat, isVertical: Bool) {
         let bothNamesWidth = nameSize.width + usernameSize.width + Size.horizNameMargin
-        let maxAllowedWidth = maxWidth - Size.outerMargins.left - Size.outerMargins.right
+        let maxAllowedWidth = maxWidth - Size.outerMargins.sides
         if bothNamesWidth > maxAllowedWidth {
             let height = nameSize.height + usernameSize.height + Size.vertNameMargin
             return (height, isVertical: true)
@@ -92,7 +92,7 @@ class ProfileNamesView: ProfileBaseView {
 
         for label in [nameLabel, usernameLabel] {
             label.frame.origin.x = max(Size.outerMargins.left, label.frame.origin.x)
-            label.frame.size.width = min(frame.width - Size.outerMargins.left - Size.outerMargins.right, label.frame.size.width)
+            label.frame.size.width = min(frame.width - Size.outerMargins.sides, label.frame.size.width)
         }
     }
 }

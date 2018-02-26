@@ -22,7 +22,7 @@ class OmnibarScreen: Screen, OmnibarScreenProtocol {
         static let toolbarButtonSpacing: CGFloat = 20
         static let additionalBuyPadding: CGFloat = 5
         static let tableTopInset: CGFloat = 22.5
-        static var keyboardContainerHeight: CGFloat { return Size.keyboardContainerMargin.top + Size.keyboardContainerMargin.bottom + Size.keyboardButtonSize.height }
+        static var keyboardContainerHeight: CGFloat { return Size.keyboardContainerMargin.tops + Size.keyboardButtonSize.height }
         static let keyboardContainerMargin = UIEdgeInsets(all: 10)
         static let keyboardButtonsMargin = UIEdgeInsets(top: 13, left: 10, bottom: 13, right: 10)
         static let keyboardButtonSize = CGSize(width: 40, height: 40)

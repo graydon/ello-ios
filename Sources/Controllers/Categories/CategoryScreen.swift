@@ -143,7 +143,7 @@ class CategoryScreen: HomeSubviewScreen, CategoryScreenProtocol {
             insets.top -= StatusBar.Size.height
             insets.bottom -= 1
             make.bottom.equalTo(navigationBar).inset(insets)
-            make.height.equalTo(Size.navigationBarHeight - insets.top - insets.bottom)
+            make.height.equalTo(Size.navigationBarHeight - insets.tops)
 
             backHiddenConstraint = make.leading.equalTo(navigationBar).inset(insets).constraint
             backVisibleConstraint = make.leading.equalTo(backButton.snp.trailing).offset(insets.left).constraint
