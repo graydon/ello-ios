@@ -1,5 +1,5 @@
 ////
-///  UIWebView.swift
+///  UIWebViewExtensions.swift
 //
 
 extension UIWebView {

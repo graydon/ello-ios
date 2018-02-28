@@ -1301,8 +1301,8 @@ class StreamDataSourceSpec: QuickSpec {
                     subject = StreamDataSource(streamKind: .following)
 
                     let items: [StreamCellItem] = [
-                        StreamCellItem(type: .categoryCard),
-                        StreamCellItem(type: .selectableCategoryCard),
+                        StreamCellItem(type: .categorySubscribeCard),
+                        StreamCellItem(type: .onboardingCategoryCard),
                         StreamCellItem(type: .categoryList),
                         StreamCellItem(type: .commentHeader),
                         StreamCellItem(type: .createComment),

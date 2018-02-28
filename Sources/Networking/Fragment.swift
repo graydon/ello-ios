@@ -99,6 +99,17 @@ struct Fragment: Equatable {
         level
         tileImage { ...tshirtProps }
         """
+    static let pageHeaderBody = """
+        id
+        postToken
+        # category { id }
+        kind
+        header
+        subheader
+        image { ...responsiveProps }
+        ctaLink { text url }
+        user { ...pageHeaderUserProps }
+        """
     static let postStreamBody = """
         next isLastPage
         posts {

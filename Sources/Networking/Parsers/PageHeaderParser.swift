@@ -19,6 +19,7 @@ class PageHeaderParser: IdParser {
         let header = PageHeader(
             id: json["id"].stringValue,
             postToken: json["postToken"].string,
+            categoryId: json["category"]["id"].id,
             header: json["header"].stringValue,
             subheader: json["subheader"].stringValue,
             ctaCaption: json["ctaLink"]["text"].stringValue,

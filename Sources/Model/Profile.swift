@@ -394,7 +394,7 @@ final class Profile: JSONAble {
         let creatorTypeCategoryIds: [String] = json["creator_type_category_ids"].arrayValue.flatMap { $0.stringValue }
         // create profile
         let profile = Profile(
-            id: json["id"].string ?? "",
+            id: json["id"].stringValue,
             createdAt: (json["created_at"].stringValue.toDate() ?? Globals.now),
             shortBio: json["short_bio"].stringValue,
             email: json["email"].stringValue,

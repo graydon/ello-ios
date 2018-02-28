@@ -38,4 +38,3 @@ extension UIEdgeInsets {
     var sides: CGFloat { return left + right }
     var tops: CGFloat { return top + bottom }
 }
-

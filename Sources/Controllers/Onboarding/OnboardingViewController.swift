@@ -58,6 +58,7 @@ class OnboardingViewController: BaseElloViewController {
         if let currentUser = currentUser {
             onboardingData.name = currentUser.name
             onboardingData.bio = currentUser.profile?.shortBio
+
             if let links = currentUser.externalLinksList {
                 onboardingData.links = links.reduce("") { (memo: String, link) in
                     if memo.isEmpty {
@@ -69,29 +70,24 @@ class OnboardingViewController: BaseElloViewController {
                 }
             }
 
-            if let url = currentUser.avatarURL(), url.absoluteString !~ "ello-default"
-            {
+            if let url = currentUser.avatarURL(), url.absoluteString !~ "ello-default" {
                 PINRemoteImageManager.shared().downloadImage(with: url, options: []) { result in
-                    if let image = result.image {
-                        self.onboardingData.avatarImage = ImageRegionData(image: image)
-                    }
+                    guard let image = result.image else { return }
+                    self.onboardingData.avatarImage = ImageRegionData(image: image)
                 }
             }
 
-            if let url = currentUser.coverImageURL(), url.absoluteString !~ "ello-default"
-            {
+            if let url = currentUser.coverImageURL(), url.absoluteString !~ "ello-default" {
                 PINRemoteImageManager.shared().downloadImage(with: url, options: []) { result in
-                    if let image = result.image {
-                        self.onboardingData.coverImage = ImageRegionData(image: image)
-                    }
+                    guard let image = result.image else { return }
+                    self.onboardingData.coverImage = ImageRegionData(image: image)
                 }
             }
         }
 
         for controller in onboardingViewControllers {
-            if let controller = controller as? ControllerThatMightHaveTheCurrentUser {
-                controller.currentUser = currentUser
-            }
+            guard let controller = controller as? ControllerThatMightHaveTheCurrentUser else { continue }
+            controller.currentUser = currentUser
         }
     }
 

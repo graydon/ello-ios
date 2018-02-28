@@ -6,16 +6,20 @@ class CategoryCardView: View {
     static let selectedAlpha: CGFloat = 0.8
     static let normalAlpha: CGFloat = 0.6
     static let darkAlpha: CGFloat = 0.8
+    static let fullAlpha: CGFloat = 1.0
 
     let info: CategoryCardListView.CategoryInfo
     var isSelected: Bool {
         set {
             _selected = newValue
             let alpha: CGFloat
-            if newValue {
+            if newValue, info.isAll {
+                alpha = CategoryCardView.fullAlpha
+            }
+            else if newValue {
                 alpha = CategoryCardView.selectedAlpha
             }
-            else if info.imageURL == nil {
+            else if info.isAll {
                 alpha = CategoryCardView.darkAlpha
             }
             else {
@@ -55,7 +59,10 @@ class CategoryCardView: View {
         backgroundColor = .white
 
         overlay.backgroundColor = .black
-        if info.imageURL == nil {
+        if info.isSubscribed {
+            overlay.alpha = CategoryCardView.normalAlpha
+        }
+        else if info.isAll {
             overlay.alpha = CategoryCardView.darkAlpha
         }
         else {
@@ -63,7 +70,10 @@ class CategoryCardView: View {
         }
 
         button.titleLabel?.numberOfLines = 0
-        let attributedString = NSAttributedString(info.title, color: .white, alignment: .center)
+        let attributedString = NSAttributedString(
+            button: info.title,
+            style: info.isSubscribed ? .whiteBoldUnderlined : .clearWhite,
+            state: .normal)
         button.setAttributedTitle(attributedString, for: .normal)
     }
 
@@ -73,6 +83,13 @@ class CategoryCardView: View {
             imageView.clipsToBounds = true
             imageView.contentMode = .scaleAspectFill
             imageView.pin_setImage(from: url)
+            addSubview(imageView)
+            imageView.snp.makeConstraints { $0.edges.equalTo(self) }
+        }
+        else if info.isSubscribed {
+            let imageView = UIImageView(image: UIImage(named: "subscribed-background"))
+            imageView.clipsToBounds = true
+            imageView.contentMode = .scaleAspectFill
             addSubview(imageView)
             imageView.snp.makeConstraints { $0.edges.equalTo(self) }
         }

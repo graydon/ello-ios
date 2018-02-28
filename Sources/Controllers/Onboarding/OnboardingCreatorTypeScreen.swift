@@ -21,6 +21,19 @@ class OnboardingCreatorTypeScreen: StreamableScreen {
         case none
         case fan
         case artist([Int])
+
+        var isFan: Bool {
+            switch self {
+            case .fan: return true
+            default: return false
+            }
+        }
+        var isArtist: Bool {
+            switch self {
+            case .artist: return true
+            default: return false
+            }
+        }
     }
 
     weak var delegate: OnboardingCreatorTypeDelegate?
@@ -280,11 +293,11 @@ class OnboardingCreatorTypeScreen: StreamableScreen {
     }
 
     func updateButtons(type: CreatorType, animated: Bool = true) {
-        fanButton.isSelected = type == .fan
-        artistButton.isSelected = type == .artist
+        fanButton.isSelected = type.isFan
+        artistButton.isSelected = type.isArtist
 
-        scrollViewArtistBottom.set(isActivated: type == .artist)
-        scrollViewFanBottom.set(isActivated: type != .artist)
+        scrollViewArtistBottom.set(isActivated: type.isArtist)
+        scrollViewFanBottom.set(isActivated: type.isArtist)
 
         let creatorTypeMargin: CGFloat
         let creatorTypeIntroMargin: CGFloat

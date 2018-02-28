@@ -12,9 +12,11 @@ let CategoryVersion = 4
 
 @objc(Category)
 final class Category: JSONAble, Groupable {
-    static let featured = Category(id: "meta1", name: InterfaceString.Discover.Featured, slug: "featured", order: 0, allowInOnboarding: false, isCreatorType: false, level: .meta, tileImage: nil)
-    static let trending = Category(id: "meta2", name: InterfaceString.Discover.Trending, slug: "trending", order: 1, allowInOnboarding: false, isCreatorType: false, level: .meta, tileImage: nil)
-    static let recent = Category(id: "meta3", name: InterfaceString.Discover.Recent, slug: "recent", order: 2, allowInOnboarding: false, isCreatorType: false, level: .meta, tileImage: nil)
+    enum Selection {
+        case all
+        case subscribed
+        case category(String)
+    }
 
     let id: String
     var groupId: String { return "Category-\(id)" }

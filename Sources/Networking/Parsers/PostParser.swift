@@ -49,7 +49,7 @@ class PostParser: IdParser {
         post.content = RegionParser.graphQLRegions(json: json["content"], isRepostContent: repostContent.count > 0)
         post.body = RegionParser.graphQLRegions(json: json["body"], isRepostContent: repostContent.count > 0)
         post.repostContent = repostContent
-        // post.artistInviteId = json["artist_invite_id"].string
+        post.artistInviteId = json["artistInvite"]["id"].id
 
         post.viewsCount = json["postStats"]["viewsCount"].int
         post.commentsCount = json["postStats"]["commentsCount"].int

@@ -40,15 +40,6 @@ class DeepLinkingSpec: QuickSpec {
                     expect(fakeNavController.pushedVC).to(beAnInstanceOf(CategoryViewController.self))
                 }
 
-                it("pushes a CategoryViewController with featured category") {
-                    DeepLinking.showDiscover(navVC: fakeNavController, currentUser: fakeCurrentUser)
-
-                    let categoryVC = fakeNavController.pushedVC as? CategoryViewController
-                    expect(categoryVC?.slug) == Category.featured.slug
-                    expect(categoryVC?.title) == Category.featured.name
-                    expect(categoryVC?.category?.name) == Category.featured.name
-                }
-
                 it("does not push a new CategoryViewController if CategoryViewController is being viewed") {
                     let existing = CategoryViewController(slug: "", name: "")
                     fakeNavController.viewControllers = [existing]

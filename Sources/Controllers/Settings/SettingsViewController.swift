@@ -176,7 +176,8 @@ class SettingsViewController: BaseElloViewController {
 
     private func updateScreenFromUser() {
         guard let currentUser = currentUser,
-            let profile = currentUser.profile
+            let profile = currentUser.profile,
+            isViewLoaded
         else {
             return
         }

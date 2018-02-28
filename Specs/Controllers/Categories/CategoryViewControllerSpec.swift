@@ -11,7 +11,6 @@ class CategoryViewControllerSpec: QuickSpec {
     class MockCategoryScreen: CategoryScreenProtocol {
         let topInsetView = UIView()
         let streamContainer = UIView()
-        var categoryCardsVisible = true
         var isGridView = true
         var navigationBarTopConstraint: NSLayoutConstraint!
         let navigationBar = ElloNavigationBar()
@@ -21,7 +20,7 @@ class CategoryViewControllerSpec: QuickSpec {
         var showShare: CategoryScreen.NavBarItems = .all
         var showBack = false
 
-        func set(categoriesInfo: [CategoryCardListView.CategoryInfo], animated: Bool, completion: @escaping Block) {
+        func set(categoriesInfo: [CategoryCardListView.CategoryInfo], completion: @escaping Block) {
             categoryTitles = categoriesInfo.map { $0.title }
         }
         func toggleCategoriesList(navBarVisible: Bool, animated: Bool) {}
@@ -89,10 +88,9 @@ class CategoryViewControllerSpec: QuickSpec {
             context("setCategories(_:)") {
                 it("accepts meta categories") {
                     subject.set(categories: [
-                        Category.featured,
                         Category.stub(["name": "Art"])
                         ])
-                    expect(screen.categoryTitles) == ["Featured", "Art"]
+                    expect(screen.categoryTitles) == ["Art"]
                 }
             }
         }

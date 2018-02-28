@@ -31,6 +31,15 @@ class StreamDataSource: ElloDataSource {
     var editorialDownloader = EditorialDownloader()
     var artistInviteCalculator = ArtistInviteCellSizeCalculator()
 
+    override init(streamKind: StreamKind) {
+        super.init(streamKind: streamKind)
+        imageSizeCalculator.streamKind = streamKind
+    }
+
+    override func didSetStreamKind() {
+        imageSizeCalculator.streamKind = streamKind
+    }
+
     // MARK: Adding items
 
     @discardableResult

@@ -19,6 +19,7 @@ final class PageHeader: JSONAble {
 
     let id: String
     let postToken: String?
+    let categoryId: String?
     let header: String
     let subheader: String
     let ctaCaption: String
@@ -35,6 +36,7 @@ final class PageHeader: JSONAble {
     init(
         id: String,
         postToken: String?,
+        categoryId: String?,
         header: String,
         subheader: String,
         ctaCaption: String,
@@ -45,6 +47,7 @@ final class PageHeader: JSONAble {
     ) {
         self.id = id
         self.postToken = postToken
+        self.categoryId = categoryId
         self.header = header
         self.subheader = subheader
         self.ctaCaption = ctaCaption
@@ -59,6 +62,7 @@ final class PageHeader: JSONAble {
         let decoder = Coder(coder)
         id = decoder.decodeKey("id")
         postToken = decoder.decodeOptionalKey("postToken")
+        categoryId = decoder.decodeOptionalKey("categoryId")
         header = decoder.decodeKey("header")
         subheader = decoder.decodeKey("subheader")
         ctaCaption = decoder.decodeKey("ctaCaption")
@@ -74,6 +78,7 @@ final class PageHeader: JSONAble {
         let encoder = Coder(coder)
         encoder.encodeObject(id, forKey: "id")
         encoder.encodeObject(postToken, forKey: "postToken")
+        encoder.encodeObject(categoryId, forKey: "categoryId")
         encoder.encodeObject(header, forKey: "header")
         encoder.encodeObject(subheader, forKey: "subheader")
         encoder.encodeObject(ctaCaption, forKey: "ctaCaption")

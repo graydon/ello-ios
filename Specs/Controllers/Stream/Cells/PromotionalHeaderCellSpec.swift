@@ -45,7 +45,7 @@ class PromotionalHeaderCellSpec: QuickSpec {
                 let longCtaCaption = "tap for more and then you should do something else"
 
                 let expectations: [
-                    (String, kind: PageHeader.Kind, type: StreamCellType, name: String, isSponsored: Bool, body: String, ctaCaption: String, style: Style)
+                    (String, kind: PageHeader.Kind, name: String, isSponsored: Bool, body: String, ctaCaption: String, style: Style)
                 ] = [
                     ("category not sponsored, narrow", kind: .category, name: "A Longer Title Goes Here, does it wrap?", isSponsored: false, body: shortBody, ctaCaption: shortCtaCaption, style: .narrow),
                     ("category not sponsored, wide", kind: .category, name: "Art", isSponsored: false, body: shortBody, ctaCaption: shortCtaCaption, style: .wide),
@@ -96,11 +96,12 @@ class PromotionalHeaderCellSpec: QuickSpec {
                             "image": image,
                             "kind": kind,
                         ])
+                        pageHeader.isSponsored = isSponsored
 
                         let height = PromotionalHeaderCellSizeCalculator.calculatePageHeaderHeight(pageHeader, htmlHeight: nil, cellWidth: style.width)
                         subject = PromotionalHeaderCell(frame: style.frame(height))
                         let item = StreamCellItem(jsonable: pageHeader, type: .promotionalHeader)
-                        PageHeaderHeaderCellPresenter.configure(subject, streamCellItem: item, streamKind: .category(slug: "Design"), indexPath: IndexPath(item: 0, section: 0), currentUser: nil)
+                        PromotionalHeaderCellPresenter.configure(subject, streamCellItem: item, streamKind: .category(slug: "Design"), indexPath: IndexPath(item: 0, section: 0), currentUser: nil)
                         setImages()
 
                         expectValidSnapshot(subject)

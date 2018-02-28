@@ -146,10 +146,10 @@ final class ArtistInviteSubmission: JSONAble, Groupable, PostActionable {
         let id = json["id"].stringValue
         let artistInviteId = json["artist_invite_id"].stringValue
         let postId: String
-        if let v1 = json["post_id"].string {
+        if let v1 = json["post_id"].id {
             postId = v1
         }
-        else if let v2 = json["links"]["post"]["id"].string {
+        else if let v2 = json["links"]["post"]["id"].id {
             postId = v2
         }
         else {

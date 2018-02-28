@@ -2,7 +2,7 @@
 ///  BuyButtonLinkViewController.swift
 //
 
-class BuyButtonLinkViewController: UIViewController {
+class BuyButtonLinkViewController: BaseElloViewController {
     private var _mockScreen: BuyButtonLinkScreenProtocol?
     var screen: BuyButtonLinkScreenProtocol {
         set(screen) { _mockScreen = screen }

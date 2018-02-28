@@ -36,7 +36,7 @@ class UserParser: IdParser {
         // user.experimentalFeatures = json["experimental_features"].bool
         // user.identifiableBy = json["identifiable_by"].string
         user.formattedShortBio = json["formattedShortBio"].string
-        // user.onboardingVersion = json["web_onboarding_version"].string.flatMap { Int($0) }
+        // user.onboardingVersion = json["web_onboarding_version"].id.flatMap { Int($0) }
         user.totalViewsCount = json["stats"]["totalViewsCount"].int
         user.location = json["location"].string
 

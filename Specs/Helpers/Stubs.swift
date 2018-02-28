@@ -560,6 +560,7 @@ extension PageHeader: Stubbable {
         let pageHeader = PageHeader(
             id: (values["id"] as? String) ?? generateID(),
             postToken: (values["postToken"] as? String),
+            categoryId: (values["categoryId"] as? String),
             header: (values["header"] as? String) ?? "Default Header",
             subheader: (values["subheader"] as? String) ?? "Default Subheader",
             ctaCaption: (values["ctaCaption"] as? String) ?? "Default CTA Caption",
@@ -608,12 +609,6 @@ extension Ello.Category: Stubbable {
             level: level,
             tileImage: tileImage
         )
-
-        category.body = values["body"] as? String
-        category.header = values["header"] as? String
-        category.isSponsored = values["isSponsored"] as? Bool
-        category.ctaCaption = values["ctaCaption"] as? String
-        category.ctaURL = urlFromValue(values["ctaURL"])
 
         return category
     }

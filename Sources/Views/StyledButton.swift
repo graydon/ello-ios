@@ -339,6 +339,10 @@ extension StyledButton.Style {
         backgroundColor: .greyE5, selectedBackgroundColor: .black,
         titleColor: .greyA, selectedTitleColor: .white
         )
+    static let subscribed = StyledButton.Style(
+        backgroundColor: .greenD1, selectedBackgroundColor: .greyA,
+        titleColor: .white, selectedTitleColor: .white
+        )
 
     static func byName(_ name: String) -> StyledButton.Style {
         switch name {

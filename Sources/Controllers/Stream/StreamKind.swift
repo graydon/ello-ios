@@ -6,31 +6,30 @@ import SwiftyUserDefaults
 
 
 enum StreamKind {
-    case allCategories
     case announcements
-    case discover(type: DiscoverType)
+    case category(Category.Selection)
+    case categories
+    case manageCategories
     case editorials
     case following
     case notifications(category: String?)
     case postDetail(postParam: String)
     case simpleStream(endpoint: ElloAPI, title: String)
     case userStream(userParam: String)
-    case category(slug: String)
     case artistInvites
     case artistInviteSubmissions
     case unknown
 
     var name: String {
         switch self {
-        case .allCategories: return InterfaceString.Discover.AllCategories
         case .announcements: return ""
-        case .discover: return InterfaceString.Discover.Title
+        case .category: return ""
+        case .categories, .manageCategories: return InterfaceString.Discover.Categories
         case .editorials: return InterfaceString.Editorials.Title
         case .following: return InterfaceString.Following.Title
         case .notifications: return InterfaceString.Notifications.Title
         case .artistInvites: return InterfaceString.ArtistInvites.Title
         case .artistInviteSubmissions: return ""
-        case .category: return ""
         case .postDetail: return ""
         case let .simpleStream(_, title): return title
         case .unknown: return ""
@@ -42,9 +41,10 @@ enum StreamKind {
         switch self {
         case .artistInvites: return "ArtistInvites"
         case .artistInviteSubmissions: return "ArtistInviteSubmissions"
-        case .allCategories: return "AllCategories"
+        case .category: return "Category"
+        case .categories: return "AllCategories"
+        case .manageCategories: return "ManageCategories"
         case .announcements: return "Announcements"
-        case .discover, .category: return "CategoryPosts"
         case .editorials: return "Editorials"
         case .following: return "Following"
         case .notifications: return "Notifications"
@@ -65,8 +65,6 @@ enum StreamKind {
         switch self {
         case .announcements: return "Announcements_createdAt"
         case .editorials: return "Editorials_createdAt"
-        case let .discover(type): return "Discover_\(type)_createdAt"
-        case let .category(slug): return "Category_\(slug)_createdAt"
         case .following: return "Following_createdAt"
         case .notifications: return "Notifications_createdAt"
         default:
@@ -74,24 +72,37 @@ enum StreamKind {
         }
     }
 
-    var columnSpacing: CGFloat {
+    var horizontalColumnSpacing: CGFloat {
         switch self {
-        case .allCategories: return 2
+        case .categories: return CategoryCardCell.Size.smallMargin
+        case .manageCategories: return CategoryCardCell.Size.cardMargins
         default: return 12
+        }
+    }
+
+    var layoutInsets: UIEdgeInsets {
+        switch self {
+        case .manageCategories: return UIEdgeInsets(sides: CategoryCardCell.Size.cardMargins)
+        default: return .zero
         }
     }
 
     var showsSubmission: Bool {
         switch self {
-        case .allCategories: return true
+        case .category: return true
         default: return false
         }
     }
     var showsCategory: Bool {
-        if case let .discover(type) = self, type == .featured {
-            return true
+        switch self {
+        case let .category(selection):
+            switch selection {
+            case .all, .subscribed: return true
+            case .category: return false
+            }
+        default:
+            return false
         }
-        return false
     }
 
     var isProfileStream: Bool {
@@ -103,10 +114,8 @@ enum StreamKind {
 
     var endpoint: ElloAPI {
         switch self {
-        case .allCategories: return .categories
         case .announcements: return .announcements
-        case let .category(slug): return .category(slug: slug)
-        case let .discover(type): return .discover(type: type)
+        case .category, .categories, .manageCategories: return .categories
         case .editorials: return .editorials
         case .artistInvites: return .artistInvites
         case .artistInviteSubmissions: return .artistInviteSubmissions
@@ -116,13 +125,6 @@ enum StreamKind {
         case let .simpleStream(endpoint, _): return endpoint
         case .unknown: return .notificationsStream(category: nil) // doesn't really get used
         case let .userStream(userParam): return .userStream(userParam: userParam)
-        }
-    }
-
-    var relationship: RelationshipPriority {
-        switch self {
-        case .following: return .following
-        default: return .null
         }
     }
 
@@ -153,16 +155,6 @@ enum StreamKind {
                 else { return nil }
                 return editorial
             }
-        case .discover, .category:
-            if let comments = jsonables as? [ElloComment]  {
-                return comments
-            }
-            else if let posts = jsonables as? [Post]  {
-                return posts
-            }
-            else {
-                return []
-            }
         case .notifications:
             if let activities = jsonables as? [Activity] {
                 let notifications: [Notification] = activities.map { return Notification(activity: $0) }
@@ -184,7 +176,7 @@ enum StreamKind {
     var isGridView: Bool {
         var defaultGrid: Bool
         switch self {
-        case .allCategories: defaultGrid = true
+        case .category, .categories, .manageCategories: defaultGrid = true
         default: defaultGrid = false
         }
         return GroupDefaults["\(cacheKey)IsGridView"].bool ?? defaultGrid
@@ -192,7 +184,7 @@ enum StreamKind {
 
     var hasGridViewToggle: Bool {
         switch self {
-        case .following, .discover, .category: return true
+        case .following: return true
         case let .simpleStream(endpoint, _):
             switch endpoint {
             case .searchForPosts, .loves, .categoryPosts:

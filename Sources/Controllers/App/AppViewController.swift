@@ -617,7 +617,7 @@ extension AppViewController {
              .exploreRecent,
              .exploreTrending,
              .discover:
-            showCategoryScreen(slug: Category.featured.slug)
+            showCategoryScreen()
         case .discoverRandom,
              .discoverRecent,
              .discoverRelated,
@@ -746,13 +746,15 @@ extension AppViewController {
         }
     }
 
-    private func showCategoryScreen(slug: String) {
+    private func showCategoryScreen(slug: String? = nil) {
+        var catVC: CategoryViewController?
         if let vc = self.visibleViewController as? ElloTabBarController {
-            Tracker.shared.categoryOpened(slug)
+            if let slug = slug {
+                Tracker.shared.categoryOpened(slug)
+            }
             vc.selectedTab = .discover
             let navVC = vc.selectedViewController as? ElloNavigationController
-            let catVC = navVC?.viewControllers.first as? CategoryViewController
-            catVC?.selectCategoryFor(slug: slug)
+            catVC = navVC?.viewControllers.first as? CategoryViewController
             navVC?.popToRootViewController(animated: true)
         }
         else if
@@ -762,7 +764,14 @@ extension AppViewController {
             let categoryViewController = childNav.viewControllers.first as? CategoryViewController
         {
             childNav.popToRootViewController(animated: true)
-            categoryViewController.selectCategoryFor(slug: slug)
+            catVC = categoryViewController
+        }
+
+        if let slug = slug {
+            catVC?.selectCategoryFor(slug: slug)
+        }
+        else {
+            catVC?.allCategoriesTapped()
         }
     }
 

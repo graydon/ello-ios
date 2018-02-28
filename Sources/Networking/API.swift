@@ -112,16 +112,7 @@ struct API {
                 Fragment.responsiveProps,
                 Fragment.pageHeaderUserProps,
             ],
-            body: """
-                id
-                postToken
-                kind
-                header
-                subheader
-                image { ...responsiveProps }
-                ctaLink { text url }
-                user { ...pageHeaderUserProps }
-                """
+            body: Fragment.pageHeaderBody
             )
         return request
     }

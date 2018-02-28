@@ -8,19 +8,30 @@ protocol CategoryCardListDelegate: class {
 }
 
 class CategoryCardListView: View {
-    weak var delegate: CategoryCardListDelegate?
-
-    struct CategoryInfo {
-        let title: String
-        let imageURL: URL?
-    }
-
     struct Size {
         static let height: CGFloat = 70
         static let smallCardSize: CGSize = CGSize(width: 50, height: 68)
         static let cardSize: CGSize = CGSize(width: 100, height: 68)
         static let spacing: CGFloat = 1
     }
+
+    struct CategoryInfo {
+        enum Kind {
+            case all
+            case subscribed
+            case category
+        }
+
+        let title: String
+        let kind: Kind
+        let imageURL: URL?
+
+        var isUnderlined: Bool { return kind == .subscribed }
+        var isAll: Bool { return kind == .all }
+        var isSubscribed: Bool { return kind == .subscribed }
+    }
+
+    weak var delegate: CategoryCardListDelegate?
 
     var categoriesInfo: [CategoryInfo] = [] {
         didSet {
@@ -36,6 +47,14 @@ class CategoryCardListView: View {
     private var buttonIndexLookup: [UIButton: Int] = [:]
     private var categoryViews: [CategoryCardView] = []
     private var scrollView = UIScrollView()
+
+    var rightInset: CGFloat {
+        get { return scrollView.contentInset.right }
+        set {
+            scrollView.contentInset.right = newValue
+            scrollView.scrollIndicatorInsets.right = newValue
+        }
+    }
 
     override func style() {
         backgroundColor = .white
@@ -77,7 +96,7 @@ class CategoryCardListView: View {
     }
 
     func selectCategory(index: Int) {
-        guard let view = categoryViews.safeValue(index) else { return }
+        let view = categoryViews[index]
         for card in categoryViews where card != view {
             card.isSelected = false
         }
@@ -92,7 +111,7 @@ class CategoryCardListView: View {
 
         buttonIndexLookup = [:]
 
-        let allCategories = CategoryCardView(info: CategoryInfo(title: InterfaceString.Discover.AllCategories, imageURL: nil))
+        let allCategories = CategoryCardView(info: CategoryInfo(title: InterfaceString.Discover.AllCategories, kind: .all, imageURL: nil))
         allCategories.overlayAlpha = CategoryCardView.darkAlpha
         allCategories.snp.makeConstraints { make in
             make.size.equalTo(Size.smallCardSize)

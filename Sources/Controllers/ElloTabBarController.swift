@@ -179,20 +179,18 @@ extension ElloTabBarController {
     }
 
     func setupControllers() {
-        let home = HomeViewController(usage: .loggedIn)
-        let discover = CategoryViewController(slug: Category.featured.slug, name: Category.featured.name)
-        discover.category = Category.featured
+        let homeController = HomeViewController(usage: .loggedIn)
+        let categoriesController = CategoryViewController()
         let omnibar = OmnibarViewController()
-
-        let notifications = NotificationsViewController()
-        let profile = ProfileViewController(currentUser: currentUser!)
         omnibar.canGoBack = false
+        let notificationsController = NotificationsViewController()
+        let profileController = ProfileViewController(currentUser: currentUser!)
 
-        self.addChildViewController(embed(home))
-        self.addChildViewController(embed(discover))
+        self.addChildViewController(embed(homeController))
+        self.addChildViewController(embed(categoriesController))
         self.addChildViewController(embed(omnibar))
-        self.addChildViewController(embed(notifications))
-        self.addChildViewController(embed(profile))
+        self.addChildViewController(embed(notificationsController))
+        self.addChildViewController(embed(profileController))
     }
 
     func embed(_ controller: UIViewController) -> UIViewController {

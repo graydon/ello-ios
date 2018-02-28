@@ -2,15 +2,17 @@
 ///  CategoryGenerator.swift
 //
 
+import PromiseKit
+
+
 protocol CategoryStreamDestination: StreamDestination {
-    func set(categories: [Category])
-    func set(category: Category)
+    func set(subscribedCategories: [Category])
+    func set(allCategories: [Category])
 }
 
 final class CategoryGenerator: StreamGenerator {
-
+    var streamKind: StreamKind = .unknown
     var currentUser: User?
-    var streamKind: StreamKind
     weak private var categoryStreamDestination: CategoryStreamDestination?
     weak var destination: StreamDestination? {
         get { return categoryStreamDestination }
@@ -20,20 +22,21 @@ final class CategoryGenerator: StreamGenerator {
         }
     }
 
-    private var category: Category?
-    private var categories: [Category]?
-    private var slug: String?
+    private var subscribedCategories: [Category]?
+    private var categorySelection: Category.Selection
     private var pageHeader: PageHeader?
     private var posts: [Post]?
     private var localToken: String = ""
     private var loadingToken = LoadingToken()
-
     private let queue = OperationQueue()
 
-    init(slug: String?, currentUser: User?, streamKind: StreamKind, destination: StreamDestination) {
-        self.slug = slug
+    private var nextPageRequest: GraphQLRequest<(PageConfig, [Post])>?
+    private var nextRequestGenerator: ((String) -> GraphQLRequest<(PageConfig, [Post])>)?
+
+    init(selection: Category.Selection, currentUser: User?, destination: StreamDestination) {
+        self.streamKind = .category(selection)
+        self.categorySelection = selection
         self.currentUser = currentUser
-        self.streamKind = streamKind
         self.destination = destination
     }
 
@@ -43,38 +46,30 @@ final class CategoryGenerator: StreamGenerator {
         return [StreamCellItem(jsonable: pageHeader, type: .promotionalHeader)]
     }
 
-    func reset(streamKind: StreamKind, category: Category?, pageHeader: PageHeader?) {
-        self.streamKind = streamKind
-        self.category = category
-        self.slug = category?.slug
+    func reset(category: Category?, selection: Category.Selection) {
+        self.categorySelection = selection
         self.pageHeader = nil
+        self.streamKind = .category(selection)
     }
 
     func load(reload: Bool = false) {
-        if reload {
-            pageHeader = nil
-        }
-
         let doneOperation = AsyncOperation()
         queue.addOperation(doneOperation)
 
         localToken = loadingToken.resetInitialPageLoadingToken()
         if reload {
-            category = nil
-            categories = nil
+            subscribedCategories = nil
             pageHeader = nil
             posts = nil
+            self.destination?.replacePlaceholder(type: .promotionalHeader, items: [])
+            self.destination?.replacePlaceholder(type: .streamItems, items: [])
         }
         else {
             setPlaceHolders()
         }
 
-        if let slug = slug {
-            loadCategory(slug: slug)
-        }
         loadPageHeader(doneOperation)
-
-        loadCategories()
+        loadSubscribedCategories()
         loadCategoryPosts(doneOperation, reload: reload)
     }
 
@@ -83,31 +78,40 @@ final class CategoryGenerator: StreamGenerator {
         destination?.replacePlaceholder(type: .streamItems, items: parse(jsonables: posts))
     }
 
+    func loadNextPage() -> Promise<[JSONAble]>? {
+        guard
+            let nextPageRequest = nextPageRequest
+        else { return nil }
+
+        return nextPageRequest
+            .execute()
+            .then { pageConfig, posts -> [JSONAble] in
+                self.setNextPageConfig(pageConfig)
+                if posts.count == 0 {
+                    self.destination?.isPagingEnabled = false
+                }
+                return posts
+            }
+            .catch { error in
+                let errorConfig = PageConfig(next: nil, isLastPage: true)
+                self.destination?.setPagingConfig(responseConfig: ResponseConfig(pageConfig: errorConfig))
+                self.destination?.isPagingEnabled = false
+            }
+    }
 }
 
-private extension CategoryGenerator {
+extension CategoryGenerator {
 
-    func setPlaceHolders() {
+    private func setPlaceHolders() {
         destination?.setPlaceholders(items: [
             StreamCellItem(type: .placeholder, placeholderType: .promotionalHeader),
             StreamCellItem(type: .placeholder, placeholderType: .streamItems)
         ])
     }
 
-    func loadCategory(slug: String) {
-        CategoryService().loadCategory(slug)
-            .then { category -> Void in
-                guard self.loadingToken.isValidInitialPageLoadingToken(self.localToken) else { return }
-
-                self.category = category
-                self.categoryStreamDestination?.set(category: category)
-            }
-            .ignoreErrors()
-    }
-
-    func loadPageHeader(_ doneOperation: AsyncOperation) {
+    private func loadPageHeader(_ doneOperation: AsyncOperation) {
         let kind: API.PageHeaderKind
-        if let slug = category?.slug ?? slug {
+        if case let .category(slug) = categorySelection {
             kind = .category(slug)
         }
         else {
@@ -138,69 +142,68 @@ private extension CategoryGenerator {
             }
     }
 
-    func loadCategories() {
+    private func loadSubscribedCategories() {
         API().subscribedCategories()
-            .then { categories -> Void in
-                self.categories = categories
-                self.categoryStreamDestination?.set(categories: categories)
+            .execute()
+            .then { subscribedCategories -> Void in
+                self.subscribedCategories = subscribedCategories
+                self.categoryStreamDestination?.set(subscribedCategories: subscribedCategories)
             }
             .ignoreErrors()
     }
 
-    func loadCategoryPosts(_ doneOperation: AsyncOperation, reload: Bool) {
-        let endpoint: ElloAPI
-        if let discoverType = slug.flatMap({ DiscoverType.fromURL($0) }) {
-            endpoint = .discover(type: discoverType)
-        }
-        else if let slug = slug {
-            endpoint = .categoryPosts(slug: slug)
-        }
-        else {
-            return
+    private func loadCategoryPosts(_ doneOperation: AsyncOperation, reload: Bool) {
+        let request: GraphQLRequest<(PageConfig, [Post])>
+        switch categorySelection {
+        case .all:
+            request = API().globalPostStream()
+            nextRequestGenerator = { next in return API().globalPostStream(before: next) }
+        case .subscribed:
+            request = API().subscribedPostStream()
+            nextRequestGenerator = { next in return API().subscribedPostStream(before: next) }
+        case let .category(slug):
+            request = API().categoryPostStream(categorySlug: slug)
+            nextRequestGenerator = { next in return API().categoryPostStream(categorySlug: slug, before: next) }
         }
 
         let displayPostsOperation = AsyncOperation()
         displayPostsOperation.addDependency(doneOperation)
         queue.addOperation(displayPostsOperation)
 
-        StreamService().loadStream(
-            endpoint: endpoint,
-            streamKind: streamKind
-            )
-            .then { response -> Void in
+        request.execute()
+            .then { pageConfig, posts -> Void in
                 guard self.loadingToken.isValidInitialPageLoadingToken(self.localToken) else { return }
 
-                switch response {
-                case let .jsonables(jsonables, responseConfig):
-                    self.destination?.setPagingConfig(responseConfig: responseConfig)
-                    self.posts = jsonables as? [Post]
-                    let items = self.parse(jsonables: jsonables)
-                    displayPostsOperation.run {
-                        inForeground {
-                            if items.count == 0 {
-                                let noItems = [StreamCellItem(type: .emptyStream(height: 182))]
-                                self.destination?.replacePlaceholder(type: .streamPosts, items: noItems)
-                                self.destination?.isPagingEnabled = false
-                                self.destination?.replacePlaceholder(type: .promotionalHeader, items: self.headerItems())
-                            }
-                            else {
-                                self.destination?.replacePlaceholder(type: .streamPosts, items: items) {
-                                    self.destination?.isPagingEnabled = true
-                                }
-                            }
-                        }
-                    }
-                case .empty:
-                    let noContentItem = StreamCellItem(type: .emptyStream(height: 282))
-                    self.destination?.replacePlaceholder(type: .streamPosts, items: [noContentItem])
-                    self.destination?.isPagingEnabled = false
-                    self.destination?.primaryJSONAbleNotFound()
-                    self.queue.cancelAllOperations()
+                self.setNextPageConfig(pageConfig)
+
+                self.posts = posts
+                var items = self.parse(jsonables: posts)
+                let isPagingEnabled = items.count > 0
+                if items.count == 0 {
+                    items = [StreamCellItem(type: .emptyStream(height: 182))]
                 }
+
+                displayPostsOperation.run { inForeground {
+                    self.destination?.replacePlaceholder(type: .streamItems, items: items) {
+                        self.destination?.isPagingEnabled = isPagingEnabled
+                    }
+                } }
             }
             .catch { _ in
                 self.destination?.primaryJSONAbleNotFound()
                 self.queue.cancelAllOperations()
             }
+    }
+
+    private func setNextPageConfig(_ pageConfig: PageConfig) {
+        self.destination?.setPagingConfig(responseConfig: ResponseConfig(pageConfig: pageConfig))
+
+        if let next = pageConfig.next, let nextRequestGenerator = nextRequestGenerator {
+            self.nextPageRequest = nextRequestGenerator(next)
+        }
+        else {
+            self.nextPageRequest = nil
+            self.nextRequestGenerator = nil
+        }
     }
 }

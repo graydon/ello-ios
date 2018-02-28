@@ -39,16 +39,12 @@ class PromotionalHeaderCellSizeCalculator: NSObject {
 
     static func calculatePageHeaderHeight(_ pageHeader: PageHeader, htmlHeight: CGFloat?, cellWidth: CGFloat) -> CGFloat {
         let config = PromotionalHeaderCell.Config(pageHeader: pageHeader)
-        return PromotionalHeaderCellSizeCalculator.calculateHeight(config, htmlHeight: htmlHeight, cellWidth: cellWidth)
-    }
-
-    static func calculateHeight(_ config: PromotionalHeaderCell.Config, htmlHeight: CGFloat?, cellWidth: CGFloat) -> CGFloat {
         var calcHeight: CGFloat = 0
         let textWidth = cellWidth - 2 * PromotionalHeaderCell.Size.defaultMargin
         let boundingSize = CGSize(width: textWidth, height: CGFloat.greatestFiniteMagnitude)
 
-        let attributedTitle = config.attributedTitle
         calcHeight += PromotionalHeaderCell.Size.topMargin
+        let attributedTitle = config.attributedTitle
         calcHeight += attributedTitle.heightForWidth(textWidth)
 
         if let htmlHeight = htmlHeight, config.hasHtml {
@@ -59,14 +55,20 @@ class PromotionalHeaderCellSizeCalculator: NSObject {
             calcHeight += attributedBody.heightForWidth(textWidth)
         }
 
-        var ctaSize: CGSize = .zero
-        var postedBySize: CGSize = .zero
+        let ctaSize: CGSize
         if let attributedCallToAction = config.attributedCallToAction {
             ctaSize = attributedCallToAction.boundingRect(with: boundingSize, options: [], context: nil).size.integral
         }
+        else {
+            ctaSize = .zero
+        }
 
+        let postedBySize: CGSize
         if let attributedPostedBy = config.attributedPostedBy {
             postedBySize = attributedPostedBy.boundingRect(with: boundingSize, options: [], context: nil).size.integral
+        }
+        else {
+            postedBySize = .zero
         }
 
         calcHeight += PromotionalHeaderCell.Size.bodySpacing

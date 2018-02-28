@@ -86,7 +86,7 @@ indirect enum ElloAPI {
     case searchForPosts(terms: String)
     case updatePost(postId: String, body: [String: Any])
     case updateComment(postId: String, commentId: String, body: [String: Any])
-    case userCategories(categoryIds: [String])
+    case userCategories(categoryIds: Set<String>, onboarding: Bool)
     case userStream(userParam: String)
     case userStreamFollowers(userId: String)
     case userStreamFollowing(userId: String)
@@ -890,9 +890,10 @@ extension ElloAPI: Moya.TargetType {
             return body
         case let .updateComment(_, _, body):
             return body
-        case let .userCategories(categoryIds):
+        case let .userCategories(categoryIds, onboarding):
             return [
-                "followed_category_ids": categoryIds,
+                "followed_category_ids": Array(categoryIds),
+                "disable_follows": !onboarding,
             ]
         case let .userNameAutoComplete(terms):
             return [

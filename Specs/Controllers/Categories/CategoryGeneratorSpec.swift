@@ -11,14 +11,12 @@ class CategoryGeneratorSpec: QuickSpec {
         describe("CategoryGenerator") {
             var destination: CategoryDestination!
             var currentUser: User!
-            var streamKind: StreamKind!
             var category: Ello.Category!
             var subject: CategoryGenerator!
 
             beforeEach {
                 destination = CategoryDestination()
                 currentUser = User.stub(["id": "42"])
-                streamKind = .category(slug: "recommended")
             }
 
             beforeEach {
@@ -26,7 +24,6 @@ class CategoryGeneratorSpec: QuickSpec {
                 subject = CategoryGenerator(
                     slug: category.slug,
                     currentUser: currentUser,
-                    streamKind: streamKind,
                     destination: destination
                 )
             }
@@ -52,7 +49,7 @@ class CategoryGeneratorSpec: QuickSpec {
 
                 it("sets the categories") {
                     subject.load()
-                    expect(destination.categories.count) > 0
+                    expect(destination.subscribedCategories.count) > 0
                 }
 
                 it("sets the config response") {
@@ -65,12 +62,11 @@ class CategoryGeneratorSpec: QuickSpec {
 }
 
 class CategoryDestination: CategoryStreamDestination {
-
     var placeholderItems: [StreamCellItem] = []
     var headerItems: [StreamCellItem] = []
     var postItems: [StreamCellItem] = []
     var otherPlaceHolderLoaded = false
-    var categories: [Ello.Category] = []
+    var subscribedCategories: [Ello.Category] = []
     var pageHeader: PageHeader?
     var responseConfig: ResponseConfig?
     var isPagingEnabled: Bool = false
@@ -94,8 +90,12 @@ class CategoryDestination: CategoryStreamDestination {
         self.pageHeader = jsonable as? PageHeader
     }
 
-    func set(categories: [Ello.Category]) {
-        self.categories = categories
+    func set(category: Ello.Category) {
+        self.category = category
+    }
+
+    func set(subscribedCategories: [Ello.Category]) {
+        self.subscribedCategories = subscribedCategories
     }
 
     func primaryJSONAbleNotFound() {

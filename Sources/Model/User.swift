@@ -52,7 +52,7 @@ final class User: JSONAble {
     var location: String?
 
     var categories: [Category]? { return getLinkArray("categories") as? [Category] }
-    var followedCategoryIds: [String] = []
+    var followedCategoryIds: Set<String> = []
     var followedCategories: [Category] {
         return followedCategoryIds.flatMap { id -> Category? in
             var category: Category?
@@ -281,12 +281,12 @@ final class User: JSONAble {
 
         user.followingCount = json["following_count"].int
         user.formattedShortBio = json["formatted_short_bio"].string
-        user.onboardingVersion = json["web_onboarding_version"].string.flatMap { Int($0) }
+        user.onboardingVersion = json["web_onboarding_version"].id.flatMap { Int($0) }
         user.totalViewsCount = json["total_views_count"].int
         user.location = json["location"].string
 
         if let ids = json["followed_category_ids"].array {
-            user.followedCategoryIds = ids.flatMap { $0.string }
+            user.followedCategoryIds = Set(ids.flatMap { $0.id })
         }
 
         if let links = json["external_links_list"].array {

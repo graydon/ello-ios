@@ -11,16 +11,29 @@ class CategoryCardCell: CollectionViewCell {
 
     struct Size {
         static let aspect: CGFloat = 1.5
-        static let colorFillTopOffset: CGFloat = 2
+        static let subscribeButtonHeight: CGFloat = 30
+        static func calculateHeight(columnCount: Int, subscribing: Bool) -> CGFloat {
+            var windowWidth = Globals.windowSize.width
+            if subscribing {
+                windowWidth -= StreamKind.manageCategories.layoutInsets.sides
+            }
+
+            let horizontalColumnSpacing: CGFloat = subscribing ? 10 : 2
+            let width = (windowWidth - horizontalColumnSpacing * (CGFloat(columnCount) - 1)) / CGFloat(columnCount)
+            var height = ceil(width / aspect)
+            if subscribing {
+                height += subscribeButtonHeight + cardMargins
+            }
+            return height
+        }
+        static let smallMargin: CGFloat = 2
+        static let subscribedCheckboxOffset: CGFloat = 4
         static let selectedImageOffset: CGFloat = 5
+        static let cardMargins: CGFloat = 10
+        static let textMargins: CGFloat = 30
+        static let cornerRadius: CGFloat = 5
     }
 
-    var isSelectable: Bool = false {
-        didSet { updateSelected() }
-    }
-    override var isSelected: Bool {
-        didSet { updateSelected() }
-    }
     var title: String {
         set { label.text = newValue }
         get { return label.text ?? "" }
@@ -30,56 +43,108 @@ class CategoryCardCell: CollectionViewCell {
             imageView.pin_setImage(from: imageURL)
         }
     }
+    var isSubscribing: Bool = false { didSet { updateSelected() } }
+    override var isSelected: Bool { didSet { updateSelected() } }
 
+    private let insetContentView = UIView()
     private let label = StyledLabel()
-    private let colorFillView = UIView()
+    private let subscribedCheckbox = UIImageView()
+    private let subscribeButton = StyledButton(style: .subscribed)
+    private let mainContentView = UIView()
     private let imageView = UIImageView()
     private let selectedImageView = UIImageView()
+    private var insetConstraint: Constraint!
+    private var subscribeContentConstraint: Constraint!
+    private var onboardingContentConstraint: Constraint!
 
     private func updateSelected() {
-        if isSelectable {
-            colorFillView.alpha = isSelected ? 0.8 : 0.4
-            label.style = isSelected ? .boldWhite : .white
-            selectedImageView.isHidden = !isSelected
+        subscribeContentConstraint.set(isActivated: isSubscribing)
+        onboardingContentConstraint.set(isActivated: !isSubscribing)
+
+        if isSubscribing {
+            insetContentView.layer.cornerRadius = Size.cornerRadius
+            subscribedCheckbox.isHidden = !isSelected
+            subscribeButton.isSelected = isSelected
+            subscribeButton.isHidden = false
+            subscribeButton.setTitle(isSelected ? InterfaceString.Discover.Subscribed : InterfaceString.Discover.Subscribe, for: .normal)
+            selectedImageView.isHidden = true
+            insetConstraint.update(inset: Size.cardMargins)
+            mainContentView.alpha = isSelected ? 0.7 : 0.5
+            label.style = .white
         }
         else {
-            colorFillView.alpha = 0.4
-            label.style = .white
-            selectedImageView.isHidden = true
+            insetContentView.layer.cornerRadius = 0
+            subscribedCheckbox.isHidden = true
+            subscribeButton.isHidden = true
+            selectedImageView.isHidden = !isSelected
+            insetConstraint.update(inset: Size.smallMargin)
+            mainContentView.alpha = isSelected ? 0.8 : 0.4
+            label.style = isSelected ? .boldWhite : .white
         }
     }
 
     override func style() {
+        label.isMultiline = true
+        label.textAlignment = .center
+
+        subscribedCheckbox.isHidden = true
+        subscribedCheckbox.setInterfaceImage(.circleCheckLarge, style: .green)
+
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        colorFillView.backgroundColor = .black
-        colorFillView.alpha = 0.4
+        mainContentView.backgroundColor = .black
+        mainContentView.alpha = 0.4
         selectedImageView.isHidden = true
         selectedImageView.interfaceImage = .smallCheck
+        insetContentView.clipsToBounds = true
     }
 
     override func arrange() {
-        contentView.addSubview(imageView)
-        contentView.addSubview(colorFillView)
-        contentView.addSubview(label)
-        contentView.addSubview(selectedImageView)
+        contentView.addSubview(insetContentView)
 
-        colorFillView.snp.makeConstraints { make in
-            make.top.equalTo(contentView)
-            make.bottom.equalTo(contentView).offset(-Size.colorFillTopOffset)
-            make.leading.equalTo(contentView)
-            make.trailing.equalTo(contentView)
+        insetContentView.snp.makeConstraints { make in
+            make.leading.trailing.top.equalTo(contentView)
+            insetConstraint = make.bottom.equalTo(contentView).constraint
         }
+
+        insetContentView.addSubview(imageView)
+        insetContentView.addSubview(mainContentView)
+        insetContentView.addSubview(subscribeButton)
+        insetContentView.addSubview(label)
+        insetContentView.addSubview(subscribedCheckbox)
+        insetContentView.addSubview(selectedImageView)
+
         imageView.snp.makeConstraints { make in
-            make.edges.equalTo(colorFillView)
+            make.edges.equalTo(insetContentView)
+        }
+        mainContentView.snp.makeConstraints { make in
+            make.leading.trailing.top.equalTo(insetContentView)
+            subscribeContentConstraint = make.bottom.equalTo(subscribeButton.snp.top).constraint
+            onboardingContentConstraint = make.bottom.equalTo(insetContentView).constraint
+        }
+        subscribeContentConstraint.deactivate()
+
+        subscribeButton.snp.makeConstraints { make in
+            make.leading.trailing.bottom.equalTo(insetContentView)
+            make.height.equalTo(Size.subscribeButtonHeight)
         }
         label.snp.makeConstraints { make in
-            make.centerX.centerY.equalTo(colorFillView)
+            make.centerX.centerY.equalTo(mainContentView)
+            make.leading.greaterThanOrEqualTo(mainContentView).inset(Size.textMargins)
+            make.trailing.lessThanOrEqualTo(mainContentView).inset(Size.textMargins)
+        }
+        subscribedCheckbox.snp.makeConstraints { make in
+            make.trailing.equalTo(label.snp.leading).offset(-Size.subscribedCheckboxOffset)
+            make.centerY.equalTo(label)
         }
         selectedImageView.snp.makeConstraints { make in
             make.trailing.equalTo(label.snp.leading).offset(-Size.selectedImageOffset)
-            make.centerY.equalTo(colorFillView)
+            make.centerY.equalTo(label)
         }
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
     }
 
     override func prepareForReuse() {

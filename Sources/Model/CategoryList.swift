@@ -56,13 +56,3 @@ class CategoryList: JSONAble {
     }
 
 }
-
-extension CategoryList {
-    class func metaCategories() -> CategoryList {
-        return CategoryList(categories: [
-            Category.featured,
-            Category.trending,
-            Category.recent,
-        ])
-    }
-}

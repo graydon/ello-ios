@@ -46,12 +46,6 @@ struct UserService {
             }
     }
 
-    func setUser(categories: [Category]) -> Promise<()> {
-        let categoryIds = categories.map { $0.id }
-        return ElloProvider.shared.request(.userCategories(categoryIds: categoryIds))
-            .asVoid()
-    }
-
     func loadUser(_ endpoint: ElloAPI) -> Promise<User> {
         return ElloProvider.shared.request(endpoint)
             .then { data, responseConfig -> User in

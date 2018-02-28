@@ -105,7 +105,7 @@ class IdParser: Parser {
     }
 
     override func identifier(json: JSON) -> Identifier? {
-        guard let id = json["id"].string else { return nil }
+        guard let id = json["id"].id else { return nil }
         return Identifier(id: id, table: table)
     }
 }

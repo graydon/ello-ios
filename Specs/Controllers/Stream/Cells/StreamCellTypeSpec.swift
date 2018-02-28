@@ -22,8 +22,8 @@ class StreamCellTypeSpec: QuickSpec {
                 multiColumnHeight: CGFloat?,
                 isFullWidth: Bool,
                 isCollapsable: Bool)] = [
-                    (".categoryCard", type: .categoryCard, name: CategoryCardCell.reuseIdentifier, isSelectable: true, classType: CategoryCardCell.self, oneColumnHeight: nil, multiColumnHeight: nil, isFullWidth: false, isCollapsable: false),
-                    (".selectableCategoryCard", type: .selectableCategoryCard, name: CategoryCardCell.selectableReuseIdentifier, isSelectable: true, classType: CategoryCardCell.self, oneColumnHeight: nil, multiColumnHeight: nil, isFullWidth: false, isCollapsable: false),
+                    (".categorySubscribeCard", type: .categorySubscribeCard, name: CategoryCardCell.reuseIdentifier, isSelectable: true, classType: CategoryCardCell.self, oneColumnHeight: nil, multiColumnHeight: nil, isFullWidth: false, isCollapsable: false),
+                    (".onboardingCategoryCard", type: .onboardingCategoryCard, name: CategoryCardCell.selectableReuseIdentifier, isSelectable: true, classType: CategoryCardCell.self, oneColumnHeight: nil, multiColumnHeight: nil, isFullWidth: false, isCollapsable: false),
                     (".categoryList", type: .categoryList, name: CategoryListCell.reuseIdentifier, isSelectable: false, classType: CategoryListCell.self, oneColumnHeight: 45, multiColumnHeight: 45, isFullWidth: true, isCollapsable: false),
                     (".commentHeader", type: .commentHeader, name: CommentHeaderCell.reuseIdentifier, isSelectable: false, classType: CommentHeaderCell.self, oneColumnHeight: 60, multiColumnHeight: 60, isFullWidth: true, isCollapsable: false),
                     (".createComment", type: .createComment, name: StreamCreateCommentCell.reuseIdentifier, isSelectable: true, classType: StreamCreateCommentCell.self, oneColumnHeight: 75, multiColumnHeight: 75, isFullWidth: true, isCollapsable: false),

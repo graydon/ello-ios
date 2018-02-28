@@ -8,13 +8,7 @@ import FLAnimatedImage
 
 class PromotionalHeaderCell: CollectionViewCell {
     static let reuseIdentifier = "PromotionalHeaderCell"
-
-    enum Style {
-        case category
-        case page
-        case editorial
-        case artistInvite
-    }
+    typealias Style = PageHeader.Kind
 
     struct Config {
         var style: Style = .category
@@ -23,14 +17,14 @@ class PromotionalHeaderCell: CollectionViewCell {
         var body: String?
         var imageURL: URL?
         var user: User?
-        var isSponsored: Bool?
+        var isSponsored = false
         var callToAction: String?
         var callToActionURL: URL?
 
         var hasHtml: Bool {
             switch style {
             case .editorial, .artistInvite: return true
-            case .category, .page: return false
+            case .category, .generic: return false
             }
         }
     }
@@ -349,7 +343,7 @@ extension PromotionalHeaderCell.Config {
     var attributedTitle: NSAttributedString {
         switch style {
         case .category: return NSAttributedString(title, color: .white, font: .regularBlackFont(16), alignment: .center)
-        case .page, .editorial, .artistInvite: return NSAttributedString(title, color: .white, font: .regularBlackFont(32))
+        case .generic, .editorial, .artistInvite: return NSAttributedString(title, color: .white, font: .regularBlackFont(32))
         }
     }
 
@@ -358,7 +352,7 @@ extension PromotionalHeaderCell.Config {
 
         switch style {
         case .category: return NSAttributedString(body, color: .white)
-        case .page, .editorial, .artistInvite: return NSAttributedString(body, color: .white, font: .defaultFont(18))
+        case .generic, .editorial, .artistInvite: return NSAttributedString(body, color: .white, font: .defaultFont(18))
         }
     }
 
@@ -371,8 +365,8 @@ extension PromotionalHeaderCell.Config {
     var attributedPostedBy: NSAttributedString? {
         guard let user = user else { return nil }
 
-        let prefix = isSponsored == true ? InterfaceString.Category.SponsoredBy : InterfaceString.Category.PostedBy
-        let title = NSAttributedString(prefix, color: .white) + NSAttributedString(user.atName, color: .white, underlineStyle: .styleSingle)
+        let postedBy = isSponsored == true ? InterfaceString.Category.SponsoredBy : InterfaceString.Category.PostedBy
+        let title = NSAttributedString(postedBy, color: .white) + NSAttributedString(user.atName, color: .white, underlineStyle: .styleSingle)
         return title
     }
 
@@ -388,16 +382,7 @@ extension PromotionalHeaderCell.Config {
     init(pageHeader: PageHeader) {
         self.init()
 
-        if pageHeader.kind == .editorial {
-            style = .editorial
-        }
-        else if pageHeader.kind == .artistInvite {
-            style = .artistInvite
-        }
-        else {
-            style = .page
-        }
-
+        style = pageHeader.kind
         title = pageHeader.header
         body = pageHeader.subheader
         tracking = "general"
@@ -405,5 +390,6 @@ extension PromotionalHeaderCell.Config {
         user = pageHeader.user
         callToAction = pageHeader.ctaCaption
         callToActionURL = pageHeader.ctaURL
+        isSponsored = pageHeader.isSponsored
     }
 }

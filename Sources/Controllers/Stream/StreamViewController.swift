@@ -41,7 +41,7 @@ final class StreamViewController: BaseElloViewController {
     var toggleClosure: BoolBlock?
     var initialDataLoaded = false
 
-    var streamKind: StreamKind = StreamKind.unknown {
+    var streamKind: StreamKind = .unknown {
         didSet {
             dataSource.streamKind = streamKind
             collectionViewDataSource.streamKind = streamKind
@@ -112,9 +112,9 @@ final class StreamViewController: BaseElloViewController {
     }
 
     override func didSetCurrentUser() {
+        super.didSetCurrentUser()
         dataSource.currentUser = currentUser
         collectionViewDataSource.currentUser = currentUser
-        super.didSetCurrentUser()
     }
 
     // If we ever create an init() method that doesn't use nib/storyboards,
@@ -166,9 +166,8 @@ final class StreamViewController: BaseElloViewController {
         let columnCount = Window.columnCountFor(width: view.frame.width)
         layout.columnCount = columnCount
         dataSource.columnCount = columnCount
-        layout.sectionInset = UIEdgeInsets.zero
-        layout.minimumColumnSpacing = streamKind.columnSpacing
-        layout.minimumInteritemSpacing = 0
+        layout.horizontalColumnSpacing = streamKind.horizontalColumnSpacing
+        layout.insets = streamKind.layoutInsets
     }
 
     private func setupDataSources() {
@@ -656,7 +655,7 @@ extension StreamViewController: StreamCollectionViewLayoutDelegate {
         layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize
     {
-        let width = calculateColumnWidth(frameWidth: Globals.windowSize.width, columnCount: columnCount)
+        let width = calculateColumnWidth(frameWidth: Globals.windowSize.width, columnSpacing: streamKind.horizontalColumnSpacing, columnCount: columnCount)
         let height = self.collectionViewDataSource.height(at: indexPath, numberOfColumns: 1)
         return CGSize(width: width, height: height)
     }
@@ -1011,15 +1010,15 @@ extension StreamViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         guard
             let tappedCell = collectionView.cellForItem(at: indexPath),
-            let item = collectionViewDataSource.streamCellItem(at: indexPath),
-            let paths = collectionView.indexPathsForSelectedItems,
-            tappedCell is CategoryCardCell && item.type == .selectableCategoryCard
-        else { return }
+            let item = collectionViewDataSource.streamCellItem(at: indexPath)
+            else { return }
 
-        let selection = paths.flatMap { collectionViewDataSource.jsonable(at: $0) as? Category }
-
-        let responder: SelectedCategoryResponder? = findResponder()
-        responder?.categoriesSelectionChanged(selection: selection)
+        if item.type == .onboardingCategoryCard || item.type == .categorySubscribeCard {
+            let paths = collectionView.indexPathsForSelectedItems
+            let selection = paths?.flatMap { collectionViewDataSource.jsonable(at: $0) as? Category }
+            let responder: SelectedCategoryResponder? = findResponder()
+            responder?.categoriesSelectionChanged(selection: selection ?? [])
+        }
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -1099,13 +1098,13 @@ extension StreamViewController: UICollectionViewDelegate {
         else if let item = dataSource.streamCellItem(at: indexPath),
             let category = dataSource.jsonable(at: indexPath) as? Category
         {
-            if item.type == .selectableCategoryCard {
+            if item.type == .onboardingCategoryCard || item.type == .categorySubscribeCard {
                 keepSelected = true
                 let paths = collectionView.indexPathsForSelectedItems
                 let selection = paths?.flatMap { dataSource.jsonable(at: $0) as? Category }
 
                 let responder: SelectedCategoryResponder? = findResponder()
-                responder?.categoriesSelectionChanged(selection: selection ?? [Category]())
+                responder?.categoriesSelectionChanged(selection: selection ?? [])
             }
             else {
                 showCategoryViewController(slug: category.slug, name: category.name)
@@ -1117,8 +1116,7 @@ extension StreamViewController: UICollectionViewDelegate {
         }
     }
 
-    func collectionView(_ collectionView: UICollectionView,
-        shouldSelectItemAt indexPath: IndexPath) -> Bool {
+    func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
             guard
                 let cellItemType = dataSource.streamCellItem(at: indexPath)?.type
             else { return false }

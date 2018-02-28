@@ -54,7 +54,7 @@ extension ProfileCategoriesViewController: ProfileCategoriesDelegate {
 
     func categoryTapped(_ category: Category) {
         Tracker.shared.categoryOpened(category.slug)
-        let vc = CategoryViewController(slug: category.slug, name: category.name)
+        let vc = CategoryViewController(category: category)
         vc.currentUser = currentUser
 
         let presentingVC = self.presentingVC

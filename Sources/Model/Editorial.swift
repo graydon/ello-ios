@@ -104,7 +104,7 @@ final class Editorial: JSONAble, Groupable {
         let title = json["title"].stringValue
         let subtitle = json["subtitle"].string
         let renderedSubtitle = json["rendered_subtitle"].string
-        let postId = json["links"]["post"]["id"].string
+        let postId = json["links"]["post"]["id"].id
         let postStreamURL = json["links"]["post_stream"]["href"].string.flatMap { URL(string: $0) }
         let externalURL: URL? = json["url"].string.flatMap { URL(string: $0) }
         let internalURL: URL? = json["path"].string.flatMap { URL(string: "\(ElloURI.baseURL)\($0)") }

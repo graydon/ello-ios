@@ -93,8 +93,7 @@ extension HomeViewController: HomeResponder {
         followingViewController.didMove(toParentViewController: self)
         self.followingViewController = followingViewController
 
-        let discoverViewController = CategoryViewController(slug: Category.featured.slug, name: Category.featured.name, usage: .largeNav)
-        discoverViewController.category = Category.featured
+        let discoverViewController = CategoryViewController(usage: .largeNav)
         discoverViewController.currentUser = currentUser
         addChildViewController(discoverViewController)
         discoverViewController.didMove(toParentViewController: self)

@@ -151,12 +151,8 @@ class ElloTextFieldView: View {
     }
 
     private func updateErrorConstraints() {
-        if errorHeight > 0 && messageHeight > 0 {
-            errorLabelSeparationSpacing.activate()
-        }
-        else {
-            errorLabelSeparationSpacing.deactivate()
-        }
+        let hasErrorAndMessage = errorHeight > 0 && messageHeight > 0
+        errorLabelSeparationSpacing.set(isActivated: hasErrorAndMessage)
         errorLabelHeight.update(offset: errorHeight)
         messageLabelHeight.update(offset: messageHeight)
     }

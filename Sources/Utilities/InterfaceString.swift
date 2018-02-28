@@ -115,12 +115,15 @@ struct InterfaceString {
     }
 
     struct Discover {
-        static let Title: String = NSLocalizedString("Discover", comment: "Discover title")
-        static let Categories: String = NSLocalizedString("Categories", comment: "some Categories title")
+        static let Title: String = NSLocalizedString("Discover", comment: "")
+        static let Categories: String = NSLocalizedString("Categories", comment: "")
         static let AllCategories: String = NSLocalizedString("All", comment: "All Categories title")
-        static let Featured: String = NSLocalizedString("Featured", comment: "Discover tab titled Featured")
-        static let Trending: String = NSLocalizedString("Trending", comment: "Discover tab titled Trending")
-        static let Recent: String = NSLocalizedString("Recent", comment: "Discover tab titled Recent")
+        static let Subscriptions: String = NSLocalizedString("Subscriptions", comment: "")
+        static let Subscribed: String = NSLocalizedString("Subscribed", comment: "Subscribed Categories title")
+        static let Subscribe: String = NSLocalizedString("Subscribe", comment: "Subscribed Categories title")
+        static let Featured: String = NSLocalizedString("Featured", comment: "")
+        static let Trending: String = NSLocalizedString("Trending", comment: "")
+        static let Recent: String = NSLocalizedString("Recent", comment: "")
     }
 
     struct Search {

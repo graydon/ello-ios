@@ -53,8 +53,8 @@ extension NSAttributedString {
         self.init(string: string, attributes: attrs)
     }
 
-    convenience init(label string: String, style: StyledLabel.Style, lineBreakMode: NSLineBreakMode? = nil) {
-        self.init(string, color: style.textColor, font: style.font, lineBreakMode: lineBreakMode)
+    convenience init(label string: String, style: StyledLabel.Style, alignment: NSTextAlignment = .left, lineBreakMode: NSLineBreakMode? = nil) {
+        self.init(string, color: style.textColor, font: style.font, alignment: alignment, lineBreakMode: lineBreakMode)
     }
 
     convenience init(button string: String, style: StyledButton.Style, state: UIControlState = .normal, selected: Bool = false, lineBreakMode: NSLineBreakMode? = nil) {

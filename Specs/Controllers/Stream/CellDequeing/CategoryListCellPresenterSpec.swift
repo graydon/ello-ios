@@ -11,7 +11,11 @@ class CategoryListCellPresenterSpec: QuickSpec {
     override func spec() {
         describe("CategoryListCellPresenter") {
             it("sets the categoriesInfo on a cell") {
-                let categoryList: CategoryList = CategoryList.metaCategories()
+                let categoryList: CategoryList = CategoryList(categories: [
+                        Category.stub(["name": "category1", "slug": "category1"]),
+                        Category.stub(["name": "category2", "slug": "category2"]),
+                        Category.stub(["name": "category3", "slug": "category3"]),
+                    ])
                 let cell: CategoryListCell = CategoryListCell()
                 let item: StreamCellItem = StreamCellItem(jsonable: categoryList, type: .categoryList)
 

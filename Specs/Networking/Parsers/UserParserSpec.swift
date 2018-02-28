@@ -27,7 +27,7 @@ class UserParserSpec: QuickSpec {
                 parser.flatten(json: json1, identifier: Parser.Identifier(id: "123", table: .usersType), db: &db)
                 parser.flatten(json: json2, identifier: Parser.Identifier(id: "123", table: .usersType), db: &db)
                 if let userJSON = db[.usersType]?["123"] {
-                    expect(userJSON["id"].string) == "123"
+                    expect(userJSON["id"].id) == "123"
                     expect(userJSON["username"].string) == "colinta"
                     expect(userJSON["name"].string) == "Colin Gray"
                     expect(userJSON["identifiable_by"].string) == "colintagray"

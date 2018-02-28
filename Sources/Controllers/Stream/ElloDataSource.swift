@@ -6,13 +6,15 @@ class ElloDataSource: NSObject {
     // In StreamDataSource, visibleCellItems can be modified based on a stream
     // filter.  In CollectionViewDataSource, there is only the one list.
     var visibleCellItems: [StreamCellItem] = []
-    var streamKind: StreamKind
+    var streamKind: StreamKind { didSet { didSetStreamKind() }}
     var currentUser: User?
 
     init(streamKind: StreamKind) {
         self.streamKind = streamKind
         super.init()
     }
+
+    func didSetStreamKind() {}
 
     func isValidIndexPath(_ indexPath: IndexPath) -> Bool {
         return indexPath.section == 0 && indexPath.item >= 0 && indexPath.item < visibleCellItems.count
