@@ -9,29 +9,7 @@ class CategoryCardView: View {
     static let fullAlpha: CGFloat = 1.0
 
     let info: CategoryCardListView.CategoryInfo
-    var isSelected: Bool {
-        set {
-            _selected = newValue
-            let alpha: CGFloat
-            if newValue, info.isAll {
-                alpha = CategoryCardView.fullAlpha
-            }
-            else if newValue {
-                alpha = CategoryCardView.selectedAlpha
-            }
-            else if info.isAll {
-                alpha = CategoryCardView.darkAlpha
-            }
-            else {
-                alpha = CategoryCardView.normalAlpha
-            }
-
-            elloAnimate {
-                self.overlay.alpha = alpha
-            }
-        }
-        get { return _selected }
-    }
+    var isSelected: Bool = false { didSet { updateStyle() } }
 
     var overlayAlpha: CGFloat {
         get { return overlay.alpha }
@@ -40,7 +18,6 @@ class CategoryCardView: View {
 
     let button = UIButton()
     private let overlay = UIView()
-    private var _selected = false
 
     init(info: CategoryCardListView.CategoryInfo) {
         self.info = info
@@ -70,11 +47,6 @@ class CategoryCardView: View {
         }
 
         button.titleLabel?.numberOfLines = 0
-        let attributedString = NSAttributedString(
-            button: info.title,
-            style: info.isSubscribed ? .whiteBoldUnderlined : .clearWhite,
-            state: .normal)
-        button.setAttributedTitle(attributedString, for: .normal)
     }
 
     override func arrange() {
@@ -99,6 +71,32 @@ class CategoryCardView: View {
 
         overlay.snp.makeConstraints { $0.edges.equalTo(self) }
         button.snp.makeConstraints { $0.edges.equalTo(self).inset(5) }
+    }
+
+    private func updateStyle() {
+        let alpha: CGFloat
+        if isSelected, info.isAll {
+            alpha = CategoryCardView.fullAlpha
+        }
+        else if isSelected {
+            alpha = CategoryCardView.selectedAlpha
+        }
+        else if info.isAll {
+            alpha = CategoryCardView.darkAlpha
+        }
+        else {
+            alpha = CategoryCardView.normalAlpha
+        }
+
+        elloAnimate {
+            self.overlay.alpha = alpha
+        }
+
+        let attributedString = NSAttributedString(
+            button: info.title,
+            style: (info.isSubscribed && isSelected) ? .whiteBoldUnderlined : .clearWhite,
+            state: .normal)
+        button.setAttributedTitle(attributedString, for: .normal)
     }
 }
 

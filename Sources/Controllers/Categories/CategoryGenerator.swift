@@ -43,10 +43,14 @@ final class CategoryGenerator: StreamGenerator {
     func headerItems() -> [StreamCellItem] {
         guard let pageHeader = pageHeader else { return [] }
 
-        return [StreamCellItem(jsonable: pageHeader, type: .promotionalHeader)]
+        var items = [StreamCellItem(jsonable: pageHeader, type: .promotionalHeader)]
+        if let currentUser = currentUser, pageHeader.categoryId != nil {
+            items.append(StreamCellItem(jsonable: pageHeader, type: .promotionalHeaderSubscription))
+        }
+        return items
     }
 
-    func reset(category: Category?, selection: Category.Selection) {
+    func reset(selection: Category.Selection) {
         self.categorySelection = selection
         self.pageHeader = nil
         self.streamKind = .category(selection)

@@ -44,6 +44,7 @@ enum StreamCellType: Equatable {
     case profileHeader
     case profileHeaderGhost
     case promotionalHeader
+    case promotionalHeaderSubscription
     case revealController(label: String, Any)
     case search(placeholder: String)
     case seeMoreComments
@@ -124,6 +125,7 @@ enum StreamCellType: Equatable {
         .profileHeader,
         .profileHeaderGhost,
         .promotionalHeader,
+        .promotionalHeaderSubscription,
         .revealController(label: "", Void()),
         .search(placeholder: ""),
         .seeMoreComments,
@@ -189,6 +191,7 @@ enum StreamCellType: Equatable {
         case .profileHeader: return ProfileHeaderCell.reuseIdentifier
         case .profileHeaderGhost: return ProfileHeaderGhostCell.reuseIdentifier
         case .promotionalHeader: return PromotionalHeaderCell.reuseIdentifier
+        case .promotionalHeaderSubscription: return PromotionalHeaderSubscriptionCell.reuseIdentifier
         case .revealController: return RevealControllerCell.reuseIdentifier
         case .search: return SearchStreamCell.reuseIdentifier
         case .seeMoreComments: return StreamSeeMoreCommentsCell.reuseIdentifier
@@ -220,11 +223,21 @@ enum StreamCellType: Equatable {
              .revealController,
              .seeMoreComments,
              .onboardingCategoryCard,
+             .promotionalHeaderSubscription,
              .streamHeader,
              .toggle,
              .userListItem:
             return true
         default: return false
+        }
+    }
+
+    var isDeselectable: Bool {
+        switch self {
+        case .promotionalHeaderSubscription:
+            return false
+        default:
+            return isSelectable
         }
     }
 
@@ -254,6 +267,7 @@ enum StreamCellType: Equatable {
         case .notification: return NotificationCellPresenter.configure
         case .profileHeader: return ProfileHeaderCellPresenter.configure
         case .promotionalHeader: return PromotionalHeaderCellPresenter.configure
+        case .promotionalHeaderSubscription: return PromotionalHeaderSubscriptionCellPresenter.configure
         case .revealController: return RevealControllerCellPresenter.configure
         case .search: return SearchStreamCellPresenter.configure
         case .spacer: return { (cell, _, _, _, _) in cell.backgroundColor = .white }
@@ -297,6 +311,7 @@ enum StreamCellType: Equatable {
         case .profileHeader: return ProfileHeaderCell.self
         case .profileHeaderGhost: return ProfileHeaderGhostCell.self
         case .promotionalHeader: return PromotionalHeaderCell.self
+        case .promotionalHeaderSubscription: return PromotionalHeaderSubscriptionCell.self
         case .revealController: return RevealControllerCell.self
         case .search: return SearchStreamCell.self
         case .seeMoreComments: return StreamSeeMoreCommentsCell.self
@@ -356,6 +371,8 @@ enum StreamCellType: Equatable {
             return 215
         case .notification:
             return 117
+        case .promotionalHeaderSubscription:
+            return 46
         case .revealController:
             return RevealControllerCell.Size.height
         case .search:
@@ -377,7 +394,7 @@ enum StreamCellType: Equatable {
         case .toggle:
             return 40
         case .userListItem:
-            return 85
+            return PromotionalHeaderSubscriptionCell.Size.height
         case .artistInviteBubble,
              .artistInviteControls,
              .artistInviteGuide,
@@ -436,6 +453,7 @@ enum StreamCellType: Equatable {
              .profileHeader,
              .profileHeaderGhost,
              .promotionalHeader,
+             .promotionalHeaderSubscription,
              .revealController,
              .search,
              .seeMoreComments,
@@ -507,6 +525,7 @@ enum StreamCellType: Equatable {
             .profileHeader,
             .profileHeaderGhost,
             .promotionalHeader,
+            .promotionalHeaderSubscription,
             .revealController(label: "", Void()),
             .search(placeholder: ""),
             .onboardingCategoryCard,

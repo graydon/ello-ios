@@ -102,7 +102,7 @@ struct Fragment: Equatable {
     static let pageHeaderBody = """
         id
         postToken
-        # category { id }
+        category { id }
         kind
         header
         subheader

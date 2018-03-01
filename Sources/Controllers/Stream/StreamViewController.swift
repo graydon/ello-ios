@@ -1009,7 +1009,6 @@ extension StreamViewController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         guard
-            let tappedCell = collectionView.cellForItem(at: indexPath),
             let item = collectionViewDataSource.streamCellItem(at: indexPath)
             else { return }
 
@@ -1022,6 +1021,7 @@ extension StreamViewController: UICollectionViewDelegate {
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let streamCellItem = dataSource.streamCellItem(at: indexPath) else { return }
         let tappedCell = collectionView.cellForItem(at: indexPath)
 
         var keepSelected = false
@@ -1029,59 +1029,56 @@ extension StreamViewController: UICollectionViewDelegate {
             dataSource.toggleCollapsed(at: indexPath)
             performDataReload()
         }
-        else if tappedCell is UserListItemCell {
-            if let user = collectionViewDataSource.user(at: indexPath) {
-                userTapped(user: user)
-            }
+        else if tappedCell is UserListItemCell,
+            let user = collectionViewDataSource.user(at: indexPath)
+        {
+            userTapped(user: user)
         }
         else if tappedCell is BadgeCell,
-            let badge = dataSource.jsonable(at: indexPath) as? Badge,
+            let badge = streamCellItem.jsonable as? Badge,
             let url = badge.url
         {
             Tracker.shared.badgeScreenLink(badge.slug)
             postNotification(ExternalWebNotification, value: url.absoluteString)
         }
-        else if tappedCell is StreamSeeMoreCommentsCell {
-            if let lastComment = dataSource.comment(at: indexPath),
-                let post = lastComment.loadedFromPost,
-                let streamCellItem = dataSource.streamCellItem(at: indexPath)
-            {
-                sendToPostTappedResponder(post: post, streamCellItem: streamCellItem, scrollToComment: lastComment)
-            }
+        else if tappedCell is StreamSeeMoreCommentsCell,
+            let lastComment = dataSource.comment(at: indexPath),
+            let post = lastComment.loadedFromPost
+        {
+            sendToPostTappedResponder(post: post, streamCellItem: streamCellItem, scrollToComment: lastComment)
         }
         else if tappedCell is StreamLoadMoreCommentsCell {
             let responder: PostCommentsResponder? = findResponder()
             responder?.loadCommentsTapped()
         }
-        else if let post = dataSource.post(at: indexPath),
-                let streamCellItem = dataSource.streamCellItem(at: indexPath) {
+        else if let post = dataSource.post(at: indexPath) {
             sendToPostTappedResponder(post: post, streamCellItem: streamCellItem)
         }
-        else if let notification = dataSource.jsonable(at: indexPath) as? Notification,
+        else if let notification = streamCellItem.jsonable as? Notification,
             let postId = notification.postId
         {
             let responder: PostTappedResponder? = findResponder()
             responder?.postTapped(postId: postId)
         }
-        else if let notification = dataSource.jsonable(at: indexPath) as? Notification,
+        else if let notification = streamCellItem.jsonable as? Notification,
             let user = notification.subject as? User
         {
             userTapped(user: user)
         }
-        else if let notification = dataSource.jsonable(at: indexPath) as? Notification,
+        else if let notification = streamCellItem.jsonable as? Notification,
             let artistInviteSubmission = notification.subject as? ArtistInviteSubmission,
             let artistInvite = artistInviteSubmission.artistInvite
         {
             artistInviteTapped(slug: artistInvite.slug)
         }
-        else if let announcement = dataSource.jsonable(at: indexPath) as? Announcement,
+        else if let announcement = streamCellItem.jsonable as? Announcement,
             let callToAction = announcement.ctaURL
         {
             Tracker.shared.announcementOpened(announcement)
             let request = URLRequest(url: callToAction)
             ElloWebViewHelper.handle(request: request, origin: self)
         }
-        else if let artistInvite = dataSource.jsonable(at: indexPath) as? ArtistInvite {
+        else if let artistInvite = streamCellItem.jsonable as? ArtistInvite {
             artistInviteTapped(artistInvite)
         }
         else if let comment = dataSource.comment(at: indexPath) {
@@ -1089,16 +1086,13 @@ extension StreamViewController: UICollectionViewDelegate {
             responder?.createComment(comment.loadedFromPostId, text: nil, fromController: self)
         }
         else if tappedCell is RevealControllerCell,
-            let streamCellItem = dataSource.streamCellItem(at: indexPath),
             let info = streamCellItem.type.data
         {
             let responder: RevealControllerResponder? = findResponder()
             responder?.revealControllerTapped(info: info)
         }
-        else if let item = dataSource.streamCellItem(at: indexPath),
-            let category = dataSource.jsonable(at: indexPath) as? Category
-        {
-            if item.type == .onboardingCategoryCard || item.type == .categorySubscribeCard {
+        else if let category = streamCellItem.jsonable as? Category {
+            if streamCellItem.type == .onboardingCategoryCard || streamCellItem.type == .categorySubscribeCard {
                 keepSelected = true
                 let paths = collectionView.indexPathsForSelectedItems
                 let selection = paths?.flatMap { dataSource.jsonable(at: $0) as? Category }
@@ -1110,6 +1104,14 @@ extension StreamViewController: UICollectionViewDelegate {
                 showCategoryViewController(slug: category.slug, name: category.name)
             }
         }
+        else if tappedCell is PromotionalHeaderSubscriptionCell,
+            let pageHeader = streamCellItem.jsonable as? PageHeader,
+            let categoryId = pageHeader.categoryId
+        {
+            let responder: PromotionalHeaderResponder? = findResponder()
+            responder?.categorySubscribed(categoryId: categoryId)
+            keepSelected = true
+        }
 
         if !keepSelected {
             collectionView.deselectItem(at: indexPath, animated: false)
@@ -1117,11 +1119,13 @@ extension StreamViewController: UICollectionViewDelegate {
     }
 
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-            guard
-                let cellItemType = dataSource.streamCellItem(at: indexPath)?.type
-            else { return false }
+        guard let cellItemType = dataSource.streamCellItem(at: indexPath)?.type else { return false }
+        return cellItemType.isSelectable
+    }
 
-            return cellItemType.isSelectable
+    func collectionView(_ collectionView: UICollectionView, shouldDeselectItemAt indexPath: IndexPath) -> Bool {
+        guard let cellItemType = dataSource.streamCellItem(at: indexPath)?.type else { return false }
+        return cellItemType.isDeselectable
     }
 }
 

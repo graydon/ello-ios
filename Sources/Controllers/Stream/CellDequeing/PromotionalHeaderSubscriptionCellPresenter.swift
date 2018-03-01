@@ -1,8 +1,8 @@
 ////
-///  PromotionalHeaderCellPresenter.swift
+///  PromotionalHeaderSubscriptionCellPresenter.swift
 //
 
-struct PromotionalHeaderCellPresenter {
+struct PromotionalHeaderSubscriptionCellPresenter {
 
     static func configure(
         _ cell: UICollectionViewCell,
@@ -12,19 +12,15 @@ struct PromotionalHeaderCellPresenter {
         currentUser: User?)
     {
         guard
-            let cell = cell as? PromotionalHeaderCell,
+            let cell = cell as? PromotionalHeaderSubscriptionCell,
             let pageHeader = streamCellItem.jsonable as? PageHeader
         else { return }
 
-        let isSubscribed: Bool
         if let currentUser = currentUser, let categoryId = pageHeader.categoryId {
-            isSubscribed = currentUser.subscribedTo(categoryId: categoryId)
+            cell.isSubscribed = currentUser.subscribedTo(categoryId: categoryId)
         }
         else {
-            isSubscribed = false
+            cell.isSubscribed = false
         }
-
-       let config = PromotionalHeaderCell.Config(pageHeader: pageHeader, isSubscribed: isSubscribed)
-       cell.config = config
     }
 }

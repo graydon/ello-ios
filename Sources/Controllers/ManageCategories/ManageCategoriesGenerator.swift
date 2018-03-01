@@ -37,7 +37,7 @@ extension ManageCategoriesGenerator {
                 guard let currentUser = self.currentUser else { return }
 
                 let subscribedCategories: [Category] = allCategories.filter { category in
-                    return currentUser.followedCategoryIds.contains(category.id)
+                    return currentUser.subscribedTo(categoryId: category.id)
                 }
 
                 let remainingCategories: [Category] = allCategories.filter { category in

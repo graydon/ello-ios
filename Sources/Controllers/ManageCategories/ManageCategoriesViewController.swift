@@ -141,7 +141,7 @@ extension ManageCategoriesViewController: StreamDestination {
                 for (row, item) in items.enumerated() {
                     guard
                         let category = item.jsonable as? Category,
-                        currentUser.followedCategoryIds.contains(category.id)
+                        currentUser.subscribedTo(categoryId: category.id)
                     else { continue }
                     let path = IndexPath(row: row, section: 0)
                     self.streamViewController.collectionView.selectItem(at: path, animated: false, scrollPosition: [])

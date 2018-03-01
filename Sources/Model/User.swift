@@ -361,6 +361,10 @@ extension User {
         }
         return id == comment.loadedFromPost?.authorId
     }
+
+    func subscribedTo(categoryId: String) -> Bool {
+        return followedCategoryIds.contains(categoryId)
+    }
 }
 
 extension User {

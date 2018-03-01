@@ -18,6 +18,7 @@ class PromotionalHeaderCell: CollectionViewCell {
         var imageURL: URL?
         var user: User?
         var isSponsored = false
+        var isSubscribed = false
         var callToAction: String?
         var callToActionURL: URL?
 
@@ -43,26 +44,26 @@ class PromotionalHeaderCell: CollectionViewCell {
         static let circleBottomInset: CGFloat = 10
         static let failImageWidth: CGFloat = 140
         static let failImageHeight: CGFloat = 160
+        static let subscribeIconSpacing: CGFloat = 10
     }
 
-    let imageView = FLAnimatedImageView()
-    let imageOverlay = UIView()
-    let titleLabel = UILabel()
-    let titleUnderlineView = UIView()
-    let bodyLabel = UILabel()
-    let bodyWebView = ElloWebView()
-    let callToActionButton = UIButton()
-    let postedByButton = UIButton()
-    let postedByAvatar = AvatarButton()
+    private let imageView = FLAnimatedImageView()
+    private let imageOverlay = UIView()
+    private let titleLabel = UILabel()
+    private let titleUnderlineView = UIView()
+    private let bodyLabel = UILabel()
+    private let bodyWebView = ElloWebView()
+    private let callToActionButton = UIButton()
+    private let postedByButton = UIButton()
+    private let postedByAvatar = AvatarButton()
+    private let circle = PulsingCircle()
+    private let failImage = UIImageView()
+    private let failBackgroundView = UIView()
 
-    var titleCenteredConstraint: Constraint!
-    var titleLeftConstraint: Constraint!
-    var postedByButtonAlignedConstraint: Constraint!
-    var postedByButtonStackedConstraint: Constraint!
-
-    let circle = PulsingCircle()
-    let failImage = UIImageView()
-    let failBackgroundView = UIView()
+    private var titleCenteredConstraint: Constraint!
+    private var titleLeftConstraint: Constraint!
+    private var postedByButtonAlignedConstraint: Constraint!
+    private var postedByButtonStackedConstraint: Constraint!
 
     private var imageSize: CGSize?
     private var aspectRatio: CGFloat? {
@@ -71,6 +72,7 @@ class PromotionalHeaderCell: CollectionViewCell {
     }
 
     private var callToActionURL: URL?
+    private let subscribedIcon = UIImageView()
 
     var config: Config = Config() {
         didSet {
@@ -79,6 +81,7 @@ class PromotionalHeaderCell: CollectionViewCell {
     }
 
     override func style() {
+        subscribedIcon.setInterfaceImage(.circleCheckLarge, style: .green)
         titleLabel.numberOfLines = 0
         titleUnderlineView.backgroundColor = .white
         bodyLabel.numberOfLines = 0
@@ -113,6 +116,7 @@ class PromotionalHeaderCell: CollectionViewCell {
         contentView.addSubview(callToActionButton)
         contentView.addSubview(postedByButton)
         contentView.addSubview(postedByAvatar)
+        contentView.addSubview(subscribedIcon)
 
         circle.snp.makeConstraints { make in
             make.edges.equalTo(contentView)
@@ -140,6 +144,11 @@ class PromotionalHeaderCell: CollectionViewCell {
             make.leading.greaterThanOrEqualTo(contentView).inset(Size.defaultMargin)
             make.trailing.lessThanOrEqualTo(contentView).inset(Size.defaultMargin)
             make.top.equalTo(contentView).offset(Size.topMargin)
+        }
+
+        subscribedIcon.snp.makeConstraints { make in
+            make.trailing.equalTo(titleLabel.snp.leading).offset(-Size.subscribeIconSpacing)
+            make.centerY.equalTo(titleLabel)
         }
 
         titleUnderlineView.snp.makeConstraints { make in
@@ -226,6 +235,8 @@ class PromotionalHeaderCell: CollectionViewCell {
             titleCenteredConstraint.update(priority: Priority.low)
             titleLeftConstraint.update(priority: Priority.high)
         }
+
+        subscribedIcon.isHidden = !config.isSubscribed
     }
 
     func setImageURL(_ url: URL?) {
@@ -379,7 +390,7 @@ extension PromotionalHeaderCell.Config {
 
 extension PromotionalHeaderCell.Config {
 
-    init(pageHeader: PageHeader) {
+    init(pageHeader: PageHeader, isSubscribed: Bool) {
         self.init()
 
         style = pageHeader.kind
@@ -391,5 +402,6 @@ extension PromotionalHeaderCell.Config {
         callToAction = pageHeader.ctaCaption
         callToActionURL = pageHeader.ctaURL
         isSponsored = pageHeader.isSponsored
+        self.isSubscribed = isSubscribed
     }
 }

@@ -35,7 +35,6 @@ final class CategoryViewController: StreamableViewController {
     var generator: CategoryGenerator!
     var userDidScroll: Bool = false
     var hasSubscribedCategory: Bool {
-        return currentUser != nil
         guard let categoryIds = currentUser?.followedCategoryIds else {
             return false
         }
@@ -113,10 +112,8 @@ final class CategoryViewController: StreamableViewController {
         switch categorySelection {
         case .category:
             screen.setupNavBar(show: .all, back: showBackButton, animated: false)
-        case .all:
+        case .all, .subscribed:
             screen.setupNavBar(show: .onlyGridToggle, back: showBackButton, animated: false)
-        case .subscribed:
-            screen.setupNavBar(show: .none, back: showBackButton, animated: false)
         }
 
         ElloHUD.showLoadingHudInView(streamViewController.view)
@@ -367,7 +364,7 @@ extension CategoryViewController: CategoryScreenDelegate {
         screen.setupNavBar(show: .onlyGridToggle, back: showBackButton, animated: true)
         screen.scrollToCategory(.all)
         screen.selectCategory(.all)
-        generator.reset(category: nil, selection: categorySelection)
+        generator.reset(selection: categorySelection)
         streamViewController.streamKind = generator.streamKind
         loadCategory(reload: true)
 
@@ -384,7 +381,7 @@ extension CategoryViewController: CategoryScreenDelegate {
         screen.setupNavBar(show: .none, back: showBackButton, animated: true)
         screen.scrollToCategory(.subscribed)
         screen.selectCategory(.subscribed)
-        generator.reset(category: nil, selection: categorySelection)
+        generator.reset(selection: categorySelection)
         streamViewController.streamKind = generator.streamKind
         loadCategory(reload: true)
 
@@ -403,7 +400,7 @@ extension CategoryViewController: CategoryScreenDelegate {
             screen.scrollToCategory(.category(index))
             screen.selectCategory(.category(index))
         }
-        generator.reset(category: category, selection: categorySelection)
+        generator.reset(selection: categorySelection)
         streamViewController.streamKind = generator.streamKind
         loadCategory(reload: true)
 
@@ -419,4 +416,26 @@ extension CategoryViewController: CategoryScreenDelegate {
         showShareActivity(sender: sender, url: shareURL)
     }
 
+}
+
+extension CategoryViewController: PromotionalHeaderResponder {
+    func categorySubscribed(categoryId: String) {
+        guard
+            let currentUser = currentUser,
+            !currentUser.subscribedTo(categoryId: categoryId)
+        else { return }
+
+        var newCategoryIds = currentUser.followedCategoryIds
+        newCategoryIds.insert(categoryId)
+        ElloHUD.showLoadingHudInView(streamViewController.view)
+        ProfileService().update(categoryIds: newCategoryIds, onboarding: false)
+            .always {
+                ElloHUD.hideLoadingHudInView(self.streamViewController.view)
+            }
+            .then { _ -> Void in
+                currentUser.followedCategoryIds = newCategoryIds
+                self.appViewController?.currentUser = currentUser
+            }
+            .ignoreErrors()
+    }
 }

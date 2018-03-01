@@ -11,6 +11,7 @@ class CategoryScreen: HomeSubviewScreen, CategoryScreenProtocol {
         static let buttonWidth: CGFloat = 40
         static let buttonMargin: CGFloat = 5
         static let gradientMidpoint: Float = 0.4
+        static var categoryCardListInset: CGFloat { return CategoryCardListView.Size.spacing }
     }
 
     enum NavBarItems {
@@ -72,6 +73,7 @@ class CategoryScreen: HomeSubviewScreen, CategoryScreenProtocol {
     private var allHiddenConstraint: Constraint!
 
     private var navBarVisible = true
+    private var hasCategories: Bool { return !categoryCardList.categoriesInfo.isEmpty }
     private var categoryCardListTop: CGFloat {
         if navBarVisible {
             return self.navigationBar.frame.height
@@ -150,7 +152,7 @@ class CategoryScreen: HomeSubviewScreen, CategoryScreenProtocol {
         }
 
         seeAllButton.snp.makeConstraints { make in
-            make.top.bottom.equalTo(categoryCardList).inset(CategoryCardListView.Size.spacing)
+            make.top.bottom.equalTo(categoryCardList).inset(Size.categoryCardListInset)
             make.trailing.equalTo(self)
         }
 
@@ -214,22 +216,24 @@ class CategoryScreen: HomeSubviewScreen, CategoryScreenProtocol {
     func set(categoriesInfo newValue: [CategoryCardListView.CategoryInfo], completion: @escaping Block) {
         categoryCardList.categoriesInfo = newValue
         updateSeeAllButton()
+
         if navBarVisible {
             completion()
             return
         }
 
+        let seeAllButtonY = categoryCardListTop + Size.categoryCardListInset
         let originalY = categoryCardList.frame.origin.y
-        categoryCardList.frame.origin.y = -categoryCardList.frame.size.height
-        seeAllButton.frame.origin.y = -seeAllButton.frame.height
+        categoryCardList.frame.origin.y = originalY - categoryCardList.frame.size.height
+        seeAllButton.frame.origin.y = seeAllButtonY - seeAllButton.frame.height
         elloAnimate {
-            self.seeAllButton.frame.origin.y = self.categoryCardListTop + CategoryCardListView.Size.spacing
+            self.seeAllButton.frame.origin.y = seeAllButtonY
             self.categoryCardList.frame.origin.y = originalY
         }.always(completion)
     }
 
     private func updateSeeAllButton() {
-        let actuallyShowSeeAll = showSeeAll && !categoryCardList.categoriesInfo.isEmpty
+        let actuallyShowSeeAll = showSeeAll && hasCategories
         seeAllButton.isHidden = !actuallyShowSeeAll
         let rightInset = actuallyShowSeeAll ? seeAllButton.frame.width * CGFloat(1 - Size.gradientMidpoint) : 0
         categoryCardList.rightInset = rightInset
@@ -240,7 +244,7 @@ class CategoryScreen: HomeSubviewScreen, CategoryScreenProtocol {
         elloAnimate(animated: animated) {
             self.categoryCardTopConstraint.update(offset: self.categoryCardListTop)
             self.categoryCardList.frame.origin.y = self.categoryCardListTop
-            self.seeAllButton.frame.origin.y = self.categoryCardListTop
+            self.seeAllButton.frame.origin.y = self.categoryCardListTop + Size.categoryCardListInset
 
             if Globals.isIphoneX {
                 let iPhoneBlackBarTop = self.categoryCardList.frame.minY - self.iPhoneBlackBar.frame.height

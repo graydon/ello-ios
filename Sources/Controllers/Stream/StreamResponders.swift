@@ -56,6 +56,11 @@ protocol SelectedCategoryResponder: class {
 }
 
 @objc
+protocol PromotionalHeaderResponder: class {
+    func categorySubscribed(categoryId: String)
+}
+
+@objc
 protocol UserResponder: class {
     func userTappedAuthor(cell: UICollectionViewCell)
     func userTappedReposter(cell: UICollectionViewCell)

@@ -190,6 +190,7 @@ enum InterfaceImage: String {
              .bubbleBody,
              .camera,
              .checkSmall,
+             .circleCheckLarge,
              .comments,
              .commentsOutline,
              .eye,

@@ -26,7 +26,6 @@ class CategoryCardListView: View {
         let kind: Kind
         let imageURL: URL?
 
-        var isUnderlined: Bool { return kind == .subscribed }
         var isAll: Bool { return kind == .all }
         var isSubscribed: Bool { return kind == .subscribed }
     }
