@@ -19,9 +19,10 @@ protocol CategoryScreenProtocol: StreamableScreenProtocol {
     var showSubscribed: Bool { get set }
     var showSeeAll: Bool { get set }
     var isGridView: Bool { get set }
+    var categoriesLoaded: Bool { get set }
     func set(categoriesInfo: [CategoryCardListView.CategoryInfo], completion: @escaping Block)
     func toggleCategoriesList(navBarVisible: Bool, animated: Bool)
     func scrollToCategory(_ selection: CategoryScreen.Selection)
     func selectCategory(_ index: CategoryScreen.Selection)
-    func setupNavBar(show: CategoryScreen.NavBarItems, back: Bool, animated: Bool)
+    func setupNavBar(back: Bool, animated: Bool)
 }

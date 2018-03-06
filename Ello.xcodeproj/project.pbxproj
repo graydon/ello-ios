@@ -1296,7 +1296,7 @@
 		EA0977C91AE6C42000F898CA /* UIImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA0977C81AE6C42000F898CA /* UIImagePickerController.swift */; };
 		EA34DAC21AD84184002F566D /* dynamic_settings.json in Resources */ = {isa = PBXBuildFile; fileRef = EA34DAC11AD84184002F566D /* dynamic_settings.json */; };
 		EA34DAC41AD851DC002F566D /* DynamicSettingsSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA34DAC31AD851DC002F566D /* DynamicSettingsSpec.swift */; };
-		EA587A9F1ACDC6F4002AF389 /* ElloEditableTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA587A9E1ACDC6F4002AF389 /* ElloEditableTextView.swift */; };
+		EA587A9F1ACDC6F4002AF389 /* BioTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA587A9E1ACDC6F4002AF389 /* BioTextView.swift */; };
 		EA68A0DA1AADF3D4003F0425 /* NSObjectClassName.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA68A0D81AADF3D4003F0425 /* NSObjectClassName.swift */; };
 		EA68A0E31AADF4AB003F0425 /* MapperSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA68A0DF1AADF4AB003F0425 /* MapperSpec.swift */; };
 		EA68A0E81AADF62F003F0425 /* empty.json in Resources */ = {isa = PBXBuildFile; fileRef = EA68A0E61AADF62F003F0425 /* empty.json */; };
@@ -1310,7 +1310,7 @@
 		EAC6054A1ADDA64B009B9426 /* DynamicSettingCellPresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAC605491ADDA64B009B9426 /* DynamicSettingCellPresenterSpec.swift */; };
 		EAD1ABCD1AB9CBB600779A48 /* amazon-credentials.json in Resources */ = {isa = PBXBuildFile; fileRef = 12BA14411AB20F7500D5018B /* amazon-credentials.json */; };
 		EAD1ABCE1AB9CBD500779A48 /* 410.json in Resources */ = {isa = PBXBuildFile; fileRef = 12F6AE911A433F2700493660 /* 410.json */; };
-		EAED46E01ADC6AE10081A9F7 /* ElloToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAED46DF1ADC6AE10081A9F7 /* ElloToggleButton.swift */; };
+		EAED46E01ADC6AE10081A9F7 /* SettingsToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAED46DF1ADC6AE10081A9F7 /* SettingsToggleButton.swift */; };
 		EAEE2A3A1AC48A2A000B6CDA /* UIViewNibLoading.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA68A0D91AADF3D4003F0425 /* UIViewNibLoading.swift */; };
 		EAEE89491AB2253F0075C832 /* StreamCellItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1217008B1A7841C400EBACA5 /* StreamCellItem.swift */; };
 		EAF43D8E1AB0B5AC0016E110 /* InviteCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAF43D8D1AB0B5AC0016E110 /* InviteCache.swift */; };
@@ -2422,7 +2422,7 @@
 		EA34DABF1AD83CA3002F566D /* DynamicSetting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamicSetting.swift; sourceTree = "<group>"; };
 		EA34DAC11AD84184002F566D /* dynamic_settings.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = dynamic_settings.json; sourceTree = "<group>"; };
 		EA34DAC31AD851DC002F566D /* DynamicSettingsSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamicSettingsSpec.swift; sourceTree = "<group>"; };
-		EA587A9E1ACDC6F4002AF389 /* ElloEditableTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ElloEditableTextView.swift; sourceTree = "<group>"; };
+		EA587A9E1ACDC6F4002AF389 /* BioTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BioTextView.swift; sourceTree = "<group>"; };
 		EA68A0D81AADF3D4003F0425 /* NSObjectClassName.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSObjectClassName.swift; sourceTree = "<group>"; };
 		EA68A0D91AADF3D4003F0425 /* UIViewNibLoading.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewNibLoading.swift; sourceTree = "<group>"; };
 		EA68A0DF1AADF4AB003F0425 /* MapperSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapperSpec.swift; sourceTree = "<group>"; };
@@ -2436,7 +2436,7 @@
 		EA9624E41ACB103700E94306 /* AvailabilitySpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AvailabilitySpec.swift; sourceTree = "<group>"; };
 		EAC605451ADD95CB009B9426 /* DynamicSettingCellSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamicSettingCellSpec.swift; sourceTree = "<group>"; };
 		EAC605491ADDA64B009B9426 /* DynamicSettingCellPresenterSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamicSettingCellPresenterSpec.swift; sourceTree = "<group>"; };
-		EAED46DF1ADC6AE10081A9F7 /* ElloToggleButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ElloToggleButton.swift; sourceTree = "<group>"; };
+		EAED46DF1ADC6AE10081A9F7 /* SettingsToggleButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsToggleButton.swift; sourceTree = "<group>"; };
 		EAF43D8D1AB0B5AC0016E110 /* InviteCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InviteCache.swift; sourceTree = "<group>"; };
 		EAF43D931AB0DE080016E110 /* ObjectCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObjectCache.swift; sourceTree = "<group>"; };
 		EAF43D961AB0DEF70016E110 /* ObjectCacheSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObjectCacheSpec.swift; sourceTree = "<group>"; };
@@ -3473,7 +3473,7 @@
 				762EE9EA1A840E4A00A3B805 /* AvatarButton.swift */,
 				1DBD0BBA1F950AB400DF9FC5 /* Base */,
 				1289F3971AF17937008A938C /* BasicIcon.swift */,
-				1D2B50BA1D272A6400F6CE90 /* StatusBar.swift */,
+				EA587A9E1ACDC6F4002AF389 /* BioTextView.swift */,
 				1DA18E571DD12FE8000231CC /* CategoryCardListView.swift */,
 				12B291371DDF5E9F0056C52E /* CategoryCardView.swift */,
 				1D7152AF1D6E4782005998FE /* ClearTextField.swift */,
@@ -3481,7 +3481,6 @@
 				1D9B74C91BB1E3EF00ACD028 /* CommentsIcon.swift */,
 				1D22C8251AAFAD760048D415 /* CreateCommentBackgroundView.swift */,
 				122454AD1D9F1BC700D930E0 /* ElloCollectionView.swift */,
-				EA587A9E1ACDC6F4002AF389 /* ElloEditableTextView.swift */,
 				12F6AE661A4339EF00493660 /* ElloHUD.swift */,
 				122D1BBD1C641188001386CE /* ElloHUDWindowExtensions.swift */,
 				12B531001A93B75700E01D72 /* ElloLogoView.swift */,
@@ -3492,7 +3491,6 @@
 				12F6AE691A4339EF00493660 /* ElloTextField.swift */,
 				EA004C911AC356CB0021B44B /* ElloTextFieldView.swift */,
 				767399801AA679CB00C4222C /* ElloTextView.swift */,
-				EAED46DF1ADC6AE10081A9F7 /* ElloToggleButton.swift */,
 				12F6AE681A4339EF00493660 /* ElloUnderlinedTextButton.swift */,
 				1DAA16191F6B22E500E79CC0 /* ElloWebView.swift */,
 				1289F3951AF17901008A938C /* ImageLabelAnimatable.swift */,
@@ -3512,7 +3510,9 @@
 				1DF0B2EA1E94247C001B9F97 /* SearchNavBarField.swift */,
 				1DB8C6AA1D7A2349007E1447 /* SearchTextField.swift */,
 				1DF0B2ED1E942BE2001B9F97 /* SearchToggleButton.swift */,
+				EAED46DF1ADC6AE10081A9F7 /* SettingsToggleButton.swift */,
 				1D7152A31D6D3848005998FE /* StartupGradientLayer.swift */,
+				1D2B50BA1D272A6400F6CE90 /* StatusBar.swift */,
 				1DB8C6A21D78C85C007E1447 /* StyledButton.swift */,
 				1D70DE571DF23862008AF216 /* StyledLabel.swift */,
 				1D7152B31D6E4FCE005998FE /* ValidationState.swift */,
@@ -5599,7 +5599,7 @@
 				1DB390C9203F8C9100A1B7E7 /* ManageCategoriesGenerator.swift in Sources */,
 				1D70DE711DF78027008AF216 /* AnnouncementCellPresenter.swift in Sources */,
 				122C66351B424E530035F4CD /* AutoCompleteCellPresenter.swift in Sources */,
-				EAED46E01ADC6AE10081A9F7 /* ElloToggleButton.swift in Sources */,
+				EAED46E01ADC6AE10081A9F7 /* SettingsToggleButton.swift in Sources */,
 				1DB390D82047394200A1B7E7 /* PromotionalHeaderSubscriptionCell.swift in Sources */,
 				1D87831E1ECCF5B300253602 /* EditorialTitledCell.swift in Sources */,
 				1D2D18651AC322070078AA05 /* UIWebViewExtensions.swift in Sources */,
@@ -5652,7 +5652,7 @@
 				128D36B31A951F1700622833 /* StreamTextCellPresenter.swift in Sources */,
 				123375871DA6ECEC0019CFAD /* ProfileLinksView.swift in Sources */,
 				1D80877D2032596C0081E8FE /* SettingsCredentialsViewController.swift in Sources */,
-				EA587A9F1ACDC6F4002AF389 /* ElloEditableTextView.swift in Sources */,
+				EA587A9F1ACDC6F4002AF389 /* BioTextView.swift in Sources */,
 				123DEBE91D3D4087007B5F86 /* PostDetailGenerator.swift in Sources */,
 				1249AD871D9EC3FC009074FD /* ProfileScreen.swift in Sources */,
 				1229432B1C6BF564003FCD20 /* NSItemProviderExtensions.swift in Sources */,

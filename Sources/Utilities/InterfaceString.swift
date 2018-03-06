@@ -503,4 +503,5 @@ struct InterfaceString {
     static let SeeAll: String = NSLocalizedString("See All", comment: "")
     static let Send: String = NSLocalizedString("Send", comment: "")
     static let Save: String = NSLocalizedString("Save", comment: "")
+    static let Edit: String = NSLocalizedString("Edit", comment: "")
 }

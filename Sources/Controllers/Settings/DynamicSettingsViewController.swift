@@ -25,11 +25,14 @@ class DynamicSettingsViewController: BaseElloViewController {
         screen.delegate = self
         screen.title = category.label
         view = screen
+        screen.reload()
     }
 
     override func didSetCurrentUser() {
         super.didSetCurrentUser()
-        screen.reload()
+        if isViewLoaded {
+            screen.reload()
+        }
     }
 }
 
@@ -60,7 +63,7 @@ extension DynamicSettingsViewController: DynamicSettingCellResponder {
 
                 self.appViewController?.currentUser = user
             }
-            .catch { [weak self] _ in
+            .always { [weak self] in
                 self?.screen.reload()
             }
     }

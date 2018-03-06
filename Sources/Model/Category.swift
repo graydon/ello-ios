@@ -16,6 +16,14 @@ final class Category: JSONAble, Groupable {
         case all
         case subscribed
         case category(String)
+
+        var shareLink: URL? {
+            switch self {
+            case .all: return URL(string: "\(ElloURI.baseURL)/discover")
+            case .subscribed: return URL(string: "\(ElloURI.baseURL)/discover/subscribed")
+            case let .category(slug): return URL(string: "\(ElloURI.baseURL)/discover/\(slug)")
+            }
+        }
     }
 
     let id: String
@@ -29,9 +37,6 @@ final class Category: JSONAble, Groupable {
     let isCreatorType: Bool
     let level: CategoryLevel
     var isMeta: Bool { return level == .meta }
-    var shareLink: String {
-        return "\(ElloURI.baseURL)/discover/\(slug)"
-    }
 
     var endpoint: ElloAPI {
         switch level {

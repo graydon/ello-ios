@@ -8,7 +8,9 @@ import SnapKit
 class ElloTextFieldView: View {
     struct Size {
         static let margins = UIEdgeInsets(tops: 8, sides: 15)
+        static let textFieldMargins = UIEdgeInsets(tops: 7, sides: 0)
         static let verticalSpacing: CGFloat = 8
+        static let cornerRadius: CGFloat = 5
         static let height: CGFloat = 89
     }
 
@@ -22,6 +24,7 @@ class ElloTextFieldView: View {
     }
 
     let textField = ElloTextField()
+    let textFieldBackground = UIView()
     let label = StyledLabel(style: .lightGray)
 
     private let errorLabel = StyledLabel(style: .error)
@@ -75,10 +78,14 @@ class ElloTextFieldView: View {
 
     override func style() {
         textField.keyboardAppearance = .dark
+        textFieldBackground.backgroundColor = textField.backgroundColor
+        textFieldBackground.clipsToBounds = true
+        textFieldBackground.layer.cornerRadius = Size.cornerRadius
     }
 
     override func arrange() {
         addSubview(label)
+        addSubview(textFieldBackground)
         addSubview(textField)
         addSubview(errorLabel)
         addSubview(messageLabel)
@@ -87,9 +94,13 @@ class ElloTextFieldView: View {
             make.leading.top.equalTo(self).inset(Size.margins)
         }
 
-        textField.snp.makeConstraints { make in
+        textFieldBackground.snp.makeConstraints { make in
             make.top.equalTo(label.snp.bottom).offset(Size.verticalSpacing)
             make.leading.trailing.equalTo(self).inset(Size.margins)
+        }
+
+        textField.snp.makeConstraints { make in
+            make.edges.equalTo(textFieldBackground).inset(Size.textFieldMargins)
         }
 
         errorLabel.snp.makeConstraints { make in

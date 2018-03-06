@@ -10,9 +10,10 @@ import FLAnimatedImage
 class SettingsScreen: Screen, SettingsScreenProtocol {
     struct Size {
         static let coverImageHeight: CGFloat = 200
-        static let avatarImageSize: CGFloat = 200
+        static let avatarImageSize: CGFloat = 180
         static let defaultMargin: CGFloat = 15
-        static let profileMargin: CGFloat = 50
+        static let avatarMargin: CGFloat = 56
+        static let profileMargin: CGFloat = 20
         static let profileDescriptionHeight: CGFloat = 100
         static let bioTopOffset: CGFloat = 10
         static let bioBottomOffset: CGFloat = 10
@@ -69,7 +70,6 @@ class SettingsScreen: Screen, SettingsScreenProtocol {
     private let coverImageButton = StyledButton(style: .clearWhite)
     private let avatarImageView = FLAnimatedImageView()
     private let avatarImageButton = StyledButton(style: .clearWhite)
-    private let logoutButton = StyledButton(style: .grayUnderlined)
 
     private let profileLabel = StyledLabel(style: .largeBold)
     private let profileDescription = StyledLabel(style: .lightGray)
@@ -79,7 +79,7 @@ class SettingsScreen: Screen, SettingsScreenProtocol {
     private let credentialsButton = UIButton()
     private let nameField = ElloTextFieldView()
     private let bioLabel = StyledLabel(style: .lightGray)
-    private let bioTextView = ElloEditableTextView()
+    private let bioTextView = BioTextView()
     private let linksField = ElloTextFieldView()
     private let locationField = ElloTextFieldView()
     private var lastSettingsView: UIView!
@@ -117,7 +117,6 @@ class SettingsScreen: Screen, SettingsScreenProtocol {
         scrollView.delegate = self
         coverImageButton.addTarget(self, action: #selector(coverImageTapped), for: .touchUpInside)
         avatarImageButton.addTarget(self, action: #selector(avatarImageTapped), for: .touchUpInside)
-        logoutButton.addTarget(self, action: #selector(logoutTapped), for: .touchUpInside)
         credentialsButton.addTarget(self, action: #selector(credentialFieldTapped), for: .touchUpInside)
 
         let updateLocationFunction = debounce(0.5) { [weak self] in
@@ -135,7 +134,6 @@ class SettingsScreen: Screen, SettingsScreenProtocol {
         navigationBar.title = InterfaceString.Settings.EditProfile
         coverImageButton.setTitle(InterfaceString.Settings.TapToEdit, for: .normal)
         avatarImageButton.setTitle(InterfaceString.Settings.TapToEdit, for: .normal)
-        logoutButton.setTitle(InterfaceString.Settings.Logout, for: .normal)
 
         profileLabel.text = InterfaceString.Settings.Profile
         profileDescription.text = InterfaceString.Settings.ProfileDescription
@@ -160,7 +158,6 @@ class SettingsScreen: Screen, SettingsScreenProtocol {
         scrollView.addSubview(coverImageButton)
         scrollView.addSubview(avatarImageView)
         scrollView.addSubview(avatarImageButton)
-        scrollView.addSubview(logoutButton)
 
         scrollView.addSubview(profileLabel)
         scrollView.addSubview(profileDescription)
@@ -207,8 +204,8 @@ class SettingsScreen: Screen, SettingsScreenProtocol {
         coverImageButton.setContentHuggingPriority(UILayoutPriority.defaultLow, for: .vertical)
 
         avatarImageView.snp.makeConstraints { make in
-            make.leading.equalTo(marginGuide)
-            make.top.equalTo(coverImageView.snp.bottom).offset(Size.defaultMargin)
+            make.centerX.equalTo(scrollView)
+            make.top.equalTo(coverImageView.snp.bottom).offset(-Size.avatarMargin)
             make.width.height.equalTo(Size.avatarImageSize)
         }
         avatarImageButton.snp.makeConstraints { make in
@@ -216,11 +213,6 @@ class SettingsScreen: Screen, SettingsScreenProtocol {
         }
         avatarImageButton.setContentHuggingPriority(UILayoutPriority.defaultLow, for: .horizontal)
         avatarImageButton.setContentHuggingPriority(UILayoutPriority.defaultLow, for: .vertical)
-
-        logoutButton.snp.makeConstraints { make in
-            make.trailing.equalTo(marginGuide)
-            make.top.equalTo(avatarImageView)
-        }
 
         profileLabel.snp.makeConstraints { make in
             make.top.equalTo(avatarImageView.snp.bottom).offset(Size.profileMargin)

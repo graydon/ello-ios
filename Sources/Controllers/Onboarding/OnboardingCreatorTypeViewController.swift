@@ -17,7 +17,9 @@ class OnboardingCreatorTypeViewController: BaseElloViewController {
         get { return _creatorType }
         set {
             _creatorType = newValue
-            screen.updateCreatorType(type: newValue)
+            if isViewLoaded {
+                screen.updateCreatorType(type: newValue)
+            }
         }
     }
     private var _creatorType: Profile.CreatorType = .none

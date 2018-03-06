@@ -7,7 +7,6 @@ import PromiseKit
 
 protocol CategoryStreamDestination: StreamDestination {
     func set(subscribedCategories: [Category])
-    func set(allCategories: [Category])
 }
 
 final class CategoryGenerator: StreamGenerator {
@@ -44,7 +43,7 @@ final class CategoryGenerator: StreamGenerator {
         guard let pageHeader = pageHeader else { return [] }
 
         var items = [StreamCellItem(jsonable: pageHeader, type: .promotionalHeader)]
-        if let currentUser = currentUser, pageHeader.categoryId != nil {
+        if pageHeader.categoryId != nil {
             items.append(StreamCellItem(jsonable: pageHeader, type: .promotionalHeaderSubscription))
         }
         return items
@@ -56,7 +55,7 @@ final class CategoryGenerator: StreamGenerator {
         self.streamKind = .category(selection)
     }
 
-    func load(reload: Bool = false) {
+    func load(reload: Bool, reloadCategories: Bool) {
         let doneOperation = AsyncOperation()
         queue.addOperation(doneOperation)
 
@@ -73,7 +72,9 @@ final class CategoryGenerator: StreamGenerator {
         }
 
         loadPageHeader(doneOperation)
-        loadSubscribedCategories()
+        if reloadCategories {
+            loadSubscribedCategories()
+        }
         loadCategoryPosts(doneOperation, reload: reload)
     }
 

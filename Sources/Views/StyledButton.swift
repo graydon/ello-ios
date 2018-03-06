@@ -128,7 +128,7 @@ class StyledButton: UIButton {
         layer.cornerRadius = style.cornerRadius.size(in: frame)
     }
 
-    private func updateStyle() {
+    func updateStyle() {
         let layerBorder: UIColor?
         if !isEnabled {
             backgroundColor = style.disabledBackgroundColor ?? style.backgroundColor
@@ -163,11 +163,11 @@ class StyledButton: UIButton {
 
         titleLabel?.font = style.font
 
-        if let title = self.title(for: .normal) {
+        if let defaultTitle = self.title(for: .normal) {
             let states: [UIControlState] = [.normal, .highlighted, .selected, .disabled]
             for state in states {
-                let attrdTitle = NSAttributedString(button: title, style: style, state: state, selected: isSelected, lineBreakMode: titleLineBreakMode)
-                setAttributedTitle(attrdTitle, for: state)
+                let title = self.title(for: state) ?? defaultTitle
+                setAttributedTitle(NSAttributedString(button: title, style: style, state: state, selected: isSelected, lineBreakMode: titleLineBreakMode), for: state)
             }
         }
     }
@@ -206,12 +206,7 @@ extension StyledButton {
 
     override func setTitle(_ title: String?, for state: UIControlState) {
         super.setTitle(title, for: state)
-        if state == .normal {
-            updateStyle()
-        }
-        else {
-            fatalError("StyledButton doesn't support titles that aren't .normal")
-        }
+        updateStyle()
     }
 
     override func titleRect(forContentRect contentRect: CGRect) -> CGRect {

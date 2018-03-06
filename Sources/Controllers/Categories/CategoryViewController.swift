@@ -30,7 +30,6 @@ final class CategoryViewController: StreamableViewController {
     var categorySelection: Category.Selection = .all
     private var prevSelection: Category.Selection?
     var subscribedCategories: [Category]?
-    var allCategories: [Category]?
     var pageHeader: PageHeader?
     var generator: CategoryGenerator!
     var userDidScroll: Bool = false
@@ -109,21 +108,16 @@ final class CategoryViewController: StreamableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        switch categorySelection {
-        case .category:
-            screen.setupNavBar(show: .all, back: showBackButton, animated: false)
-        case .all, .subscribed:
-            screen.setupNavBar(show: .onlyGridToggle, back: showBackButton, animated: false)
-        }
+        screen.setupNavBar(back: showBackButton, animated: false)
 
         ElloHUD.showLoadingHudInView(streamViewController.view)
 
         streamViewController.streamKind = generator.streamKind
-        streamViewController.initialLoadClosure = { [weak self] in self?.loadCategory(reload: false) }
+        streamViewController.initialLoadClosure = { [weak self] in self?.loadCategory(reload: false, reloadCategories: true) }
         streamViewController.reloadClosure = { [weak self] in self?.reloadCurrentCategory() }
         streamViewController.toggleClosure = { [weak self] isGridView in self?.toggleGrid(isGridView) }
 
-        self.loadCategory(reload: false)
+        self.loadCategory(reload: false, reloadCategories: true)
     }
 
     private func updateInsets() {
@@ -164,7 +158,7 @@ final class CategoryViewController: StreamableViewController {
 
 private extension CategoryViewController {
 
-    func loadCategory(reload: Bool) {
+    func loadCategory(reload: Bool, reloadCategories: Bool) {
         if reload {
             replacePlaceholder(type: .promotionalHeader, items: [])
             replacePlaceholder(type: .streamItems, items: [StreamCellItem(type: .streamLoading)])
@@ -178,13 +172,14 @@ private extension CategoryViewController {
         }
 
         pageHeader = nil
-        generator.load(reload: reload)
+        generator.load(reload: reload, reloadCategories: reloadCategories ?? reload)
     }
 
     func reloadCurrentCategory() {
         ElloHUD.showLoadingHudInView(streamViewController.view)
+        screen.categoriesLoaded = false
         pageHeader = nil
-        generator.load(reload: true)
+        generator.load(reload: true, reloadCategories: true)
     }
 }
 
@@ -230,12 +225,9 @@ extension CategoryViewController: CategoryStreamDestination, StreamDestination {
         self.title = category.name
     }
 
-    func set(allCategories: [Category]) {
-        self.allCategories = allCategories
-    }
-
     func set(subscribedCategories: [Category]) {
         self.subscribedCategories = subscribedCategories
+        screen.categoriesLoaded = true
 
         var info: [CategoryCardListView.CategoryInfo] = []
         if hasSubscribedCategory {
@@ -250,7 +242,11 @@ extension CategoryViewController: CategoryStreamDestination, StreamDestination {
             return CategoryCardListView.CategoryInfo(title: category.name, kind: .category, imageURL: category.tileURL)
         }
 
-        showScreenCategories(info)
+        let pullToRefreshView = streamViewController.pullToRefreshView
+        pullToRefreshView?.isHidden = true
+        screen.set(categoriesInfo: info) {
+            pullToRefreshView?.isHidden = false
+        }
 
         if case let .category(slug) = categorySelection,
             let selectedCategoryIndex = subscribedCategories.index(where: { $0.slug == slug })
@@ -276,14 +272,6 @@ extension CategoryViewController: CategoryStreamDestination, StreamDestination {
         screen.selectCategory(screenSelection)
 
         updateInsets()
-    }
-
-    private func showScreenCategories(_ info: [CategoryCardListView.CategoryInfo]) {
-        let pullToRefreshView = streamViewController.pullToRefreshView
-        pullToRefreshView?.isHidden = true
-        screen.set(categoriesInfo: info) {
-            pullToRefreshView?.isHidden = false
-        }
     }
 
     func primaryJSONAbleNotFound() {
@@ -361,12 +349,11 @@ extension CategoryViewController: CategoryScreenDelegate {
         title = InterfaceString.Discover.Title
         pageHeader = nil
 
-        screen.setupNavBar(show: .onlyGridToggle, back: showBackButton, animated: true)
         screen.scrollToCategory(.all)
         screen.selectCategory(.all)
         generator.reset(selection: categorySelection)
         streamViewController.streamKind = generator.streamKind
-        loadCategory(reload: true)
+        loadCategory(reload: true, reloadCategories: false)
 
         trackScreenAppeared()
     }
@@ -378,12 +365,11 @@ extension CategoryViewController: CategoryScreenDelegate {
         title = InterfaceString.Discover.Title
         pageHeader = nil
 
-        screen.setupNavBar(show: .none, back: showBackButton, animated: true)
         screen.scrollToCategory(.subscribed)
         screen.selectCategory(.subscribed)
         generator.reset(selection: categorySelection)
         streamViewController.streamKind = generator.streamKind
-        loadCategory(reload: true)
+        loadCategory(reload: true, reloadCategories: false)
 
         trackScreenAppeared()
     }
@@ -395,22 +381,20 @@ extension CategoryViewController: CategoryScreenDelegate {
         categorySelection = .category(category.slug)
         title = category.name
 
-        screen.setupNavBar(show: .all, back: showBackButton, animated: true)
         if let index = subscribedCategories?.index(where: { $0.slug == category.slug }) {
             screen.scrollToCategory(.category(index))
             screen.selectCategory(.category(index))
         }
         generator.reset(selection: categorySelection)
         streamViewController.streamKind = generator.streamKind
-        loadCategory(reload: true)
+        loadCategory(reload: true, reloadCategories: false)
 
         trackScreenAppeared()
     }
 
     func shareTapped(sender: UIView) {
         guard
-            let category = category,
-            let shareURL = URL(string: category.shareLink)
+            let shareURL = categorySelection.shareLink
         else { return }
 
         showShareActivity(sender: sender, url: shareURL)

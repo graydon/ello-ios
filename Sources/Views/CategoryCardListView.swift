@@ -33,25 +33,22 @@ class CategoryCardListView: View {
     weak var delegate: CategoryCardListDelegate?
 
     var categoriesInfo: [CategoryInfo] = [] {
-        didSet {
-            let changed: Bool = (categoriesInfo.count != oldValue.count) || oldValue.enumerated().any { (index, info) in
-                return info.title != categoriesInfo[index].title
-            }
-            if changed {
-                updateCategoryViews()
-            }
-        }
+        didSet { updateCategoryViews() }
     }
 
     private var buttonIndexLookup: [UIButton: Int] = [:]
     private var categoryViews: [CategoryCardView] = []
-    private var scrollView = UIScrollView()
+    private let remainderView = UIView()
+    private let remainderGradient = CategoryCardListView.generateGradientLayer()
+    private let scrollView = UIScrollView()
+    private var scrollViewBackground: UIView?
 
     var rightInset: CGFloat {
         get { return scrollView.contentInset.right }
         set {
             scrollView.contentInset.right = newValue
             scrollView.scrollIndicatorInsets.right = newValue
+            setNeedsLayout()
         }
     }
 
@@ -63,7 +60,16 @@ class CategoryCardListView: View {
     }
 
     override func arrange() {
-        self.addSubview(scrollView)
+        remainderView.layer.addSublayer(remainderGradient)
+        remainderView.isHidden = true
+        addSubview(remainderView)
+        addSubview(scrollView)
+
+        remainderView.snp.makeConstraints { make in
+            make.trailing.equalTo(scrollView)
+            make.top.bottom.equalTo(scrollView).inset(Size.spacing)
+            make.leading.equalTo(scrollView).offset(Size.smallCardSize.width)
+        }
 
         scrollView.snp.makeConstraints { make in
             make.edges.equalTo(self)
@@ -83,6 +89,7 @@ class CategoryCardListView: View {
 
     func scrollToIndex(_ index: Int, animated: Bool) {
         guard let view = categoryViews.safeValue(index) else { return }
+        layoutIfNeeded()
 
         let left = view.frame.minX
         let right = view.frame.maxX - frame.width
@@ -95,7 +102,8 @@ class CategoryCardListView: View {
     }
 
     func selectCategory(index: Int) {
-        let view = categoryViews[index]
+        guard let view = categoryViews.safeValue(index) else { return }
+
         for card in categoryViews where card != view {
             card.isSelected = false
         }
@@ -104,6 +112,7 @@ class CategoryCardListView: View {
     }
 
     private func updateCategoryViews() {
+        self.scrollViewBackground?.removeFromSuperview()
         for view in categoryViews {
             view.removeFromSuperview()
         }
@@ -124,19 +133,7 @@ class CategoryCardListView: View {
             }
             return view
         }
-        arrangeCategoryViews()
 
-        layoutIfNeeded()
-    }
-
-    private func categoryView(index: Int, info: CategoryInfo) -> CategoryCardView {
-        let card = CategoryCardView(info: info)
-        card.addTarget(self, action: #selector(categoryButtonTapped(_:)))
-        buttonIndexLookup[card.button] = index
-        return card
-    }
-
-    private func arrangeCategoryViews() {
         var prevView: UIView? = nil
         for view in categoryViews {
             scrollView.addSubview(view)
@@ -156,9 +153,79 @@ class CategoryCardListView: View {
         }
 
         if let prevView = prevView {
+            let scrollViewBackground = UIView()
+            scrollViewBackground.backgroundColor = .white
+            scrollView.insertSubview(scrollViewBackground, at: 0)
+            scrollViewBackground.snp.makeConstraints { make in
+                make.leading.trailing.equalTo(scrollView)
+                make.top.bottom.equalTo(prevView).inset(-Size.spacing)
+            }
+            self.scrollViewBackground = scrollViewBackground
+
             prevView.snp.makeConstraints { make in
-                make.trailing.equalTo(scrollView.snp.trailing)
+                make.trailing.equalTo(scrollViewBackground).offset(-Size.spacing)
             }
         }
+        setNeedsLayout()
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        layoutIfNeeded()
+        remainderGradient.frame = remainderView.bounds
+
+        let calculate: (UIView) -> CGFloat = { self.frame.width - $0.frame.maxX - Size.spacing - self.scrollView.contentInset.right }
+        if let lastCard = categoryViews.last, let remWidth = categoryViews.last.map(calculate), remWidth > 0 {
+        //     remainderView.frame = CGRect(
+        //         x: Size.spacing,
+        //         y: lastCard.frame.minY,
+        //         width: frame.width - 2 * Size.spacing,
+        //         height: lastCard.frame.height
+        //         )
+            remainderView.isHidden = false
+        //     if remainderGradient.superlayer == nil {
+        //         remainderView.layer.addSublayer(remainderGradient)
+        //     }
+        }
+        else {
+            remainderView.isHidden = true
+        //     if remainderGradient.superlayer != nil {
+        //         remainderGradient.removeFromSuperlayer()
+        //     }
+        }
+    }
+
+    private func categoryView(index: Int, info: CategoryInfo) -> CategoryCardView {
+        let card = CategoryCardView(info: info)
+        card.addTarget(self, action: #selector(categoryButtonTapped(_:)))
+        buttonIndexLookup[card.button] = index
+        return card
+    }
+}
+
+extension CategoryCardListView {
+    private static func generateGradientLayer() -> CAGradientLayer {
+        let layer = CAGradientLayer()
+        layer.locations = [0, NSNumber(value: CategoryScreen.Size.gradientMidpoint), 1]
+        layer.colors = [
+            UIColor(hex: 0xD300BD, alpha: 1).cgColor,
+            UIColor(hex: 0xd200ff, alpha: 1).cgColor,
+            UIColor(hex: 0x0063ff, alpha: 1).cgColor,
+            UIColor(hex: 0x00ffc1, alpha: 1).cgColor,
+            UIColor(hex: 0x0BFF66, alpha: 1).cgColor,
+            UIColor(hex: 0x22FF51, alpha: 1).cgColor,
+        ]
+        layer.locations = [
+            0,
+            0.08,
+            0.40,
+            0.70,
+            0.96,
+            1,
+        ]
+        layer.startPoint = CGPoint(x: 0, y: 0.51)
+        layer.endPoint = CGPoint(x: 1, y: 0.49)
+        return layer
     }
 }

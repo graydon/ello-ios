@@ -3,9 +3,6 @@
 //
 
 protocol StreamGenerator {
-
-    func load(reload: Bool)
-
     var currentUser: User? { get }
     var streamKind: StreamKind { get }
     weak var destination: StreamDestination? { get }

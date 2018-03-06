@@ -37,6 +37,7 @@ class CategoryScreen: HomeSubviewScreen, CategoryScreenProtocol {
             gridListButton.setImage(isGridView ? .listView : .gridView, imageStyle: .normal, for: .normal)
         }
     }
+    var categoriesLoaded: Bool = false { didSet { updateSeeAllButton() } }
 
     private let usage: Usage
 
@@ -68,12 +69,8 @@ class CategoryScreen: HomeSubviewScreen, CategoryScreenProtocol {
     private var iPhoneBlackBarTopConstraint: Constraint!
     private var backVisibleConstraint: Constraint!
     private var backHiddenConstraint: Constraint!
-    private var shareVisibleConstraint: Constraint!
-    private var shareHiddenConstraint: Constraint!
-    private var allHiddenConstraint: Constraint!
 
     private var navBarVisible = true
-    private var hasCategories: Bool { return !categoryCardList.categoriesInfo.isEmpty }
     private var categoryCardListTop: CGFloat {
         if navBarVisible {
             return self.navigationBar.frame.height
@@ -95,7 +92,6 @@ class CategoryScreen: HomeSubviewScreen, CategoryScreenProtocol {
         super.style()
         iPhoneBlackBar.backgroundColor = .black
         backButton.setImages(.backChevron)
-        shareButton.alpha = 0
         shareButton.setImage(.share, imageStyle: .normal, for: .normal)
         seeAllButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 30, bottom: 0, right: 10)
         seeAllButton.isHidden = true
@@ -103,7 +99,7 @@ class CategoryScreen: HomeSubviewScreen, CategoryScreenProtocol {
 
     override func setText() {
         navigationBar.title = ""
-        seeAllButton.setTitle(InterfaceString.SeeAll, for: .normal)
+        seeAllButton.setTitle(InterfaceString.Edit, for: .normal)
     }
 
     override func bindActions() {
@@ -178,13 +174,8 @@ class CategoryScreen: HomeSubviewScreen, CategoryScreenProtocol {
             backHiddenConstraint = make.leading.equalTo(navigationBar).inset(insets).constraint
             backVisibleConstraint = make.leading.equalTo(backButton.snp.trailing).offset(insets.left).constraint
 
-            shareHiddenConstraint = make.trailing.equalTo(gridListButton.snp.leading).offset(-insets.right).constraint
-            shareVisibleConstraint = make.trailing.equalTo(shareButton.snp.leading).offset(-Size.buttonMargin).constraint
-            allHiddenConstraint = make.trailing.equalTo(gridListButton.snp.trailing).offset(-Size.buttonMargin).constraint
+            make.trailing.equalTo(shareButton.snp.leading).offset(-Size.buttonMargin)
         }
-        backVisibleConstraint.deactivate()
-        shareVisibleConstraint.deactivate()
-        allHiddenConstraint.deactivate()
 
         navigationContainer.snp.makeConstraints { make in
             make.leading.equalTo(searchField).offset(-SearchNavBarField.Size.searchInsets.left)
@@ -215,7 +206,6 @@ class CategoryScreen: HomeSubviewScreen, CategoryScreenProtocol {
 
     func set(categoriesInfo newValue: [CategoryCardListView.CategoryInfo], completion: @escaping Block) {
         categoryCardList.categoriesInfo = newValue
-        updateSeeAllButton()
 
         if navBarVisible {
             completion()
@@ -233,7 +223,7 @@ class CategoryScreen: HomeSubviewScreen, CategoryScreenProtocol {
     }
 
     private func updateSeeAllButton() {
-        let actuallyShowSeeAll = showSeeAll && hasCategories
+        let actuallyShowSeeAll = showSeeAll && categoriesLoaded
         seeAllButton.isHidden = !actuallyShowSeeAll
         let rightInset = actuallyShowSeeAll ? seeAllButton.frame.width * CGFloat(1 - Size.gradientMidpoint) : 0
         categoryCardList.rightInset = rightInset
@@ -304,32 +294,12 @@ class CategoryScreen: HomeSubviewScreen, CategoryScreenProtocol {
         delegate?.seeAllCategoriesTapped()
     }
 
-    func setupNavBar(show: CategoryScreen.NavBarItems, back backVisible: Bool, animated: Bool) {
-        let shareButtonAlpha: CGFloat
-        let gridButtonAlpha: CGFloat
-        switch show {
-        case .onlyGridToggle:
-            shareButtonAlpha = 0
-            gridButtonAlpha = 1
-        case .all:
-            shareButtonAlpha = 1
-            gridButtonAlpha = 1
-        case .none:
-            shareButtonAlpha = 0
-            gridButtonAlpha = 0
-        }
-
-        shareHiddenConstraint.set(isActivated: show == .onlyGridToggle)
-        shareVisibleConstraint.set(isActivated: show == .all)
-        allHiddenConstraint.set(isActivated: show == .none)
-
+    func setupNavBar(back backVisible: Bool, animated: Bool) {
         backButton.isHidden = !backVisible
         backVisibleConstraint.set(isActivated: backVisible)
         backHiddenConstraint.set(isActivated: !backVisible)
 
         elloAnimate(animated: animated) {
-            self.shareButton.alpha = shareButtonAlpha
-            self.gridListButton.alpha = gridButtonAlpha
             self.navigationBar.layoutIfNeeded()
         }
     }
