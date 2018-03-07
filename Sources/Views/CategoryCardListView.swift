@@ -135,9 +135,6 @@ class CategoryCardListView: View {
             case .category:
                 buttonIndexLookup[card.button] = index
                 card.addTarget(self, action: #selector(categoryButtonTapped(_:)))
-                print("=============== \(#file) line \(#line) ===============")
-                print("info.title: \(info.title)")
-                print("index: \(index)")
                 index += 1
             }
 
