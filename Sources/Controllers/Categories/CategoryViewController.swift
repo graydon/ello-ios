@@ -28,16 +28,14 @@ final class CategoryViewController: StreamableViewController {
 
     var category: Category?
     var categorySelection: Category.Selection = .all
+    var stream: DiscoverType = .featured
     private var prevSelection: Category.Selection?
     var subscribedCategories: [Category]?
     var pageHeader: PageHeader?
     var generator: CategoryGenerator!
     var userDidScroll: Bool = false
     var hasSubscribedCategory: Bool {
-        guard let categoryIds = currentUser?.followedCategoryIds else {
-            return false
-        }
-        return categoryIds.count > 0
+        return currentUser?.hasSubscribedCategory == true
     }
     private let usage: Usage
 
@@ -53,15 +51,18 @@ final class CategoryViewController: StreamableViewController {
         return !isRootViewController()
     }
 
-    convenience init(category: Category, usage: Usage = .default) {
-        self.init(slug: category.slug, name: category.name, usage: usage)
+    convenience init(currentUser: User?, category: Category, usage: Usage = .default) {
+        self.init(currentUser: currentUser, slug: category.slug, name: category.name, usage: usage)
         self.category = category
     }
 
-    init(slug: String? = nil, name: String? = nil, usage: Usage = .default) {
+    init(currentUser: User?, slug: String? = nil, name: String? = nil, usage: Usage = .default) {
         self.usage = usage
         if let slug = slug {
             self.categorySelection = .category(slug)
+        }
+        else if let currentUser = currentUser, currentUser.hasSubscribedCategory {
+            self.categorySelection = .subscribed
         }
         else {
             self.categorySelection = .all
@@ -71,9 +72,11 @@ final class CategoryViewController: StreamableViewController {
 
         self.generator = CategoryGenerator(
             selection: categorySelection,
+            stream: stream,
             currentUser: currentUser,
             destination: self
         )
+        self.currentUser = currentUser
     }
 
     required init?(coder: NSCoder) {
@@ -83,8 +86,9 @@ final class CategoryViewController: StreamableViewController {
     override func didSetCurrentUser() {
         super.didSetCurrentUser()
         generator.currentUser = currentUser
+
         if isViewLoaded {
-            screen.showSeeAll = currentUser != nil
+            screen.showEditButton = currentUser != nil
 
             if let subscribedCategories = subscribedCategories,
                 let currentUser = currentUser,
@@ -99,7 +103,7 @@ final class CategoryViewController: StreamableViewController {
         let screen = CategoryScreen(usage: usage)
         screen.isGridView = StreamKind.categories.isGridView
         screen.delegate = self
-        screen.showSeeAll = currentUser != nil
+        screen.showEditButton = currentUser != nil
 
         view = screen
         viewContainer = screen.streamContainer
@@ -113,11 +117,11 @@ final class CategoryViewController: StreamableViewController {
         ElloHUD.showLoadingHudInView(streamViewController.view)
 
         streamViewController.streamKind = generator.streamKind
-        streamViewController.initialLoadClosure = { [weak self] in self?.loadCategory(reload: false, reloadCategories: true) }
+        streamViewController.initialLoadClosure = { [weak self] in self?.initialLoadCategory() }
         streamViewController.reloadClosure = { [weak self] in self?.reloadCurrentCategory() }
         streamViewController.toggleClosure = { [weak self] isGridView in self?.toggleGrid(isGridView) }
 
-        self.loadCategory(reload: false, reloadCategories: true)
+        self.initialLoadCategory()
     }
 
     private func updateInsets() {
@@ -158,12 +162,11 @@ final class CategoryViewController: StreamableViewController {
 
 private extension CategoryViewController {
 
-    func loadCategory(reload: Bool, reloadCategories: Bool) {
-        if reload {
-            replacePlaceholder(type: .promotionalHeader, items: [])
-            replacePlaceholder(type: .streamItems, items: [StreamCellItem(type: .streamLoading)])
-        }
+    func initialLoadCategory() {
+        generator.load(reloadPosts: false, reloadHeader: false, reloadCategories: false)
+    }
 
+    func loadCategory() {
         if let categoryName = category?.name {
             title = categoryName
         }
@@ -172,14 +175,19 @@ private extension CategoryViewController {
         }
 
         pageHeader = nil
-        generator.load(reload: reload, reloadCategories: reloadCategories ?? reload)
+        generator.load(reloadPosts: true, reloadHeader: true, reloadCategories: false)
+    }
+
+    func loadStream(_ stream: DiscoverType) {
+        generator.reset(stream: stream)
+        streamViewController.streamKind = generator.streamKind
+        generator.load(reloadPosts: true, reloadHeader: false, reloadCategories: false)
     }
 
     func reloadCurrentCategory() {
         ElloHUD.showLoadingHudInView(streamViewController.view)
         screen.categoriesLoaded = false
-        pageHeader = nil
-        generator.load(reload: true, reloadCategories: true)
+        generator.load(reloadPosts: true, reloadHeader: false, reloadCategories: true)
     }
 }
 
@@ -229,7 +237,8 @@ extension CategoryViewController: CategoryStreamDestination, StreamDestination {
         self.subscribedCategories = subscribedCategories
         screen.categoriesLoaded = true
 
-        var info: [CategoryCardListView.CategoryInfo] = []
+        var info: [CategoryCardListView.CategoryInfo] = [CategoryCardListView.CategoryInfo(title: InterfaceString.Discover.AllCategories, kind: .all, imageURL: nil)]
+
         if hasSubscribedCategory {
             info.append(CategoryCardListView.CategoryInfo(title: InterfaceString.Discover.Subscribed, kind: .subscribed, imageURL: nil))
             screen.showSubscribed = true
@@ -240,6 +249,10 @@ extension CategoryViewController: CategoryStreamDestination, StreamDestination {
 
         info += subscribedCategories.map { (category: Category) -> CategoryCardListView.CategoryInfo in
             return CategoryCardListView.CategoryInfo(title: category.name, kind: .category, imageURL: category.tileURL)
+        }
+
+        if !hasSubscribedCategory {
+            info.append(CategoryCardListView.CategoryInfo(title: InterfaceString.Discover.ZeroState, kind: .zeroState, imageURL: nil))
         }
 
         let pullToRefreshView = streamViewController.pullToRefreshView
@@ -310,7 +323,7 @@ extension CategoryViewController: CategoryScreenDelegate {
         selectAllCategories()
     }
 
-    func seeAllCategoriesTapped() {
+    func editCategoriesTapped() {
         guard let currentUser = currentUser else { return }
 
         let vc = ManageCategoriesViewController(currentUser: currentUser)
@@ -347,13 +360,12 @@ extension CategoryViewController: CategoryScreenDelegate {
         prevSelection = categorySelection
         categorySelection = .all
         title = InterfaceString.Discover.Title
-        pageHeader = nil
 
         screen.scrollToCategory(.all)
         screen.selectCategory(.all)
         generator.reset(selection: categorySelection)
         streamViewController.streamKind = generator.streamKind
-        loadCategory(reload: true, reloadCategories: false)
+        loadCategory()
 
         trackScreenAppeared()
     }
@@ -363,13 +375,12 @@ extension CategoryViewController: CategoryScreenDelegate {
         prevSelection = categorySelection
         categorySelection = .subscribed
         title = InterfaceString.Discover.Title
-        pageHeader = nil
 
         screen.scrollToCategory(.subscribed)
         screen.selectCategory(.subscribed)
         generator.reset(selection: categorySelection)
         streamViewController.streamKind = generator.streamKind
-        loadCategory(reload: true, reloadCategories: false)
+        loadCategory()
 
         trackScreenAppeared()
     }
@@ -387,7 +398,7 @@ extension CategoryViewController: CategoryScreenDelegate {
         }
         generator.reset(selection: categorySelection)
         streamViewController.streamKind = generator.streamKind
-        loadCategory(reload: true, reloadCategories: false)
+        loadCategory()
 
         trackScreenAppeared()
     }
@@ -422,4 +433,15 @@ extension CategoryViewController: PromotionalHeaderResponder {
             }
             .ignoreErrors()
     }
+}
+
+extension CategoryViewController: StreamSelectionCellResponder {
+
+    func streamTapped(_ slug: String) {
+        let stream: DiscoverType! = DiscoverType(rawValue: slug)
+        loadStream(stream)
+
+        trackScreenAppeared()
+    }
+
 }

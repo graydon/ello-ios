@@ -8,6 +8,13 @@ enum DiscoverType: String {
     case recent = "recent"
 
     var slug: String { return rawValue }
+    var graphQL: String {
+        switch self {
+        case .featured: return "FEATURED"
+        case .trending: return "TRENDING"
+        case .recent: return "RECENT"
+        }
+    }
     var name: String {
         switch self {
         case .featured: return InterfaceString.Discover.Featured

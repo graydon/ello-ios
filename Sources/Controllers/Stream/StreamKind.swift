@@ -7,7 +7,7 @@ import SwiftyUserDefaults
 
 enum StreamKind {
     case announcements
-    case category(Category.Selection)
+    case category(Category.Selection, DiscoverType)
     case categories
     case manageCategories
     case editorials
@@ -95,7 +95,7 @@ enum StreamKind {
     }
     var showsCategory: Bool {
         switch self {
-        case let .category(selection):
+        case let .category(selection, _):
             switch selection {
             case .all, .subscribed: return true
             case .category: return false

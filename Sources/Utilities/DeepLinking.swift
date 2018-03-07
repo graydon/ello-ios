@@ -7,8 +7,7 @@ struct DeepLinking {
     static func showDiscover(navVC: UINavigationController?, currentUser: User?) {
         if navVC?.visibleViewController is CategoryViewController { return }
 
-        let vc = CategoryViewController()
-        vc.currentUser = currentUser
+        let vc = CategoryViewController(currentUser: currentUser)
         navVC?.pushViewController(vc, animated: true)
     }
 
@@ -28,8 +27,7 @@ struct DeepLinking {
             categoryVC.selectCategoryFor(slug: slug)
         }
         else {
-            let vc = CategoryViewController(slug: slug)
-            vc.currentUser = currentUser
+            let vc = CategoryViewController(currentUser: currentUser, slug: slug)
             navVC?.pushViewController(vc, animated: true)
         }
     }

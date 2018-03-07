@@ -25,7 +25,6 @@ enum StreamCellType: Equatable {
     case artistInviteSubmissionsButton
     case badge
     case categorySubscribeCard
-    case categoryList
     case commentHeader
     case createComment
     case editorial(Editorial.Kind)
@@ -54,6 +53,7 @@ enum StreamCellType: Equatable {
     case streamHeader
     case streamLoading
     case streamPageLoading
+    case streamSelection
     case tallHeader(NSAttributedString?)
     case text(data: Regionable?)
     case toggle
@@ -65,7 +65,7 @@ enum StreamCellType: Equatable {
         case streamItems
         case promotionalHeader
 
-        case categoryList
+        case streamSelection
         case peopleToFollow
 
         case announcements
@@ -101,7 +101,6 @@ enum StreamCellType: Equatable {
         .artistInviteSubmissionsButton,
         .badge,
         .categorySubscribeCard,
-        .categoryList,
         .commentHeader,
         .createComment,
         .editorial(.external),
@@ -129,6 +128,7 @@ enum StreamCellType: Equatable {
         .revealController(label: "", Void()),
         .search(placeholder: ""),
         .seeMoreComments,
+        .streamSelection,
         .onboardingCategoryCard,
         .spacer(height: 0),
         .streamFooter,
@@ -172,7 +172,6 @@ enum StreamCellType: Equatable {
         case .artistInviteSubmissionsButton: return ArtistInviteSubmissionsButtonCell.reuseIdentifier
         case .badge: return BadgeCell.reuseIdentifier
         case .categorySubscribeCard: return CategoryCardCell.reuseIdentifier
-        case .categoryList: return CategoryListCell.reuseIdentifier
         case .commentHeader: return CommentHeaderCell.reuseIdentifier
         case .streamHeader: return StreamHeaderCell.reuseIdentifier
         case .createComment: return StreamCreateCommentCell.reuseIdentifier
@@ -200,6 +199,7 @@ enum StreamCellType: Equatable {
         case .streamFooter: return StreamFooterCell.reuseIdentifier
         case .streamLoading: return StreamLoadingCell.reuseIdentifier
         case .streamPageLoading: return StreamPageLoadingCell.reuseIdentifier
+        case .streamSelection: return StreamSelectionCell.reuseIdentifier
         case .tallHeader: return TextHeaderCell.reuseIdentifier
         case .text: return StreamTextCell.reuseIdentifier
         case .toggle: return StreamToggleCell.reuseIdentifier
@@ -251,7 +251,6 @@ enum StreamCellType: Equatable {
         case .artistInviteHeader: return ArtistInviteCellPresenter.configure
         case .badge: return BadgeCellPresenter.configure
         case .categorySubscribeCard, .onboardingCategoryCard: return CategoryCardCellPresenter.configure
-        case .categoryList: return CategoryListCellPresenter.configure
         case .commentHeader: return CommentHeaderCellPresenter.configure
         case .streamHeader: return StreamHeaderCellPresenter.configure
         case .createComment: return StreamCreateCommentCellPresenter.configure
@@ -273,6 +272,7 @@ enum StreamCellType: Equatable {
         case .spacer: return { (cell, _, _, _, _) in cell.backgroundColor = .white }
         case .streamLoading, .streamPageLoading: return LoadingCellPresenter.configure
         case .streamFooter: return StreamFooterCellPresenter.configure
+        case .streamSelection: return StreamSelectionCellPresenter.configure
         case .tallHeader: return TextHeaderCellPresenter.configure
         case .text: return StreamTextCellPresenter.configure
         case .toggle: return StreamToggleCellPresenter.configure
@@ -293,7 +293,6 @@ enum StreamCellType: Equatable {
         case .artistInviteSubmissionsButton: return ArtistInviteSubmissionsButtonCell.self
         case .badge: return BadgeCell.self
         case .categorySubscribeCard, .onboardingCategoryCard: return CategoryCardCell.self
-        case .categoryList: return CategoryListCell.self
         case .commentHeader: return CommentHeaderCell.self
         case .streamHeader: return StreamHeaderCell.self
         case .createComment: return StreamCreateCommentCell.self
@@ -318,6 +317,7 @@ enum StreamCellType: Equatable {
         case .streamFooter: return StreamFooterCell.self
         case .streamLoading: return StreamLoadingCell.self
         case .streamPageLoading: return StreamPageLoadingCell.self
+        case .streamSelection: return StreamSelectionCell.self
         case .tallHeader: return TextHeaderCell.self
         case .text: return StreamTextCell.self
         case .toggle: return StreamToggleCell.self
@@ -341,8 +341,6 @@ enum StreamCellType: Equatable {
             return CategoryCardCell.Size.calculateHeight(columnCount: 1, subscribing: true)
         case .onboardingCategoryCard:
             return CategoryCardCell.Size.calculateHeight(columnCount: 1, subscribing: false)
-        case .categoryList:
-            return CategoryListCell.Size.height
         case .commentHeader:
             return CommentHeaderCell.Size.height
         case .inviteFriends,
@@ -383,6 +381,8 @@ enum StreamCellType: Equatable {
             return StreamLoadingCell.Size.height
         case .streamPageLoading:
             return StreamPageLoadingCell.Size.height
+        case .streamSelection:
+            return StreamSelectionCell.Size.height
         case .userAvatars:
             return 50
         case .streamFooter:
@@ -437,7 +437,6 @@ enum StreamCellType: Equatable {
              .artistInviteHeader,
              .artistInviteSubmissionsButton,
              .badge,
-             .categoryList,
              .commentHeader,
              .createComment,
              .editorial,
@@ -459,6 +458,7 @@ enum StreamCellType: Equatable {
              .seeMoreComments,
              .streamLoading,
              .streamPageLoading,
+             .streamSelection,
              .tallHeader,
              .userAvatars,
              .userListItem:
@@ -505,7 +505,6 @@ enum StreamCellType: Equatable {
             .artistInviteSubmissionsButton,
             .badge,
             .categorySubscribeCard,
-            .categoryList,
             .commentHeader,
             .createComment,
             .editorial(.external),
@@ -533,6 +532,7 @@ enum StreamCellType: Equatable {
             .streamFooter,
             .streamLoading,
             .streamPageLoading,
+            .streamSelection,
             .tallHeader(nil),
             .text(data: nil),
             .unknown,

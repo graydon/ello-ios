@@ -10,7 +10,7 @@ protocol CategoryStreamDestination: StreamDestination {
 }
 
 final class CategoryGenerator: StreamGenerator {
-    var streamKind: StreamKind = .unknown
+    var streamKind: StreamKind
     var currentUser: User?
     weak private var categoryStreamDestination: CategoryStreamDestination?
     weak var destination: StreamDestination? {
@@ -22,7 +22,9 @@ final class CategoryGenerator: StreamGenerator {
     }
 
     private var subscribedCategories: [Category]?
-    private var categorySelection: Category.Selection
+    private var streamSelection: (Category.Selection, DiscoverType)
+    private var categorySelection: Category.Selection { return streamSelection.0 }
+    private var stream: DiscoverType { return streamSelection.1 }
     private var pageHeader: PageHeader?
     private var posts: [Post]?
     private var localToken: String = ""
@@ -32,9 +34,9 @@ final class CategoryGenerator: StreamGenerator {
     private var nextPageRequest: GraphQLRequest<(PageConfig, [Post])>?
     private var nextRequestGenerator: ((String) -> GraphQLRequest<(PageConfig, [Post])>)?
 
-    init(selection: Category.Selection, currentUser: User?, destination: StreamDestination) {
-        self.streamKind = .category(selection)
-        self.categorySelection = selection
+    init(selection: Category.Selection, stream: DiscoverType, currentUser: User?, destination: StreamDestination) {
+        self.streamKind = .category(selection, stream)
+        self.streamSelection = (selection, stream)
         self.currentUser = currentUser
         self.destination = destination
     }
@@ -49,33 +51,50 @@ final class CategoryGenerator: StreamGenerator {
         return items
     }
 
-    func reset(selection: Category.Selection) {
-        self.categorySelection = selection
+    func reset(selection _selection: Category.Selection? = nil, stream _stream: DiscoverType? = nil) {
+        let selection = _selection ?? self.categorySelection
+        let stream = _stream ?? self.stream
+        self.streamSelection = (selection, stream)
         self.pageHeader = nil
-        self.streamKind = .category(selection)
+        self.streamKind = .category(selection, stream)
     }
 
-    func load(reload: Bool, reloadCategories: Bool) {
+    func load(reloadPosts: Bool, reloadHeader: Bool, reloadCategories: Bool) {
         let doneOperation = AsyncOperation()
         queue.addOperation(doneOperation)
 
         localToken = loadingToken.resetInitialPageLoadingToken()
-        if reload {
-            subscribedCategories = nil
-            pageHeader = nil
-            posts = nil
-            self.destination?.replacePlaceholder(type: .promotionalHeader, items: [])
-            self.destination?.replacePlaceholder(type: .streamItems, items: [])
-        }
-        else {
+
+        let isInitialLoad = !reloadPosts && !reloadHeader && !reloadCategories
+        if isInitialLoad {
             setPlaceHolders()
         }
 
-        loadPageHeader(doneOperation)
-        if reloadCategories {
+        if reloadPosts {
+            posts = nil
+            self.destination?.replacePlaceholder(type: .streamItems, items: [StreamCellItem(type: .streamLoading)])
+        }
+
+        if reloadHeader {
+            self.destination?.replacePlaceholder(type: .promotionalHeader, items: [])
+        }
+
+        if isInitialLoad || reloadHeader {
+            pageHeader = nil
+            loadPageHeader(doneOperation)
+        }
+        else {
+            doneOperation.run()
+        }
+
+        if isInitialLoad || reloadCategories {
+            subscribedCategories = nil
             loadSubscribedCategories()
         }
-        loadCategoryPosts(doneOperation, reload: reload)
+
+        if isInitialLoad || reloadPosts {
+            loadCategoryPosts(doneOperation, reload: reloadPosts)
+        }
     }
 
     func toggleGrid() {
@@ -110,6 +129,7 @@ extension CategoryGenerator {
     private func setPlaceHolders() {
         destination?.setPlaceholders(items: [
             StreamCellItem(type: .placeholder, placeholderType: .promotionalHeader),
+            StreamCellItem(type: .placeholder, placeholderType: .streamSelection),
             StreamCellItem(type: .placeholder, placeholderType: .streamItems)
         ])
     }
@@ -159,16 +179,18 @@ extension CategoryGenerator {
 
     private func loadCategoryPosts(_ doneOperation: AsyncOperation, reload: Bool) {
         let request: GraphQLRequest<(PageConfig, [Post])>
+        let stream = self.stream
+
         switch categorySelection {
         case .all:
-            request = API().globalPostStream()
-            nextRequestGenerator = { next in return API().globalPostStream(before: next) }
+            request = API().globalPostStream(stream: stream)
+            nextRequestGenerator = { next in return API().globalPostStream(stream: stream, before: next) }
         case .subscribed:
-            request = API().subscribedPostStream()
-            nextRequestGenerator = { next in return API().subscribedPostStream(before: next) }
+            request = API().subscribedPostStream(stream: stream)
+            nextRequestGenerator = { next in return API().subscribedPostStream(stream: stream, before: next) }
         case let .category(slug):
-            request = API().categoryPostStream(categorySlug: slug)
-            nextRequestGenerator = { next in return API().categoryPostStream(categorySlug: slug, before: next) }
+            request = API().categoryPostStream(categorySlug: slug, stream: stream)
+            nextRequestGenerator = { next in return API().categoryPostStream(categorySlug: slug, stream: stream, before: next) }
         }
 
         let displayPostsOperation = AsyncOperation()
@@ -189,6 +211,14 @@ extension CategoryGenerator {
                 }
 
                 displayPostsOperation.run { inForeground {
+                    if isPagingEnabled && !reload {
+                        let metaItem = StreamCellItem(type: .streamSelection)
+                        self.destination?.replacePlaceholder(type: .streamSelection, items: [metaItem])
+                    }
+                    else if !isPagingEnabled {
+                        self.destination?.replacePlaceholder(type: .streamSelection, items: [])
+                    }
+
                     self.destination?.replacePlaceholder(type: .streamItems, items: items) {
                         self.destination?.isPagingEnabled = isPagingEnabled
                     }

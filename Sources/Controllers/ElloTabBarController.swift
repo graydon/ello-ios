@@ -180,10 +180,13 @@ extension ElloTabBarController {
 
     func setupControllers() {
         let homeController = HomeViewController(usage: .loggedIn)
-        let categoriesController = CategoryViewController()
+        homeController.currentUser = currentUser
+        let categoriesController = CategoryViewController(currentUser: currentUser)
         let omnibar = OmnibarViewController()
+        omnibar.currentUser = currentUser
         omnibar.canGoBack = false
         let notificationsController = NotificationsViewController()
+        notificationsController.currentUser = currentUser
         let profileController = ProfileViewController(currentUser: currentUser!)
 
         self.addChildViewController(embed(homeController))

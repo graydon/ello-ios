@@ -120,7 +120,13 @@ struct InterfaceString {
         static let AllCategories: String = NSLocalizedString("All", comment: "All Categories title")
         static let Subscriptions: String = NSLocalizedString("Subscriptions", comment: "")
         static let Subscribed: String = NSLocalizedString("Subscribed", comment: "Subscribed Categories title")
-        static let Subscribe: String = NSLocalizedString("Subscribe", comment: "Subscribed Categories title")
+        static let Subscribe: String = NSLocalizedString("Subscribe", comment: "Subscribe Categories title")
+
+        static let ZeroState: String = NSLocalizedString("Choose communities to subscribe to here.", comment: "")
+        static let ZeroState1: String = NSLocalizedString("Choose communities to subscribe to ", comment: "")
+        static let ZeroState2: String = NSLocalizedString("here", comment: "")
+        static let ZeroState3: String = NSLocalizedString(".", comment: "")
+
         static let Featured: String = NSLocalizedString("Featured", comment: "")
         static let Trending: String = NSLocalizedString("Trending", comment: "")
         static let Recent: String = NSLocalizedString("Recent", comment: "")

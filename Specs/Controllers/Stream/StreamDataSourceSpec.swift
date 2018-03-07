@@ -118,7 +118,7 @@ class StreamDataSourceSpec: QuickSpec {
                         StreamCellItem(type: .streamHeader),
                         StreamCellItem(type: .streamHeader),
                     ]
-                    subject.replacePlaceholder(type: .categoryList, items: newItems)
+                    subject.replacePlaceholder(type: .streamSelection, items: newItems)
 
                     expect(subject.allStreamCellItems.count) == 1
                     expect(subject.allStreamCellItems[0].type) == StreamCellType.placeholder
@@ -242,7 +242,7 @@ class StreamDataSourceSpec: QuickSpec {
                     let testItem = StreamCellItem(type: .placeholder)
                     testItem.placeholderType = .postHeader
                     let testItem2 = StreamCellItem(type: .placeholder)
-                    testItem2.placeholderType = .categoryList
+                    testItem2.placeholderType = .streamSelection
 
                     subject.appendStreamCellItems([testItem])
 
@@ -1303,7 +1303,6 @@ class StreamDataSourceSpec: QuickSpec {
                     let items: [StreamCellItem] = [
                         StreamCellItem(type: .categorySubscribeCard),
                         StreamCellItem(type: .onboardingCategoryCard),
-                        StreamCellItem(type: .categoryList),
                         StreamCellItem(type: .commentHeader),
                         StreamCellItem(type: .createComment),
                         StreamCellItem(type: .streamFooter),
@@ -1321,6 +1320,7 @@ class StreamDataSourceSpec: QuickSpec {
                         StreamCellItem(type: .fullWidthSpacer(height: 10)),
                         StreamCellItem(type: .streamLoading),
                         StreamCellItem(type: .header("")),
+                        StreamCellItem(type: .streamSelection),
                         StreamCellItem(type: .tallHeader(nil)),
                         StreamCellItem(type: .toggle),
                         StreamCellItem(type: .unknown),

@@ -4,14 +4,14 @@
 
 protocol CategoryCardListDelegate: class {
     func allCategoriesTapped()
+    func editCategoriesTapped()
+    func subscribedCategoryTapped()
     func categoryCardSelected(_ index: Int)
 }
 
 class CategoryCardListView: View {
     struct Size {
         static let height: CGFloat = 70
-        static let smallCardSize: CGSize = CGSize(width: 50, height: 68)
-        static let cardSize: CGSize = CGSize(width: 100, height: 68)
         static let spacing: CGFloat = 1
     }
 
@@ -19,6 +19,7 @@ class CategoryCardListView: View {
         enum Kind {
             case all
             case subscribed
+            case zeroState
             case category
         }
 
@@ -28,6 +29,8 @@ class CategoryCardListView: View {
 
         var isAll: Bool { return kind == .all }
         var isSubscribed: Bool { return kind == .subscribed }
+        var isZeroState: Bool { return kind == .zeroState }
+        var isCategory: Bool { return kind == .category }
     }
 
     weak var delegate: CategoryCardListDelegate?
@@ -38,8 +41,6 @@ class CategoryCardListView: View {
 
     private var buttonIndexLookup: [UIButton: Int] = [:]
     private var categoryViews: [CategoryCardView] = []
-    private let remainderView = UIView()
-    private let remainderGradient = CategoryCardListView.generateGradientLayer()
     private let scrollView = UIScrollView()
     private var scrollViewBackground: UIView?
 
@@ -60,16 +61,7 @@ class CategoryCardListView: View {
     }
 
     override func arrange() {
-        remainderView.layer.addSublayer(remainderGradient)
-        remainderView.isHidden = true
-        addSubview(remainderView)
         addSubview(scrollView)
-
-        remainderView.snp.makeConstraints { make in
-            make.trailing.equalTo(scrollView)
-            make.top.bottom.equalTo(scrollView).inset(Size.spacing)
-            make.leading.equalTo(scrollView).offset(Size.smallCardSize.width)
-        }
 
         scrollView.snp.makeConstraints { make in
             make.edges.equalTo(self)
@@ -79,6 +71,16 @@ class CategoryCardListView: View {
     @objc
     func allCategoriesTapped() {
         delegate?.allCategoriesTapped()
+    }
+
+    @objc
+    func subscribedCategoryTapped() {
+        delegate?.subscribedCategoryTapped()
+    }
+
+    @objc
+    func editCategoriesTapped() {
+        delegate?.editCategoriesTapped()
     }
 
     @objc
@@ -119,19 +121,27 @@ class CategoryCardListView: View {
 
         buttonIndexLookup = [:]
 
-        let allCategories = CategoryCardView(info: CategoryInfo(title: InterfaceString.Discover.AllCategories, kind: .all, imageURL: nil))
-        allCategories.overlayAlpha = CategoryCardView.darkAlpha
-        allCategories.snp.makeConstraints { make in
-            make.size.equalTo(Size.smallCardSize)
-        }
-        allCategories.addTarget(self, action: #selector(allCategoriesTapped))
+        var index = 0
+        categoryViews = categoriesInfo.map { info in
+            let card = CategoryCardView(info: info)
 
-        categoryViews = [allCategories] + categoriesInfo.enumerated().map { (index, info) in
-            let view = categoryView(index: index, info: info)
-            view.snp.makeConstraints { make in
-                make.size.equalTo(Size.cardSize)
+            switch info.kind {
+            case .all:
+                card.addTarget(self, action: #selector(allCategoriesTapped))
+            case .subscribed:
+                card.addTarget(self, action: #selector(subscribedCategoryTapped))
+            case .zeroState:
+                card.addTarget(self, action: #selector(editCategoriesTapped))
+            case .category:
+                buttonIndexLookup[card.button] = index
+                card.addTarget(self, action: #selector(categoryButtonTapped(_:)))
+                print("=============== \(#file) line \(#line) ===============")
+                print("info.title: \(info.title)")
+                print("index: \(index)")
+                index += 1
             }
-            return view
+
+            return card
         }
 
         var prevView: UIView? = nil
@@ -167,65 +177,5 @@ class CategoryCardListView: View {
             }
         }
         setNeedsLayout()
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-
-        layoutIfNeeded()
-        remainderGradient.frame = remainderView.bounds
-
-        let calculate: (UIView) -> CGFloat = { self.frame.width - $0.frame.maxX - Size.spacing - self.scrollView.contentInset.right }
-        if let lastCard = categoryViews.last, let remWidth = categoryViews.last.map(calculate), remWidth > 0 {
-        //     remainderView.frame = CGRect(
-        //         x: Size.spacing,
-        //         y: lastCard.frame.minY,
-        //         width: frame.width - 2 * Size.spacing,
-        //         height: lastCard.frame.height
-        //         )
-            remainderView.isHidden = false
-        //     if remainderGradient.superlayer == nil {
-        //         remainderView.layer.addSublayer(remainderGradient)
-        //     }
-        }
-        else {
-            remainderView.isHidden = true
-        //     if remainderGradient.superlayer != nil {
-        //         remainderGradient.removeFromSuperlayer()
-        //     }
-        }
-    }
-
-    private func categoryView(index: Int, info: CategoryInfo) -> CategoryCardView {
-        let card = CategoryCardView(info: info)
-        card.addTarget(self, action: #selector(categoryButtonTapped(_:)))
-        buttonIndexLookup[card.button] = index
-        return card
-    }
-}
-
-extension CategoryCardListView {
-    private static func generateGradientLayer() -> CAGradientLayer {
-        let layer = CAGradientLayer()
-        layer.locations = [0, NSNumber(value: CategoryScreen.Size.gradientMidpoint), 1]
-        layer.colors = [
-            UIColor(hex: 0xD300BD, alpha: 1).cgColor,
-            UIColor(hex: 0xd200ff, alpha: 1).cgColor,
-            UIColor(hex: 0x0063ff, alpha: 1).cgColor,
-            UIColor(hex: 0x00ffc1, alpha: 1).cgColor,
-            UIColor(hex: 0x0BFF66, alpha: 1).cgColor,
-            UIColor(hex: 0x22FF51, alpha: 1).cgColor,
-        ]
-        layer.locations = [
-            0,
-            0.08,
-            0.40,
-            0.70,
-            0.96,
-            1,
-        ]
-        layer.startPoint = CGPoint(x: 0, y: 0.51)
-        layer.endPoint = CGPoint(x: 1, y: 0.49)
-        return layer
     }
 }

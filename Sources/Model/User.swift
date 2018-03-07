@@ -52,6 +52,7 @@ final class User: JSONAble {
     var location: String?
 
     var categories: [Category]? { return getLinkArray("categories") as? [Category] }
+    var hasSubscribedCategory: Bool { return followedCategoryIds.count > 0 }
     var followedCategoryIds: Set<String> = []
     var followedCategories: [Category] {
         return followedCategoryIds.flatMap { id -> Category? in

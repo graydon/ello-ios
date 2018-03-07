@@ -73,8 +73,8 @@ protocol WebLinkResponder: class {
 }
 
 @objc
-protocol CategoryListCellResponder: class {
-    func categoryListCellTapped(slug: String, name: String)
+protocol StreamSelectionCellResponder: class {
+    func streamTapped(_ type: String)
 }
 
 @objc

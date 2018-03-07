@@ -10,12 +10,10 @@ import SnapKit
 import PromiseKit
 
 
-// MARK: StreamNotification
 struct StreamNotification {
     static let UpdateCellHeightNotification = TypedNotification<StreamCellItem>(name: "UpdateCellHeightNotification")
 }
 
-// MARK: StreamViewController
 final class StreamViewController: BaseElloViewController {
     override func trackerName() -> String? { return nil }
 
@@ -221,8 +219,6 @@ final class StreamViewController: BaseElloViewController {
         peformDataDelta(delta)
     }
 
-// MARK: Public Functions
-
     func scrollToTop(animated: Bool) {
         collectionView.setContentOffset(CGPoint(x: 0, y: -contentInset.top), animated: animated)
     }
@@ -397,8 +393,6 @@ final class StreamViewController: BaseElloViewController {
         performDataReload()
     }
 
-// MARK: Private Functions
-
     private func initialLoadFailure() {
         self.doneLoading()
 
@@ -552,8 +546,6 @@ final class StreamViewController: BaseElloViewController {
 
 }
 
-// MARK: DELEGATE & RESPONDER EXTENSIONS
-
 extension StreamViewController: HasGridListButton {
     func gridListToggled(_ sender: UIButton) {
         let isGridView = !streamKind.isGridView
@@ -604,16 +596,6 @@ extension StreamViewController: HasGridListButton {
     }
 }
 
-// MARK: StreamViewController: CategoryListCellResponder
-extension StreamViewController: CategoryListCellResponder {
-
-    func categoryListCellTapped(slug: String, name: String) {
-        showCategoryViewController(slug: slug, name: name)
-    }
-
-}
-
-// MARK: StreamViewController: SimpleStreamResponder
 extension StreamViewController: SimpleStreamResponder {
 
     func showSimpleStream(boxedEndpoint: BoxedElloAPI, title: String) {
@@ -623,7 +605,6 @@ extension StreamViewController: SimpleStreamResponder {
     }
 }
 
-// MARK: StreamViewController: SSPullToRefreshViewDelegate
 extension StreamViewController: SSPullToRefreshViewDelegate {
 
     func pull(toRefreshViewShouldStartLoading view: SSPullToRefreshView!) -> Bool {
@@ -648,7 +629,6 @@ extension StreamViewController: SSPullToRefreshViewDelegate {
 
 }
 
-// MARK: StreamViewController: StreamCollectionViewLayoutDelegate
 extension StreamViewController: StreamCollectionViewLayoutDelegate {
 
     func collectionView(_ collectionView: UICollectionView,
@@ -681,7 +661,6 @@ extension StreamViewController: StreamCollectionViewLayoutDelegate {
     }
 }
 
-// MARK: StreamViewController: StreamEditingResponder
 extension StreamViewController: StreamEditingResponder {
 
     func cellDoubleTapped(cell: UICollectionViewCell, location: CGPoint) {
@@ -739,7 +718,6 @@ extension StreamViewController: StreamEditingResponder {
     }
 }
 
-// MARK: StreamViewController: StreamImageCellResponder
 extension StreamViewController: StreamImageCellResponder {
     func imageTapped(cell: StreamImageCell) {
         guard
@@ -786,7 +764,6 @@ extension StreamViewController: StreamImageCellResponder {
     }
 }
 
-// MARK: StreamViewController: Open post
 extension StreamViewController: StreamPostTappedResponder {
 
     @objc
@@ -818,7 +795,6 @@ extension StreamViewController: StreamPostTappedResponder {
 
 }
 
-// MARK: StreamViewController: Open category
 extension StreamViewController {
 
     func showCategoryViewController(slug: String, name: String) {
@@ -827,14 +803,12 @@ extension StreamViewController {
         }
         else {
             Tracker.shared.categoryOpened(slug)
-            let vc = CategoryViewController(slug: slug, name: name)
-            vc.currentUser = currentUser
+            let vc = CategoryViewController(currentUser: currentUser, slug: slug, name: name)
             navigationController?.pushViewController(vc, animated: true)
         }
     }
 }
 
-// MARK: StreamViewController: CategoryResponder
 extension StreamViewController: CategoryResponder {
 
     func categoryTapped(_ category: Category) {
@@ -852,7 +826,6 @@ extension StreamViewController: CategoryResponder {
     }
 }
 
-// MARK: StreamViewController: StreamCellResponder
 extension StreamViewController: StreamCellResponder {
 
     func streamCellTapped(cell: UICollectionViewCell) {
@@ -880,7 +853,6 @@ extension StreamViewController: StreamCellResponder {
     }
 }
 
-// MARK: StreamViewController: UserResponder
 extension StreamViewController: UserResponder {
 
     func userTapped(user: User) {
@@ -907,7 +879,6 @@ extension StreamViewController: UserResponder {
     }
 }
 
-// MARK: StreamViewController: ArtistInviteResponder
 extension StreamViewController {
 
     func artistInviteTapped(_ artistInvite: ArtistInvite) {
@@ -929,7 +900,6 @@ extension StreamViewController {
 }
 
 
-// MARK: StreamViewController: WebLinkResponder
 extension StreamViewController: WebLinkResponder {
 
     func webLinkTapped(path: String, type: ElloURIWrapper, data: String?) {
@@ -946,7 +916,6 @@ extension StreamViewController: WebLinkResponder {
     }
 }
 
-// MARK: StreamViewController: AnnouncementCellResponder
 extension StreamViewController: AnnouncementCellResponder {
 
     func markAnnouncementAsRead(cell: UICollectionViewCell) {
@@ -960,7 +929,6 @@ extension StreamViewController: AnnouncementCellResponder {
     }
 }
 
-// MARK: StreamViewController: UICollectionViewDelegate
 extension StreamViewController: UICollectionViewDelegate {
 
     func jsonable(forPath indexPath: IndexPath) -> JSONAble? {
@@ -1129,7 +1097,6 @@ extension StreamViewController: UICollectionViewDelegate {
     }
 }
 
-// MARK: StreamViewController: UIScrollViewDelegate
 extension StreamViewController: UIScrollViewDelegate {
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {

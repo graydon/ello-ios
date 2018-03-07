@@ -41,7 +41,7 @@ class DeepLinkingSpec: QuickSpec {
                 }
 
                 it("does not push a new CategoryViewController if CategoryViewController is being viewed") {
-                    let existing = CategoryViewController(slug: "", name: "")
+                    let existing = CategoryViewController(currentUser: nil, slug: "", name: "")
                     fakeNavController.viewControllers = [existing]
 
                     DeepLinking.showDiscover(navVC: fakeNavController, currentUser: fakeCurrentUser)
@@ -71,7 +71,7 @@ class DeepLinkingSpec: QuickSpec {
                 }
 
                 it("uses existing CategoryViewController when deep linking to a new category") {
-                    let existing = CategoryViewController(slug: "art")
+                    let existing = CategoryViewController(currentUser: nil, slug: "art")
                     let art = Category.stub(["slug": "art"])
                     let design = Category.stub(["slug": "design"])
                     existing.allCategories = [art, design]
@@ -88,7 +88,7 @@ class DeepLinkingSpec: QuickSpec {
                 }
 
                 it("does not push a new CategoryViewController if already on that screen") {
-                    let existing = CategoryViewController(slug: "art")
+                    let existing = CategoryViewController(currentUser: nil, slug: "art")
                     fakeNavController.viewControllers = [existing]
 
                     DeepLinking.showCategory(navVC: fakeNavController, currentUser: fakeCurrentUser, slug: "art")
@@ -184,7 +184,7 @@ class DeepLinkingSpec: QuickSpec {
             describe("alreadyOnCurrentCategory()") {
 
                 it("returns true if the category is being shown") {
-                    let existing = CategoryViewController(slug: "art")
+                    let existing = CategoryViewController(currentUser: nil, slug: "art")
                     fakeNavController.viewControllers = [existing]
 
                     let onCategory = DeepLinking.alreadyOnCurrentCategory(navVC: fakeNavController, slug: "art")
@@ -193,7 +193,7 @@ class DeepLinkingSpec: QuickSpec {
                 }
 
                 it("returns false if viewing a different category") {
-                    let existing = CategoryViewController(slug: "art")
+                    let existing = CategoryViewController(currentUser: nil, slug: "art")
                     fakeNavController.viewControllers = [existing]
 
                     let onCategory = DeepLinking.alreadyOnCurrentCategory(navVC: fakeNavController, slug: "different-category")

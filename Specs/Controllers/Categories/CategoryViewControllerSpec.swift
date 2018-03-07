@@ -50,9 +50,8 @@ class CategoryViewControllerSpec: QuickSpec {
 
             beforeEach {
                 let category: Ello.Category = Ello.Category.stub([:])
-                subject = CategoryViewController(slug: category.slug)
+                subject = CategoryViewController(currentUser: currentUser, slug: category.slug)
                 screen = MockCategoryScreen()
-                subject.currentUser = currentUser
                 subject.screen = screen
                 showController(subject)
             }
@@ -63,9 +62,8 @@ class CategoryViewControllerSpec: QuickSpec {
 
             it("shows the back button when necessary") {
                 let category: Ello.Category = Ello.Category.stub([:])
-                subject = CategoryViewController(slug: category.slug)
+                subject = CategoryViewController(currentUser: currentUser, slug: category.slug)
                 screen = MockCategoryScreen()
-                subject.currentUser = currentUser
                 subject.screen = screen
 
                 let nav = UINavigationController(rootViewController: UIViewController())
