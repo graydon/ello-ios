@@ -20,6 +20,15 @@ struct ProfileService {
             }
     }
 
+    func update(categories: [Category], onboarding: Bool) -> Promise<()> {
+        return update(categoryIds: Set(categories.map { $0.id }), onboarding: onboarding)
+    }
+
+    func update(categoryIds: Set<String>, onboarding: Bool) -> Promise<()> {
+        return ElloProvider.shared.request(.userCategories(categoryIds: categoryIds, onboarding: onboarding))
+            .asVoid()
+    }
+
     func updateUserProfile(_ properties: [Profile.Property: Any]) -> Promise<User> {
         var content: [String: Any] = [:]
         for (key, value) in properties {

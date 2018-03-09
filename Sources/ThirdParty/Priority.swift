@@ -22,3 +22,14 @@ enum Priority: ConstraintPriorityTarget {
     }
 
 }
+
+extension Constraint {
+    func set(isActivated: Bool) {
+        if isActivated {
+            activate()
+        }
+        else {
+            deactivate()
+        }
+    }
+}

@@ -29,13 +29,13 @@ struct ProfileLinksSizeCalculator {
 
         let textLinksCount = externalLinks.filter{$0.iconURL == nil && !$0.text.isEmpty}.count
         let linksHeight = CGFloat(textLinksCount) * ProfileLinksView.Size.linkHeight + CGFloat(max(0, textLinksCount - 1)) * ProfileLinksView.Size.verticalLinkMargin
-        return ProfileLinksView.Size.margins.top + ProfileLinksView.Size.margins.bottom + max(iconsHeight, linksHeight)
+        return ProfileLinksView.Size.margins.tops + max(iconsHeight, linksHeight)
     }
 
     static func calculateIconsBoxWidth(_ externalLinks: [ExternalLink], maxWidth: CGFloat) -> (Int, CGFloat) {
         let iconsCount = externalLinks.filter({ $0.iconURL != nil }).count
         let textLinksCount = externalLinks.filter{$0.iconURL == nil && !$0.text.isEmpty}.count
-        let cellWidth = max(0, maxWidth - ProfileLinksView.Size.margins.left - ProfileLinksView.Size.margins.right)
+        let cellWidth = max(0, maxWidth - ProfileLinksView.Size.margins.sides)
         let perRow: Int
         let iconsBoxWidth: CGFloat
         if textLinksCount > 0 {

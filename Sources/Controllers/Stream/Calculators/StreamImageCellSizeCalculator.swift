@@ -9,6 +9,7 @@ class StreamImageCellSizeCalculator {
     private var columnCount: Int = 1
     private var cellItems: [StreamCellItem] = []
     private var completion: Block = {}
+    var streamKind: StreamKind = .unknown
 
 // MARK: Static
 
@@ -82,7 +83,7 @@ class StreamImageCellSizeCalculator {
             else {
                 ratio = 16 / 9
             }
-            let multiWidth = calculateColumnWidth(frameWidth: screenWidth, columnCount: columnCount) - margin
+            let multiWidth = calculateColumnWidth(frameWidth: screenWidth, columnSpacing: streamKind.horizontalColumnSpacing, columnCount: columnCount) - margin
             item.calculatedCellHeights.oneColumn = StreamImageCell.Size.bottomMargin + (screenWidth - margin) / ratio
             item.calculatedCellHeights.multiColumn = StreamImageCell.Size.bottomMargin + multiWidth / ratio
         }
@@ -98,7 +99,7 @@ class StreamImageCellSizeCalculator {
     }
 
     private func multiColumnImageHeight(_ imageRegion: ImageRegion, margin: CGFloat) -> CGFloat {
-        var imageWidth = calculateColumnWidth(frameWidth: screenWidth, columnCount: columnCount) - margin
+        var imageWidth = calculateColumnWidth(frameWidth: screenWidth, columnSpacing: StreamKind.unknown.horizontalColumnSpacing, columnCount: columnCount) - margin
         if let assetWidth = imageRegion.asset?.gridLayoutAttachment?.width {
             imageWidth = min(imageWidth, CGFloat(assetWidth))
         }

@@ -24,14 +24,14 @@ class SearchViewController: StreamableViewController {
     private var _mockScreen: SearchScreenProtocol?
     var screen: SearchScreenProtocol {
         set(screen) { _mockScreen = screen }
-        get { return _mockScreen ?? self.view as! SearchScreen }
+        get { return fetchScreen(_mockScreen) }
     }
 
     override func loadView() {
         let screen = SearchScreen()
         screen.delegate = self
         screen.showsFindFriends = currentUser != nil
-        self.view = screen
+        view = screen
     }
 
     override func viewDidAppear(_ animated: Bool) {

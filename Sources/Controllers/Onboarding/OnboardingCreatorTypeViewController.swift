@@ -9,7 +9,7 @@ class OnboardingCreatorTypeViewController: BaseElloViewController {
     private var _mockScreen: OnboardingCreatorTypeScreenProtocol?
     var screen: OnboardingCreatorTypeScreenProtocol {
         set(screen) { _mockScreen = screen }
-        get { return _mockScreen ?? self.view as! OnboardingCreatorTypeScreen }
+        get { return fetchScreen(_mockScreen) }
     }
 
     var categories: [Category]?
@@ -17,7 +17,9 @@ class OnboardingCreatorTypeViewController: BaseElloViewController {
         get { return _creatorType }
         set {
             _creatorType = newValue
-            screen.updateCreatorType(type: newValue)
+            if isViewLoaded {
+                screen.updateCreatorType(type: newValue)
+            }
         }
     }
     private var _creatorType: Profile.CreatorType = .none
@@ -33,7 +35,7 @@ class OnboardingCreatorTypeViewController: BaseElloViewController {
         screen.delegate = self
         screen.showIntroText = false
 
-        self.view = screen
+        view = screen
     }
 
     override func viewDidLoad() {

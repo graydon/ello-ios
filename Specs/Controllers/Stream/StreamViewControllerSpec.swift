@@ -21,22 +21,22 @@ class StreamViewControllerSpec: QuickSpec {
 
             describe("hasCellItems(for:)") {
                 it("returns 'false' if 0 items") {
-                    expect(controller.hasCellItems(for: .streamPosts)) == false
+                    expect(controller.hasCellItems(for: .streamItems)) == false
                 }
                 it("returns 'false' if 1 placeholder item") {
-                    controller.appendStreamCellItems([StreamCellItem(type: .placeholder, placeholderType: .streamPosts)])
-                    expect(controller.hasCellItems(for: .streamPosts)) == false
+                    controller.appendStreamCellItems([StreamCellItem(type: .placeholder, placeholderType: .streamItems)])
+                    expect(controller.hasCellItems(for: .streamItems)) == false
                 }
                 it("returns 'true' if 1 jsonable item") {
-                    controller.appendStreamCellItems([StreamCellItem(type: .streamLoading, placeholderType: .streamPosts)])
-                    expect(controller.hasCellItems(for: .streamPosts)) == true
+                    controller.appendStreamCellItems([StreamCellItem(type: .streamLoading, placeholderType: .streamItems)])
+                    expect(controller.hasCellItems(for: .streamItems)) == true
                 }
                 it("returns 'true' if more than 1 jsonable item") {
                     controller.appendStreamCellItems([
-                        StreamCellItem(type: .streamLoading, placeholderType: .streamPosts),
-                        StreamCellItem(type: .streamLoading, placeholderType: .streamPosts),
+                        StreamCellItem(type: .streamLoading, placeholderType: .streamItems),
+                        StreamCellItem(type: .streamLoading, placeholderType: .streamItems),
                     ])
-                    expect(controller.hasCellItems(for: .streamPosts)) == true
+                    expect(controller.hasCellItems(for: .streamItems)) == true
                 }
             }
 

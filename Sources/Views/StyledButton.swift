@@ -128,7 +128,7 @@ class StyledButton: UIButton {
         layer.cornerRadius = style.cornerRadius.size(in: frame)
     }
 
-    private func updateStyle() {
+    func updateStyle() {
         let layerBorder: UIColor?
         if !isEnabled {
             backgroundColor = style.disabledBackgroundColor ?? style.backgroundColor
@@ -163,11 +163,11 @@ class StyledButton: UIButton {
 
         titleLabel?.font = style.font
 
-        if let title = self.title(for: .normal) {
+        if let defaultTitle = self.title(for: .normal) {
             let states: [UIControlState] = [.normal, .highlighted, .selected, .disabled]
             for state in states {
-                let attrdTitle = NSAttributedString(button: title, style: style, state: state, selected: isSelected, lineBreakMode: titleLineBreakMode)
-                setAttributedTitle(attrdTitle, for: state)
+                let title = self.title(for: state) ?? defaultTitle
+                setAttributedTitle(NSAttributedString(button: title, style: style, state: state, selected: isSelected, lineBreakMode: titleLineBreakMode), for: state)
             }
         }
     }
@@ -206,12 +206,7 @@ extension StyledButton {
 
     override func setTitle(_ title: String?, for state: UIControlState) {
         super.setTitle(title, for: state)
-        if state == .normal {
-            updateStyle()
-        }
-        else {
-            fatalError("StyledButton doesn't support titles that aren't .normal")
-        }
+        updateStyle()
     }
 
     override func titleRect(forContentRect contentRect: CGRect) -> CGRect {
@@ -265,6 +260,12 @@ extension StyledButton.Style {
     static let whiteUnderlined = StyledButton.Style(
         backgroundColor: .clear,
         titleColor: .white,
+        underline: true
+        )
+    static let whiteBoldUnderlined = StyledButton.Style(
+        backgroundColor: .clear,
+        titleColor: .white,
+        font: .defaultBoldFont(),
         underline: true
         )
     static let grayUnderlined = StyledButton.Style(
@@ -332,6 +333,10 @@ extension StyledButton.Style {
     static let notification = StyledButton.Style(
         backgroundColor: .greyE5, selectedBackgroundColor: .black,
         titleColor: .greyA, selectedTitleColor: .white
+        )
+    static let subscribed = StyledButton.Style(
+        backgroundColor: .greenD1, selectedBackgroundColor: .greyA,
+        titleColor: .white, selectedTitleColor: .white
         )
 
     static func byName(_ name: String) -> StyledButton.Style {

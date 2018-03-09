@@ -48,15 +48,17 @@ class CategoryScreenSpec: QuickSpec {
             beforeEach {
                 let infoA = CategoryCardListView.CategoryInfo(
                     title: "Art",
+                    type: .category,
                     imageURL: URL(string: "https://example.com")
                     )
                 let infoB = CategoryCardListView.CategoryInfo(
                     title: "Lorem ipsum dolor sit amet",
+                    type: .category,
                     imageURL: URL(string: "https://example.com")
                     )
                 subject = CategoryScreen(usage: .default)
                 categoryInfo = [infoA, infoB, infoA, infoB]
-                subject.set(categoriesInfo: categoryInfo, animated: false, completion: {})
+                subject.set(categoriesInfo: categoryInfo, completion: {})
                 delegate = MockCategoryScreenDelegate()
                 subject.delegate = delegate
             }
@@ -67,7 +69,7 @@ class CategoryScreenSpec: QuickSpec {
                 describe("snapshots on home screen") {
                     beforeEach {
                         subject = CategoryScreen(usage: .largeNav)
-                        subject.set(categoriesInfo: categoryInfo, animated: false, completion: {})
+                        subject.set(categoriesInfo: categoryInfo, completion: {})
                     }
                     validateAllSnapshots(named: "CategoryScreen HomeScreen") { return subject }
                 }

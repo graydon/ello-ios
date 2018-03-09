@@ -490,14 +490,12 @@ extension Asset: Stubbable {
         let asset = Asset(id: (values["id"] as? String) ?? generateID())
         let defaultAttachment = values["attachment"] as? Attachment
         asset.optimized = (values["optimized"] as? Attachment) ?? defaultAttachment
-        asset.ldpi = (values["ldpi"] as? Attachment) ?? defaultAttachment
         asset.mdpi = (values["mdpi"] as? Attachment) ?? defaultAttachment
         asset.hdpi = (values["hdpi"] as? Attachment) ?? defaultAttachment
         asset.xhdpi = (values["xhdpi"] as? Attachment) ?? defaultAttachment
         asset.original = (values["original"] as? Attachment) ?? defaultAttachment
         asset.large = (values["large"] as? Attachment) ?? defaultAttachment
         asset.regular = (values["regular"] as? Attachment) ?? defaultAttachment
-        asset.small = (values["small"] as? Attachment) ?? defaultAttachment
         ElloLinkedStore.shared.setObject(asset, forKey: asset.id, type: .assetsType)
         return asset
     }
@@ -557,58 +555,27 @@ extension StreamCellItem: Stubbable {
     }
 }
 
-extension Promotional: Stubbable {
-    class func stub(_ values: [String: Any]) -> Promotional {
-
-        let promotional = Promotional(
-            id: (values["id"] as? String) ?? generateID(),
-            userId: (values["userId"] as? String) ?? generateID(),
-            postToken: (values["postToken"] as? String),
-            categoryId: (values["categoryId"] as? String) ?? generateID()
-        )
-
-        if let image = values["image"] as? Asset {
-            promotional.addLinkObject("image", key: image.id, type: .assetsType)
-            ElloLinkedStore.shared.setObject(image, forKey: image.id, type: .assetsType)
-        }
-
-        if let user = values["user"] as? User {
-            promotional.addLinkObject("user", key: user.id, type: .usersType)
-            ElloLinkedStore.shared.setObject(user, forKey: user.id, type: .usersType)
-        }
-
-        return promotional
-    }
-}
-
-
-extension PagePromotional: Stubbable {
-    class func stub(_ values: [String: Any]) -> PagePromotional {
-
-        let pagePromotional = PagePromotional(
+extension PageHeader: Stubbable {
+    class func stub(_ values: [String: Any]) -> PageHeader {
+        let pageHeader = PageHeader(
             id: (values["id"] as? String) ?? generateID(),
             postToken: (values["postToken"] as? String),
+            categoryId: (values["categoryId"] as? String),
             header: (values["header"] as? String) ?? "Default Header",
             subheader: (values["subheader"] as? String) ?? "Default Subheader",
             ctaCaption: (values["ctaCaption"] as? String) ?? "Default CTA Caption",
             ctaURL: urlFromValue(values["ctaURL"]),
+            isSponsored: (values["isSponsored"] as? Bool) ?? false,
             image: values["image"] as? Asset,
-            isEditorial: (values["is_editorial"] as? Bool) ?? false,
-            isArtistInvite: (values["is_artist_invite"] as? Bool) ?? false
+            kind: (values["kind"] as? PageHeader.Kind) ?? .generic
         )
 
-        if let image = pagePromotional.image {
-            pagePromotional.addLinkObject("image", key: image.id, type: .assetsType)
-            ElloLinkedStore.shared.setObject(image, forKey: image.id, type: .assetsType)
-        }
-
         if let user = values["user"] as? User {
-            pagePromotional.addLinkObject("user", key: user.id, type: .usersType)
+            pageHeader.addLinkObject("user", key: user.id, type: .usersType)
             ElloLinkedStore.shared.setObject(user, forKey: user.id, type: .usersType)
         }
 
-
-        return pagePromotional
+        return pageHeader
     }
 }
 
@@ -639,25 +606,9 @@ extension Ello.Category: Stubbable {
             order: (values["order"] as? Int) ?? 0,
             allowInOnboarding: (values["allowInOnboarding"] as? Bool) ?? true,
             isCreatorType: (values["isCreatorType"] as? Bool) ?? true,
-            usesPagePromo: (values["usesPagePromo"] as? Bool) ?? false,
             level: level,
             tileImage: tileImage
         )
-
-        if let promotionals = values["promotionals"] as? [Promotional] {
-            var promotionalIds = [String]()
-            for promotional in promotionals {
-                promotionalIds.append(promotional.id)
-                ElloLinkedStore.shared.setObject(promotional, forKey: promotional.id, type: .promotionalsType)
-            }
-            category.addLinkArray("promotionals", array: promotionalIds, type: .promotionalsType)
-        }
-
-        category.body = values["body"] as? String
-        category.header = values["header"] as? String
-        category.isSponsored = values["isSponsored"] as? Bool
-        category.ctaCaption = values["ctaCaption"] as? String
-        category.ctaURL = urlFromValue(values["ctaURL"])
 
         return category
     }

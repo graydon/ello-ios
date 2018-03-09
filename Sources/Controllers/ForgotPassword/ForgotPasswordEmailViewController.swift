@@ -6,13 +6,13 @@ class ForgotPasswordEmailViewController: BaseElloViewController {
     private var _mockScreen: ForgotPasswordEmailScreenProtocol?
     var screen: ForgotPasswordEmailScreenProtocol {
         set(screen) { _mockScreen = screen}
-        get { return _mockScreen ?? self.view as! ForgotPasswordEmailScreen }
+        get { return fetchScreen(_mockScreen) }
     }
 
     override func loadView() {
         let screen = ForgotPasswordEmailScreen()
         screen.delegate = self
-        self.view = screen
+        view = screen
     }
 }
 

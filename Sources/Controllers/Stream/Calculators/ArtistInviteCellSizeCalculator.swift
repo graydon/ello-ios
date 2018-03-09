@@ -45,8 +45,8 @@ class ArtistInviteCellSizeCalculator: NSObject {
 
         self.job = job
         var webWidth = job.width
-        webWidth -= ArtistInviteBubbleCell.Size.bubbleMargins.left + ArtistInviteBubbleCell.Size.bubbleMargins.right
-        webWidth -= ArtistInviteBubbleCell.Size.descriptionMargins.left + ArtistInviteBubbleCell.Size.descriptionMargins.right
+        webWidth -= ArtistInviteBubbleCell.Size.bubbleMargins.sides
+        webWidth -= ArtistInviteBubbleCell.Size.descriptionMargins.sides
         webView.frame = webView.frame.with(width: webWidth)
 
         loadNext()

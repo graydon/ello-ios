@@ -27,38 +27,21 @@ class DynamicSettingCellSpec: QuickSpec {
     override func spec() {
         describe("DynamicSettingCell") {
             var subject: DynamicSettingCell!
+            var button: UIControl!
 
             beforeEach {
                 subject = DynamicSettingCell()
-            }
-
-            describe("initialization") {
-                beforeEach {
-                    subject = DynamicSettingCell.loadFromNib()
-                }
-
-                describe("nib") {
-                    it("IBOutlets are not nil") {
-                        expect(subject.titleLabel).notTo(beNil())
-                        expect(subject.descriptionLabel).notTo(beNil())
-                        expect(subject.toggleButton).notTo(beNil())
-                        expect(subject.deleteButton).notTo(beNil())
-                    }
-                }
+                button = subject.findSubview()
             }
 
             describe("toggleButtonTapped") {
-                beforeEach {
-                    subject = DynamicSettingCell.loadFromNib()
-                }
-
                 it("calls the delegate function") {
                     let fake = FakeDelegate()
                     let setting = DynamicSetting(label: "", key: "")
                     fake.addSubview(subject)
                     showView(fake)
                     subject.setting = setting
-                    subject.toggleButtonTapped()
+                    button.sendActions(for: .touchUpInside)
                     expect(fake.didCall).to(beTrue())
                 }
 
@@ -68,22 +51,19 @@ class DynamicSettingCellSpec: QuickSpec {
                     fake.addSubview(subject)
                     showView(fake)
                     subject.setting = setting
-                    subject.toggleButtonTapped()
+                    button.sendActions(for: .touchUpInside)
                     expect(fake.setting?.label) == setting.label
                     expect(fake.value) == true
                 }
             }
 
             describe("deleteButtonTapped") {
-                beforeEach {
-                    subject = DynamicSettingCell.loadFromNib()
-                }
-
                 it("calls the delegate function") {
                     let fake = FakeDelegate()
                     fake.addSubview(subject)
+                    subject.setting = DynamicSetting.accountDeletionSetting
                     showView(fake)
-                    subject.deleteButtonTapped()
+                    button.sendActions(for: .touchUpInside)
                     expect(fake.didCall).to(beTrue())
                 }
             }

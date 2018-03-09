@@ -52,6 +52,18 @@ final class User: JSONAble {
     var location: String?
 
     var categories: [Category]? { return getLinkArray("categories") as? [Category] }
+    var hasSubscribedCategory: Bool { return followedCategoryIds.count > 0 }
+    var followedCategoryIds: Set<String> = []
+    var followedCategories: [Category] {
+        return followedCategoryIds.flatMap { id -> Category? in
+            var category: Category?
+            ElloLinkedStore.shared.readConnection.read { transaction in
+                category = transaction.object(forKey: id, inCollection: "categories") as? Category
+            }
+            return category
+        }
+    }
+
     private var _badges: [Badge]?
     var badges: [Badge] {
         get { return _badges ?? [] }
@@ -270,9 +282,13 @@ final class User: JSONAble {
 
         user.followingCount = json["following_count"].int
         user.formattedShortBio = json["formatted_short_bio"].string
-        user.onboardingVersion = json["web_onboarding_version"].string.flatMap { Int($0) }
+        user.onboardingVersion = json["web_onboarding_version"].id.flatMap { Int($0) }
         user.totalViewsCount = json["total_views_count"].int
         user.location = json["location"].string
+
+        if let ids = json["followed_category_ids"].array {
+            user.followedCategoryIds = Set(ids.flatMap { $0.id })
+        }
 
         if let links = json["external_links_list"].array {
             let externalLinks = links.flatMap { $0.dictionaryObject as? [String: String] }
@@ -345,6 +361,10 @@ extension User {
             return id == repostAuthor.id
         }
         return id == comment.loadedFromPost?.authorId
+    }
+
+    func subscribedTo(categoryId: String) -> Bool {
+        return followedCategoryIds.contains(categoryId)
     }
 }
 

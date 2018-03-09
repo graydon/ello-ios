@@ -26,10 +26,12 @@ class CategoryCardListViewSpec: QuickSpec {
             subject = CategoryCardListView(frame: CGRect(origin: .zero, size: CGSize(width: 320, height: CategoryCardListView.Size.height)))
             let infoA = CategoryCardListView.CategoryInfo(
                 title: "Art",
+                type: .category,
                 imageURL: URL(string: "https://example.com")
             )
             let infoB = CategoryCardListView.CategoryInfo(
                 title: "Lorem ipsum dolor sit amet",
+                type: .category,
                 imageURL: URL(string: "https://example.com")
             )
             subject.categoriesInfo = [infoA, infoB, infoA, infoB]

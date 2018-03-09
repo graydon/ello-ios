@@ -1,5 +1,5 @@
 ////
-///  CategoryListCellSpec.swift
+///  StreamSelectionCellSpec.swift
 //
 
 @testable import Ello
@@ -7,9 +7,9 @@ import Quick
 import Nimble
 
 
-class CategoryListCellSpec: QuickSpec {
+class StreamSelectionCellSpec: QuickSpec {
 
-    class FakeCategoryListCellResponder: UIView, CategoryListCellResponder {
+    class FakeStreamSelectionCellResponder: UIView, StreamSelectionCellResponder {
         var categoryTapped = false
         var slug: String?
         var name: String?
@@ -22,14 +22,14 @@ class CategoryListCellSpec: QuickSpec {
     }
 
     override func spec() {
-        describe("CategoryListCell") {
-            var subject: CategoryListCell!
-            var responder: FakeCategoryListCellResponder!
+        describe("StreamSelectionCell") {
+            var subject: StreamSelectionCell!
+            var responder: FakeStreamSelectionCellResponder!
 
             beforeEach {
-                responder = FakeCategoryListCellResponder()
-                let frame = CGRect(origin: .zero, size: CGSize(width: 320, height: CategoryListCell.Size.height))
-                subject = CategoryListCell(frame: frame)
+                responder = FakeStreamSelectionCellResponder()
+                let frame = CGRect(origin: .zero, size: CGSize(width: 320, height: StreamSelectionCell.Size.height))
+                subject = StreamSelectionCell(frame: frame)
                 showView(subject, container: responder)
             }
 

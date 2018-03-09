@@ -55,7 +55,7 @@ struct Preloader {
                 preloadUrl(url)
             }
             // promotionals
-            else if let promotional = jsonable as? PagePromotional,
+            else if let promotional = jsonable as? PageHeader,
                 let url = promotional.tileURL
             {
                 preloadUrl(url)

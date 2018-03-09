@@ -128,15 +128,16 @@ func prepareForSnapshot(_ subject: Snapshotable, size: CGSize) {
     view.layoutIfNeeded()
 
     // wtf is up w/ ios 11 / xcode 9?
-    let allClearSubviews = view.findAllSubviews { return $0.backgroundColor == nil }
+    let allClearSubviews: [UIView] = view.findAllSubviews { return $0.backgroundColor == nil }
     allClearSubviews.forEach { v in
         v.backgroundColor = .clear
     }
     // another weird fix, table view separators aren't hiding:
     let tableViews: [UITableView] = view.findAllSubviews { v in v.separatorStyle == .none }
-    for separator in tableViews.flatMap({ $0.findAllSubviews { v in
+    let separators: [UIView] = tableViews.flatMap({ $0.findAllSubviews { v in
         return v.readableClassName() == "_UITableViewCellSeparatorView"
-    }}) {
+        }})
+    for separator in separators {
         separator.isHidden = true
     }
     // and UIPageControls don't display at all, so color them just to have

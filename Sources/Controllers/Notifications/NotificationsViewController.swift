@@ -27,7 +27,7 @@ class NotificationsViewController: StreamableViewController, NotificationsScreen
     private var _mockScreen: NotificationsScreenProtocol?
     var screen: NotificationsScreenProtocol {
         set(screen) { _mockScreen = screen }
-        get { return _mockScreen ?? self.view as! NotificationsScreen }
+        get { return fetchScreen(_mockScreen) }
     }
 
     init() {
@@ -51,8 +51,8 @@ class NotificationsViewController: StreamableViewController, NotificationsScreen
     }
 
     override func didSetCurrentUser() {
-        generator?.currentUser = currentUser
         super.didSetCurrentUser()
+        generator?.currentUser = currentUser
     }
 
     override func viewDidLoad() {

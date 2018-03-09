@@ -57,7 +57,7 @@ class ArtistInviteBubbleCell: CollectionViewCell, ArtistInviteConfigurableCell {
     private let descriptionWebView = ElloWebView()
 
     static func calculateDynamicHeights(title: String, inviteType: String, cellWidth: CGFloat) -> CGFloat {
-        let textWidth = cellWidth - Size.bubbleMargins.left - Size.bubbleMargins.right - Size.infoMargins.left - Size.infoMargins.right
+        let textWidth = cellWidth - Size.bubbleMargins.sides - Size.infoMargins.sides
         let height1 = NSAttributedString(label: title, style: .artistInviteTitle, lineBreakMode: .byWordWrapping).heightForWidth(textWidth)
         let height2 = NSAttributedString(label: inviteType, style: .gray, lineBreakMode: .byWordWrapping).heightForWidth(textWidth)
         return height1 + height2

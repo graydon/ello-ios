@@ -19,8 +19,8 @@ class DynamicSettingCell: TableViewCell {
         set { infoLabel.text = newValue }
     }
     var value: Bool {
-        get { return toggleButton.value }
-        set { toggleButton.value = newValue }
+        get { return toggleButton.isSelected }
+        set { toggleButton.isSelected = newValue }
     }
     var isEnabled: Bool {
         get { return toggleButton.isEnabled }
@@ -29,7 +29,7 @@ class DynamicSettingCell: TableViewCell {
 
     private let titleLabel = StyledLabel(style: .default)
     private let infoLabel = StyledLabel(style: .smallGray)
-    private let toggleButton = ElloToggleButton()
+    private let toggleButton = SettingsToggleButton()
     private let line = UIView()
 
     override func styleCell() {
@@ -91,7 +91,6 @@ class DynamicSettingCell: TableViewCell {
         titleLabel.text = nil
         infoLabel.text = nil
         toggleButton.isEnabled = true
-        toggleButton.text = nil
     }
 
     @objc
@@ -105,8 +104,8 @@ class DynamicSettingCell: TableViewCell {
             responder.deleteAccount()
         }
         else {
-            responder.toggleSetting(setting, value: !toggleButton.value)
-            toggleButton.value = !toggleButton.value
+            responder.toggleSetting(setting, value: !toggleButton.isSelected)
+            toggleButton.isSelected = !toggleButton.isSelected
         }
     }
 }

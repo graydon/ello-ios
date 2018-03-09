@@ -17,10 +17,10 @@ class StreamableViewController: BaseElloViewController {
     }
 
     override func didSetCurrentUser() {
+        super.didSetCurrentUser()
         if isViewLoaded {
             streamViewController.currentUser = currentUser
         }
-        super.didSetCurrentUser()
     }
 
     func setupStreamController() {

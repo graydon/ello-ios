@@ -13,10 +13,18 @@ struct PromotionalHeaderCellPresenter {
     {
         guard
             let cell = cell as? PromotionalHeaderCell,
-            let category = streamCellItem.jsonable as? Category
+            let pageHeader = streamCellItem.jsonable as? PageHeader
         else { return }
 
-        let config = PromotionalHeaderCell.Config(category: category)
-        cell.config = config
+        let isSubscribed: Bool
+        if let currentUser = currentUser, let categoryId = pageHeader.categoryId {
+            isSubscribed = currentUser.subscribedTo(categoryId: categoryId)
+        }
+        else {
+            isSubscribed = false
+        }
+
+       let config = PromotionalHeaderCell.Config(pageHeader: pageHeader, isSubscribed: isSubscribed)
+       cell.config = config
     }
 }

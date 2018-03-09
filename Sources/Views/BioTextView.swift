@@ -1,8 +1,8 @@
 ////
-///  ElloEditableTextView.swift
+///  BioTextView.swift
 //
 
-class ElloEditableTextView: UITextView {
+class BioTextView: UITextView {
     required override init(frame: CGRect, textContainer: NSTextContainer?) {
         super.init(frame: frame, textContainer: textContainer)
         sharedSetup()
@@ -14,11 +14,12 @@ class ElloEditableTextView: UITextView {
     }
 
     func sharedSetup() {
-        backgroundColor = UIColor.greyE5
-        font = UIFont.defaultFont()
-        textColor = UIColor.black
-        contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
+        backgroundColor = .greyE5
+        clipsToBounds = true
+        layer.cornerRadius = ElloTextFieldView.Size.cornerRadius
+        font = .defaultFont()
+        textColor = .black
+        contentInset = UIEdgeInsets(top: 8, left: 10, bottom: 8, right: 10)
         scrollsToTop = false
-        setNeedsDisplay()
     }
 }

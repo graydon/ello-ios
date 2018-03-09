@@ -8,13 +8,7 @@ import FLAnimatedImage
 
 class PromotionalHeaderCell: CollectionViewCell {
     static let reuseIdentifier = "PromotionalHeaderCell"
-
-    enum Style {
-        case category
-        case page
-        case editorial
-        case artistInvite
-    }
+    typealias Style = PageHeader.Kind
 
     struct Config {
         var style: Style = .category
@@ -23,14 +17,15 @@ class PromotionalHeaderCell: CollectionViewCell {
         var body: String?
         var imageURL: URL?
         var user: User?
-        var isSponsored: Bool?
+        var isSponsored = false
+        var isSubscribed = false
         var callToAction: String?
         var callToActionURL: URL?
 
         var hasHtml: Bool {
             switch style {
             case .editorial, .artistInvite: return true
-            case .category, .page: return false
+            case .category, .generic: return false
             }
         }
     }
@@ -49,26 +44,26 @@ class PromotionalHeaderCell: CollectionViewCell {
         static let circleBottomInset: CGFloat = 10
         static let failImageWidth: CGFloat = 140
         static let failImageHeight: CGFloat = 160
+        static let subscribeIconSpacing: CGFloat = 10
     }
 
-    let imageView = FLAnimatedImageView()
-    let imageOverlay = UIView()
-    let titleLabel = UILabel()
-    let titleUnderlineView = UIView()
-    let bodyLabel = UILabel()
-    let bodyWebView = ElloWebView()
-    let callToActionButton = UIButton()
-    let postedByButton = UIButton()
-    let postedByAvatar = AvatarButton()
+    private let imageView = FLAnimatedImageView()
+    private let imageOverlay = UIView()
+    private let titleLabel = UILabel()
+    private let titleUnderlineView = UIView()
+    private let bodyLabel = UILabel()
+    private let bodyWebView = ElloWebView()
+    private let callToActionButton = UIButton()
+    private let postedByButton = UIButton()
+    private let postedByAvatar = AvatarButton()
+    private let circle = PulsingCircle()
+    private let failImage = UIImageView()
+    private let failBackgroundView = UIView()
 
-    var titleCenteredConstraint: Constraint!
-    var titleLeftConstraint: Constraint!
-    var postedByButtonAlignedConstraint: Constraint!
-    var postedByButtonStackedConstraint: Constraint!
-
-    let circle = PulsingCircle()
-    let failImage = UIImageView()
-    let failBackgroundView = UIView()
+    private var titleCenteredConstraint: Constraint!
+    private var titleLeftConstraint: Constraint!
+    private var postedByButtonAlignedConstraint: Constraint!
+    private var postedByButtonStackedConstraint: Constraint!
 
     private var imageSize: CGSize?
     private var aspectRatio: CGFloat? {
@@ -77,6 +72,7 @@ class PromotionalHeaderCell: CollectionViewCell {
     }
 
     private var callToActionURL: URL?
+    private let subscribedIcon = UIImageView()
 
     var config: Config = Config() {
         didSet {
@@ -85,6 +81,7 @@ class PromotionalHeaderCell: CollectionViewCell {
     }
 
     override func style() {
+        subscribedIcon.setInterfaceImage(.circleCheckLarge, style: .green)
         titleLabel.numberOfLines = 0
         titleUnderlineView.backgroundColor = .white
         bodyLabel.numberOfLines = 0
@@ -119,6 +116,7 @@ class PromotionalHeaderCell: CollectionViewCell {
         contentView.addSubview(callToActionButton)
         contentView.addSubview(postedByButton)
         contentView.addSubview(postedByAvatar)
+        contentView.addSubview(subscribedIcon)
 
         circle.snp.makeConstraints { make in
             make.edges.equalTo(contentView)
@@ -146,6 +144,11 @@ class PromotionalHeaderCell: CollectionViewCell {
             make.leading.greaterThanOrEqualTo(contentView).inset(Size.defaultMargin)
             make.trailing.lessThanOrEqualTo(contentView).inset(Size.defaultMargin)
             make.top.equalTo(contentView).offset(Size.topMargin)
+        }
+
+        subscribedIcon.snp.makeConstraints { make in
+            make.trailing.equalTo(titleLabel.snp.leading).offset(-Size.subscribeIconSpacing)
+            make.centerY.equalTo(titleLabel)
         }
 
         titleUnderlineView.snp.makeConstraints { make in
@@ -232,6 +235,8 @@ class PromotionalHeaderCell: CollectionViewCell {
             titleCenteredConstraint.update(priority: Priority.low)
             titleLeftConstraint.update(priority: Priority.high)
         }
+
+        subscribedIcon.isHidden = !config.isSubscribed
     }
 
     func setImageURL(_ url: URL?) {
@@ -349,7 +354,7 @@ extension PromotionalHeaderCell.Config {
     var attributedTitle: NSAttributedString {
         switch style {
         case .category: return NSAttributedString(title, color: .white, font: .regularBlackFont(16), alignment: .center)
-        case .page, .editorial, .artistInvite: return NSAttributedString(title, color: .white, font: .regularBlackFont(32))
+        case .generic, .editorial, .artistInvite: return NSAttributedString(title, color: .white, font: .regularBlackFont(32))
         }
     }
 
@@ -358,7 +363,7 @@ extension PromotionalHeaderCell.Config {
 
         switch style {
         case .category: return NSAttributedString(body, color: .white)
-        case .page, .editorial, .artistInvite: return NSAttributedString(body, color: .white, font: .defaultFont(18))
+        case .generic, .editorial, .artistInvite: return NSAttributedString(body, color: .white, font: .defaultFont(18))
         }
     }
 
@@ -371,8 +376,8 @@ extension PromotionalHeaderCell.Config {
     var attributedPostedBy: NSAttributedString? {
         guard let user = user else { return nil }
 
-        let prefix = isSponsored == true ? InterfaceString.Category.SponsoredBy : InterfaceString.Category.PostedBy
-        let title = NSAttributedString(prefix, color: .white) + NSAttributedString(user.atName, color: .white, underlineStyle: .styleSingle)
+        let postedBy = isSponsored == true ? InterfaceString.Category.SponsoredBy : InterfaceString.Category.PostedBy
+        let title = NSAttributedString(postedBy, color: .white) + NSAttributedString(user.atName, color: .white, underlineStyle: .styleSingle)
         return title
     }
 
@@ -385,41 +390,18 @@ extension PromotionalHeaderCell.Config {
 
 extension PromotionalHeaderCell.Config {
 
-    init(category: Category) {
+    init(pageHeader: PageHeader, isSubscribed: Bool) {
         self.init()
 
-        style = .category
-        title = category.name
-        body = category.body
-        tracking = category.slug
-        isSponsored = category.isSponsored
-        callToAction = category.ctaCaption
-        callToActionURL = category.ctaURL
-
-        if let promotional = category.randomPromotional {
-            imageURL = promotional.image?.oneColumnAttachment?.url
-            user = promotional.user
-        }
-    }
-
-    init(pagePromotional: PagePromotional) {
-        self.init()
-
-        if pagePromotional.isEditorial {
-            style = .editorial
-        }
-        else if pagePromotional.isArtistInvite {
-            style = .artistInvite
-        }
-        else {
-            style = .page
-        }
-        title = pagePromotional.header
-        body = pagePromotional.subheader
+        style = pageHeader.kind
+        title = pageHeader.header
+        body = pageHeader.subheader
         tracking = "general"
-        imageURL = pagePromotional.tileURL
-        user = pagePromotional.user
-        callToAction = pagePromotional.ctaCaption
-        callToActionURL = pagePromotional.ctaURL
+        imageURL = pageHeader.tileURL
+        user = pageHeader.user
+        callToAction = pageHeader.ctaCaption
+        callToActionURL = pageHeader.ctaURL
+        isSponsored = pageHeader.isSponsored
+        self.isSubscribed = isSubscribed
     }
 }

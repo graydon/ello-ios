@@ -103,6 +103,7 @@ enum InterfaceImage: String {
 
     // Artist Invites
     case circleCheck = "circle_check"
+    case circleCheckLarge = "circle_check_large"
     case star = "star"
 
     // "New Posts" arrow
@@ -189,6 +190,7 @@ enum InterfaceImage: String {
              .bubbleBody,
              .camera,
              .checkSmall,
+             .circleCheckLarge,
              .comments,
              .commentsOutline,
              .eye,
@@ -228,7 +230,7 @@ enum InterfaceImage: String {
     }
     var greenImage: UIImage? {
         switch self {
-        case .watch, .circleCheck:
+        case .watch, .circleCheck, .circleCheckLarge:
             return svgNamed("\(self.rawValue)_green")
         default:
             return nil

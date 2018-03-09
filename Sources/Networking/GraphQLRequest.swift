@@ -1,3 +1,7 @@
+////
+///  GraphQLRequest.swift
+//
+
 import SwiftyJSON
 import PromiseKit
 import Alamofire
@@ -13,6 +17,8 @@ class GraphQLRequest<T>: AuthenticationEndpoint {
         case optionalFloat(String, Float?)
         case bool(String, Bool)
         case optionalBool(String, Bool?)
+        case `enum`(String, String, String)
+        case optionalEnum(String, String, String?)
 
         var name: String {
             switch self {
@@ -24,6 +30,8 @@ class GraphQLRequest<T>: AuthenticationEndpoint {
             case let .optionalFloat(name, _): return name
             case let .bool(name, _): return name
             case let .optionalBool(name, _): return name
+            case let .`enum`(name, _, _): return name
+            case let .optionalEnum(name, _, _): return name
             }
         }
 
@@ -37,6 +45,8 @@ class GraphQLRequest<T>: AuthenticationEndpoint {
             case .optionalFloat: return "Float"
             case .bool: return "Bool!"
             case .optionalBool: return "Bool"
+            case let .`enum`(_, type, _): return "\(type)!"
+            case let .optionalEnum(_, type, _): return type
             }
         }
 
@@ -50,6 +60,8 @@ class GraphQLRequest<T>: AuthenticationEndpoint {
             case let .optionalFloat(_, value): return value
             case let .bool(_, value): return value
             case let .optionalBool(_, value): return value
+            case let .`enum`(_, _, value): return value
+            case let .optionalEnum(_, _, value): return value
             }
         }
     }
@@ -62,20 +74,21 @@ class GraphQLRequest<T>: AuthenticationEndpoint {
     var endpointName: String
     var parser: ((JSON) throws -> T)
     var variables: [Variable]
-    var fragments: String?
+    var fragments: [Fragment]
     var body: String
 
-    var manager: SessionManager = ElloManager.manager
+    var manager: RequestManager
 
     private var url: URL { return URL(string: "\(ElloURI.baseURL)/api/v3/graphql")! }
     private var uuid: UUID!
 
-    init(endpointName: String, parser: @escaping ((JSON) throws -> T), variables: [Variable] = [], fragments: String? = nil, body: String) {
+    init(endpointName: String, parser: @escaping ((JSON) throws -> T), variables: [Variable] = [], fragments: [Fragment] = [], body: String) {
         self.endpointName = endpointName
         self.parser = parser
         self.variables = variables
         self.fragments = fragments
         self.body = body
+        self.manager = API.sharedManager
     }
 
     func execute() -> Promise<T> {
@@ -103,70 +116,6 @@ class GraphQLRequest<T>: AuthenticationEndpoint {
         return self.promise
     }
 
-    private func headers() -> [String: String] {
-        var headers: [String: String] = [
-            "Accept": "application/json",
-            "Accept-Language": "",
-            "Content-Type": "application/json",
-        ]
-
-        if let info = Bundle.main.infoDictionary,
-            let buildNumber = info[kCFBundleVersionKey as String] as? String
-        {
-            headers["X-iOS-Build-Number"] = buildNumber
-        }
-
-        if requiresAnyToken, let authToken = AuthToken().tokenWithBearer {
-            headers += [
-                "Authorization": authToken,
-            ]
-        }
-
-        return headers
-    }
-
-    private func queryVariables() -> String {
-        return variables.map({ variable in
-                return "$\(variable.name): \(variable.type)"
-            }).joined(separator: ", ")
-    }
-
-    private func endpointVariables() -> String {
-        return variables.map({ variable in
-                return "\(variable.name): $\(variable.name)"
-            }).joined(separator: ", ")
-    }
-
-    private func httpBody() throws -> Data {
-        var query: String = ""
-
-        if let fragments = fragments {
-            query += fragments
-        }
-
-        if variables.count > 0 {
-            query += "query(\(queryVariables()))"
-        }
-
-        query += "{\(endpointName)(\(endpointVariables())){\(body)}}"
-        // print("query:\n\(query)")
-
-        var httpBody: [String: Any] = [
-            "query": query,
-        ]
-
-        if variables.count > 0 {
-            var variables: [String: Any?] = [:]
-            for variable in self.variables {
-                // guard let value = variable.value else { continue }
-                variables[variable.name] = variable.value
-            }
-            httpBody["variables"] = variables
-        }
-
-        return try JSONSerialization.data(withJSONObject: httpBody, options: [])
-    }
-
     private func sendRequest() -> Promise<(Data, Int)> {
         let (promise, resolve, reject) = Promise<(Data, Int)>.pending()
 
@@ -176,28 +125,27 @@ class GraphQLRequest<T>: AuthenticationEndpoint {
 
         do {
             urlRequest.httpBody = try httpBody()
+
+            let task = manager.request(urlRequest) { response in
+                if let data = response.data, let statusCode = response.response?.statusCode {
+                    resolve((data, statusCode))
+                }
+                else if let error = response.error {
+                    reject(error)
+                }
+                else {
+                    delay(1) {
+                        _ = self.execute()
+                    }
+                }
+            }
+
+            task.resume()
         }
         catch {
             reject(error)
-            return promise
         }
 
-        let dataRequest = manager.request(urlRequest)
-        let dataResponse = dataRequest.response { response in
-            if let data = response.data, let statusCode = response.response?.statusCode {
-                resolve((data, statusCode))
-            }
-            else if let error = response.error {
-                reject(error)
-            }
-            else {
-                delay(1) {
-                    _ = self.execute()
-                }
-            }
-        }
-
-        dataResponse.resume()
         return promise
     }
 
@@ -241,7 +189,6 @@ class GraphQLRequest<T>: AuthenticationEndpoint {
             ElloProvider.failedToMapObjects(reject)
             return
         }
-        // print("json:\n\(json)")
         resolve(json)
     }
 
@@ -249,4 +196,75 @@ class GraphQLRequest<T>: AuthenticationEndpoint {
         let result = data["data"][endpointName]
         return try parser(result)
     }
+}
+
+extension GraphQLRequest {
+
+    private func headers() -> [String: String] {
+        var headers: [String: String] = [
+            "Accept": "application/json",
+            "Accept-Language": "",
+            "Content-Type": "application/json",
+        ]
+
+        if let info = Bundle.main.infoDictionary,
+            let buildNumber = info[kCFBundleVersionKey as String] as? String
+        {
+            headers["X-iOS-Build-Number"] = buildNumber
+        }
+
+        if requiresAnyToken, let authToken = AuthToken().tokenWithBearer {
+            headers += [
+                "Authorization": authToken,
+            ]
+        }
+
+        return headers
+    }
+
+    private func queryVariables() -> String {
+        return variables.map({ variable in
+                return "$\(variable.name): \(variable.type)"
+            }).joined(separator: ", ")
+    }
+
+    private func endpointVariables() -> String {
+        return variables.map({ variable in
+                return "\(variable.name): $\(variable.name)"
+            }).joined(separator: ", ")
+    }
+
+    private func httpBody() throws -> Data {
+        var query: String = ""
+
+        if fragments.count > 0 {
+            let fragmentsQuery = Fragment.flatten(fragments)
+            query += fragmentsQuery + "\n"
+        }
+
+        if variables.count > 0 {
+            query += "query(\(queryVariables()))\n"
+        }
+
+        query += "{\n\(endpointName)"
+        if variables.count > 0 {
+            query += "(\(endpointVariables()))"
+        }
+        query += "\n  {\n\(body)\n  }\n}"
+
+        var httpBody: [String: Any] = [
+            "query": query,
+        ]
+
+        if variables.count > 0 {
+            var variables: [String: Any?] = [:]
+            for variable in self.variables {
+                variables[variable.name] = variable.value
+            }
+            httpBody["variables"] = variables
+        }
+
+        return try JSONSerialization.data(withJSONObject: httpBody, options: [])
+    }
+
 }

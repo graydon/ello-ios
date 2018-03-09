@@ -69,11 +69,11 @@ class AlertViewController: UIViewController {
     }
 
     private var totalHorizontalPadding: CGFloat {
-        return Size.margins.left + Size.margins.right
+        return Size.margins.sides
     }
 
     private var totalVerticalPadding: CGFloat {
-        return Size.margins.top + Size.margins.bottom
+        return Size.margins.tops
     }
 
     init(message: String? = nil, buttonAlignment: NSTextAlignment = .center) {

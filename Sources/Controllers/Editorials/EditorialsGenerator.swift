@@ -11,7 +11,7 @@ final class EditorialsGenerator: StreamGenerator {
     private var localToken: String = ""
     private var loadingToken = LoadingToken()
 
-    init(currentUser: User?, destination: StreamDestination?) {
+    init(currentUser: User?, destination: StreamDestination) {
         self.currentUser = currentUser
         self.destination = destination
     }
@@ -59,16 +59,15 @@ private extension EditorialsGenerator {
     }
 
     func loadEditorialPromotionals() {
-        PagePromotionalService().loadEditorialPromotionals()
-            .then { promotionals -> Void in
-                guard let promotionals = promotionals else { return }
+        API().pageHeaders(kind: .editorials)
+            .execute()
+            .then { pageHeaders -> Void in
+                guard let pageHeader = pageHeaders.randomItem() else { return }
 
-                if let pagePromotional = promotionals.randomItem() {
-                    self.destination?.replacePlaceholder(type: .promotionalHeader, items: [
-                        StreamCellItem(jsonable: pagePromotional, type: .pagePromotionalHeader),
-                        StreamCellItem(type: .spacer(height: EditorialCell.Size.bgMargins.bottom)),
-                    ])
-                }
+                self.destination?.replacePlaceholder(type: .promotionalHeader, items: [
+                    StreamCellItem(jsonable: pageHeader, type: .promotionalHeader),
+                    StreamCellItem(type: .spacer(height: EditorialCell.Size.bgMargins.bottom)),
+                ])
             }
             .ignoreErrors()
     }

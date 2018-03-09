@@ -13,7 +13,7 @@ class PostSpec: QuickSpec {
             beforeEach {
                 let testingKeys = APIKeys(
                     key: "", secret: "", segmentKey: "",
-                    domain: "https://ello.co"
+                    domain: "https://ello.co", hasGraphQL: false
                     )
                 APIKeys.shared = testingKeys
             }

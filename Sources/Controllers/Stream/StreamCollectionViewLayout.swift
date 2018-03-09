@@ -20,47 +20,31 @@ protocol StreamCollectionViewLayoutDelegate: UICollectionViewDelegate {
         layout collectionViewLayout: UICollectionViewLayout,
         groupForItemAtIndexPath indexPath: IndexPath) -> String?
 
-    @objc optional func colletionView (_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
-        insetForSectionAtIndex section: NSInteger) -> UIEdgeInsets
-
-    @objc optional func colletionView (_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
-        minimumInteritemSpacingForSectionAtIndex section: NSInteger) -> CGFloat
-
     @objc optional func collectionView (_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
         isFullWidthAtIndexPath indexPath: IndexPath) -> Bool
 }
 
 class StreamCollectionViewLayout: UICollectionViewLayout {
-    struct Size {
-        static let defaultColumnSpacing: CGFloat = 12
-    }
-
     enum Direction {
         case shortestFirst
         case leftToRight
         case rightToLeft
     }
 
-    var columnCount: Int {
+    var columnCount: Int = 1 {
         didSet { if columnCount != oldValue {
             invalidateLayout()
         } }
     }
 
-    var minimumColumnSpacing: CGFloat {
-        didSet { if minimumColumnSpacing != oldValue {
+    var horizontalColumnSpacing: CGFloat = 0 {
+        didSet { if horizontalColumnSpacing != oldValue {
             invalidateLayout()
         } }
     }
 
-    var minimumInteritemSpacing: CGFloat {
-        didSet { if minimumInteritemSpacing != oldValue {
-            invalidateLayout()
-        } }
-    }
-
-    var sectionInset: UIEdgeInsets {
-        didSet { if sectionInset != oldValue {
+    var insets: UIEdgeInsets {
+        didSet { if insets != oldValue {
             invalidateLayout()
         } }
     }
@@ -81,19 +65,13 @@ class StreamCollectionViewLayout: UICollectionViewLayout {
     let unionSize = 20
 
     override init(){
-        columnCount = 2
-        minimumInteritemSpacing = 0
-        minimumColumnSpacing = Size.defaultColumnSpacing
-        sectionInset = UIEdgeInsets.zero
+        insets = UIEdgeInsets.zero
         itemRenderDirection = .shortestFirst
         super.init()
     }
 
     required init?(coder: NSCoder) {
-        columnCount = 2
-        minimumInteritemSpacing = 0
-        minimumColumnSpacing = Size.defaultColumnSpacing
-        sectionInset = UIEdgeInsets.zero
+        insets = UIEdgeInsets.zero
         itemRenderDirection = .shortestFirst
         super.init(coder: coder)
     }
@@ -133,30 +111,27 @@ class StreamCollectionViewLayout: UICollectionViewLayout {
 
         var attributes = UICollectionViewLayoutAttributes()
 
-        let width = collectionView!.frame.size.width - sectionInset.left - sectionInset.right
-
+        let width = collectionView!.frame.size.width - insets.sides
         let spaceColumCount = CGFloat(columnCount-1)
-
-        let itemWidth = floor((width - (spaceColumCount * minimumColumnSpacing)) / CGFloat(columnCount))
-
+        let itemWidth = floor((width - (spaceColumCount * horizontalColumnSpacing)) / CGFloat(columnCount))
         let itemCount = collectionView!.numberOfItems(inSection: section)
         var itemAttributes = [UICollectionViewLayoutAttributes]()
 
         // Item will be put into shortest column.
         var groupIndex = ""
-        var currentColumIndex = 0
-        for index in 0..<itemCount {
+        var currentColumnIndex = 0
+        for index in 0 ..< itemCount {
             let indexPath = IndexPath(item: index, section: section)
             let itemGroup: String? = self.delegate?.collectionView?(self.collectionView!, layout: self, groupForItemAtIndexPath: indexPath)
             let isFullWidth = self.delegate?.collectionView?(self.collectionView!, layout: self, isFullWidthAtIndexPath: indexPath) ?? false
             if let itemGroup = itemGroup {
                 if itemGroup != groupIndex {
                     groupIndex = itemGroup
-                    currentColumIndex = nextColumnIndexForItem(index)
+                    currentColumnIndex = nextColumnIndexForItem(index)
                 }
             }
             else {
-                currentColumIndex = nextColumnIndexForItem(index)
+                currentColumnIndex = nextColumnIndexForItem(index)
             }
 
             var calculatedColumnCount = columnCount
@@ -164,17 +139,21 @@ class StreamCollectionViewLayout: UICollectionViewLayout {
             if isFullWidth {
                 calculatedItemWidth = floor(width)
                 calculatedColumnCount = 1
-                currentColumIndex = 0
+                currentColumnIndex = 0
             }
 
-            let xOffset = sectionInset.left + (calculatedItemWidth + minimumColumnSpacing) * CGFloat(currentColumIndex)
-            let yOffset: CGFloat
+            var xOffset = (calculatedItemWidth + horizontalColumnSpacing) * CGFloat(currentColumnIndex)
+            if !isFullWidth {
+                xOffset += insets.left
+            }
+
+            var yOffset: CGFloat
             if isFullWidth {
-                yOffset = columnHeights.max() ?? 0
-             }
-             else {
-                yOffset = columnHeights[currentColumIndex]
-             }
+               yOffset = columnHeights.max() ?? 0
+            }
+            else {
+               yOffset = columnHeights[currentColumnIndex]
+            }
 
             var itemHeight: CGFloat = 0.0
 
@@ -194,7 +173,7 @@ class StreamCollectionViewLayout: UICollectionViewLayout {
                 }
             }
             else {
-                columnHeights[currentColumIndex] = maxY
+                columnHeights[currentColumnIndex] = maxY
             }
         }
 

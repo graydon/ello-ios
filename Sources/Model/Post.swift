@@ -216,7 +216,7 @@ final class Post: JSONAble, Authorable, Groupable {
         post.content = RegionParser.jsonRegions(json: json["content"], isRepostContent: repostContent.count > 0)
         post.body = RegionParser.jsonRegions(json: json["body"], isRepostContent: repostContent.count > 0)
         post.repostContent = repostContent
-        post.artistInviteId = json["artist_invite_id"].string
+        post.artistInviteId = json["artist_invite_id"].id
         post.viewsCount = json["views_count"].int
         post.commentsCount = json["comments_count"].int
         post.repostsCount = json["reposts_count"].int

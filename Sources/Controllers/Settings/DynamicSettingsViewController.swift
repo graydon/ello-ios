@@ -6,7 +6,7 @@ class DynamicSettingsViewController: BaseElloViewController {
     private var _mockScreen: DynamicSettingsScreenProtocol?
     var screen: DynamicSettingsScreenProtocol {
         set(screen) { _mockScreen = screen }
-        get { return _mockScreen ?? self.view as! DynamicSettingsScreen }
+        get { return fetchScreen(_mockScreen) }
     }
 
     let category: DynamicSettingCategory
@@ -24,12 +24,15 @@ class DynamicSettingsViewController: BaseElloViewController {
         let screen = DynamicSettingsScreen(settings: category.settings)
         screen.delegate = self
         screen.title = category.label
-        self.view = screen
+        view = screen
+        screen.reload()
     }
 
     override func didSetCurrentUser() {
         super.didSetCurrentUser()
-        screen.reload()
+        if isViewLoaded {
+            screen.reload()
+        }
     }
 }
 
@@ -60,7 +63,7 @@ extension DynamicSettingsViewController: DynamicSettingCellResponder {
 
                 self.appViewController?.currentUser = user
             }
-            .catch { [weak self] _ in
+            .always { [weak self] in
                 self?.screen.reload()
             }
     }

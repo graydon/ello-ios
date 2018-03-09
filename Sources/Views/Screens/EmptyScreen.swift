@@ -9,12 +9,7 @@ class EmptyScreen: Screen {
     var blackBarIsVisible: Bool {
         get { return !statusBar.isHidden }
         set {
-            if newValue {
-                blackBarHeightConstraint.deactivate()
-            }
-            else {
-                blackBarHeightConstraint.activate()
-            }
+            blackBarHeightConstraint.set(isActivated: !newValue)
             statusBar.isHidden = !newValue
         }
     }

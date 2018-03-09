@@ -2,16 +2,12 @@
 ///  OnboardingProfileViewController.swift
 //
 
-class OnboardingProfileViewController: UIViewController, HasAppController {
+class OnboardingProfileViewController: BaseElloViewController {
     private var _mockScreen: OnboardingProfileScreenProtocol?
     var screen: OnboardingProfileScreenProtocol {
         set(screen) { _mockScreen = screen }
-        get { return _mockScreen ?? self.view as! OnboardingProfileScreen }
+        get { return fetchScreen(_mockScreen) }
     }
-
-    var currentUser: User?
-
-    var appViewController: AppViewController? { return findParentController() }
 
     var onboardingViewController: OnboardingViewController?
     var onboardingData: OnboardingData!
@@ -33,7 +29,7 @@ class OnboardingProfileViewController: UIViewController, HasAppController {
     override func loadView() {
         let screen = OnboardingProfileScreen()
         screen.delegate = self
-        self.view = screen
+        view = screen
     }
 }
 

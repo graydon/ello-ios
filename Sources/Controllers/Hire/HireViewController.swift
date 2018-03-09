@@ -26,7 +26,7 @@ class HireViewController: BaseElloViewController {
     private var _mockScreen: HireScreenProtocol?
     var screen: HireScreenProtocol {
         set(screen) { _mockScreen = screen }
-        get { return _mockScreen ?? self.view as! HireScreen }
+        get { return fetchScreen(_mockScreen) }
     }
     var keyboardWillShowObserver: NotificationObserver?
     var keyboardWillHideObserver: NotificationObserver?
@@ -53,7 +53,7 @@ class HireViewController: BaseElloViewController {
         screen.navigationBar.leftItems = [.back]
         screen.delegate = self
         screen.recipient = user.displayName
-        self.view = screen
+        view = screen
     }
 
     override func viewWillAppear(_ animated: Bool) {

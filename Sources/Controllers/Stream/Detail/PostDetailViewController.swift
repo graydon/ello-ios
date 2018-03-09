@@ -70,8 +70,8 @@ final class PostDetailViewController: StreamableViewController {
     }
 
     override func didSetCurrentUser() {
-        generator.currentUser = currentUser
         super.didSetCurrentUser()
+        generator.currentUser = currentUser
     }
 
     override func showNavBars(animated: Bool) {
@@ -204,8 +204,8 @@ extension PostDetailViewController: PostDetailStreamDestination {
                 self.checkScrollToComment()
             }
 
-            if self.streamViewController.hasCellItems(for: .profileHeader) && !self.streamViewController.hasCellItems(for: .streamPosts) {
-                self.streamViewController.replacePlaceholder(type: .streamPosts, items: [StreamCellItem(type: .streamLoading)])
+            if self.streamViewController.hasCellItems(for: .profileHeader) && !self.streamViewController.hasCellItems(for: .streamItems) {
+                self.streamViewController.replacePlaceholder(type: .streamItems, items: [StreamCellItem(type: .streamLoading)])
             }
             completion()
         }

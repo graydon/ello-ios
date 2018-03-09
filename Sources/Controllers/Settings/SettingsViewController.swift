@@ -6,7 +6,7 @@ class SettingsViewController: BaseElloViewController {
     private var _mockScreen: SettingsScreenProtocol?
     var screen: SettingsScreenProtocol {
         set(screen) { _mockScreen = screen }
-        get { return _mockScreen ?? self.view as! SettingsScreen }
+        get { return fetchScreen(_mockScreen) }
     }
 
     let generator: SettingsGenerator
@@ -49,7 +49,7 @@ class SettingsViewController: BaseElloViewController {
     override func loadView() {
         let screen = SettingsScreen()
         screen.delegate = self
-        self.view = screen
+        view = screen
     }
 
     override func didSetCurrentUser() {
@@ -176,7 +176,8 @@ class SettingsViewController: BaseElloViewController {
 
     private func updateScreenFromUser() {
         guard let currentUser = currentUser,
-            let profile = currentUser.profile
+            let profile = currentUser.profile,
+            isViewLoaded
         else {
             return
         }

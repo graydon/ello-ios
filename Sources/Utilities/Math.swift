@@ -46,6 +46,6 @@ func pixelAwareFloor(_ value: Double) -> Double {
     return floor(value*scale)/scale
 }
 
-func calculateColumnWidth(frameWidth: CGFloat, columnCount: Int) -> CGFloat {
-    return floor((frameWidth - StreamCollectionViewLayout.Size.defaultColumnSpacing * CGFloat(columnCount - 1)) / CGFloat(columnCount))
+func calculateColumnWidth(frameWidth: CGFloat, columnSpacing: CGFloat, columnCount: Int) -> CGFloat {
+    return floor((frameWidth - columnSpacing * CGFloat(columnCount - 1)) / CGFloat(columnCount))
 }

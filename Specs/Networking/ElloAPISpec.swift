@@ -84,7 +84,6 @@ class ElloAPISpec: QuickSpec {
                         (.notificationsNewContent(createdAt: nil), "/api/v2/notifications"),
                         (.markAnnouncementAsRead, "/api/v2/most_recent_announcements/mark_last_read_announcement"),
                         (.notificationsStream(category: nil), "/api/v2/notifications"),
-                        (.pagePromotionals, "/api/v2/page_promotionals"),
                         (.postComments(postId: "fake-id"), "/api/v2/posts/fake-id/comments"),
                         (.postDetail(postParam: "some-param"), "/api/v2/posts/some-param"),
                         (.postViews(streamId: "", streamKind: "", postIds: Set<String>(), currentUserId: ""), "/api/v2/post_views"),

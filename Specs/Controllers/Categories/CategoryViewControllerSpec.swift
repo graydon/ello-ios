@@ -11,7 +11,6 @@ class CategoryViewControllerSpec: QuickSpec {
     class MockCategoryScreen: CategoryScreenProtocol {
         let topInsetView = UIView()
         let streamContainer = UIView()
-        var categoryCardsVisible = true
         var isGridView = true
         var navigationBarTopConstraint: NSLayoutConstraint!
         let navigationBar = ElloNavigationBar()
@@ -21,7 +20,7 @@ class CategoryViewControllerSpec: QuickSpec {
         var showShare: CategoryScreen.NavBarItems = .all
         var showBack = false
 
-        func set(categoriesInfo: [CategoryCardListView.CategoryInfo], animated: Bool, completion: @escaping Block) {
+        func set(categoriesInfo: [CategoryCardListView.CategoryInfo], completion: @escaping Block) {
             categoryTitles = categoriesInfo.map { $0.title }
         }
         func toggleCategoriesList(navBarVisible: Bool, animated: Bool) {}
@@ -51,9 +50,8 @@ class CategoryViewControllerSpec: QuickSpec {
 
             beforeEach {
                 let category: Ello.Category = Ello.Category.stub([:])
-                subject = CategoryViewController(slug: category.slug)
+                subject = CategoryViewController(currentUser: currentUser, slug: category.slug)
                 screen = MockCategoryScreen()
-                subject.currentUser = currentUser
                 subject.screen = screen
                 showController(subject)
             }
@@ -64,9 +62,8 @@ class CategoryViewControllerSpec: QuickSpec {
 
             it("shows the back button when necessary") {
                 let category: Ello.Category = Ello.Category.stub([:])
-                subject = CategoryViewController(slug: category.slug)
+                subject = CategoryViewController(currentUser: currentUser, slug: category.slug)
                 screen = MockCategoryScreen()
-                subject.currentUser = currentUser
                 subject.screen = screen
 
                 let nav = UINavigationController(rootViewController: UIViewController())
@@ -89,10 +86,9 @@ class CategoryViewControllerSpec: QuickSpec {
             context("setCategories(_:)") {
                 it("accepts meta categories") {
                     subject.set(categories: [
-                        Category.featured,
                         Category.stub(["name": "Art"])
                         ])
-                    expect(screen.categoryTitles) == ["Featured", "Art"]
+                    expect(screen.categoryTitles) == ["Art"]
                 }
             }
         }

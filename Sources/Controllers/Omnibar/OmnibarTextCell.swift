@@ -80,7 +80,7 @@ class OmnibarTextCell: UITableViewCell {
     }
 
     class func heightForText(_ attributedText: NSAttributedString, tableWidth: CGFloat, editing: Bool) -> CGFloat {
-        var textWidth = tableWidth - (Size.textMargins.left + Size.textMargins.right)
+        var textWidth = tableWidth - Size.textMargins.sides
         if editing {
             textWidth -= 80
         }
@@ -89,7 +89,7 @@ class OmnibarTextCell: UITableViewCell {
         tv.attributedText = attributedText
         let tvSize = tv.sizeThatFits(CGSize(width: textWidth, height: .greatestFiniteMagnitude))
         // adding a magic 1, for rare "off by 1" height calculations.
-        let heightPadding = Size.textMargins.top + Size.textMargins.bottom + 1
+        let heightPadding = Size.textMargins.tops + 1
         let textHeight = heightPadding + ceil(tvSize.height)
 
         let reasonableHeight = max(Size.minHeight, textHeight)

@@ -13,7 +13,7 @@ final class ArtistInviteAdminGenerator: StreamGenerator {
     private var localToken: String = ""
     private var loadingToken = LoadingToken()
 
-    init(artistInvite: ArtistInvite, stream: ArtistInvite.Stream, currentUser: User?, destination: StreamDestination?) {
+    init(artistInvite: ArtistInvite, stream: ArtistInvite.Stream, currentUser: User?, destination: StreamDestination) {
         self.artistInvite = artistInvite
         self.stream = stream
         self.currentUser = currentUser
@@ -34,7 +34,7 @@ private extension ArtistInviteAdminGenerator {
 
     func setPlaceHolders() {
         destination?.setPlaceholders(items: [
-            StreamCellItem(type: .placeholder, placeholderType: .streamPosts),
+            StreamCellItem(type: .placeholder, placeholderType: .streamItems),
         ])
     }
 
@@ -59,7 +59,7 @@ private extension ArtistInviteAdminGenerator {
                 self.destination?.setPagingConfig(responseConfig: responseConfig)
 
                 let artistInviteItems = self.parse(jsonables: submissions)
-                self.destination?.replacePlaceholder(type: .streamPosts, items: artistInviteItems) {
+                self.destination?.replacePlaceholder(type: .streamItems, items: artistInviteItems) {
                     self.destination?.isPagingEnabled = artistInviteItems.count > 0
                 }
             }
@@ -69,8 +69,7 @@ private extension ArtistInviteAdminGenerator {
     }
 
     func showEmptySubmissions() {
-        let header = NSAttributedString(label: InterfaceString.ArtistInvites.AdminEmpty, style: .header)
-        let headerItem = StreamCellItem(type: .header(header))
-        destination?.replacePlaceholder(type: .streamPosts, items: [headerItem])
+        let headerItem = StreamCellItem(type: .header(InterfaceString.ArtistInvites.AdminEmpty))
+        destination?.replacePlaceholder(type: .streamItems, items: [headerItem])
     }
 }

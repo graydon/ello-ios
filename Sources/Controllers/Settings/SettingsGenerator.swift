@@ -11,16 +11,16 @@ class SettingsGenerator {
 
     func loadSettings() {
         SettingsService().dynamicSettings(currentUser: currentUser)
-            .then { [weak self] settingsCategories -> Void in
-                self?.delegate?.dynamicSettingsLoaded(settingsCategories)
+            .then { settingsCategories -> Void in
+                self.delegate?.dynamicSettingsLoaded(settingsCategories)
             }
             .ignoreErrors()
     }
 
     func loadCategories() {
         CategoryService().loadCreatorCategories()
-            .then { [weak self] categories -> Void in
-                self?.delegate?.categoriesLoaded(categories)
+            .then { categories -> Void in
+                self.delegate?.categoriesLoaded(categories)
             }
             .ignoreErrors()
     }

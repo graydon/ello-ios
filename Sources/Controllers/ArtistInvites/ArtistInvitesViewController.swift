@@ -10,7 +10,7 @@ class ArtistInvitesViewController: StreamableViewController {
     private var _mockScreen: StreamableScreenProtocol?
     var screen: StreamableScreenProtocol {
         set(screen) { _mockScreen = screen }
-        get { return _mockScreen ?? self.view as! ArtistInvitesScreen }
+        get { return fetchScreen(_mockScreen) }
     }
     var generator: ArtistInvitesGenerator!
 
@@ -36,11 +36,11 @@ class ArtistInvitesViewController: StreamableViewController {
     }
 
     override func didSetCurrentUser() {
+        super.didSetCurrentUser()
         generator.currentUser = currentUser
         if currentUser != nil, isViewLoaded {
             screen.navigationBar.leftItems = [.burger]
         }
-        super.didSetCurrentUser()
     }
 
     override func loadView() {
@@ -52,7 +52,7 @@ class ArtistInvitesViewController: StreamableViewController {
             screen.navigationBar.leftItems = [.burger]
         }
 
-        self.view = screen
+        view = screen
         viewContainer = screen.streamContainer
     }
 
@@ -93,6 +93,14 @@ extension ArtistInvitesViewController: StreamDestination {
     }
 
     func replacePlaceholder(type: StreamCellType.PlaceholderType, items: [StreamCellItem], completion: @escaping Block) {
+        if type == .promotionalHeader,
+            let pageHeader = items.flatMap({ $0.jsonable as? PageHeader }).first,
+            let trackingPostToken = pageHeader.postToken
+        {
+            let trackViews: ElloAPI = .promotionalViews(tokens: [trackingPostToken])
+            ElloProvider.shared.request(trackViews).ignoreErrors()
+        }
+
         streamViewController.replacePlaceholder(type: type, items: items) {
             if self.streamViewController.hasCellItems(for: .promotionalHeader) && !self.streamViewController.hasCellItems(for: .artistInvites) {
                 self.streamViewController.replacePlaceholder(type: .artistInvites, items: [StreamCellItem(type: .streamLoading)])

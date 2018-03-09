@@ -109,7 +109,7 @@ class StreamCreateCommentCell: CollectionViewCell {
         createCommentBackground.snp.makeConstraints { make in
             make.leading.equalTo(avatarView.snp.trailing).offset(Size.AvatarRightMargin)
             make.centerY.equalTo(contentView)
-            make.height.equalTo(contentView).offset(-Size.Margins.top - Size.Margins.bottom)
+            make.height.equalTo(contentView).offset(-Size.Margins.tops)
             watchButtonHiddenConstraint = make.trailing.equalTo(contentView).inset(Size.Margins.right).constraint
             replyAllButtonVisibleConstraint = make.trailing.equalTo(replyAllButton.snp.leading).constraint
             replyAllButtonHiddenConstraint = make.trailing.equalTo(watchButton.snp.leading).offset(-Size.WatchMargin).constraint
@@ -134,21 +134,13 @@ class StreamCreateCommentCell: CollectionViewCell {
     }
 
     private func updateCreateButtonConstraints() {
-        if replyAllButton.isHidden && watchButton.isHidden {
-            watchButtonHiddenConstraint.activate()
-            replyAllButtonVisibleConstraint.deactivate()
-            replyAllButtonHiddenConstraint.deactivate()
-        }
-        else if replyAllButton.isHidden {
-            watchButtonHiddenConstraint.deactivate()
-            replyAllButtonVisibleConstraint.deactivate()
-            replyAllButtonHiddenConstraint.activate()
-        }
-        else {
-            watchButtonHiddenConstraint.deactivate()
-            replyAllButtonVisibleConstraint.activate()
-            replyAllButtonHiddenConstraint.deactivate()
-        }
+        let bothHidden = replyAllButton.isHidden && watchButton.isHidden
+        let onlyReplyHidden = replyAllButton.isHidden && !watchButton.isHidden
+        let noneHidden = !replyAllButton.isHidden && !watchButton.isHidden
+        watchButtonHiddenConstraint.set(isActivated: bothHidden)
+        replyAllButtonHiddenConstraint.set(isActivated: onlyReplyHidden)
+        replyAllButtonVisibleConstraint.set(isActivated: noneHidden)
+
         setNeedsLayout()
     }
 

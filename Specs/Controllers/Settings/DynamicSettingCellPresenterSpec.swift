@@ -17,15 +17,12 @@ class DynamicSettingCellPresenterSpec: QuickSpec {
                         "hasSharingEnabled": false,
                         "profile": profile
                         ])
-                    let cell = DynamicSettingCell.loadFromNib() as DynamicSettingCell
+                    let cell = DynamicSettingCell()
                     DynamicSettingCellPresenter.configure(cell, setting: setting, currentUser: user)
 
-                    expect(cell.titleLabel.text) == setting.label
-                    expect(cell.descriptionLabel.text) == setting.info
-                    expect(cell.toggleButton.value) == false
-                    expect(cell.toggleButton.isHidden) == false
-                    expect(cell.toggleButton.isEnabled) == true
-                    expect(cell.deleteButton.isHidden) == true
+                    expect(cell.title) == setting.label
+                    expect(cell.info) == setting.info
+                    expect(cell.value) == false
                 }
 
                 it("configures the cell from the setting and uses the profile setting") {
@@ -35,15 +32,12 @@ class DynamicSettingCellPresenterSpec: QuickSpec {
                         "hasSharingEnabled": false,
                         "profile": profile
                         ])
-                    let cell = DynamicSettingCell.loadFromNib() as DynamicSettingCell
+                    let cell = DynamicSettingCell()
                     DynamicSettingCellPresenter.configure(cell, setting: setting, currentUser: user)
 
-                    expect(cell.titleLabel.text) == setting.label
-                    expect(cell.descriptionLabel.text) == setting.info
-                    expect(cell.toggleButton.value) == true
-                    expect(cell.toggleButton.isHidden) == false
-                    expect(cell.toggleButton.isEnabled) == true
-                    expect(cell.deleteButton.isHidden) == true
+                    expect(cell.title) == setting.label
+                    expect(cell.info) == setting.info
+                    expect(cell.value) == true
                 }
 
                 it("configures the cell from the setting and disables if dependent is false") {
@@ -53,17 +47,13 @@ class DynamicSettingCellPresenterSpec: QuickSpec {
                         "hasSharingEnabled": false,
                         "profile": profile
                         ])
-                    let cell = DynamicSettingCell.loadFromNib() as DynamicSettingCell
+                    let cell = DynamicSettingCell()
                     DynamicSettingCellPresenter.configure(cell, setting: setting, currentUser: user)
-                    let isVisible = DynamicSettingCellPresenter.isVisible(setting: setting, currentUser: user)
 
-                    expect(cell.titleLabel.text) == setting.label
-                    expect(cell.descriptionLabel.text) == setting.info
-                    expect(cell.toggleButton.value) == true
-                    expect(cell.toggleButton.isHidden) == false
-                    expect(cell.contentView.isHidden) == true
-                    expect(isVisible) == false
-                    expect(cell.deleteButton.isHidden) == true
+                    expect(cell.title) == setting.label
+                    expect(cell.info) == setting.info
+                    expect(cell.value) == true
+                    expect(cell.isEnabled) == false
                 }
 
                 it("configures the cell from the setting and enables if dependent is true") {
@@ -73,17 +63,13 @@ class DynamicSettingCellPresenterSpec: QuickSpec {
                         "hasSharingEnabled": false,
                         "profile": profile
                         ])
-                    let cell = DynamicSettingCell.loadFromNib() as DynamicSettingCell
+                    let cell = DynamicSettingCell()
                     DynamicSettingCellPresenter.configure(cell, setting: setting, currentUser: user)
-                    let isVisible = DynamicSettingCellPresenter.isVisible(setting: setting, currentUser: user)
 
-                    expect(cell.titleLabel.text) == setting.label
-                    expect(cell.descriptionLabel.text) == setting.info
-                    expect(cell.toggleButton.value) == false
-                    expect(cell.toggleButton.isHidden) == false
-                    expect(cell.contentView.isHidden) == false
-                    expect(isVisible) == true
-                    expect(cell.deleteButton.isHidden) == true
+                    expect(cell.title) == setting.label
+                    expect(cell.info) == setting.info
+                    expect(cell.value) == false
+                    expect(cell.isEnabled) == true
                 }
 
                 it("configures the cell from the setting and disables if conflicted is true") {
@@ -92,17 +78,14 @@ class DynamicSettingCellPresenterSpec: QuickSpec {
                     let user: User = stub([
                         "profile": profile
                         ])
-                    let cell = DynamicSettingCell.loadFromNib() as DynamicSettingCell
+                    let cell = DynamicSettingCell()
                     DynamicSettingCellPresenter.configure(cell, setting: setting, currentUser: user)
                     let isVisible = DynamicSettingCellPresenter.isVisible(setting: setting, currentUser: user)
 
-                    expect(cell.titleLabel.text) == setting.label
-                    expect(cell.descriptionLabel.text) == setting.info
-                    expect(cell.toggleButton.value) == true
-                    expect(cell.toggleButton.isHidden) == false
-                    expect(cell.contentView.isHidden) == true
+                    expect(cell.title) == setting.label
+                    expect(cell.info) == setting.info
+                    expect(cell.value) == true
                     expect(isVisible) == false
-                    expect(cell.deleteButton.isHidden) == true
                 }
 
                 it("configures the cell from the setting and enables if conflicted if false") {
@@ -111,17 +94,14 @@ class DynamicSettingCellPresenterSpec: QuickSpec {
                     let user: User = stub([
                         "profile": profile
                         ])
-                    let cell = DynamicSettingCell.loadFromNib() as DynamicSettingCell
+                    let cell = DynamicSettingCell()
                     DynamicSettingCellPresenter.configure(cell, setting: setting, currentUser: user)
                     let isVisible = DynamicSettingCellPresenter.isVisible(setting: setting, currentUser: user)
 
-                    expect(cell.titleLabel.text) == setting.label
-                    expect(cell.descriptionLabel.text) == setting.info
-                    expect(cell.toggleButton.value) == false
-                    expect(cell.toggleButton.isHidden) == false
-                    expect(cell.contentView.isHidden) == false
+                    expect(cell.title) == setting.label
+                    expect(cell.info) == setting.info
+                    expect(cell.value) == false
                     expect(isVisible) == true
-                    expect(cell.deleteButton.isHidden) == true
                 }
 
                 it("configures the cell from the setting and disables if conflicted") {
@@ -130,17 +110,14 @@ class DynamicSettingCellPresenterSpec: QuickSpec {
                     let user: User = stub([
                         "profile": profile
                         ])
-                    let cell = DynamicSettingCell.loadFromNib() as DynamicSettingCell
+                    let cell = DynamicSettingCell()
                     DynamicSettingCellPresenter.configure(cell, setting: setting, currentUser: user)
                     let isVisible = DynamicSettingCellPresenter.isVisible(setting: setting, currentUser: user)
 
-                    expect(cell.titleLabel.text) == setting.label
-                    expect(cell.descriptionLabel.text) == setting.info
-                    expect(cell.toggleButton.value) == true
-                    expect(cell.toggleButton.isHidden) == false
-                    expect(cell.contentView.isHidden) == false
+                    expect(cell.title) == setting.label
+                    expect(cell.info) == setting.info
+                    expect(cell.value) == true
                     expect(isVisible) == true
-                    expect(cell.deleteButton.isHidden) == true
                 }
 
                 it("configures the cell from the setting and enables if not conflicted") {
@@ -149,17 +126,14 @@ class DynamicSettingCellPresenterSpec: QuickSpec {
                     let user: User = stub([
                         "profile": profile
                         ])
-                    let cell = DynamicSettingCell.loadFromNib() as DynamicSettingCell
+                    let cell = DynamicSettingCell()
                     DynamicSettingCellPresenter.configure(cell, setting: setting, currentUser: user)
                     let isVisible = DynamicSettingCellPresenter.isVisible(setting: setting, currentUser: user)
 
-                    expect(cell.titleLabel.text) == setting.label
-                    expect(cell.descriptionLabel.text) == setting.info
-                    expect(cell.toggleButton.value) == false
-                    expect(cell.toggleButton.isHidden) == false
-                    expect(cell.contentView.isHidden) == true
+                    expect(cell.title) == setting.label
+                    expect(cell.info) == setting.info
+                    expect(cell.value) == false
                     expect(isVisible) == false
-                    expect(cell.deleteButton.isHidden) == true
                 }
             }
 
@@ -170,13 +144,11 @@ class DynamicSettingCellPresenterSpec: QuickSpec {
                     let user: User = stub([
                         "profile": profile
                         ])
-                    let cell = DynamicSettingCell.loadFromNib() as DynamicSettingCell
+                    let cell = DynamicSettingCell()
                     DynamicSettingCellPresenter.configure(cell, setting: setting, currentUser: user)
 
-                    expect(cell.titleLabel.text) == setting.label
-                    expect(cell.descriptionLabel.text) == setting.info
-                    expect(cell.toggleButton.isHidden) == true
-                    expect(cell.deleteButton.isHidden) == false
+                    expect(cell.title) == setting.label
+                    expect(cell.info) == setting.info
                 }
             }
         }

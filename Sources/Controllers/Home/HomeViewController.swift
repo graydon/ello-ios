@@ -31,7 +31,7 @@ class HomeViewController: BaseElloViewController, HomeScreenDelegate {
     private var _mockScreen: HomeScreenProtocol?
     var screen: HomeScreenProtocol {
         set(screen) { _mockScreen = screen }
-        get { return _mockScreen ?? self.view as! HomeScreen }
+        get { return fetchScreen(_mockScreen) }
     }
 
     override func didSetCurrentUser() {
@@ -46,7 +46,7 @@ class HomeViewController: BaseElloViewController, HomeScreenDelegate {
         let screen = HomeScreen()
         screen.delegate = self
 
-        self.view = screen
+        view = screen
     }
 
     override func viewDidLoad() {
@@ -93,9 +93,7 @@ extension HomeViewController: HomeResponder {
         followingViewController.didMove(toParentViewController: self)
         self.followingViewController = followingViewController
 
-        let discoverViewController = CategoryViewController(slug: Category.featured.slug, name: Category.featured.name, usage: .largeNav)
-        discoverViewController.category = Category.featured
-        discoverViewController.currentUser = currentUser
+        let discoverViewController = CategoryViewController(currentUser: currentUser, usage: .largeNav)
         addChildViewController(discoverViewController)
         discoverViewController.didMove(toParentViewController: self)
         self.discoverViewController = discoverViewController

@@ -32,6 +32,9 @@ struct StreamCellItemParser {
             else if let editorial = item as? Editorial {
                 streamItems += editorialCellItems(editorial)
             }
+            else if let category = item as? Category, case .manageCategories = streamKind {
+                streamItems += typicalCellItems(category, type: .categorySubscribeCard)
+            }
             else if let artistInvite = item as? ArtistInvite {
                 if case .artistInvites = streamKind {
                     streamItems += typicalCellItems(artistInvite, type: .artistInviteBubble)

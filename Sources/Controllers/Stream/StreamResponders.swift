@@ -56,6 +56,11 @@ protocol SelectedCategoryResponder: class {
 }
 
 @objc
+protocol PromotionalHeaderResponder: class {
+    func categorySubscribed(categoryId: String)
+}
+
+@objc
 protocol UserResponder: class {
     func userTappedAuthor(cell: UICollectionViewCell)
     func userTappedReposter(cell: UICollectionViewCell)
@@ -68,8 +73,8 @@ protocol WebLinkResponder: class {
 }
 
 @objc
-protocol CategoryListCellResponder: class {
-    func categoryListCellTapped(slug: String, name: String)
+protocol StreamSelectionCellResponder: class {
+    func streamTapped(_ type: String)
 }
 
 @objc

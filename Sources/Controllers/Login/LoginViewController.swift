@@ -9,14 +9,14 @@ class LoginViewController: BaseElloViewController {
     private var _mockScreen: LoginScreenProtocol?
     var screen: LoginScreenProtocol {
         set(screen) { _mockScreen = screen }
-        get { return _mockScreen ?? self.view as! LoginScreen }
+        get { return fetchScreen(_mockScreen) }
     }
 
     override func loadView() {
         let screen = LoginScreen()
         screen.delegate = self
         screen.isOnePasswordAvailable = OnePasswordExtension.shared().isAppExtensionAvailable()
-        self.view = screen
+        view = screen
     }
 
     private func loadCurrentUser() {

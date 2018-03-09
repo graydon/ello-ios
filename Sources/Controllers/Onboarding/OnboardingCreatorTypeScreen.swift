@@ -21,6 +21,19 @@ class OnboardingCreatorTypeScreen: StreamableScreen {
         case none
         case fan
         case artist([Int])
+
+        var isFan: Bool {
+            switch self {
+            case .fan: return true
+            default: return false
+            }
+        }
+        var isArtist: Bool {
+            switch self {
+            case .artist: return true
+            default: return false
+            }
+        }
     }
 
     weak var delegate: OnboardingCreatorTypeDelegate?
@@ -175,15 +188,8 @@ class OnboardingCreatorTypeScreen: StreamableScreen {
     }
 
     private func updateCreatorTypeLabels() {
-        if showIntroText {
-            creatorTypeContainerTop.deactivate()
-            creatorTypeContainerIntroTop.activate()
-        }
-        else {
-            creatorTypeContainerTop.activate()
-            creatorTypeContainerIntroTop.deactivate()
-        }
-
+        creatorTypeContainerIntroTop.set(isActivated: showIntroText)
+        creatorTypeContainerTop.set(isActivated: !showIntroText)
         headerLabel.isHidden = !showIntroText
     }
 
@@ -287,23 +293,11 @@ class OnboardingCreatorTypeScreen: StreamableScreen {
     }
 
     func updateButtons(type: CreatorType, animated: Bool = true) {
-        switch type {
-        case .none:
-            fanButton.isSelected = false
-            artistButton.isSelected = false
-            scrollViewArtistBottom.deactivate()
-            scrollViewFanBottom.activate()
-        case .fan:
-            fanButton.isSelected = true
-            artistButton.isSelected = false
-            scrollViewArtistBottom.deactivate()
-            scrollViewFanBottom.activate()
-        case .artist:
-            fanButton.isSelected = false
-            artistButton.isSelected = true
-            scrollViewArtistBottom.activate()
-            scrollViewFanBottom.deactivate()
-        }
+        fanButton.isSelected = type.isFan
+        artistButton.isSelected = type.isArtist
+
+        scrollViewArtistBottom.set(isActivated: type.isArtist)
+        scrollViewFanBottom.set(isActivated: type.isArtist)
 
         let creatorTypeMargin: CGFloat
         let creatorTypeIntroMargin: CGFloat

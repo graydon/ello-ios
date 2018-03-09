@@ -8,7 +8,7 @@ class JoinViewController: BaseElloViewController {
     private var _mockScreen: JoinScreenProtocol?
     var screen: JoinScreenProtocol {
         set(screen) { _mockScreen = screen }
-        get { return _mockScreen ?? self.view as! JoinScreen }
+        get { return fetchScreen(_mockScreen) }
     }
 
     var invitationCode: String?
@@ -30,7 +30,7 @@ class JoinViewController: BaseElloViewController {
         let screen = JoinScreen()
         screen.delegate = self
         screen.isOnePasswordAvailable = OnePasswordExtension.shared().isAppExtensionAvailable()
-        self.view = screen
+        view = screen
     }
 
     private func showOnboardingScreen(_ user: User) {

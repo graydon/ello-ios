@@ -50,6 +50,8 @@ final class Profile: JSONAble {
 
     enum Property: String {
         case name
+        case username
+        case email
         case bio = "unsanitized_short_bio"
         case links = "external_links"
         case location
@@ -57,47 +59,45 @@ final class Profile: JSONAble {
         case coverImageURL = "remote_cover_image_url"
         case webOnboardingVersion = "web_onboarding_version"
         case creatorTypeCategoryIds = "creator_type_category_ids"
-        case isHireable = "is_hireable"
-        case isCollaborateable = "is_collaborateable"
 
-        case username
-        case email
         case currentPassword = "current_password"
         case password
         case passwordConfirmation = "password_confirmation"
 
-        case hasSharingEnabled = "has_sharing_enabled"
+        case allowsAnalytics = "allows_analytics"
+        case discoverable
         case hasAdNotificationsEnabled = "has_ad_notifications_enabled"
+        case hasAnnouncementsEnabled = "has_announcements_enabled"
         case hasAutoWatchEnabled = "has_auto_watch_enabled"
         case hasRepostingEnabled = "has_reposting_enabled"
-        case allowsAnalytics = "allows_analytics"
-        case notifyOfCommentsViaEmail = "notify_of_comments_via_email"
-        case notifyOfLovesViaEmail = "notify_of_loves_via_email"
-        case notifyOfInvitationAcceptancesViaEmail = "notify_of_invitation_acceptances_via_email"
-        case notifyOfMentionsViaEmail = "notify_of_mentions_via_email"
-        case notifyOfNewFollowersViaEmail = "notify_of_new_followers_via_email"
-        case notifyOfRepostsViaEmail = "notify_of_reposts_via_email"
-        case notifyOfWhatYouMissedViaEmail = "notify_of_what_you_missed_via_email"
-        case notifyOfApprovedSubmissionsFromFollowingViaEmail = "notify_of_approved_submissions_from_following_via_email"
-        case subscribeToUsersEmailList = "subscribe_to_users_email_list"
-        case subscribeToDailyEllo = "subscribe_to_daily_ello"
-        case subscribeToWeeklyEllo = "subscribe_to_weekly_ello"
-        case subscribeToOnboardingDrip = "subscribe_to_onboarding_drip"
+        case hasSharingEnabled = "has_sharing_enabled"
+        case isCollaborateable = "is_collaborateable"
+        case isHireable = "is_hireable"
         case notifyOfAnnouncementsViaPush = "notify_of_announcements_via_push"
-        case notifyOfApprovedSubmissionsViaPush = "notify_of_approved_submissions_via_push"
-        case notifyOfCommentsViaPush = "notify_of_comments_via_push"
-        case notifyOfLovesViaPush = "notify_of_loves_via_push"
-        case notifyOfMentionsViaPush = "notify_of_mentions_via_push"
-        case notifyOfRepostsViaPush = "notify_of_reposts_via_push"
-        case notifyOfNewFollowersViaPush = "notify_of_new_followers_via_push"
-        case notifyOfInvitationAcceptancesViaPush = "notify_of_invitation_acceptances_via_push"
-        case notifyOfWatchesViaPush = "notify_of_watches_via_push"
-        case notifyOfWatchesViaEmail = "notify_of_watches_via_email"
-        case notifyOfCommentsOnPostWatchViaPush = "notify_of_comments_on_post_watch_via_push"
-        case notifyOfCommentsOnPostWatchViaEmail = "notify_of_comments_on_post_watch_via_email"
+        case notifyOfApprovedSubmissionsFromFollowingViaEmail = "notify_of_approved_submissions_from_following_via_email"
         case notifyOfApprovedSubmissionsFromFollowingViaPush = "notify_of_approved_submissions_from_following_via_push"
-        case hasAnnouncementsEnabled = "has_announcements_enabled"
-        case discoverable
+        case notifyOfApprovedSubmissionsViaPush = "notify_of_approved_submissions_via_push"
+        case notifyOfCommentsOnPostWatchViaEmail = "notify_of_comments_on_post_watch_via_email"
+        case notifyOfCommentsOnPostWatchViaPush = "notify_of_comments_on_post_watch_via_push"
+        case notifyOfCommentsViaEmail = "notify_of_comments_via_email"
+        case notifyOfCommentsViaPush = "notify_of_comments_via_push"
+        case notifyOfInvitationAcceptancesViaEmail = "notify_of_invitation_acceptances_via_email"
+        case notifyOfInvitationAcceptancesViaPush = "notify_of_invitation_acceptances_via_push"
+        case notifyOfLovesViaEmail = "notify_of_loves_via_email"
+        case notifyOfLovesViaPush = "notify_of_loves_via_push"
+        case notifyOfMentionsViaEmail = "notify_of_mentions_via_email"
+        case notifyOfMentionsViaPush = "notify_of_mentions_via_push"
+        case notifyOfNewFollowersViaEmail = "notify_of_new_followers_via_email"
+        case notifyOfNewFollowersViaPush = "notify_of_new_followers_via_push"
+        case notifyOfRepostsViaEmail = "notify_of_reposts_via_email"
+        case notifyOfRepostsViaPush = "notify_of_reposts_via_push"
+        case notifyOfWatchesViaEmail = "notify_of_watches_via_email"
+        case notifyOfWatchesViaPush = "notify_of_watches_via_push"
+        case notifyOfWhatYouMissedViaEmail = "notify_of_what_you_missed_via_email"
+        case subscribeToDailyEllo = "subscribe_to_daily_ello"
+        case subscribeToOnboardingDrip = "subscribe_to_onboarding_drip"
+        case subscribeToUsersEmailList = "subscribe_to_users_email_list"
+        case subscribeToWeeklyEllo = "subscribe_to_weekly_ello"
     }
 
     let id: String
@@ -394,7 +394,7 @@ final class Profile: JSONAble {
         let creatorTypeCategoryIds: [String] = json["creator_type_category_ids"].arrayValue.flatMap { $0.stringValue }
         // create profile
         let profile = Profile(
-            id: json["id"].string ?? "",
+            id: json["id"].stringValue,
             createdAt: (json["created_at"].stringValue.toDate() ?? Globals.now),
             shortBio: json["short_bio"].stringValue,
             email: json["email"].stringValue,

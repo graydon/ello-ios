@@ -18,13 +18,13 @@ final class ProfileBadgeViewController: BaseElloViewController {
     private var _mockScreen: ProfileBadgeScreenProtocol?
     var screen: ProfileBadgeScreenProtocol {
         set(screen) { _mockScreen = screen }
-        get { return _mockScreen ?? self.view as! ProfileBadgeScreen }
+        get { return fetchScreen(_mockScreen) }
     }
 
     override func loadView() {
         let screen = ProfileBadgeScreen(title: badge.name, caption: badge.caption)
         screen.delegate = self
-        self.view = screen
+        view = screen
     }
 }
 

@@ -69,6 +69,14 @@ class NestedTabBarView: View {
         }
     }
 
+    func select(button: UIButton) {
+        for tab in tabs {
+            guard tab.button == button else { continue }
+            select(tab: tab)
+            break
+        }
+    }
+
     override func didMoveToSuperview() {
         super.didMoveToSuperview()
         if superview != nil {

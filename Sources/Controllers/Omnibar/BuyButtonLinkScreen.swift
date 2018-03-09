@@ -28,18 +28,11 @@ class BuyButtonLinkScreen: View, BuyButtonLinkScreenProtocol {
     var buyButtonURL: URL? {
         get { return URL(string: productLinkField.text ?? "") }
         set {
-            if let buyButtonURL = newValue {
-                productLinkField.text = buyButtonURL.absoluteString
-                submitButtonTrailingRight.deactivate()
-                submitButtonTrailingRemove.activate()
-                removeButton.isHidden = false
-            }
-            else {
-                productLinkField.text = ""
-                submitButtonTrailingRight.activate()
-                submitButtonTrailingRemove.deactivate()
-                removeButton.isHidden = true
-            }
+            let hasLink = newValue != nil
+            submitButtonTrailingRemove.set(isActivated: hasLink)
+            submitButtonTrailingRight.set(isActivated: !hasLink)
+            removeButton.isHidden = !hasLink
+            productLinkField.text = newValue?.absoluteString
             productLinkDidChange()
         }
     }

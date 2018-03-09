@@ -6,7 +6,28 @@ import Alamofire
 import ElloCerts
 
 
-struct ElloManager {
+protocol Response {
+    var request: URLRequest? { get }
+    var response: HTTPURLResponse? { get }
+    var data: Data? { get }
+    var error: Error? { get }
+}
+
+
+protocol RequestTask {
+    func resume()
+}
+
+
+typealias RequestHandler = (Response) -> Void
+
+
+protocol RequestManager {
+    func request(_ request: URLRequest, _ handler: @escaping RequestHandler) -> RequestTask
+}
+
+
+struct ElloManager: RequestManager {
     static var serverTrustPolicies: [String: ServerTrustPolicy] {
         let policyDict: [String: ServerTrustPolicy]
         if Globals.isSimulator {
@@ -28,7 +49,7 @@ struct ElloManager {
         return policyDict
     }
 
-    static var manager: SessionManager {
+    static func alamofireManager() -> SessionManager {
         let config = URLSessionConfiguration.default
         config.sharedContainerIdentifier = ElloGroupName
         config.timeoutIntervalForRequest = 30
@@ -39,14 +60,17 @@ struct ElloManager {
         )
     }
 
-    static var shareExtensionManager: SessionManager {
-        let config = URLSessionConfiguration.background(withIdentifier: "co.ello.shareextension.background")
-        config.sharedContainerIdentifier = ElloGroupName
-        config.sessionSendsLaunchEvents = false
-        return SessionManager(
-            configuration: config,
-            serverTrustPolicyManager: ServerTrustPolicyManager(policies: ElloManager.serverTrustPolicies)
-        )
+    func request(_ urlRequest: URLRequest, _ handler: @escaping RequestHandler) -> RequestTask {
+        let manager = ElloManager.alamofireManager()
+        var retain: SessionManager? = manager
+        let task = manager.request(urlRequest)
+        return task.response { response in
+            retain = nil
+            handler(response)
+        }
     }
 
 }
+
+extension Alamofire.Request: RequestTask {}
+extension DefaultDataResponse: Response {}

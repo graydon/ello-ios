@@ -18,7 +18,15 @@ struct CategoryCardCellPresenter {
 
         cell.title = category.name
         cell.imageURL = category.tileURL
-        cell.isSelectable = streamCellItem.type == .selectableCategoryCard
+
+        switch streamCellItem.type {
+        case .categorySubscribeCard:
+            cell.isSubscribing = true
+        case .onboardingCategoryCard:
+            cell.isSubscribing = false
+        default:
+            break
+        }
     }
 
 }

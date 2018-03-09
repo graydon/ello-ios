@@ -189,14 +189,8 @@ class SearchScreen: StreamableScreen, SearchScreenProtocol {
     }
 
     override func keyboardWillChange(_ keyboard: Keyboard, animated: Bool) {
-        if keyboard.isActive {
-            findFriendsPinToKeyboard.activate()
-            findFriendsPinToBottom.deactivate()
-        }
-        else {
-            findFriendsPinToKeyboard.deactivate()
-            findFriendsPinToBottom.activate()
-        }
+        findFriendsPinToKeyboard.set(isActivated: keyboard.isActive)
+        findFriendsPinToBottom.set(isActivated: !keyboard.isActive)
 
         super.keyboardWillChange(keyboard, animated: animated)
     }
@@ -296,14 +290,8 @@ extension SearchScreen {
     }
 
     private func animateGridListButton(visible: Bool) {
-        if visible {
-            self.gridListVisibleConstraint.activate()
-            self.gridListHiddenConstraint.deactivate()
-        }
-        else {
-            self.gridListVisibleConstraint.deactivate()
-            self.gridListHiddenConstraint.activate()
-        }
+        self.gridListVisibleConstraint.set(isActivated: visible)
+        self.gridListHiddenConstraint.set(isActivated: !visible)
 
         elloAnimate {
             self.gridListButton.alpha = visible ? 1 : 0
@@ -387,16 +375,9 @@ extension SearchScreen: ArrangeNavBackButton {
     }
 
     private func updateBackButton() {
-        if showBackButton {
-            persistentBackButton.alpha = 1
-            showBackButtonConstraint.activate()
-            hideBackButtonConstraint.deactivate()
-        }
-        else {
-            persistentBackButton.alpha = 0
-            showBackButtonConstraint.deactivate()
-            hideBackButtonConstraint.activate()
-        }
+        showBackButtonConstraint.set(isActivated: showBackButton)
+        hideBackButtonConstraint.set(isActivated: !showBackButton)
+        persistentBackButton.alpha = showBackButton ? 1 : 0
         searchControlsContainer.layoutIfNeeded()
     }
 }

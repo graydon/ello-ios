@@ -10,6 +10,8 @@ class CategoryScreen: HomeSubviewScreen, CategoryScreenProtocol {
         static let navigationBarHeight: CGFloat = 43
         static let buttonWidth: CGFloat = 40
         static let buttonMargin: CGFloat = 5
+        static let gradientMidpoint: Float = 0.4
+        static var categoryCardListInset: CGFloat { return CategoryCardListView.Size.spacing }
     }
 
     enum NavBarItems {
@@ -18,10 +20,28 @@ class CategoryScreen: HomeSubviewScreen, CategoryScreenProtocol {
         case none
     }
 
-    weak var delegate: CategoryScreenDelegate?
-    private let usage: CategoryViewController.Usage
+    enum Selection {
+        case all
+        case subscribed
+        case category(Int)
+    }
 
-    init(usage: CategoryViewController.Usage) {
+    typealias Usage = CategoryViewController.Usage
+
+    weak var delegate: CategoryScreenDelegate?
+    var topInsetView: UIView { return categoryCardList }
+    var showSubscribed: Bool = false
+    var showEditButton: Bool = false { didSet { updateEditButton() } }
+    var isGridView = false {
+        didSet {
+            gridListButton.setImage(isGridView ? .listView : .gridView, imageStyle: .normal, for: .normal)
+        }
+    }
+    var categoriesLoaded: Bool = false { didSet { updateEditButton() } }
+
+    private let usage: Usage
+
+    init(usage: Usage) {
         self.usage = usage
         super.init(frame: .default)
     }
@@ -34,17 +54,13 @@ class CategoryScreen: HomeSubviewScreen, CategoryScreenProtocol {
         fatalError("init(coder:) has not been implemented")
     }
 
-    var isGridView = false {
-        didSet {
-            gridListButton.setImage(isGridView ? .listView : .gridView, imageStyle: .normal, for: .normal)
-        }
-    }
-
     private let categoryCardList = CategoryCardListView()
     private let iPhoneBlackBar = UIView()
     private let searchField = SearchNavBarField()
     private let searchFieldButton = UIButton()
     private let backButton = UIButton()
+    private let editCategoriesButton = StyledButton(style: .clearWhite)
+    private let editCategoriesGradient = CategoryScreen.generateGradientLayer()
     private let gridListButton = UIButton()
     private let shareButton = UIButton()
     private let navigationContainer = UIView()
@@ -53,34 +69,37 @@ class CategoryScreen: HomeSubviewScreen, CategoryScreenProtocol {
     private var iPhoneBlackBarTopConstraint: Constraint!
     private var backVisibleConstraint: Constraint!
     private var backHiddenConstraint: Constraint!
-    private var shareVisibleConstraint: Constraint!
-    private var shareHiddenConstraint: Constraint!
-    private var allHiddenConstraint: Constraint!
 
-    var topInsetView: UIView {
-        if categoryCardsVisible {
-            return categoryCardList
+    private var navBarVisible = true
+    private var categoryCardListTop: CGFloat {
+        if navBarVisible {
+            return self.navigationBar.frame.height
+        }
+        else if Globals.isIphoneX {
+            return Globals.statusBarHeight
         }
         else {
-            return navigationBar
+            return 0
         }
     }
 
-    private var _categoryCardsVisible: Bool = true
-    var categoryCardsVisible: Bool {
-        set {
-            _categoryCardsVisible = newValue
-            categoryCardList.isHidden = !categoryCardsVisible
-        }
-        get { return _categoryCardsVisible && categoryCardList.categoriesInfo.count > 0 }
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        editCategoriesGradient.frame = editCategoriesButton.bounds
     }
 
     override func style() {
         super.style()
         iPhoneBlackBar.backgroundColor = .black
         backButton.setImages(.backChevron)
-        shareButton.alpha = 0
         shareButton.setImage(.share, imageStyle: .normal, for: .normal)
+        editCategoriesButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 30, bottom: 0, right: 10)
+        editCategoriesButton.isHidden = true
+    }
+
+    override func setText() {
+        navigationBar.title = ""
+        editCategoriesButton.setTitle(InterfaceString.Edit, for: .normal)
     }
 
     override func bindActions() {
@@ -90,11 +109,14 @@ class CategoryScreen: HomeSubviewScreen, CategoryScreenProtocol {
         backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
         gridListButton.addTarget(self, action: #selector(gridListToggled), for: .touchUpInside)
         shareButton.addTarget(self, action: #selector(shareTapped), for: .touchUpInside)
+        editCategoriesButton.addTarget(self, action: #selector(editCategoriesTapped), for: .touchUpInside)
     }
 
     override func arrange() {
         super.arrange()
         addSubview(categoryCardList)
+        editCategoriesButton.layer.insertSublayer(editCategoriesGradient, at: 0)
+        addSubview(editCategoriesButton)
         addSubview(navigationBar)
 
         navigationContainer.addSubview(searchField)
@@ -118,12 +140,16 @@ class CategoryScreen: HomeSubviewScreen, CategoryScreenProtocol {
             }
             iPhoneBlackBar.alpha = 0
         }
-        categoryCardList.isHidden = true
 
         categoryCardList.snp.makeConstraints { make in
             categoryCardTopConstraint = make.top.equalTo(self).constraint
             make.leading.trailing.equalTo(self)
             make.height.equalTo(CategoryCardListView.Size.height)
+        }
+
+        editCategoriesButton.snp.makeConstraints { make in
+            make.top.bottom.equalTo(categoryCardList).inset(Size.categoryCardListInset)
+            make.trailing.equalTo(self)
         }
 
         backButton.snp.makeConstraints { make in
@@ -143,18 +169,13 @@ class CategoryScreen: HomeSubviewScreen, CategoryScreenProtocol {
             insets.top -= StatusBar.Size.height
             insets.bottom -= 1
             make.bottom.equalTo(navigationBar).inset(insets)
-            make.height.equalTo(Size.navigationBarHeight - insets.top - insets.bottom)
+            make.height.equalTo(Size.navigationBarHeight - insets.tops)
 
             backHiddenConstraint = make.leading.equalTo(navigationBar).inset(insets).constraint
             backVisibleConstraint = make.leading.equalTo(backButton.snp.trailing).offset(insets.left).constraint
 
-            shareHiddenConstraint = make.trailing.equalTo(gridListButton.snp.leading).offset(-insets.right).constraint
-            shareVisibleConstraint = make.trailing.equalTo(shareButton.snp.leading).offset(-Size.buttonMargin).constraint
-            allHiddenConstraint = make.trailing.equalTo(gridListButton.snp.trailing).offset(-Size.buttonMargin).constraint
+            make.trailing.equalTo(shareButton.snp.leading).offset(-Size.buttonMargin)
         }
-        backVisibleConstraint.deactivate()
-        shareVisibleConstraint.deactivate()
-        allHiddenConstraint.deactivate()
 
         navigationContainer.snp.makeConstraints { make in
             make.leading.equalTo(searchField).offset(-SearchNavBarField.Size.searchInsets.left)
@@ -183,41 +204,37 @@ class CategoryScreen: HomeSubviewScreen, CategoryScreenProtocol {
         }
     }
 
-    func set(categoriesInfo newValue: [CategoryCardListView.CategoryInfo], animated: Bool, completion: @escaping Block) {
+    func set(categoriesInfo newValue: [CategoryCardListView.CategoryInfo], completion: @escaping Block) {
         categoryCardList.categoriesInfo = newValue
-        categoryCardList.isHidden = !categoryCardsVisible
 
-        if categoryCardsVisible && animated {
-            showCategoryCardList(completion: completion)
-        }
-        else {
+        if navBarVisible {
             completion()
+            return
         }
-    }
 
-    private func showCategoryCardList(completion: @escaping Block = {}) {
+        let editCategoriesButtonY = categoryCardListTop + Size.categoryCardListInset
         let originalY = categoryCardList.frame.origin.y
-        categoryCardList.frame.origin.y = -categoryCardList.frame.size.height
+        categoryCardList.frame.origin.y = originalY - categoryCardList.frame.size.height
+        editCategoriesButton.frame.origin.y = editCategoriesButtonY - editCategoriesButton.frame.height
         elloAnimate {
+            self.editCategoriesButton.frame.origin.y = editCategoriesButtonY
             self.categoryCardList.frame.origin.y = originalY
         }.always(completion)
     }
 
-    func toggleCategoriesList(navBarVisible: Bool, animated: Bool) {
-        elloAnimate(animated: animated) {
-            let categoryCardListTop: CGFloat
-            if navBarVisible {
-                categoryCardListTop = self.navigationBar.frame.height
-            }
-            else if Globals.isIphoneX {
-                categoryCardListTop = Globals.statusBarHeight
-            }
-            else {
-                categoryCardListTop = 0
-            }
+    private func updateEditButton() {
+        let actuallyShowEditButton = showEditButton && categoriesLoaded
+        editCategoriesButton.isHidden = !actuallyShowEditButton
+        let rightInset = actuallyShowEditButton ? editCategoriesButton.frame.width * CGFloat(1 - Size.gradientMidpoint) : 0
+        categoryCardList.rightInset = rightInset
+    }
 
-            self.categoryCardTopConstraint.update(offset: categoryCardListTop)
-            self.categoryCardList.frame.origin.y = categoryCardListTop
+    func toggleCategoriesList(navBarVisible: Bool, animated: Bool) {
+        self.navBarVisible = navBarVisible
+        elloAnimate(animated: animated) {
+            self.categoryCardTopConstraint.update(offset: self.categoryCardListTop)
+            self.categoryCardList.frame.origin.y = self.categoryCardListTop
+            self.editCategoriesButton.frame.origin.y = self.categoryCardListTop + Size.categoryCardListInset
 
             if Globals.isIphoneX {
                 let iPhoneBlackBarTop = self.categoryCardList.frame.minY - self.iPhoneBlackBar.frame.height
@@ -228,12 +245,28 @@ class CategoryScreen: HomeSubviewScreen, CategoryScreenProtocol {
         }
     }
 
-    func scrollToCategory(index: Int) {
-        self.categoryCardList.scrollToIndex(index + 1, animated: true)
+    func scrollToCategory(_ selection: Selection) {
+        switch selection {
+        case .all:
+            self.categoryCardList.scrollToIndex(0, animated: true)
+        case .subscribed:
+            self.categoryCardList.scrollToIndex(1, animated: true)
+        case let .category(index):
+            let offset = showSubscribed ? 2 : 1
+            self.categoryCardList.scrollToIndex(index + offset, animated: true)
+        }
     }
 
-    func selectCategory(index: Int) {
-        self.categoryCardList.selectCategory(index: index + 1)
+    func selectCategory(_ selection: Selection) {
+        switch selection {
+        case .all:
+            self.categoryCardList.selectCategory(index: 0)
+        case .subscribed:
+            self.categoryCardList.selectCategory(index: 1)
+        case let .category(index):
+            let offset = showSubscribed ? 2 : 1
+            self.categoryCardList.selectCategory(index: index + offset)
+        }
     }
 
     @objc
@@ -256,64 +289,57 @@ class CategoryScreen: HomeSubviewScreen, CategoryScreenProtocol {
         delegate?.shareTapped(sender: shareButton)
     }
 
-    func setupNavBar(show: CategoryScreen.NavBarItems, back backVisible: Bool, animated: Bool) {
-        let shareButtonAlpha: CGFloat
-        let gridButtonAlpha: CGFloat
-        switch show {
-        case .onlyGridToggle:
-            shareHiddenConstraint.activate()
-            shareVisibleConstraint.deactivate()
-            allHiddenConstraint.deactivate()
-            shareButtonAlpha = 0
-            gridButtonAlpha = 1
-        case .all:
-            shareHiddenConstraint.deactivate()
-            shareVisibleConstraint.activate()
-            allHiddenConstraint.deactivate()
-            shareButtonAlpha = 1
-            gridButtonAlpha = 1
-        case .none:
-            shareHiddenConstraint.deactivate()
-            shareVisibleConstraint.deactivate()
-            allHiddenConstraint.activate()
-            shareButtonAlpha = 0
-            gridButtonAlpha = 0
-        }
-
+    func setupNavBar(back backVisible: Bool, animated: Bool) {
         backButton.isHidden = !backVisible
-        if backVisible {
-            backHiddenConstraint.deactivate()
-            backVisibleConstraint.activate()
-        }
-        else {
-            backHiddenConstraint.activate()
-            backVisibleConstraint.deactivate()
-        }
+        backVisibleConstraint.set(isActivated: backVisible)
+        backHiddenConstraint.set(isActivated: !backVisible)
 
         elloAnimate(animated: animated) {
             self.navigationBar.layoutIfNeeded()
-            self.shareButton.alpha = shareButtonAlpha
-            self.gridListButton.alpha = gridButtonAlpha
         }
     }
-
 }
 
 extension CategoryScreen: CategoryCardListDelegate {
+    @objc
     func allCategoriesTapped() {
         delegate?.allCategoriesTapped()
     }
 
+    @objc
+    func editCategoriesTapped() {
+        delegate?.editCategoriesTapped()
+    }
+
+    @objc
+    func subscribedCategoryTapped() {
+        delegate?.subscribedCategoryTapped()
+    }
+
+    @objc
     func categoryCardSelected(_ index: Int) {
         delegate?.categorySelected(index: index)
     }
 }
 
 extension CategoryScreen: HomeScreenNavBar {
-
     @objc
     func homeScreenScrollToTop() {
         delegate?.scrollToTop()
     }
+}
 
+extension CategoryScreen {
+    private static func generateGradientLayer() -> CAGradientLayer {
+        let layer = CAGradientLayer()
+        layer.locations = [0, NSNumber(value: CategoryScreen.Size.gradientMidpoint), 1]
+        layer.colors = [
+            UIColor(hex: 0x000000, alpha: 0).cgColor,
+            UIColor(hex: 0x000000, alpha: 1).cgColor,
+            UIColor(hex: 0x000000, alpha: 1).cgColor,
+        ]
+        layer.startPoint = CGPoint(x: 0, y: 0.5)
+        layer.endPoint = CGPoint(x: 1, y: 0.5)
+        return layer
+    }
 }

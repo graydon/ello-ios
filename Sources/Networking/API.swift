@@ -8,92 +8,126 @@ import SwiftyJSON
 
 
 struct API {
-    func userPosts(username: String, before: String? = nil) -> Promise<(PageConfig, [Post])> {
+    static var sharedManager: RequestManager = ElloManager()
+
+    enum PageHeaderKind {
+        case category(String)
+        case artistInvites
+        case editorials
+        case generic
+
+        var apiKind: String {
+            switch self {
+            case .category: return "CATEGORY"
+            case .editorials: return "EDITORIAL"
+            case .artistInvites: return "ARTIST_INVITE"
+            case .generic: return "GENERIC"
+            }
+        }
+
+        var slug: String? {
+            switch self {
+            case let .category(slug): return slug
+            default: return nil
+            }
+        }
+    }
+
+    func globalPostStream(stream: DiscoverType, before: String? = nil) -> GraphQLRequest<(PageConfig, [Post])> {
+        let request = GraphQLRequest(
+            endpointName: "globalPostStream",
+            parser: PageParser<Post>("posts", PostParser()).parse,
+            variables: [
+                (.enum("kind", "StreamKind", stream.graphQL)),
+                (.optionalString("before", before)),
+            ],
+            fragments: [Fragment.postStream],
+            body: Fragment.postStreamBody
+            )
+        return request
+    }
+
+    func categoryPostStream(categorySlug: String, stream: DiscoverType, before: String? = nil) -> GraphQLRequest<(PageConfig, [Post])> {
+        let request = GraphQLRequest(
+            endpointName: "categoryPostStream",
+            parser: PageParser<Post>("posts", PostParser()).parse,
+            variables: [
+                (.enum("kind", "StreamKind", stream.graphQL)),
+                (.string("slug", categorySlug)),
+                (.optionalString("before", before)),
+            ],
+            fragments: [Fragment.postStream],
+            body: Fragment.postStreamBody
+            )
+        return request
+    }
+
+    func subscribedPostStream(stream: DiscoverType, before: String? = nil) -> GraphQLRequest<(PageConfig, [Post])> {
+        let request = GraphQLRequest(
+            endpointName: "subscribedPostStream",
+            parser: PageParser<Post>("posts", PostParser()).parse,
+            variables: [
+                (.enum("kind", "StreamKind", stream.graphQL)),
+                (.optionalString("before", before)),
+            ],
+            fragments: [Fragment.postStream],
+            body: Fragment.postStreamBody
+            )
+        return request
+    }
+
+    func allCategories() -> GraphQLRequest<[Category]> {
+        let request = GraphQLRequest(
+            endpointName: "allCategories",
+            parser: ManyParser<Category>(CategoryParser()).parse,
+            fragments: [
+                Fragment.tshirtProps,
+            ],
+            body: Fragment.categoriesBody
+            )
+        return request
+    }
+
+    func subscribedCategories() -> GraphQLRequest<[Category]> {
+        let request = GraphQLRequest(
+            endpointName: "categoryNav",
+            parser: ManyParser<Category>(CategoryParser()).parse,
+            fragments: [
+                Fragment.tshirtProps,
+            ],
+            body: Fragment.categoriesBody
+            )
+        return request
+    }
+
+    func pageHeaders(kind: PageHeaderKind) -> GraphQLRequest<[PageHeader]> {
+        let request = GraphQLRequest(
+            endpointName: "pageHeaders",
+            parser: ManyParser<PageHeader>(PageHeaderParser()).parse,
+            variables: [
+                (.enum("kind", "PageHeaderKind", kind.apiKind)),
+                (.optionalString("slug", kind.slug)),
+            ],
+            fragments: [
+                Fragment.responsiveProps,
+                Fragment.pageHeaderUserProps,
+            ],
+            body: Fragment.pageHeaderBody
+            )
+        return request
+    }
+
+    func userPosts(username: String, before: String? = nil) -> GraphQLRequest<(PageConfig, [Post])> {
         let request = GraphQLRequest(
             endpointName: "userPostStream",
-            parser: ManyParser<Post>("posts", PostParser()).parse,
+            parser: PageParser<Post>("posts", PostParser()).parse,
             variables: [
                 (.string("username", username)),
                 (.optionalString("before", before)),
             ],
-            fragments: """
-                fragment imageProps on Image {
-                  url
-                  metadata { height width type size }
-                }
-
-                fragment tshirtImages on TshirtImageVersions {
-                  small { ...imageProps }
-                  regular { ...imageProps }
-                  large { ...imageProps }
-                  original { ...imageProps }
-                }
-
-                fragment responsiveImages on ResponsiveImageVersions {
-                  mdpi { ...imageProps }
-                  ldpi { ...imageProps }
-                  hdpi { ...imageProps }
-                  xhdpi { ...imageProps }
-                  optimized { ...imageProps }
-                }
-
-                fragment authorSummary on User {
-                  id
-                  username
-                  name
-                  currentUserState { relationshipPriority }
-                  settings {
-                    hasCommentingEnabled hasLovesEnabled hasRepostingEnabled hasSharingEnabled
-                    isCollaborateable isHireable
-                  }
-                  avatar {
-                    ...tshirtImages
-                  }
-                  coverImage {
-                    ...responsiveImages
-                  }
-                }
-
-                fragment contentProps on ContentBlocks {
-                  linkUrl
-                  kind
-                  data
-                  links { assets }
-                }
-
-                fragment assetProps on Asset {
-                  id
-                  attachment { ...responsiveImages }
-                }
-
-                fragment postContent on Post {
-                  content { ...contentProps }
-                }
-
-                fragment postSummary on Post {
-                  id
-                  token
-                  createdAt
-                  summary { ...contentProps }
-                  author { ...authorSummary }
-                  assets { ...assetProps }
-                  postStats { lovesCount commentsCount viewsCount repostsCount }
-                  currentUserState { watching loved reposted }
-                }
-                """,
-            body: """
-                next isLastPage
-                posts {
-                    ...postSummary
-                    ...postContent
-                    repostContent { ...contentProps }
-                    currentUserState { loved reposted watching }
-                    repostedSource {
-                        ...postSummary
-                    }
-                }
-                """
+            fragments: [Fragment.postStream],
+            body: Fragment.postStreamBody
             )
-        return request.execute()
+        return request
     }
 }

@@ -18,13 +18,13 @@ final class ProfileCategoriesViewController: BaseElloViewController {
     private var _mockScreen: ProfileCategoriesProtocol?
     var screen: ProfileCategoriesProtocol {
         set(screen) { _mockScreen = screen }
-        get { return _mockScreen ?? self.view as! ProfileCategoriesScreen }
+        get { return fetchScreen(_mockScreen) }
     }
 
     override func loadView() {
         let screen = ProfileCategoriesScreen(categories: categories)
         screen.delegate = self
-        self.view = screen
+        view = screen
     }
 }
 
@@ -54,8 +54,7 @@ extension ProfileCategoriesViewController: ProfileCategoriesDelegate {
 
     func categoryTapped(_ category: Category) {
         Tracker.shared.categoryOpened(category.slug)
-        let vc = CategoryViewController(slug: category.slug, name: category.name)
-        vc.currentUser = currentUser
+        let vc = CategoryViewController(currentUser: currentUser, category: category)
 
         let presentingVC = self.presentingVC
         self.dismiss(animated: true) {

@@ -92,9 +92,6 @@ class OmnibarScreenSpec: QuickSpec {
                     overrideGlobals(FakeGlobal())
                     subject.addImageButtonTapped()
                 }
-                afterEach {
-                    overrideGlobals(nil)
-                }
 
                 it("should toggle buttons") {
                     expect(subject.specs().addImageButton.isHidden) == true

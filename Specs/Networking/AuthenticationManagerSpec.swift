@@ -9,8 +9,6 @@ import Nimble
 
 class AuthenticationManagerSpec: QuickSpec {
     override func spec() {
-        let manager = AuthenticationManager.shared
-
         describe("AuthenticationManager") {
             describe("canMakeRequest(ElloAPI)") {
                 let noTokenReqd: [ElloAPI] = [.auth(email: "", password: ""), .reAuth(token: ""), .anonymousCredentials]

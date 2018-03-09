@@ -18,11 +18,7 @@ final class NotificationsGenerator: StreamGenerator {
     private var localToken: String = ""
     private var loadingToken = LoadingToken()
 
-    init(
-        currentUser: User?,
-        streamKind: StreamKind,
-        destination: StreamDestination?
-        ) {
+    init(currentUser: User?, streamKind: StreamKind, destination: StreamDestination) {
         self.currentUser = currentUser
         self.streamKind = streamKind
         self.destination = destination

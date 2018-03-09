@@ -63,6 +63,9 @@ class StyledLabel: UILabel {
     override var lineBreakMode: NSLineBreakMode {
         didSet { updateStyle() }
     }
+    override var textAlignment: NSTextAlignment {
+        didSet { updateStyle() }
+    }
     var isMultiline: Bool = false {
         didSet {
             if isMultiline {
@@ -89,18 +92,20 @@ class StyledLabel: UILabel {
         textColor = style.textColor
 
         if let text = text {
-            attributedText = NSAttributedString(label: text, style: style, lineBreakMode: lineBreakMode)
+            attributedText = NSAttributedString(label: text, style: style, alignment: textAlignment, lineBreakMode: lineBreakMode)
         }
     }
 
     required override init(frame: CGRect) {
         super.init(frame: frame)
+        textAlignment = .left
         numberOfLines = 1
         lineBreakMode = .byTruncatingTail
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+        textAlignment = .left
         updateStyle()
     }
 

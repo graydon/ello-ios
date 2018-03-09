@@ -5,59 +5,43 @@
 import SwiftyJSON
 
 // Version 2: allowInOnboarding
-// Version 3: usesPagePromo
+// Version 3: usesPagePromo (removed)
 // Version 4: isCreatorType
 let CategoryVersion = 4
 
 
 @objc(Category)
 final class Category: JSONAble, Groupable {
-    static let featured = Category(id: "meta1", name: InterfaceString.Discover.Featured, slug: "featured", order: 0, allowInOnboarding: false, isCreatorType: false, usesPagePromo: true, level: .meta, tileImage: nil)
-    static let trending = Category(id: "meta2", name: InterfaceString.Discover.Trending, slug: "trending", order: 1, allowInOnboarding: false, isCreatorType: false, usesPagePromo: true, level: .meta, tileImage: nil)
-    static let recent = Category(id: "meta3", name: InterfaceString.Discover.Recent, slug: "recent", order: 2, allowInOnboarding: false, isCreatorType: false, usesPagePromo: true, level: .meta, tileImage: nil)
+    enum Selection {
+        case all
+        case subscribed
+        case category(String)
+
+        var shareLink: URL? {
+            switch self {
+            case .all: return URL(string: "\(ElloURI.baseURL)/discover")
+            case .subscribed: return URL(string: "\(ElloURI.baseURL)/discover/subscribed")
+            case let .category(slug): return URL(string: "\(ElloURI.baseURL)/discover/\(slug)")
+            }
+        }
+    }
 
     let id: String
     var groupId: String { return "Category-\(id)" }
     let name: String
     let slug: String
     var tileURL: URL? { return tileImage?.url }
-    var isSponsored: Bool?
-    var body: String?
-    var header: String?
-    var ctaCaption: String?
-    var ctaURL: URL?
     let tileImage: Attachment?
     let order: Int
     let allowInOnboarding: Bool
     let isCreatorType: Bool
     let level: CategoryLevel
     var isMeta: Bool { return level == .meta }
-    var usesPagePromo: Bool
-    var hasPromotionalData: Bool {
-        return body != nil
-    }
-    var shareLink: String {
-        return "\(ElloURI.baseURL)/discover/\(slug)"
-    }
 
     var endpoint: ElloAPI {
         switch level {
         case .meta: return .discover(type: DiscoverType(rawValue: slug)!)
         default: return .categoryPosts(slug: slug)
-        }
-    }
-
-    var promotionals: [Promotional]? { return getLinkArray("promotionals") as? [Promotional] }
-    private var _randomPromotional: Promotional?
-    var randomPromotional: Promotional? {
-        get {
-            if _randomPromotional == nil {
-                _randomPromotional = promotionals?.randomItem()
-            }
-            return _randomPromotional
-        }
-        set {
-            _randomPromotional = newValue
         }
     }
 
@@ -71,7 +55,6 @@ final class Category: JSONAble, Groupable {
         order: Int,
         allowInOnboarding: Bool,
         isCreatorType: Bool,
-        usesPagePromo: Bool,
         level: CategoryLevel,
         tileImage: Attachment?)
     {
@@ -81,7 +64,6 @@ final class Category: JSONAble, Groupable {
         self.order = order
         self.allowInOnboarding = allowInOnboarding
         self.isCreatorType = isCreatorType
-        self.usesPagePromo = usesPagePromo
         self.level = level
         self.tileImage = tileImage
         super.init(version: CategoryVersion)
@@ -101,12 +83,6 @@ final class Category: JSONAble, Groupable {
         else {
             allowInOnboarding = true
         }
-        if version > 2 {
-            usesPagePromo = decoder.decodeKey("usesPagePromo")
-        }
-        else {
-            usesPagePromo = level == .meta
-        }
         if version > 3 {
             isCreatorType = decoder.decodeKey("isCreatorType")
         }
@@ -114,11 +90,6 @@ final class Category: JSONAble, Groupable {
             isCreatorType = false
         }
         tileImage = decoder.decodeOptionalKey("tileImage")
-        isSponsored = decoder.decodeOptionalKey("isSponsored")
-        body = decoder.decodeOptionalKey("body")
-        header = decoder.decodeOptionalKey("header")
-        ctaCaption = decoder.decodeOptionalKey("ctaCaption")
-        ctaURL = decoder.decodeOptionalKey("ctaURL")
         super.init(coder: coder)
     }
 
@@ -130,60 +101,34 @@ final class Category: JSONAble, Groupable {
         encoder.encodeObject(order, forKey: "order")
         encoder.encodeObject(allowInOnboarding, forKey: "allowInOnboarding")
         encoder.encodeObject(isCreatorType, forKey: "isCreatorType")
-        encoder.encodeObject(usesPagePromo, forKey: "usesPagePromo")
         encoder.encodeObject(level.rawValue, forKey: "level")
         encoder.encodeObject(tileImage, forKey: "tileImage")
-        encoder.encodeObject(isSponsored, forKey: "isSponsored")
-        encoder.encodeObject(body, forKey: "body")
-        encoder.encodeObject(header, forKey: "header")
-        encoder.encodeObject(ctaCaption, forKey: "ctaCaption")
-        encoder.encodeObject(ctaURL, forKey: "ctaURL")
         super.encode(with: coder)
-    }
-
-    override func merge(_ other: JSONAble) -> JSONAble {
-        if let other = other as? Category {
-            if other.links?["promotionals"] == nil, let promotionals = promotionals, promotionals.count > 0 {
-                other.addLinkArray("promotionals", array: promotionals.map { $0.id }, type: .promotionalsType)
-            }
-        }
-        return other
     }
 
     class func fromJSON(_ data: [String: Any]) -> Category {
         let json = JSON(data)
-        let id = json["id"].stringValue
-        let name = json["name"].stringValue
-        let slug = json["slug"].stringValue
-        let order = json["order"].intValue
-        let allowInOnboarding = json["allow_in_onboarding"].bool ?? true
-        let isCreatorType = json["is_creator_type"].bool ?? true
         let level: CategoryLevel = CategoryLevel(rawValue: json["level"].stringValue) ?? .unknown
-        let usesPagePromo = json["uses_page_promotionals"].bool ?? (level == .meta)
         let tileImage: Attachment?
-        if let assetJson = json["tile_image"].object as? [String: Any],
-            let attachmentJson = DeviceScreen.isRetina ? (assetJson["large"] as? [String: Any]) : (assetJson["small"] as? [String: Any])
-        {
+        if let attachmentJson = json["tile_image"]["large"].object as? [String: Any] {
             tileImage = Attachment.fromJSON(attachmentJson)
         }
         else {
             tileImage = nil
         }
 
-        let isSponsored = json["is_sponsored"].bool
-        let body = json["description"].string
-        let header = json["header"].string
-        let ctaCaption = json["cta_caption"].string
-        let ctaURL = json["cta_href"].string.flatMap { URL(string: $0) }
-
-        let category = Category(id: id, name: name, slug: slug, order: order, allowInOnboarding: allowInOnboarding, isCreatorType: isCreatorType, usesPagePromo: usesPagePromo, level: level, tileImage: tileImage)
+        let category = Category(
+            id: json["id"].stringValue,
+            name: json["name"].stringValue,
+            slug: json["slug"].stringValue,
+            order: json["order"].intValue,
+            allowInOnboarding: json["allow_in_onboarding"].bool ?? true,
+            isCreatorType: json["is_creator_type"].bool ?? true,
+            level: level,
+            tileImage: tileImage
+            )
 
         category.links = data["links"] as? [String: Any]
-        category.isSponsored = isSponsored
-        category.body = body
-        category.header = header
-        category.ctaCaption = ctaCaption
-        category.ctaURL = ctaURL
 
         return category
     }

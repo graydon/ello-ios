@@ -4,38 +4,54 @@
 
 protocol CategoryCardListDelegate: class {
     func allCategoriesTapped()
+    func editCategoriesTapped()
+    func subscribedCategoryTapped()
     func categoryCardSelected(_ index: Int)
 }
 
 class CategoryCardListView: View {
-    weak var delegate: CategoryCardListDelegate?
-
-    struct CategoryInfo {
-        let title: String
-        let imageURL: URL?
-    }
-
     struct Size {
         static let height: CGFloat = 70
-        static let smallCardSize: CGSize = CGSize(width: 50, height: 68)
-        static let cardSize: CGSize = CGSize(width: 100, height: 68)
         static let spacing: CGFloat = 1
     }
 
-    var categoriesInfo: [CategoryInfo] = [] {
-        didSet {
-            let changed: Bool = (categoriesInfo.count != oldValue.count) || oldValue.enumerated().any { (index, info) in
-                return info.title != categoriesInfo[index].title
-            }
-            if changed {
-                updateCategoryViews()
-            }
+    struct CategoryInfo {
+        enum Kind {
+            case all
+            case subscribed
+            case zeroState
+            case category
         }
+
+        let title: String
+        let kind: Kind
+        let imageURL: URL?
+
+        var isAll: Bool { return kind == .all }
+        var isSubscribed: Bool { return kind == .subscribed }
+        var isZeroState: Bool { return kind == .zeroState }
+        var isCategory: Bool { return kind == .category }
+    }
+
+    weak var delegate: CategoryCardListDelegate?
+
+    var categoriesInfo: [CategoryInfo] = [] {
+        didSet { updateCategoryViews() }
     }
 
     private var buttonIndexLookup: [UIButton: Int] = [:]
     private var categoryViews: [CategoryCardView] = []
-    private var scrollView = UIScrollView()
+    private let scrollView = UIScrollView()
+    private var scrollViewBackground: UIView?
+
+    var rightInset: CGFloat {
+        get { return scrollView.contentInset.right }
+        set {
+            scrollView.contentInset.right = newValue
+            scrollView.scrollIndicatorInsets.right = newValue
+            setNeedsLayout()
+        }
+    }
 
     override func style() {
         backgroundColor = .white
@@ -45,7 +61,7 @@ class CategoryCardListView: View {
     }
 
     override func arrange() {
-        self.addSubview(scrollView)
+        addSubview(scrollView)
 
         scrollView.snp.makeConstraints { make in
             make.edges.equalTo(self)
@@ -58,6 +74,16 @@ class CategoryCardListView: View {
     }
 
     @objc
+    func subscribedCategoryTapped() {
+        delegate?.subscribedCategoryTapped()
+    }
+
+    @objc
+    func editCategoriesTapped() {
+        delegate?.editCategoriesTapped()
+    }
+
+    @objc
     func categoryButtonTapped(_ button: UIButton) {
         guard let index = buttonIndexLookup[button] else { return }
         delegate?.categoryCardSelected(index)
@@ -65,6 +91,7 @@ class CategoryCardListView: View {
 
     func scrollToIndex(_ index: Int, animated: Bool) {
         guard let view = categoryViews.safeValue(index) else { return }
+        layoutIfNeeded()
 
         let left = view.frame.minX
         let right = view.frame.maxX - frame.width
@@ -78,6 +105,7 @@ class CategoryCardListView: View {
 
     func selectCategory(index: Int) {
         guard let view = categoryViews.safeValue(index) else { return }
+
         for card in categoryViews where card != view {
             card.isSelected = false
         }
@@ -86,39 +114,33 @@ class CategoryCardListView: View {
     }
 
     private func updateCategoryViews() {
+        self.scrollViewBackground?.removeFromSuperview()
         for view in categoryViews {
             view.removeFromSuperview()
         }
 
         buttonIndexLookup = [:]
 
-        let allCategories = CategoryCardView(info: CategoryInfo(title: InterfaceString.Discover.AllCategories, imageURL: nil))
-        allCategories.overlayAlpha = CategoryCardView.darkAlpha
-        allCategories.snp.makeConstraints { make in
-            make.size.equalTo(Size.smallCardSize)
-        }
-        allCategories.addTarget(self, action: #selector(allCategoriesTapped))
+        var index = 0
+        categoryViews = categoriesInfo.map { info in
+            let card = CategoryCardView(info: info)
 
-        categoryViews = [allCategories] + categoriesInfo.enumerated().map { (index, info) in
-            let view = categoryView(index: index, info: info)
-            view.snp.makeConstraints { make in
-                make.size.equalTo(Size.cardSize)
+            switch info.kind {
+            case .all:
+                card.addTarget(self, action: #selector(allCategoriesTapped))
+            case .subscribed:
+                card.addTarget(self, action: #selector(subscribedCategoryTapped))
+            case .zeroState:
+                card.addTarget(self, action: #selector(editCategoriesTapped))
+            case .category:
+                buttonIndexLookup[card.button] = index
+                card.addTarget(self, action: #selector(categoryButtonTapped(_:)))
+                index += 1
             }
-            return view
+
+            return card
         }
-        arrangeCategoryViews()
 
-        layoutIfNeeded()
-    }
-
-    private func categoryView(index: Int, info: CategoryInfo) -> CategoryCardView {
-        let card = CategoryCardView(info: info)
-        card.addTarget(self, action: #selector(categoryButtonTapped(_:)))
-        buttonIndexLookup[card.button] = index
-        return card
-    }
-
-    private func arrangeCategoryViews() {
         var prevView: UIView? = nil
         for view in categoryViews {
             scrollView.addSubview(view)
@@ -138,9 +160,19 @@ class CategoryCardListView: View {
         }
 
         if let prevView = prevView {
+            let scrollViewBackground = UIView()
+            scrollViewBackground.backgroundColor = .white
+            scrollView.insertSubview(scrollViewBackground, at: 0)
+            scrollViewBackground.snp.makeConstraints { make in
+                make.leading.trailing.equalTo(scrollView)
+                make.top.bottom.equalTo(prevView).inset(-Size.spacing)
+            }
+            self.scrollViewBackground = scrollViewBackground
+
             prevView.snp.makeConstraints { make in
-                make.trailing.equalTo(scrollView.snp.trailing)
+                make.trailing.equalTo(scrollViewBackground).offset(-Size.spacing)
             }
         }
+        setNeedsLayout()
     }
 }

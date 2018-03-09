@@ -21,7 +21,7 @@ class LightboxViewController: BaseElloViewController {
     private var _mockScreen: LightboxScreenProtocol?
     var screen: LightboxScreenProtocol {
         set(screen) { _mockScreen = screen }
-        get { return _mockScreen ?? self.view as! LightboxScreen }
+        get { return fetchScreen(_mockScreen) }
     }
 
     init(selected index: Int, allItems: [Item]) {

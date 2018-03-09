@@ -22,11 +22,7 @@ class ElloProvider {
     }
 
     static func DefaultProvider() -> MoyaProvider<ElloAPI> {
-        return MoyaProvider<ElloAPI>(endpointClosure: ElloProvider.endpointClosure, manager: ElloManager.manager)
-    }
-
-    static func ShareExtensionProvider() -> MoyaProvider<ElloAPI> {
-        return MoyaProvider<ElloAPI>(endpointClosure: ElloProvider.endpointClosure, manager: ElloManager.shareExtensionManager)
+        return MoyaProvider<ElloAPI>(endpointClosure: ElloProvider.endpointClosure, manager: ElloManager.alamofireManager())
     }
 
     static var defaultProvider: MoyaProvider<ElloAPI> = ElloProvider.DefaultProvider()

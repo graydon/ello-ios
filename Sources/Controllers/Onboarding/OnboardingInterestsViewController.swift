@@ -11,7 +11,7 @@ class OnboardingInterestsViewController: StreamableViewController {
 
     required init() {
         super.init(nibName: nil, bundle: nil)
-        streamViewController.streamKind = .allCategories
+        streamViewController.streamKind = .categories
     }
 
     required init?(coder: NSCoder) {
@@ -20,7 +20,7 @@ class OnboardingInterestsViewController: StreamableViewController {
 
     override func loadView() {
         let screen = Screen()
-        self.view = screen
+        view = screen
         viewContainer = screen
     }
 
@@ -45,7 +45,7 @@ class OnboardingInterestsViewController: StreamableViewController {
 
         if let categories = jsonables as? [Category] {
             let onboardingCategories = categories.filter { $0.allowInOnboarding }
-            items += onboardingCategories.map { StreamCellItem(jsonable: $0, type: .selectableCategoryCard) }
+            items += onboardingCategories.map { StreamCellItem(jsonable: $0, type: .onboardingCategoryCard) }
         }
         return items
     }
@@ -63,16 +63,13 @@ extension OnboardingInterestsViewController: OnboardingStepController {
     func onboardingWillProceed(abort: Bool, proceedClosure: @escaping (_ success: OnboardingViewController.OnboardingProceed) -> Void) {
         guard selectedCategories.count > 0 else { return }
 
-        let categories = self.selectedCategories
-        for category in categories {
+        onboardingData.categories = selectedCategories
+        for category in selectedCategories {
             Tracker.shared.onboardingCategorySelected(category)
         }
 
-        UserService().setUser(categories: categories)
-            .then { [weak self] _ -> Void in
-                guard let `self` = self else { return }
-
-                self.onboardingData.categories = categories
+        ProfileService().update(categories: selectedCategories, onboarding: true)
+            .then { _ -> Void in
                 proceedClosure(.continue)
             }
             .catch { [weak self] _ in

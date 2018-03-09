@@ -20,11 +20,12 @@ class LoggedOutViewController: BaseElloViewController, BottomBarController {
     let bottomBarVisible: Bool = true
     var bottomBarHeight: CGFloat { return screen.bottomBarHeight }
     var bottomBarView: UIView { return screen.bottomBarView }
+    var childView: UIView?
 
     private var _mockScreen: LoggedOutScreenProtocol?
     var screen: LoggedOutScreenProtocol {
         set(screen) { _mockScreen = screen }
-        get { return _mockScreen ?? self.view as! LoggedOutScreen }
+        get { return fetchScreen(_mockScreen) }
     }
 
     private var userActionAttemptedObserver: NotificationObserver?
@@ -35,13 +36,23 @@ class LoggedOutViewController: BaseElloViewController, BottomBarController {
 
     override func addChildViewController(_ childController: UIViewController) {
         super.addChildViewController(childController)
-        screen.setControllerView(childController.view)
+        childView = childController.view
+        if isViewLoaded {
+            screen.setControllerView(childController.view)
+        }
     }
 
     override func loadView() {
         let screen = LoggedOutScreen()
         screen.delegate = self
-        self.view = screen
+        view = screen
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        if let childView = childView {
+            screen.setControllerView(childView)
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {

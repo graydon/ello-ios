@@ -18,7 +18,9 @@ final class ProfileGenerator: StreamGenerator {
     private var localToken: String = ""
     private var loadingToken = LoadingToken()
     private let queue = OperationQueue()
-    private var pageConfig: PageConfig?
+
+    private var nextPageRequest: GraphQLRequest<(PageConfig, [Post])>?
+    private var nextRequestGenerator: ((String) -> GraphQLRequest<(PageConfig, [Post])>)?
 
     func headerItems() -> [StreamCellItem] {
         guard let user = user else { return [] }
@@ -34,13 +36,7 @@ final class ProfileGenerator: StreamGenerator {
         return items
     }
 
-    init(
-        currentUser: User?,
-        userParam: String,
-        user: User?,
-        streamKind: StreamKind,
-        destination: StreamDestination?
-        ) {
+    init(currentUser: User?, userParam: String, user: User?, streamKind: StreamKind, destination: StreamDestination) {
         self.currentUser = currentUser
         self.user = user
         self.userParam = userParam
@@ -53,6 +49,10 @@ final class ProfileGenerator: StreamGenerator {
         queue.addOperation(doneOperation)
 
         let username = user?.username
+        if let username = username {
+            self.nextRequestGenerator = { next in return API().userPosts(username: username, before: next) }
+        }
+
         localToken = loadingToken.resetInitialPageLoadingToken()
         if reload {
             user = nil
@@ -73,48 +73,56 @@ final class ProfileGenerator: StreamGenerator {
 
     func toggleGrid() {
         if let posts = posts, hasPosts == true {
-            destination?.replacePlaceholder(type: .streamPosts, items: parse(jsonables: posts))
+            destination?.replacePlaceholder(type: .streamItems, items: parse(jsonables: posts))
         }
         else if let user = user, hasPosts == false {
             let noItems = [StreamCellItem(jsonable: user, type: .noPosts)]
-            destination?.replacePlaceholder(type: .streamPosts, items: noItems)
+            destination?.replacePlaceholder(type: .streamItems, items: noItems)
         }
     }
 
     func loadNextPage() -> Promise<[JSONAble]>? {
         guard
-            let username = user?.username,
-            let pageConfig = pageConfig,
-            let next = pageConfig.next
+            let nextPageRequest = nextPageRequest
         else { return nil }
 
-        return API().userPosts(username: username, before: next)
-            .then { newPageConfig, posts -> [JSONAble] in
-                self.destination?.setPagingConfig(responseConfig: self.createFakeConfig(pageConfig: newPageConfig))
-                self.pageConfig = newPageConfig
+        return nextPageRequest
+            .execute()
+            .then { pageConfig, posts -> [JSONAble] in
+                self.setNextPageConfig(pageConfig)
                 return posts
             }
             .catch { error in
                 let errorConfig = PageConfig(next: nil, isLastPage: true)
-                self.destination?.setPagingConfig(responseConfig: self.createFakeConfig(pageConfig: errorConfig))
+                self.destination?.setPagingConfig(responseConfig: ResponseConfig(pageConfig: errorConfig))
             }
     }
 
+    private func setNextPageConfig(_ pageConfig: PageConfig) {
+        self.destination?.setPagingConfig(responseConfig: ResponseConfig(pageConfig: pageConfig))
+        if let next = pageConfig.next, let nextRequestGenerator = nextRequestGenerator {
+            self.nextPageRequest = nextRequestGenerator(next)
+        }
+        else {
+            self.nextPageRequest = nil
+            self.nextRequestGenerator = nil
+        }
+    }
 }
 
-private extension ProfileGenerator {
+extension ProfileGenerator {
 
-    func setPlaceHolders() {
+    private func setPlaceHolders() {
         let header = StreamCellItem(type: .profileHeaderGhost, placeholderType: .profileHeader)
         header.calculatedCellHeights.oneColumn = ProfileHeaderGhostCell.Size.height
         header.calculatedCellHeights.multiColumn = ProfileHeaderGhostCell.Size.height
         destination?.setPlaceholders(items: [
             header,
-            StreamCellItem(type: .placeholder, placeholderType: .streamPosts)
+            StreamCellItem(type: .placeholder, placeholderType: .streamItems)
         ])
     }
 
-    func setInitialUser(_ doneOperation: AsyncOperation) {
+    private func setInitialUser(_ doneOperation: AsyncOperation) {
         guard let user = user else { return }
 
         destination?.setPrimary(jsonable: user)
@@ -122,7 +130,7 @@ private extension ProfileGenerator {
         doneOperation.run()
     }
 
-    func loadUser(_ doneOperation: AsyncOperation, reload: Bool) {
+    private func loadUser(_ doneOperation: AsyncOperation, reload: Bool) {
         guard !doneOperation.isFinished || reload else { return }
 
         // load the user with no posts
@@ -131,6 +139,8 @@ private extension ProfileGenerator {
                 guard self.loadingToken.isValidInitialPageLoadingToken(self.localToken) else { return }
 
                 self.user = user
+                let username = user.username
+                self.nextRequestGenerator = { next in return API().userPosts(username: username, before: next) }
                 self.destination?.setPrimary(jsonable: user)
                 self.destination?.replacePlaceholder(type: .profileHeader, items: self.headerItems())
                 doneOperation.run()
@@ -141,25 +151,18 @@ private extension ProfileGenerator {
             }
     }
 
-    func createFakeConfig(pageConfig: PageConfig) -> ResponseConfig {
-        let fakeConfig = ResponseConfig()
-        fakeConfig.nextQuery = URLComponents(string: ElloURI.baseURL)
-        fakeConfig.totalPagesRemaining = pageConfig.isLastPage == true ? "0" : "1"
-        return fakeConfig
-    }
-
-    func gqlLoadUserPosts(username: String, _ doneOperation: AsyncOperation, reload: Bool) {
+    private func gqlLoadUserPosts(username: String, _ doneOperation: AsyncOperation, reload: Bool) {
         let displayPostsOperation = AsyncOperation()
         displayPostsOperation.addDependency(doneOperation)
         queue.addOperation(displayPostsOperation)
 
         API().userPosts(username: username)
+            .execute()
             .then { pageConfig, posts -> Void in
                 guard self.loadingToken.isValidInitialPageLoadingToken(self.localToken) else { return }
 
-                self.destination?.setPagingConfig(responseConfig: self.createFakeConfig(pageConfig: pageConfig))
+                self.setNextPageConfig(pageConfig)
 
-                self.pageConfig = pageConfig
                 self.posts = posts
                 let userPostItems = self.parse(jsonables: posts)
                 displayPostsOperation.run {
@@ -168,7 +171,7 @@ private extension ProfileGenerator {
                             self.hasPosts = false
                             let user: User = self.user ?? User.empty(id: self.userParam)
                             let noItems = [StreamCellItem(jsonable: user, type: .noPosts)]
-                            self.destination?.replacePlaceholder(type: .streamPosts, items: noItems) {
+                            self.destination?.replacePlaceholder(type: .streamItems, items: noItems) {
                                 self.destination?.isPagingEnabled = false
                             }
                             self.destination?.replacePlaceholder(type: .profileHeader, items: self.headerItems())
@@ -179,7 +182,7 @@ private extension ProfileGenerator {
                             if updateHeaderItems {
                                 self.destination?.replacePlaceholder(type: .profileHeader, items: self.headerItems())
                             }
-                            self.destination?.replacePlaceholder(type: .streamPosts, items: userPostItems) {
+                            self.destination?.replacePlaceholder(type: .streamItems, items: userPostItems) {
                                 self.destination?.isPagingEnabled = true
                             }
                         }
@@ -192,7 +195,7 @@ private extension ProfileGenerator {
             }
     }
 
-    func loadUserPosts(_ doneOperation: AsyncOperation, reload: Bool) {
+    private func loadUserPosts(_ doneOperation: AsyncOperation, reload: Bool) {
         let displayPostsOperation = AsyncOperation()
         displayPostsOperation.addDependency(doneOperation)
         queue.addOperation(displayPostsOperation)
@@ -210,7 +213,7 @@ private extension ProfileGenerator {
                             self.hasPosts = false
                             let user: User = self.user ?? User.empty(id: self.userParam)
                             let noItems = [StreamCellItem(jsonable: user, type: .noPosts)]
-                            self.destination?.replacePlaceholder(type: .streamPosts, items: noItems) {
+                            self.destination?.replacePlaceholder(type: .streamItems, items: noItems) {
                                 self.destination?.isPagingEnabled = false
                             }
                             self.destination?.replacePlaceholder(type: .profileHeader, items: self.headerItems())
@@ -221,7 +224,7 @@ private extension ProfileGenerator {
                             if updateHeaderItems {
                                 self.destination?.replacePlaceholder(type: .profileHeader, items: self.headerItems())
                             }
-                            self.destination?.replacePlaceholder(type: .streamPosts, items: userPostItems) {
+                            self.destination?.replacePlaceholder(type: .streamItems, items: userPostItems) {
                                 self.destination?.isPagingEnabled = true
                             }
                         }

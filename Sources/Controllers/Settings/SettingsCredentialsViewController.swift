@@ -6,7 +6,7 @@ class SettingsCredentialsViewController: BaseElloViewController {
     private var _mockScreen: SettingsCredentialsScreenProtocol?
     var screen: SettingsCredentialsScreenProtocol {
         set(screen) { _mockScreen = screen }
-        get { return _mockScreen ?? self.view as! SettingsCredentialsScreen }
+        get { return fetchScreen(_mockScreen) }
     }
 
     var keyboardWillShowObserver: NotificationObserver?
@@ -26,7 +26,7 @@ class SettingsCredentialsViewController: BaseElloViewController {
     override func loadView() {
         let screen = SettingsCredentialsScreen()
         screen.delegate = self
-        self.view = screen
+        view = screen
     }
 
     override func viewDidLoad() {
