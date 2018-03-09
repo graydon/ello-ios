@@ -189,10 +189,7 @@ extension ProfileGenerator {
                     }
                 }
             }
-            .catch { _ in
-                self.destination?.primaryJSONAbleNotFound()
-                self.queue.cancelAllOperations()
-            }
+            .ignoreErrors()
     }
 
     private func loadUserPosts(_ doneOperation: AsyncOperation, reload: Bool) {
@@ -231,9 +228,6 @@ extension ProfileGenerator {
                     }
                 }
             }
-            .catch { _ in
-                self.destination?.primaryJSONAbleNotFound()
-                self.queue.cancelAllOperations()
-            }
+            .ignoreErrors()
     }
 }

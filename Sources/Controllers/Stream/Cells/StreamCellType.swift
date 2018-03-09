@@ -10,11 +10,6 @@ typealias CellConfigClosure = (
     _ currentUser: User?
 ) -> Void
 
-// MARK: Equatable
-func == (lhs: StreamCellType, rhs: StreamCellType) -> Bool {
-    return lhs.equalityIdentifier == rhs.equalityIdentifier
-}
-
 enum StreamCellType: Equatable {
     case announcement
     case artistInviteAdminControls
@@ -60,6 +55,10 @@ enum StreamCellType: Equatable {
     case unknown
     case userAvatars
     case userListItem
+
+    static func == (lhs: StreamCellType, rhs: StreamCellType) -> Bool {
+        return lhs.equalityIdentifier == rhs.equalityIdentifier
+    }
 
     enum PlaceholderType {
         case streamItems

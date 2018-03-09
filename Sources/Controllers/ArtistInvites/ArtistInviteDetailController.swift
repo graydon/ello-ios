@@ -105,7 +105,10 @@ extension ArtistInviteDetailController: StreamDestination {
 
     func replacePlaceholder(type: StreamCellType.PlaceholderType, items: [StreamCellItem], completion: @escaping Block) {
         streamViewController.replacePlaceholder(type: type, items: items, completion: completion)
-        streamViewController.doneLoading()
+
+        if type == .artistInvites {
+            streamViewController.doneLoading()
+        }
     }
 
     func setPlaceholders(items: [StreamCellItem]) {

@@ -20,11 +20,17 @@ class ElloDataSource: NSObject {
         return indexPath.section == 0 && indexPath.item >= 0 && indexPath.item < visibleCellItems.count
     }
 
+    func streamCellItem(where filter: (StreamCellItem) -> Bool) -> StreamCellItem? {
+        return visibleCellItems.find(filter)
+    }
+
+    func indexPath(where filter: (StreamCellItem) -> Bool) -> IndexPath? {
+        guard let index = visibleCellItems.index(where: filter) else { return nil }
+        return IndexPath(item: index, section: 0)
+    }
+
     func indexPath(forItem item: StreamCellItem) -> IndexPath? {
-        if let index = visibleCellItems.index(where: { $0 == item }) {
-            return IndexPath(item: index, section: 0)
-        }
-        return nil
+        return indexPath(where: { $0 == item })
     }
 
     func indexPaths(forPlaceholderType placeholderType: StreamCellType.PlaceholderType) -> [IndexPath] {

@@ -90,11 +90,12 @@ extension OnboardingInviteViewController {
             .then { mixedContacts -> Void in
                 self.streamViewController.clearForInitialLoad()
                 self.setContacts(mixedContacts)
-                self.streamViewController.doneLoading()
             }
             .catch { _ in
                 let mixedContacts: [(LocalPerson, User?)] = self.addressBook.localPeople.map { ($0, .none) }
                 self.setContacts(mixedContacts)
+            }
+            .always {
                 self.streamViewController.doneLoading()
             }
     }

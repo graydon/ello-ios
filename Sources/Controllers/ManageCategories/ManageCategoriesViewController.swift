@@ -134,8 +134,6 @@ extension ManageCategoriesViewController: StreamDestination {
     }
 
     func replacePlaceholder(type: StreamCellType.PlaceholderType, items: [StreamCellItem], completion: @escaping Block) {
-        streamViewController.doneLoading()
-
         streamViewController.replacePlaceholder(type: type, items: items) {
             if type == .streamItems, let currentUser = self.currentUser {
                 for (row, item) in items.enumerated() {
@@ -149,6 +147,10 @@ extension ManageCategoriesViewController: StreamDestination {
             }
 
             completion()
+        }
+
+        if type == .streamItems {
+            streamViewController.doneLoading()
         }
     }
 
