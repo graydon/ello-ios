@@ -83,21 +83,21 @@ class NotificationCell: UICollectionViewCell, UIWebViewDelegate {
 
     var canReplyToComment: Bool {
         set {
-            replyButton.isHidden = !newValue
+            replyButton.isVisible = newValue
             setNeedsLayout()
         }
         get { return !replyButton.isHidden }
     }
     var canBackFollow: Bool {
         set {
-            relationshipControl.isHidden = !newValue
+            relationshipControl.isVisible = newValue
             setNeedsLayout()
         }
         get { return !relationshipControl.isHidden }
     }
     var buyButtonVisible: Bool {
         get { return !buyButtonImage.isHidden }
-        set { buyButtonImage.isHidden = !newValue }
+        set { buyButtonImage.isVisible = newValue }
     }
 
     private var messageVisible = false
@@ -112,7 +112,7 @@ class NotificationCell: UICollectionViewCell, UIWebViewDelegate {
                     messageWebView.isHidden = true
                 }
                 else {
-                    messageWebView.isHidden = false
+                    messageWebView.isVisible = true
                 }
                 messageWebView.loadHTMLString(StreamTextCellHTML.postHTML(value), baseURL: URL(string: "/"))
                 _messageHtml = value
@@ -130,7 +130,7 @@ class NotificationCell: UICollectionViewCell, UIWebViewDelegate {
                 notificationImageView.isHidden = true
                 return
             }
-            notificationImageView.isHidden = false
+            notificationImageView.isVisible = true
             self.notificationImageView.pin_setImage(from: imageURL) { [weak self] result in
                 guard
                     let `self` = self,
@@ -341,7 +341,7 @@ class NotificationCell: UICollectionViewCell, UIWebViewDelegate {
 
     func webViewDidFinishLoad(_ webView: UIWebView) {
         if messageVisible {
-            messageWebView.isHidden = !messageVisible
+            messageWebView.isVisible = messageVisible
         }
         webContentReady?(webView)
         if let height = webView.windowContentSize()?.height {

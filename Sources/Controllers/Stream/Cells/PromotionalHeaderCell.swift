@@ -226,7 +226,7 @@ class PromotionalHeaderCell: CollectionViewCell {
         callToActionButton.setAttributedTitle(config.attributedCallToAction, for: .normal)
 
         if config.style == .category {
-            titleUnderlineView.isHidden = false
+            titleUnderlineView.isVisible = true
             titleCenteredConstraint.update(priority: Priority.high)
             titleLeftConstraint.update(priority: Priority.low)
         }
@@ -236,7 +236,7 @@ class PromotionalHeaderCell: CollectionViewCell {
             titleLeftConstraint.update(priority: Priority.high)
         }
 
-        subscribedIcon.isHidden = !config.isSubscribed
+        subscribedIcon.isVisible = config.isSubscribed
     }
 
     func setImageURL(_ url: URL?) {
@@ -322,8 +322,8 @@ private extension PromotionalHeaderCell {
     }
 
     func imageLoadFailed() {
-        failImage.isHidden = false
-        failBackgroundView.isHidden = false
+        failImage.isVisible = true
+        failBackgroundView.isVisible = true
         circle.stopPulse()
         imageSize = nil
         UIView.animate(withDuration: 0.15, animations: {

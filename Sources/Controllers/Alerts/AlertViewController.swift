@@ -184,7 +184,7 @@ extension AlertViewController {
             self.view.addSubview(contentView)
         }
         else {
-            self.tableView.isHidden = false
+            self.tableView.isVisible = true
         }
 
         resize()

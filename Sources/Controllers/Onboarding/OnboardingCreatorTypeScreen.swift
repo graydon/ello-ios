@@ -190,7 +190,7 @@ class OnboardingCreatorTypeScreen: StreamableScreen {
     private func updateCreatorTypeLabels() {
         creatorTypeContainerIntroTop.set(isActivated: showIntroText)
         creatorTypeContainerTop.set(isActivated: !showIntroText)
-        headerLabel.isHidden = !showIntroText
+        headerLabel.isVisible = showIntroText
     }
 
     private func updateCreatorCategories() {

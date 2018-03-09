@@ -46,7 +46,7 @@ class DeleteAccountConfirmationViewController: BaseElloViewController {
         case .areYouSure:
             let title = InterfaceString.AreYouSure
             titleLabel.text = title
-            infoLabel.isHidden = false
+            infoLabel.isVisible = true
 
         case .noTurningBack:
             let title = InterfaceString.Settings.AccountIsBeingDeleted
@@ -55,7 +55,7 @@ class DeleteAccountConfirmationViewController: BaseElloViewController {
             timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(DeleteAccountConfirmationViewController.tick), userInfo: .none, repeats: true)
             infoLabel.isHidden = true
             buttonView.isHidden = true
-            cancelView.isHidden = false
+            cancelView.isVisible = true
         }
     }
 

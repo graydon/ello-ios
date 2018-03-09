@@ -29,7 +29,7 @@ class EditorialInviteCell: EditorialCell {
         responder?.submitInvite(cell: self, emails: emails)
 
         inviteControls.isHidden = true
-        sentLabel.isHidden = false
+        sentLabel.isVisible = true
         textView.text = ""
         timer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(showControls), userInfo: .none, repeats: false)
     }
@@ -50,12 +50,12 @@ class EditorialInviteCell: EditorialCell {
             timer?.invalidate()
         }
         inviteControls.isHidden = showSent
-        sentLabel.isHidden = !showSent
+        sentLabel.isVisible = showSent
     }
 
     @objc
     func showControls() {
-        inviteControls.isHidden = false
+        inviteControls.isVisible = true
         sentLabel.isHidden = true
         timer = nil
     }

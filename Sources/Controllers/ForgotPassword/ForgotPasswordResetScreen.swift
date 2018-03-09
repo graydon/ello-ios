@@ -104,7 +104,7 @@ extension ForgotPasswordResetScreen: ForgotPasswordResetScreenProtocol {
     }
 
     func showFailureMessage() {
-        failureLabel.isHidden = false
+        failureLabel.isVisible = true
         activatePasswordButton.isHidden = true
         passwordField.isHidden = true
         passwordErrorLabel.isHidden = true

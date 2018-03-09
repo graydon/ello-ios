@@ -437,7 +437,7 @@ class LightboxScreen: Screen, LightboxScreenProtocol {
         }
 
         if canLoadMore() {
-            nextPageView.isHidden = false
+            nextPageView.isVisible = true
         }
     }
 

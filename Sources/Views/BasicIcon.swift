@@ -46,13 +46,13 @@ class BasicIcon: UIView {
     // MARK: Private
     func updateIcon(selected: Bool, enabled: Bool) {
         if let disabledIconView = disabledIconView {
-            normalIconView.isHidden = !(enabled && !selected)
-            selectedIconView.isHidden = !(enabled && selected)
+            normalIconView.isVisible = (enabled && !selected)
+            selectedIconView.isVisible = (enabled && selected)
             disabledIconView.isHidden = enabled
         }
         else {
             normalIconView.isHidden = selected
-            selectedIconView.isHidden = !selected
+            selectedIconView.isVisible = selected
         }
     }
 }

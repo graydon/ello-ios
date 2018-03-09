@@ -313,7 +313,7 @@ class ElloNavigationBar: UIView {
     private func updateBackButton() {
         let hasBackButton = leftItems.contains(where: { $0 == .back })
         if hasBackButton && showBackButton {
-            persistentBackButton.isHidden = false
+            persistentBackButton.isVisible = true
         }
         else {
             persistentBackButton.isHidden = true

@@ -258,7 +258,7 @@ extension CategoryViewController: CategoryStreamDestination, StreamDestination {
         let pullToRefreshView = streamViewController.pullToRefreshView
         pullToRefreshView?.isHidden = true
         screen.set(categoriesInfo: info) {
-            pullToRefreshView?.isHidden = false
+            pullToRefreshView?.isVisible = true
         }
 
         if case let .category(slug) = categorySelection,

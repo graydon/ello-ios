@@ -19,7 +19,7 @@ class ProfileBioView: ProfileBaseView {
     private let grayLine = UIView()
     var grayLineVisible: Bool {
         get { return !grayLine.isHidden }
-        set { grayLine.isHidden = !newValue }
+        set { grayLine.isVisible = newValue }
     }
 
     var onHeightMismatch: OnHeightMismatch?
@@ -52,7 +52,7 @@ class ProfileBioView: ProfileBaseView {
 extension ProfileBioView {
     func prepareForReuse() {
         self.bio = ""
-        grayLine.isHidden = false
+        grayLine.isVisible = true
     }
 }
 

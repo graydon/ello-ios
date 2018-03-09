@@ -18,7 +18,7 @@ struct AlertCellPresenter {
 
         cell.button.text = ""
         cell.button.font = .defaultFont()
-        cell.button.isHidden = false
+        cell.button.isVisible = true
 
         cell.input.isHidden = true
         cell.okButton.isHidden = true
@@ -30,7 +30,7 @@ struct AlertCellPresenter {
 
         cell.button.isHidden = true
 
-        cell.label.isHidden = false
+        cell.label.isVisible = true
         cell.label.font = .regularBlackFont(18)
         cell.label.text = action.title
         cell.label.textColor = .black
@@ -43,7 +43,7 @@ struct AlertCellPresenter {
 
         cell.button.isHidden = true
 
-        cell.label.isHidden = false
+        cell.label.isVisible = true
         cell.label.text = action.title
         cell.label.textColor = .greyA
         cell.label.textAlignment = .left
@@ -55,7 +55,7 @@ struct AlertCellPresenter {
 
         cell.button.isHidden = true
 
-        cell.label.isHidden = false
+        cell.label.isVisible = true
         let attributedString = NSAttributedString(action.title)
         cell.label.attributedText = attributedString
         cell.background.backgroundColor = .white
@@ -112,7 +112,7 @@ struct AlertCellPresenter {
         cell.label.isHidden = true
         cell.button.isHidden = true
 
-        cell.input.isHidden = false
+        cell.input.isVisible = true
         cell.input.placeholder = action.title
         cell.input.keyboardAppearance = .dark
         cell.input.keyboardType = .default
@@ -143,8 +143,8 @@ struct AlertCellPresenter {
         cell.label.isHidden = true
         cell.button.isHidden = true
         cell.input.isHidden = true
-        cell.okButton.isHidden = false
-        cell.cancelButton.isHidden = false
+        cell.okButton.isVisible = true
+        cell.cancelButton.isVisible = true
     }
 
 }

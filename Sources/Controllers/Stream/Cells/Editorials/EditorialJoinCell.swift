@@ -133,7 +133,7 @@ class EditorialJoinCell: EditorialCell {
             remainingHeight += joinCaption.frame.height + Size.textFieldMargin
         }
         else {
-            joinCaption.isHidden = false
+            joinCaption.isVisible = true
         }
         let fieldHeight: CGFloat = min(max(ceil(remainingHeight / 3), Size.minFieldHeight), Size.maxFieldHeight)
         var y: CGFloat = textFieldsBottom

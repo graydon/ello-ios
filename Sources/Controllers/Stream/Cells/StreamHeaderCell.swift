@@ -97,10 +97,10 @@ class StreamHeaderCell: UICollectionViewCell {
             aiSubmissionVisible = isSubmission
         }
         let categoryVisible: Bool = category != nil && !repostedVisible && !aiSubmissionVisible
-        repostedByButton.isHidden = !repostedVisible
-        repostIconView.isHidden = !repostedVisible
-        categoryButton.isHidden = !categoryVisible
-        artistInviteSubmissionButton.isHidden = !aiSubmissionVisible
+        repostedByButton.isVisible = repostedVisible
+        repostIconView.isVisible = repostedVisible
+        categoryButton.isVisible = categoryVisible
+        artistInviteSubmissionButton.isVisible = aiSubmissionVisible
 
         if let category = category, categoryVisible {
             let attributedString = NSAttributedString(string: "in ", attributes: [
@@ -165,7 +165,7 @@ class StreamHeaderCell: UICollectionViewCell {
 
         timestampLabel.sizeToFit()
 
-        relationshipControl.isHidden = !followButtonVisible
+        relationshipControl.isVisible = followButtonVisible
         usernameButton.isHidden = followButtonVisible
         if followButtonVisible {
             let relationshipControlSize = relationshipControl.intrinsicContentSize

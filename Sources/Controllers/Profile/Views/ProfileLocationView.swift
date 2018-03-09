@@ -33,7 +33,7 @@ class ProfileLocationView: ProfileBaseView {
     private let grayLine = UIView()
     var grayLineVisible: Bool {
         get { return !grayLine.isHidden }
-        set { grayLine.isHidden = !newValue }
+        set { grayLine.isVisible = newValue }
     }
 
     var onHeightMismatch: OnHeightMismatch?

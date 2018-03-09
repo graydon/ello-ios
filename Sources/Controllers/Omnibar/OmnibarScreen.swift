@@ -108,7 +108,7 @@ class OmnibarScreen: Screen, OmnibarScreenProtocol {
         didSet {
             toolbarPinToNavConstraint.set(isActivated: canGoBack)
             toolbarPinToTopConstraint.set(isActivated: !canGoBack)
-            navigationBar.isHidden = !canGoBack
+            navigationBar.isVisible = canGoBack
             statusBar.isHidden = canGoBack
 
             setNeedsLayout()
@@ -517,7 +517,7 @@ class OmnibarScreen: Screen, OmnibarScreenProtocol {
         guard let (_, region) = tableViewRegions.safeValue(path.row), region.isText else { return }
 
         currentTextPath = path
-        textScrollView.isHidden = false
+        textScrollView.isVisible = true
         textScrollView.contentOffset = regionsTableView.contentOffset
         textScrollView.contentInset = regionsTableView.contentInset
         textScrollView.scrollIndicatorInsets = regionsTableView.scrollIndicatorInsets
@@ -943,7 +943,7 @@ class OmnibarScreen: Screen, OmnibarScreenProtocol {
     @objc
     func addImageButtonTapped() {
         addImageButton.isHidden = true
-        cancelImageButton.isHidden = false
+        cancelImageButton.isVisible = true
         stopEditing()
 
         UIImagePickerController.requestStatus()
@@ -955,7 +955,7 @@ class OmnibarScreen: Screen, OmnibarScreenProtocol {
 
     private func resetToImageButton() {
         currentAssets = []
-        addImageButton.isHidden = false
+        addImageButton.isVisible = true
         cancelImageButton.isHidden = true
         setPhotoAccessoryView(nil)
     }
@@ -1099,7 +1099,7 @@ class OmnibarScreen: Screen, OmnibarScreenProtocol {
         }
 
         if assets.count > imageFetchLimit {
-            nativeAdditionalImagesButton.isHidden = false
+            nativeAdditionalImagesButton.isVisible = true
             nativeAdditionalImagesButton.frame.origin.x = x
 
             x += nativeAdditionalImagesButton.frame.width

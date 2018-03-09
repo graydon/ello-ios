@@ -221,7 +221,7 @@ class CommentHeaderCell: CollectionViewCell {
         usernameButton.setTitle(config.author?.atName, for: .normal)
         if config.canReplyAndFlag {
             replyButtonWidthConstraint.update(offset: Size.buttonWidth)
-            replyButton.isHidden = false
+            replyButton.isVisible = true
         }
         else {
             replyButtonWidthConstraint.update(offset: 0)
@@ -229,9 +229,9 @@ class CommentHeaderCell: CollectionViewCell {
         }
         timestampLabel.text = config.timestamp
 
-        flagButton.isHidden = !config.canReplyAndFlag
-        editButton.isHidden = !config.canEdit
-        deleteButton.isHidden = !config.canDelete
+        flagButton.isVisible = config.canReplyAndFlag
+        editButton.isVisible = config.canEdit
+        deleteButton.isVisible = config.canDelete
 
         setNeedsLayout()
     }

@@ -75,7 +75,7 @@ class ArtistInviteControlsCell: CollectionViewCell, ArtistInviteConfigurableCell
         let showSubmit = config.hasCurrentUser && isOpen
         submitVisibleConstraint.set(isActivated: showSubmit)
         submitHiddenConstraint.set(isActivated: !showSubmit)
-        submitButton.isHidden = !showSubmit
+        submitButton.isVisible = showSubmit
     }
 }
 

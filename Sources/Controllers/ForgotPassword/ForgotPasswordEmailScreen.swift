@@ -104,7 +104,7 @@ extension ForgotPasswordEmailScreen: ForgotPasswordEmailScreenProtocol {
     }
 
     func showSubmitMessage() {
-        successLabel.isHidden = false
+        successLabel.isVisible = true
         activateEmailButton.isHidden = true
         emailField.isHidden = true
         emailErrorLabel.isHidden = true

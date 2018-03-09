@@ -89,13 +89,13 @@ class OnboardingScreen: EmptyScreen {
     private func updateButtonVisibility() {
         if hasAbortButton && canGoNext {
             promptButton.isHidden = true
-            nextButton.isHidden = false
-            abortButton.isHidden = false
+            nextButton.isVisible = true
+            abortButton.isVisible = true
         }
         else {
             promptButton.isEnabled = canGoNext
             promptButton.style = canGoNext ? .green : .roundedGrayOutline
-            promptButton.isHidden = false
+            promptButton.isVisible = true
             nextButton.isHidden = true
             abortButton.isHidden = true
         }
@@ -110,7 +110,7 @@ class OnboardingScreen: EmptyScreen {
         case .inviteFriends: nextString = InterfaceString.Join.Discover
         }
 
-        promptButton.isHidden = false
+        promptButton.isVisible = true
         nextButton.isHidden = true
         abortButton.isHidden = true
         promptButton.setTitle(nextString, for: .normal)
