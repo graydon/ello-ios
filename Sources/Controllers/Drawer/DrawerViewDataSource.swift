@@ -2,21 +2,43 @@
 ///  DrawerViewDataSource.swift
 //
 
-struct DrawerItem {
-    let name: String
+struct DrawerItem: Equatable {
+    let title: String
     let type: DrawerItemType
     let tracking: String?
 
-    init(name: String, type: DrawerItemType, tracking: String? = nil) {
-        self.name = name
+    init(title: String, type: DrawerItemType, tracking: String? = nil) {
+        self.title = title
         self.type = type
         self.tracking = tracking
+    }
+
+    var logo: UIImage? {
+        switch type {
+        case .twitter: return UIImage(named: "drawer-twitter")
+        case .instagram: return UIImage(named: "drawer-instagram")
+        case .facebook: return UIImage(named: "drawer-facebook")
+        case .pinterest: return UIImage(named: "drawer-pinterest")
+        case .tumblr: return UIImage(named: "drawer-tumblr")
+        case .medium: return UIImage(named: "drawer-medium")
+        default: return nil
+        }
+    }
+
+    static func == (lhs: DrawerItem, rhs: DrawerItem) -> Bool {
+        return lhs.title == rhs.title
     }
 }
 
 enum DrawerItemType {
     case external(String)
     case invite
+    case twitter
+    case instagram
+    case facebook
+    case pinterest
+    case tumblr
+    case medium
     case logout
     case version
     case debugger
@@ -28,15 +50,21 @@ class DrawerViewDataSource: NSObject {
     // moved into a separate function to save compile time
     private func drawerItems() -> [DrawerItem] {
         var items: [DrawerItem] = [
-            DrawerItem(name: InterfaceString.Drawer.Invite, type: .invite, tracking: "invite"),
-            DrawerItem(name: InterfaceString.Drawer.Store, type: .external("http://store.ello.co/"), tracking: "store"),
-            DrawerItem(name: InterfaceString.Drawer.Help, type: .external("https://ello.co/wtf/"), tracking: "help"),
-            DrawerItem(name: InterfaceString.Drawer.Logout, type: .logout, tracking: "logout"),
+            DrawerItem(title: InterfaceString.Drawer.Invite, type: .invite, tracking: "invite"),
+            DrawerItem(title: InterfaceString.Drawer.Store, type: .external("http://store.ello.co/"), tracking: "store"),
+            DrawerItem(title: InterfaceString.Drawer.Help, type: .external("https://ello.co/wtf/"), tracking: "help"),
+            DrawerItem(title: InterfaceString.Drawer.Twitter, type: .twitter, tracking: "twitter"),
+            DrawerItem(title: InterfaceString.Drawer.Instagram, type: .instagram, tracking: "instagram"),
+            DrawerItem(title: InterfaceString.Drawer.Facebook, type: .facebook, tracking: "facebook"),
+            DrawerItem(title: InterfaceString.Drawer.Pinterest, type: .pinterest, tracking: "pinterest"),
+            DrawerItem(title: InterfaceString.Drawer.Tumblr, type: .tumblr, tracking: "tumblr"),
+            DrawerItem(title: InterfaceString.Drawer.Medium, type: .medium, tracking: "medium"),
+            DrawerItem(title: InterfaceString.Drawer.Logout, type: .logout, tracking: "logout"),
         ]
         if AuthToken().isStaff {
-            items.append(DrawerItem(name: "Show Debugger", type: .debugger))
+            items.append(DrawerItem(title: "Show Debugger", type: .debugger))
         }
-        items.append(DrawerItem(name: InterfaceString.Drawer.Version, type: .version))
+        items.append(DrawerItem(title: InterfaceString.Drawer.Version, type: .version))
         return items
     }
 
@@ -53,9 +81,9 @@ extension DrawerViewDataSource: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: DrawerCell.reuseIdentifier, for: indexPath) as! DrawerCell
-        if let item = items.safeValue(indexPath.row) {
-            DrawerCellPresenter.configure(cell, item: item)
-        }
+        guard let item = items.safeValue(indexPath.row) else { return cell }
+
+        DrawerCellPresenter.configure(cell, item: item, isLast: item == items.last)
         return cell
     }
 }

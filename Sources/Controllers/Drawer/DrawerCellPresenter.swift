@@ -4,19 +4,16 @@
 
 struct DrawerCellPresenter {
 
-    static func configure(_ cell: DrawerCell, item: DrawerItem) {
+    static func configure(_ cell: DrawerCell, item: DrawerItem, isLast: Bool) {
         switch item.type {
         case .version:
-            cell.label.font = UIFont.defaultFont(12)
-            cell.label.textColor = .greyA
-            cell.line.isHidden = true
+            cell.style == .version
         default:
-            cell.label.font = UIFont.defaultFont()
-            cell.label.textColor = .white
-            cell.line.isHidden = false
+            cell.style = .default
         }
 
-        cell.label.text = item.name
-        cell.selectionStyle = .none
+        cell.title = item.title
+        cell.logo = item.logo
+        cell.isLineVisible = !isLast
     }
 }

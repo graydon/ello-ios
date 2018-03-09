@@ -51,6 +51,24 @@ extension DrawerViewController: UITableViewDelegate {
         switch item.type {
         case let .external(link):
             postNotification(ExternalWebNotification, value: link)
+        case .twitter:
+            let link = "https://twitter.com/ellohype"
+            postNotification(ExternalWebNotification, value: link)
+        case .instagram:
+            let link = "https://www.instagram.com/ellohype"
+            postNotification(ExternalWebNotification, value: link)
+        case .facebook:
+            let link = "https://www.facebook.com/ellohype"
+            postNotification(ExternalWebNotification, value: link)
+        case .pinterest:
+            let link = "https://www.pinterest.com/ellohype"
+            postNotification(ExternalWebNotification, value: link)
+        case .tumblr:
+            let link = "http://ellohype.tumblr.com/"
+            postNotification(ExternalWebNotification, value: link)
+        case .medium:
+            let link = "https://medium.com/@ElloHype"
+            postNotification(ExternalWebNotification, value: link)
         case .invite:
             let responder: InviteResponder? = findResponder()
             responder?.onInviteFriends()
