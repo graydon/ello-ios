@@ -160,7 +160,6 @@ extension CategoryGenerator {
             }
             .catch { _ in
                 self.destination?.primaryJSONAbleNotFound()
-                self.queue.cancelAllOperations()
             }
             .always {
                 doneOperation.run()
@@ -226,7 +225,6 @@ extension CategoryGenerator {
             }
             .catch { _ in
                 self.destination?.primaryJSONAbleNotFound()
-                self.queue.cancelAllOperations()
             }
     }
 
