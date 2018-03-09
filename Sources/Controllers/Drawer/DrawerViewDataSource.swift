@@ -20,7 +20,7 @@ struct DrawerItem: Equatable {
         case .facebook: return UIImage(named: "drawer-facebook")
         case .pinterest: return UIImage(named: "drawer-pinterest")
         case .tumblr: return UIImage(named: "drawer-tumblr")
-        // case .medium: return UIImage(named: "drawer-medium")
+        case .medium: return InterfaceImage.logoMedium.normalImage
         default: return nil
         }
     }
