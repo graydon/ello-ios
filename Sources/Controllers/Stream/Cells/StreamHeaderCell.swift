@@ -5,7 +5,7 @@
 let streamHeaderCellDidOpenNotification = TypedNotification<UICollectionViewCell>(name: "StreamCellDidOpenNotification")
 
 
-class StreamHeaderCell: UICollectionViewCell {
+class StreamHeaderCell: CollectionViewCell {
     static let reuseIdentifier = "StreamHeaderCell"
     struct Size {
         static let height: CGFloat = 70
@@ -23,14 +23,14 @@ class StreamHeaderCell: UICollectionViewCell {
         }
     }
 
-    @IBOutlet var avatarButton: AvatarButton!
-    @IBOutlet var categoryButton: UIButton!
-    @IBOutlet var timestampLabel: UILabel!
-    @IBOutlet var usernameButton: UIButton!
-    @IBOutlet var relationshipControl: RelationshipControl!
-    @IBOutlet var repostedByButton: UIButton!
-    @IBOutlet var repostIconView: UIImageView!
-    @IBOutlet var artistInviteSubmissionButton: UIButton!
+    private let avatarButton = AvatarButton()
+    private let timestampLabel = StyledLabel(style: .gray)
+    private let usernameButton = StyledButton(style: .clearGray)
+    private let relationshipControl = RelationshipControl()
+    private let repostIconView = UIImageView()
+    private let repostedByButton = StyledButton(style: .clearGray)
+    private let categoryButton = StyledButton(style: .clearGray)
+    private let artistInviteSubmissionButton = StyledButton(style: .clearGray)
 
     var isGridLayout = false
     var showUsername = true {
@@ -119,11 +119,11 @@ class StreamHeaderCell: UICollectionViewCell {
         setNeedsLayout()
     }
 
-    override func awakeFromNib() {
-        super.awakeFromNib()
+    override func style() {
+        super.style()
 
-        styleUsernameButton()
-        styleTimestampLabel()
+        usernameButton.titleLineBreakMode = .byTruncatingTail
+        usernameButton.contentHorizontalAlignment = .left
 
         let goToPostTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(postTapped(_:)))
         contentView.addGestureRecognizer(goToPostTapRecognizer)
@@ -142,8 +142,19 @@ class StreamHeaderCell: UICollectionViewCell {
         artistInviteSubmissionButton.setAttributedTitle(attributedSubmissionTitle, for: .normal)
     }
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
+    override func arrange() {
+        super.arrange()
+
+        contentView.addSubview(avatarButton)
+        contentView.addSubview(timestampLabel)
+        contentView.addSubview(usernameButton)
+        contentView.addSubview(relationshipControl)
+        contentView.addSubview(repostIconView)
+        contentView.addSubview(repostedByButton)
+        contentView.addSubview(categoryButton)
+        contentView.addSubview(artistInviteSubmissionButton)
+
+        repostIconView.frame.size = CGSize(width: 20, height: 20)
     }
 
     override func layoutSubviews() {
@@ -268,18 +279,6 @@ class StreamHeaderCell: UICollectionViewCell {
 
     private func flexibleItem() -> UIBarButtonItem {
         return UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-    }
-
-    private func styleUsernameButton() {
-        usernameButton.titleLabel?.font = UIFont.defaultFont()
-        usernameButton.setTitleColor(UIColor.greyA, for: .normal)
-        usernameButton.titleLabel?.lineBreakMode = .byTruncatingTail
-        usernameButton.contentHorizontalAlignment = .left
-    }
-
-    private func styleTimestampLabel() {
-        timestampLabel.textColor = UIColor.greyA
-        timestampLabel.font = UIFont.defaultFont()
     }
 
     @objc

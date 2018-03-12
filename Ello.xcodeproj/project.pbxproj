@@ -109,7 +109,6 @@
 		122B19011A867C7D00247A05 /* StreamImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122B18F11A867C7D00247A05 /* StreamImageCell.swift */; };
 		122B19031A867C7D00247A05 /* StreamTextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122B18F21A867C7D00247A05 /* StreamTextCell.swift */; };
 		122B19051A867C7D00247A05 /* StreamTextCellHTML.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122B18F31A867C7D00247A05 /* StreamTextCellHTML.swift */; };
-		122B190A1A867D1800247A05 /* StreamHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 122B19091A867D1800247A05 /* StreamHeaderCell.xib */; };
 		122B190D1A86894400247A05 /* StreamCellType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122B190C1A86894400247A05 /* StreamCellType.swift */; };
 		122B19101A8692C700247A05 /* StreamImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 122B190F1A8692C700247A05 /* StreamImageCell.xib */; };
 		122B30AE1C6A3FBB00C1B9D8 /* Activity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F6AE351A43392D00493660 /* Activity.swift */; };
@@ -1459,7 +1458,6 @@
 		122B18F11A867C7D00247A05 /* StreamImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamImageCell.swift; sourceTree = "<group>"; };
 		122B18F21A867C7D00247A05 /* StreamTextCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamTextCell.swift; sourceTree = "<group>"; };
 		122B18F31A867C7D00247A05 /* StreamTextCellHTML.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamTextCellHTML.swift; sourceTree = "<group>"; };
-		122B19091A867D1800247A05 /* StreamHeaderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StreamHeaderCell.xib; sourceTree = "<group>"; };
 		122B190C1A86894400247A05 /* StreamCellType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamCellType.swift; sourceTree = "<group>"; };
 		122B190F1A8692C700247A05 /* StreamImageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StreamImageCell.xib; sourceTree = "<group>"; };
 		122C662C1B42403D0035F4CD /* AutoCompleteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutoCompleteViewController.swift; sourceTree = "<group>"; };
@@ -2614,7 +2612,6 @@
 				122B18EE1A867C7D00247A05 /* StreamFooterButton.swift */,
 				122B18EF1A867C7D00247A05 /* StreamFooterCell.swift */,
 				122B18F01A867C7D00247A05 /* StreamHeaderCell.swift */,
-				122B19091A867D1800247A05 /* StreamHeaderCell.xib */,
 				122B18F11A867C7D00247A05 /* StreamImageCell.swift */,
 				122B190F1A8692C700247A05 /* StreamImageCell.xib */,
 				7659FB7E1B29EE0F00DEB6F4 /* StreamInviteFriendsCell.swift */,
@@ -4773,7 +4770,6 @@
 				7689B50D1AD4ED3B00E4A4A3 /* users_searching_for_users.json in Resources */,
 				76B53AD31B0AA89B00534548 /* relationship_batches__when_an_unknown_priority_is_specified.json in Resources */,
 				1D6E43161EA68AEA0029C9B1 /* badge_spam_selected.svg in Resources */,
-				122B190A1A867D1800247A05 /* StreamHeaderCell.xib in Resources */,
 				76F8DEB91B6C0BC4009BCF61 /* burger_normal.svg in Resources */,
 				12F6AE9E1A433F2700493660 /* 502.json in Resources */,
 				7689B4FC1AD4ED3B00E4A4A3 /* profile_listing_blocked_users.json in Resources */,

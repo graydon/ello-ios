@@ -526,6 +526,7 @@ enum StreamCellType: Equatable {
             .promotionalHeaderSubscription,
             .revealController(label: "", Void()),
             .search(placeholder: ""),
+            .streamHeader,
             .onboardingCategoryCard,
             .spacer(height: 0),
             .streamFooter,
