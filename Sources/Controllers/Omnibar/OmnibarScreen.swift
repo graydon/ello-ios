@@ -118,17 +118,14 @@ class OmnibarScreen: Screen, OmnibarScreenProtocol {
     private var toolbarPinToTopConstraint: Constraint!
     private var toolbarPinToNavConstraint: Constraint!
 
-// MARK: photo picker assets
     var currentAssets: [PHAsset] = []
     var imageButtons: [UIButton] = []
 
-// MARK: views and private vars
     var autoCompleteVC = AutoCompleteViewController()
 
     let statusBar = StatusBar()
     let navigationBar = ElloNavigationBar()
 
-// MARK: toolbar buttons
     private let toolbarContainer = Container()
     private let cancelButton = UIButton()
     private let buyButton = UIButton()
@@ -136,14 +133,12 @@ class OmnibarScreen: Screen, OmnibarScreenProtocol {
     private let addImageButton = UIButton()
     private let cancelImageButton = UIButton()
 
-// MARK: image picker views
     let photoAccessoryContainer = Container()
     let imagesScrollView = UIScrollView()
     let nativeCameraButton = UIButton()
     let nativeLibraryButton = UIButton()
     let nativeAdditionalImagesButton = UIButton()
 
-// MARK: keyboard buttons
     private let keyboardButtonsEffect = UIVisualEffectView()
     private var keyboardButtonsContainer: UIView { return keyboardButtonsEffect.contentView }
     let boldButton = StyledButton(style: .boldButton)
@@ -159,14 +154,11 @@ class OmnibarScreen: Screen, OmnibarScreenProtocol {
     let textContainer = Container()
     let textView: UITextView
 
-// MARK: autocomplete views (keyboard accessory)
     var autoCompleteContainer = Container()
     var autoCompleteThrottle = debounce(0.4)
     var autoCompleteShowing = false
 
     private var contentSizeObservation: NSKeyValueObservation?
-
-// MARK: init
 
     required init(frame: CGRect) {
         submitableRegions = [.text("")]
@@ -215,8 +207,6 @@ class OmnibarScreen: Screen, OmnibarScreenProtocol {
             window.addSubview(photoAccessoryContainer)
         }
     }
-
-// MARK: View setup code
 
     private func setupAutoComplete() {
         autoCompleteVC.view.frame = autoCompleteContainer.bounds
@@ -451,8 +441,6 @@ class OmnibarScreen: Screen, OmnibarScreenProtocol {
         imagesScrollView.addSubview(nativeAdditionalImagesButton)
     }
 
-// MARK: Generate regions
-
     func generateEditableRegions(_ regions: [OmnibarRegion]) -> [IndexedRegion] {
         var editableRegions = [IndexedRegion]()
         for (index, region) in regions.enumerated() {
@@ -467,8 +455,6 @@ class OmnibarScreen: Screen, OmnibarScreenProtocol {
         return editableRegions
     }
 
-// MARK: Public interface
-
     func resetAfterSuccessfulPost() {
         resetEditor()
     }
@@ -480,8 +466,6 @@ class OmnibarScreen: Screen, OmnibarScreenProtocol {
         editingCanceled()
         toggleStylingButtons(visible: false)
     }
-
-// MARK: Internal, but might need to be testable
 
     // called whenever the keyboard is dismissed, by user or system
     private func editingCanceled() {

@@ -58,8 +58,6 @@ final class Badge: JSONAble {
         return Badge.badges[slug]
     }
 
-// MARK: NSCoding
-
     required init(coder: NSCoder) {
         let decoder = Coder(coder)
         self.slug = decoder.decodeKey("slug")

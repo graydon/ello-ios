@@ -198,7 +198,6 @@ extension AlertViewController {
     }
 }
 
-// MARK: UIViewControllerTransitioningDelegate
 extension AlertViewController: UIViewControllerTransitioningDelegate {
     func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
         guard presented == self else { return nil }
@@ -207,7 +206,6 @@ extension AlertViewController: UIViewControllerTransitioningDelegate {
     }
 }
 
-// MARK: UITableViewDelegate
 extension AlertViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let action = actions.safeValue(indexPath.row),
@@ -245,7 +243,6 @@ extension AlertViewController: UITableViewDelegate {
     }
 }
 
-// MARK: UITableViewDataSource
 extension AlertViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return actions.count

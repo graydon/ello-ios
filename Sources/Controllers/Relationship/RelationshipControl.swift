@@ -94,7 +94,6 @@ class RelationshipControl: View {
     }
 }
 
-// MARK: IBActions
 extension RelationshipControl {
 
     @IBAction

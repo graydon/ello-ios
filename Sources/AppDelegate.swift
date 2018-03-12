@@ -148,7 +148,6 @@ extension AppDelegate {
     }
 }
 
-// MARK: URLs
 extension AppDelegate {
     func application(_ application: UIApplication, handleOpen url: URL) -> Bool {
         guard

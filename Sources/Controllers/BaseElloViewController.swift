@@ -158,7 +158,6 @@ class BaseElloViewController: UIViewController, HasAppController, ControllerThat
     }
 }
 
-// MARK: Search
 extension BaseElloViewController {
     func searchButtonTapped() {
         let search = SearchViewController()

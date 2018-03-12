@@ -188,7 +188,6 @@ extension PostDetailViewController: PostCommentsResponder {
     }
 }
 
-// MARK: PostDetailViewController: PostDetailStreamDestination
 extension PostDetailViewController: PostDetailStreamDestination {
 
     var isPagingEnabled: Bool {

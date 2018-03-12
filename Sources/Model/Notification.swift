@@ -82,8 +82,6 @@ final class Notification: JSONAble, Authorable, Groupable {
         return activity.kind != .unknown
     }
 
-// MARK: Initialization
-
     init(activity: Activity) {
         self.activity = activity
 
@@ -125,8 +123,6 @@ final class Notification: JSONAble, Authorable, Groupable {
 
         subject = activity.subject
     }
-
-// MARK: NSCoding
 
     required init(coder: NSCoder) {
         let decoder = Coder(coder)

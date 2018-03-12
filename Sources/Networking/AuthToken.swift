@@ -9,13 +9,9 @@ struct AuthToken {
     static var sharedKeychain: KeychainType = ElloKeychain()
     var keychain: KeychainType
 
-    // MARK: - Initializers
-
     init() {
         keychain = AuthToken.sharedKeychain
     }
-
-    // MARK: - Properties
 
     var tokenWithBearer: String? {
         guard let key = keychain.authToken else { return nil }

@@ -282,8 +282,6 @@ class StreamHeaderCell: UICollectionViewCell {
         timestampLabel.font = UIFont.defaultFont()
     }
 
-// MARK: - IBActions
-
     @objc
     func postTapped(_ recognizer: UITapGestureRecognizer) {
         let responder: PostbarController? = findResponder()

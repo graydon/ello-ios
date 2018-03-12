@@ -470,8 +470,6 @@ class PostbarController: UIResponder {
             }
     }
 
-// MARK: - Private
-
     private func commentLoadSuccess(_ post: Post, comments jsonables: [JSONAble], indexPath: IndexPath, cell: StreamFooterCell) {
         let createCommentNow = jsonables.count == 0
         self.appendCreateCommentItem(post, at: indexPath)

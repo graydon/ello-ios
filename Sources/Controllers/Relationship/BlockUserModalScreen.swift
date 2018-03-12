@@ -132,7 +132,6 @@ extension BlockUserModalScreen {
     }
 }
 
-// MARK: ACTIONS
 extension BlockUserModalScreen {
 
     @objc

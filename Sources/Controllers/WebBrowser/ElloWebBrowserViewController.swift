@@ -77,7 +77,6 @@ class ElloWebBrowserViewController: KINWebBrowserViewController {
 
 }
 
-// MARK: ElloWebBrowserViewConteroller: KINWebBrowserDelegate
 extension ElloWebBrowserViewController: KINWebBrowserDelegate {
 
     func webBrowser(_ webBrowser: KINWebBrowserViewController!, didFailToLoad url: URL?, error: Error!) {
@@ -100,7 +99,6 @@ extension ElloWebBrowserViewController: KINWebBrowserDelegate {
 
 }
 
-// MARK: ElloWebBrowserViewController: WebLinkResponder
 extension ElloWebBrowserViewController: WebLinkResponder {
 
     func webLinkTapped(path: String, type: ElloURIWrapper, data: String?) {

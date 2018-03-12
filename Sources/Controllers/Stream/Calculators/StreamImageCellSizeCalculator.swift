@@ -11,8 +11,6 @@ class StreamImageCellSizeCalculator {
     private var completion: Block = {}
     var streamKind: StreamKind = .unknown
 
-// MARK: Static
-
     static func aspectRatioForImageRegion(_ imageRegion: ImageRegion) -> CGFloat {
         guard let asset = imageRegion.asset else { return 4/3 }
         return asset.aspectRatio

@@ -24,8 +24,6 @@ final class Love: JSONAble, PostActionable {
         return ElloLinkedStore.shared.getObject(self.userId, type: .usersType) as? User
     }
 
-// MARK: Initialization
-
     init(id: String,
         createdAt: Date,
         updatedAt: Date,
@@ -42,8 +40,6 @@ final class Love: JSONAble, PostActionable {
         super.init(version: LoveVersion)
     }
 
-
-// MARK: NSCoding
     required init(coder: NSCoder) {
         let decoder = Coder(coder)
         self.id = decoder.decodeKey("id")
@@ -65,8 +61,6 @@ final class Love: JSONAble, PostActionable {
         coder.encodeObject(userId, forKey: "userId")
         super.encode(with: coder.coder)
     }
-
-// MARK: JSONAble
 
     class func fromJSON(_ data: [String: Any]) -> Love {
         let json = JSON(data)

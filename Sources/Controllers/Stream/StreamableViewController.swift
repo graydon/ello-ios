@@ -209,7 +209,6 @@ extension StreamableViewController: HasHamburgerButton {
     }
 }
 
-// MARK: PostTappedResponder
 extension StreamableViewController: PostTappedResponder {
 
     func postTapped(_ post: Post) {
@@ -239,7 +238,6 @@ extension StreamableViewController: PostTappedResponder {
     }
 }
 
-// MARK: UserTappedResponder
 extension StreamableViewController: UserTappedResponder {
 
     func userTapped(_ user: User) {
@@ -272,7 +270,6 @@ extension StreamableViewController: UserTappedResponder {
     }
 }
 
-// MARK: CreatePostResponder
 extension StreamableViewController: CreatePostResponder {
     func createPost(text: String?, fromController: UIViewController) {
         let vc = OmnibarViewController(defaultText: text)
@@ -329,7 +326,6 @@ extension StreamableViewController: CreatePostResponder {
     }
 }
 
-// MARK: StreamViewDelegate
 extension StreamableViewController: StreamViewDelegate {
     @objc
     func streamViewStreamCellItems(jsonables: [JSONAble], defaultGenerator generator: StreamCellItemGenerator) -> [StreamCellItem]? {

@@ -1,7 +1,5 @@
 //  Copyright (c) 2014 Rob Rix. All rights reserved.
 
-// MARK: BoxType
-
 /// The type conformed to by all boxes.
 protocol BoxType {
 	/// The type of the wrapped value.
@@ -21,8 +19,6 @@ protocol MutableBoxType: BoxType {
 }
 
 
-// MARK: Equality
-
 /// Equality of `BoxType`s of `Equatable` types.
 ///
 /// We cannot declare that e.g. `Box<T: Equatable>` conforms to `Equatable`, so this is a relatively ad hoc definition.
@@ -37,8 +33,6 @@ func != <B: BoxType> (lhs: B, rhs: B) -> Bool where B.Value: Equatable {
 	return lhs.value != rhs.value
 }
 
-
-// MARK: Map
 
 /// Maps the value of a box into a new box.
 func map<B: BoxType, C: BoxType>(_ v: B, f: (B.Value) -> C.Value) -> C {

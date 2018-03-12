@@ -22,7 +22,6 @@ class AutoCompleteViewController: UIViewController {
     }
 }
 
-// MARK: View Lifecycle
 extension AutoCompleteViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -82,7 +81,6 @@ extension AutoCompleteViewController {
     }
 }
 
-// MARK: UITableViewDelegate
 extension AutoCompleteViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let item = dataSource.itemForIndexPath(indexPath) {

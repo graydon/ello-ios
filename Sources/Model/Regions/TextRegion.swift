@@ -13,14 +13,10 @@ final class TextRegion: JSONAble, Regionable {
 
     let content: String
 
-// MARK: Initialization
-
     init(content: String) {
         self.content = content
         super.init(version: TextRegionVersion)
     }
-
-// MARK: NSCoding
 
     override func encode(with encoder: NSCoder) {
         let coder = Coder(encoder)
@@ -36,15 +32,11 @@ final class TextRegion: JSONAble, Regionable {
         super.init(coder: coder)
     }
 
-// MARK: JSONAble
-
     class func fromJSON(_ data: [String: Any]) -> TextRegion {
         let json = JSON(data)
         let content = json["data"].stringValue
         return TextRegion(content: content)
     }
-
-// MARK: Regionable
 
     let kind: RegionKind = .text
 

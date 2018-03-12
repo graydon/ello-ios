@@ -14,7 +14,6 @@ class AlertPresentationController: UIPresentationController {
     }
 }
 
-// MARK: View Lifecycle
 extension AlertPresentationController {
     override func containerViewDidLayoutSubviews() {
         super.containerViewDidLayoutSubviews()
@@ -31,7 +30,6 @@ extension AlertPresentationController {
     }
 }
 
-// MARK: Presentation
 extension AlertPresentationController {
     override func presentationTransitionWillBegin() {
         guard

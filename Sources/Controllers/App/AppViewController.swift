@@ -119,8 +119,6 @@ class AppViewController: BaseElloViewController {
         }
     }
 
-// MARK: - Private
-
     private func checkIfLoggedIn() {
         let authToken = AuthToken()
 
@@ -506,9 +504,6 @@ extension AppViewController {
     }
 }
 
-// MARK: Invitations screen
-
-// MARK: InviteResponder
 extension AppViewController: InviteResponder {
 
     func onInviteFriends() {

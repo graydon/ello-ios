@@ -123,8 +123,6 @@ final class User: JSONAble {
         super.init(version: UserVersion)
     }
 
-// MARK: NSCoding
-
     required init(coder: NSCoder) {
         let decoder = Coder(coder)
         self.id = decoder.decodeKey("id")
@@ -231,8 +229,6 @@ final class User: JSONAble {
         encoder.encodeObject(profile, forKey: "profile")
         super.encode(with: coder)
     }
-
-// MARK: JSONAble
 
     override func merge(_ other: JSONAble) -> JSONAble {
         if let otherUser = other as? User {

@@ -158,7 +158,6 @@ extension LoginScreen {
     }
 }
 
-// MARK: Actions
 extension LoginScreen {
 
     @objc
@@ -187,7 +186,6 @@ extension LoginScreen {
     }
 }
 
-// MARK: UITextFieldDelegate
 extension LoginScreen: UITextFieldDelegate {
     @objc
     func textFieldDidChange(_ textField: UITextField) {
@@ -215,7 +213,6 @@ extension LoginScreen: UITextFieldDelegate {
     }
 }
 
-// MARK: LoginScreenProtocol
 extension LoginScreen: LoginScreenProtocol {
     func loadingHUD(visible: Bool) {
         if visible {

@@ -103,8 +103,6 @@ final class Asset: JSONAble {
         return 4.0/3.0
     }
 
-// MARK: Initialization
-
     convenience init(url: URL) {
         self.init(id: UUID().uuidString)
 
@@ -152,8 +150,6 @@ final class Asset: JSONAble {
         super.init(version: AssetVersion)
     }
 
-// MARK: NSCoding
-
     required init(coder: NSCoder) {
         let decoder = Coder(coder)
         self.id = decoder.decodeKey("id")
@@ -181,8 +177,6 @@ final class Asset: JSONAble {
         coder.encodeObject(regular, forKey: "regular")
         super.encode(with: coder.coder)
     }
-
-// MARK: JSONAble
 
     class func fromJSON(_ data: [String: Any]) -> Asset {
         let json = JSON(data)

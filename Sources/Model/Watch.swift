@@ -23,8 +23,6 @@ final class Watch: JSONAble, PostActionable {
         return ElloLinkedStore.shared.getObject(self.userId, type: .usersType) as? User
     }
 
-// MARK: Initialization
-
     init(id: String,
         createdAt: Date,
         updatedAt: Date,
@@ -39,8 +37,6 @@ final class Watch: JSONAble, PostActionable {
         super.init(version: WatchVersion)
     }
 
-
-// MARK: NSCoding
     required init(coder: NSCoder) {
         let decoder = Coder(coder)
         self.id = decoder.decodeKey("id")
@@ -60,8 +56,6 @@ final class Watch: JSONAble, PostActionable {
         coder.encodeObject(userId, forKey: "userId")
         super.encode(with: coder.coder)
     }
-
-// MARK: JSONAble
 
     class func fromJSON(_ data: [String: Any]) -> Watch {
         let json = JSON(data)

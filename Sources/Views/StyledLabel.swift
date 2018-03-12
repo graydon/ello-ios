@@ -114,6 +114,12 @@ class StyledLabel: UILabel {
         self.style = style
         updateStyle()
     }
+
+    override func sizeThatFits(_ size: CGSize) -> CGSize {
+        var size = super.sizeThatFits(size)
+        size.height = heightForWidth(size.width) + extraBottomMargin
+        return size
+    }
 }
 
 extension StyledLabel {
@@ -121,12 +127,6 @@ extension StyledLabel {
         return (attributedText?.boundingRect(with: CGSize(width: width, height: CGFloat.greatestFiniteMagnitude),
             options: [.usesLineFragmentOrigin, .usesFontLeading, .truncatesLastVisibleLine],
             context: nil).size.height).map(ceil) ?? 0
-    }
-
-    override func sizeThatFits(_ size: CGSize) -> CGSize {
-        var size = super.sizeThatFits(size)
-        size.height = heightForWidth(size.width) + extraBottomMargin
-        return size
     }
 }
 

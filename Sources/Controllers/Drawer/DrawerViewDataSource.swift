@@ -73,7 +73,6 @@ class DrawerViewDataSource: NSObject {
     }
 }
 
-// MARK: UITableViewDataSource
 extension DrawerViewDataSource: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return items.count

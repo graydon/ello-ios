@@ -321,7 +321,6 @@ extension CommentHeaderCell {
     }
 }
 
-// MARK: UIScrollViewDelegate
 extension CommentHeaderCell: UIScrollViewDelegate {
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {

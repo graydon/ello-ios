@@ -39,7 +39,6 @@ class DrawerViewController: BaseElloViewController {
     }
 }
 
-// MARK: UITableViewDelegate
 extension DrawerViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let item = dataSource.itemForIndexPath(indexPath) else { return }
@@ -93,7 +92,6 @@ extension DrawerViewController: UITableViewDelegate {
     }
 }
 
-// MARK: View Helpers
 private extension DrawerViewController {
     func arrange() {
         view.addSubview(tableView)

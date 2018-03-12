@@ -13,8 +13,6 @@ class BasicIcon: UIView {
     private let selectedIconView: UIView
     private let disabledIconView: UIView?
 
-    // MARK: Initializers
-
     init(normalIconView: UIView, selectedIconView: UIView, disabledIconView: UIView? = nil) {
         normalIconView.sizeToFit()
 

@@ -25,13 +25,9 @@ final class ImageRegion: JSONAble, Regionable {
         return assetURL ?? url
     }
 
-// MARK: Initialization
-
     init(url: URL?) {
         super.init(version: ImageRegionVersion)
     }
-
-// MARK: NSCoding
 
     required init(coder: NSCoder) {
         let decoder = Coder(coder)
@@ -48,8 +44,6 @@ final class ImageRegion: JSONAble, Regionable {
         coder.encodeObject(buyButtonURL, forKey: "buyButtonURL")
         super.encode(with: coder.coder)
     }
-
-// MARK: JSONAble
 
     class func fromJSON(_ data: [String: Any]) -> ImageRegion {
         let json = JSON(data)
@@ -69,8 +63,6 @@ final class ImageRegion: JSONAble, Regionable {
         imageRegion.links = data["links"] as? [String: Any]
         return imageRegion
     }
-
-// MARK: Regionable
 
     let kind: RegionKind = .image
 

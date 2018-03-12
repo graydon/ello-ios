@@ -16,7 +16,6 @@ class DarkModalPresentationController: UIPresentationController {
     }
 }
 
-// MARK: Presentation
 extension DarkModalPresentationController {
     override func presentationTransitionWillBegin() {
         guard let containerView = containerView else { return }

@@ -10,8 +10,6 @@ class OmnibarCacheData: NSObject, NSCoding {
         super.init()
     }
 
-// MARK: NSCoding
-
     func encode(with encoder: NSCoder) {
         encoder.encode(regions, forKey: "regions")
     }
