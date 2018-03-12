@@ -4,7 +4,7 @@
 
 import ElloUIFonts
 
-class ImageLabelControl: UIControl {
+class ImageLabelControl: Control {
     struct Size {
         static let innerPadding: CGFloat = 5
         static let outerPadding: CGFloat = 5
@@ -54,13 +54,15 @@ class ImageLabelControl: UIControl {
     init(icon: ImageLabelAnimatable, title: String) {
         self.icon = icon
         super.init(frame: .zero)
-        addSubviews()
-        addTargets()
         self.title = title
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    required init(frame: CGRect) {
+        fatalError("init(frame:) has not been implemented")
     }
 
     func animate() {
@@ -71,21 +73,24 @@ class ImageLabelControl: UIControl {
         self.icon.finishAnimation?()
     }
 
-    @IBAction func buttonTouchExit() {
+    @objc
+    func buttonTouchExit() {
         isHighlighted = false
     }
 
-    @IBAction func buttonTouchEnter() {
+    @objc
+    func buttonTouchEnter() {
         isHighlighted = true
     }
 
-    private func addSubviews() {
+    override func arrange() {
         addSubview(contentContainer)
+
         contentContainer.addSubview(icon.view)
         contentContainer.addSubview(label)
     }
 
-    private func addTargets() {
+    override func bindActions() {
         contentContainer.isUserInteractionEnabled = false
         addTarget(self, action: #selector(buttonTouchEnter), for: [.touchDown, .touchDragEnter])
         addTarget(self, action: #selector(buttonTouchExit), for: [.touchCancel, .touchDragExit, .touchUpInside])
