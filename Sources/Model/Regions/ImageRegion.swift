@@ -26,6 +26,7 @@ final class ImageRegion: JSONAble, Regionable {
     }
 
     init(url: URL?) {
+        self.url = url
         super.init(version: ImageRegionVersion)
     }
 

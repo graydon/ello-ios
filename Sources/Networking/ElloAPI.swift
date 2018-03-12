@@ -42,7 +42,6 @@ indirect enum ElloAPI {
     case deletePost(postId: String)
     case deleteSubscriptions(token: Data)
     case deleteWatchPost(postId: String)
-    case discover(type: DiscoverType)
     case editorials
     case emojiAutoComplete(terms: String)
     case findFriends(contacts: [String: [String]])
@@ -178,7 +177,6 @@ indirect enum ElloAPI {
             return .lovesType
         case .categoryPosts,
              .createPost,
-             .discover,
              .following,
              .postDetail,
              .postRelatedPosts,
@@ -240,7 +238,6 @@ extension ElloAPI: AuthenticationEndpoint {
              .category,
              .categoryPosts,
              .deleteSubscriptions,
-             .discover,
              .editorials,
              .join,
              .loves,
@@ -402,13 +399,6 @@ extension ElloAPI: Moya.TargetType {
             return "\(ElloAPI.currentUserProfile.path)/push_subscriptions/apns/\(tokenStringFromData(tokenData))"
         case let .deleteWatchPost(postId):
             return "\(defaultPrefix)/posts/\(postId)/watch"
-        case let .discover(type):
-            switch type {
-            case .featured:
-                return "\(defaultPrefix)/categories/posts/recent"
-            default:
-                return "\(defaultPrefix)/discover/posts/\(type.slug)"
-            }
         case .emojiAutoComplete:
             return "\(defaultPrefix)/emoji/autocomplete"
         case .findFriends:
@@ -559,8 +549,6 @@ extension ElloAPI: Moya.TargetType {
             return stubbedData("empty")
         case .categoryPosts:
             return stubbedData("users_posts")
-        case .discover:
-            return stubbedData("posts_searching_for_posts")
         case .editorials:
             return stubbedData("editorials")
         case .emojiAutoComplete:
@@ -749,10 +737,6 @@ extension ElloAPI: Moya.TargetType {
         case let .collaborate(_, body):
             return [
                 "body": body
-            ]
-        case .discover:
-            return [
-                "per_page": 10,
             ]
         case let .findFriends(contacts):
             var hashedContacts = [String: [String]]()

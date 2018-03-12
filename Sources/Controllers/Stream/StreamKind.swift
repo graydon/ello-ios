@@ -55,6 +55,8 @@ enum StreamKind {
             switch endpoint {
             case .searchForPosts:
                 return "SearchForPosts"
+            case .searchForUsers:
+                return "SearchForUsers"
             default:
                 return "SimpleStream.\(title)"
             }
