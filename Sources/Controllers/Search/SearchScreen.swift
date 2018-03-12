@@ -88,7 +88,7 @@ class SearchScreen: StreamableScreen, SearchScreenProtocol {
         persistentBackButton.alpha = 0
 
         findFriendsContainer.backgroundColor = .greyF2
-        findFriendsContainer.isHidden = !showsFindFriends
+        findFriendsContainer.isVisible = showsFindFriends
         findFriendsContainer.layer.cornerRadius = Size.cornerRadius
         findFriendsContainer.clipsToBounds = true
 
@@ -361,7 +361,7 @@ extension SearchScreen {
 
     private func showHideFindFriends() {
         if showsFindFriends && searchField.text.isEmpty {
-            findFriendsContainer.isHidden = false
+            findFriendsContainer.isVisible = true
         }
         else {
             findFriendsContainer.isHidden = true

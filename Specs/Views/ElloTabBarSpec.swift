@@ -26,7 +26,7 @@ class ElloTabBarSpec: QuickSpec {
                 ]
 
                 redDot = subject.addRedDotFor(tab: ElloTab.notifications)
-                redDot.isHidden = false
+                redDot.isVisible = true
             }
 
             context("red dot position") {

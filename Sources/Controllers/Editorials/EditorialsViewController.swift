@@ -201,7 +201,10 @@ extension EditorialsViewController: StreamDestination {
 
             completion()
         }
-        streamViewController.doneLoading()
+
+        if type == .editorials {
+            streamViewController.doneLoading()
+        }
     }
 
     func setPlaceholders(items: [StreamCellItem]) {

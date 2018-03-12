@@ -63,7 +63,7 @@ class ProfileStatsView: ProfileBaseView {
     private let grayLine = UIView()
     var grayLineVisible: Bool {
         get { return !grayLine.isHidden }
-        set { grayLine.isHidden = !newValue }
+        set { grayLine.isVisible = newValue }
     }
 
     override func style() {
@@ -154,7 +154,7 @@ extension ProfileStatsView {
         for countLabel in countLabels {
             countLabel.text = ""
         }
-        grayLine.isHidden = false
+        grayLine.isVisible = true
     }
 
     @objc

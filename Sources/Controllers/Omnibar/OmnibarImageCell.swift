@@ -71,7 +71,7 @@ class OmnibarImageCell: TableViewCell {
             margins = UIEdgeInsets(all: 0)
 
             flImageView.contentMode = .scaleAspectFit
-            buyButton.isHidden = !hasBuyButtonURL
+            buyButton.isVisible = hasBuyButtonURL
         }
 
         let innerFrame = contentView.bounds

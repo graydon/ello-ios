@@ -157,7 +157,7 @@ class EditorialCell: CollectionViewCell {
 
     func updateConfig() {
         if let url = config.imageURL {
-            self.spinner.isHidden = false
+            self.spinner.isVisible = true
             self.spinner.animateLogo()
             imageView.pin_setImage(from: url) { result in
                 self.spinner.stopAnimatingLogo()

@@ -117,9 +117,9 @@ final class CategoryViewController: StreamableViewController {
         ElloHUD.showLoadingHudInView(streamViewController.view)
 
         streamViewController.streamKind = generator.streamKind
-        streamViewController.initialLoadClosure = { [weak self] in self?.initialLoadCategory() }
-        streamViewController.reloadClosure = { [weak self] in self?.reloadCurrentCategory() }
-        streamViewController.toggleClosure = { [weak self] isGridView in self?.toggleGrid(isGridView) }
+        streamViewController.initialLoadClosure = {}
+        streamViewController.reloadClosure = { [unowned self] in self.reloadCurrentCategory() }
+        streamViewController.toggleClosure = { [unowned self] isGridView in self.toggleGrid(isGridView) }
 
         self.initialLoadCategory()
     }
@@ -164,6 +164,7 @@ private extension CategoryViewController {
 
     func initialLoadCategory() {
         generator.load(reloadPosts: false, reloadHeader: false, reloadCategories: false)
+        streamViewController.isPullToRefreshEnabled = false
     }
 
     func loadCategory() {
@@ -176,18 +177,21 @@ private extension CategoryViewController {
 
         pageHeader = nil
         generator.load(reloadPosts: true, reloadHeader: true, reloadCategories: false)
+        streamViewController.isPullToRefreshEnabled = false
     }
 
     func loadStream(_ stream: DiscoverType) {
         generator.reset(stream: stream)
         streamViewController.streamKind = generator.streamKind
         generator.load(reloadPosts: true, reloadHeader: false, reloadCategories: false)
+        streamViewController.isPullToRefreshEnabled = false
     }
 
     func reloadCurrentCategory() {
         ElloHUD.showLoadingHudInView(streamViewController.view)
         screen.categoriesLoaded = false
         generator.load(reloadPosts: true, reloadHeader: false, reloadCategories: true)
+        streamViewController.isPullToRefreshEnabled = false
     }
 }
 
@@ -200,8 +204,6 @@ extension CategoryViewController: CategoryStreamDestination, StreamDestination {
     }
 
     func replacePlaceholder(type: StreamCellType.PlaceholderType, items: [StreamCellItem], completion: @escaping Block) {
-        streamViewController.doneLoading()
-
         streamViewController.replacePlaceholder(type: type, items: items) {
             if self.streamViewController.hasCellItems(for: .promotionalHeader) && !self.streamViewController.hasCellItems(for: .streamItems) {
                 self.streamViewController.replacePlaceholder(type: .streamItems, items: [StreamCellItem(type: .streamLoading)])
@@ -209,7 +211,13 @@ extension CategoryViewController: CategoryStreamDestination, StreamDestination {
 
             completion()
         }
+
         updateInsets()
+
+        if type == .streamItems {
+            streamViewController.isPullToRefreshEnabled = true
+            streamViewController.doneLoading()
+        }
     }
 
     func setPlaceholders(items: [StreamCellItem]) {
@@ -258,7 +266,7 @@ extension CategoryViewController: CategoryStreamDestination, StreamDestination {
         let pullToRefreshView = streamViewController.pullToRefreshView
         pullToRefreshView?.isHidden = true
         screen.set(categoriesInfo: info) {
-            pullToRefreshView?.isHidden = false
+            pullToRefreshView?.isVisible = true
         }
 
         if case let .category(slug) = categorySelection,
@@ -288,7 +296,6 @@ extension CategoryViewController: CategoryStreamDestination, StreamDestination {
     }
 
     func primaryJSONAbleNotFound() {
-        self.streamViewController.doneLoading()
     }
 
     func setPagingConfig(responseConfig: ResponseConfig) {

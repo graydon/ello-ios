@@ -63,9 +63,9 @@ class CategoryCardCell: CollectionViewCell {
 
         if isSubscribing {
             insetContentView.layer.cornerRadius = Size.cornerRadius
-            subscribedCheckbox.isHidden = !isSelected
+            subscribedCheckbox.isVisible = isSelected
             subscribeButton.isSelected = isSelected
-            subscribeButton.isHidden = false
+            subscribeButton.isVisible = true
             subscribeButton.setTitle(isSelected ? InterfaceString.Discover.Subscribed : InterfaceString.Discover.Subscribe, for: .normal)
             selectedImageView.isHidden = true
             insetConstraint.update(inset: Size.cardMargins)
@@ -76,7 +76,7 @@ class CategoryCardCell: CollectionViewCell {
             insetContentView.layer.cornerRadius = 0
             subscribedCheckbox.isHidden = true
             subscribeButton.isHidden = true
-            selectedImageView.isHidden = !isSelected
+            selectedImageView.isVisible = isSelected
             insetConstraint.update(inset: Size.smallMargin)
             mainContentView.alpha = isSelected ? 0.8 : 0.4
             label.style = isSelected ? .boldWhite : .white

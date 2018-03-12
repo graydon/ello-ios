@@ -32,7 +32,6 @@ final class StreamViewController: BaseElloViewController {
     var postbarController: PostbarController?
     lazy var imageViewer = StreamImageViewer(streamViewController: self)
 
-    var pullToRefreshView: SSPullToRefreshView?
     var allOlderPagesLoaded = false
     var initialLoadClosure: Block?
     var reloadClosure: Block?
@@ -83,9 +82,15 @@ final class StreamViewController: BaseElloViewController {
         return layout.columnCount
     }
 
-    var isPullToRefreshEnabled: Bool = true {
-        didSet { pullToRefreshView?.isHidden = !isPullToRefreshEnabled }
+    private var actuallyIsPullToRefreshEnabled: Bool { return isPullToRefreshEnabled && internalIsPullToRefreshEnabled }
+    private var internalIsPullToRefreshEnabled: Bool = false {
+        didSet { pullToRefreshView?.isVisible = actuallyIsPullToRefreshEnabled }
     }
+    var isPullToRefreshEnabled: Bool = true {
+        didSet { pullToRefreshView?.isVisible = actuallyIsPullToRefreshEnabled }
+    }
+    var pullToRefreshView: SSPullToRefreshView?
+
     var isPagingEnabled = false
     private var scrollToPaginateGuard = false
 
@@ -182,7 +187,7 @@ final class StreamViewController: BaseElloViewController {
 
         pullToRefreshView = SSPullToRefreshView(scrollView: collectionView, delegate: self)
         pullToRefreshView?.contentView = ElloPullToRefreshView(frame: .zero)
-        pullToRefreshView?.isHidden = !isPullToRefreshEnabled
+        pullToRefreshView?.isVisible = actuallyIsPullToRefreshEnabled
 
         setupCollectionView()
         addNotificationObservers()
@@ -235,6 +240,7 @@ final class StreamViewController: BaseElloViewController {
 
     func doneLoading() {
         ElloHUD.hideLoadingHudInView(view)
+        internalIsPullToRefreshEnabled = true
         pullToRefreshView?.finishLoading()
         initialDataLoaded = true
     }
@@ -327,6 +333,7 @@ final class StreamViewController: BaseElloViewController {
     }
 
     func loadInitialPage(reload: Bool = false) {
+        internalIsPullToRefreshEnabled = false
         if let reloadClosure = reloadClosure, reload {
             responseConfig = nil
             isPagingEnabled = false
@@ -337,7 +344,6 @@ final class StreamViewController: BaseElloViewController {
         }
         else {
             let localToken = loadingToken.resetInitialPageLoadingToken()
-
             StreamService().loadStream(streamKind: streamKind)
                 .then { response -> Void in
                     guard self.loadingToken.isValidInitialPageLoadingToken(localToken) else { return }
@@ -608,12 +614,12 @@ extension StreamViewController: SimpleStreamResponder {
 extension StreamViewController: SSPullToRefreshViewDelegate {
 
     func pull(toRefreshViewShouldStartLoading view: SSPullToRefreshView!) -> Bool {
-        return isPullToRefreshEnabled
+        return actuallyIsPullToRefreshEnabled
     }
 
     func pull(_ view: SSPullToRefreshView, didTransitionTo toState: SSPullToRefreshViewState, from fromState: SSPullToRefreshViewState, animated: Bool) {
         if toState == .loading {
-            if isPullToRefreshEnabled {
+            if isPullToRefreshEnabled && internalIsPullToRefreshEnabled {
                 streamViewDelegate?.streamWillPullToRefresh()
 
                 if let controller = parent as? BaseElloViewController {
@@ -1130,7 +1136,9 @@ extension StreamViewController: UIScrollViewDelegate {
     }
 
     func canLoadNextPage() -> Bool {
+        let loadingItem = dataSource.streamCellItem(where: { $0.type == .streamPageLoading || $0.type == .streamLoading })
         return isPagingEnabled
+            && loadingItem == nil
             && !allOlderPagesLoaded
             && responseConfig?.totalPagesRemaining != "0"
             && responseConfig?.nextQuery != nil
@@ -1142,12 +1150,7 @@ extension StreamViewController: UIScrollViewDelegate {
             canLoadNextPage()
         else { return Promise(value: Void()) }
 
-        guard
-            let lastCellItem = dataSource.visibleCellItems.last,
-            lastCellItem.type != .streamPageLoading
-        else { return Promise(value: Void()) }
-
-        let placeholderType = lastCellItem.placeholderType
+        let lastPlaceholderType = dataSource.visibleCellItems.last?.placeholderType
         appendStreamCellItems([StreamCellItem(type: .streamPageLoading)])
 
         scrollToPaginateGuard = false
@@ -1177,7 +1180,7 @@ extension StreamViewController: UIScrollViewDelegate {
         return infiniteScrollGenerator
             .then { jsonables -> Promise<Void> in
                 self.allOlderPagesLoaded = jsonables.count == 0
-                return self.scrollLoaded(jsonables: jsonables, placeholderType: placeholderType)
+                return self.scrollLoaded(jsonables: jsonables, placeholderType: lastPlaceholderType)
             }
             .catch { error in
                 self.scrollLoaded()

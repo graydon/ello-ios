@@ -33,6 +33,9 @@ enum InterfaceImage: String {
     case reply = "reply"
     case flag = "flag"
 
+    // Social logos
+    case logoMedium = "logo_medium"
+
     // Badges
     case badgeFeatured = "badge_featured"
     case badgeCommunity = "badge_community"
@@ -168,6 +171,7 @@ enum InterfaceImage: String {
             .elloLogoGrey,
             .elloGrayLineLogo,
             .giantHeart,
+            .logoMedium,
             .marker,
             .narrationPointer,
             .validationError,

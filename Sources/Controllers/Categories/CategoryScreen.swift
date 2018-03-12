@@ -224,7 +224,7 @@ class CategoryScreen: HomeSubviewScreen, CategoryScreenProtocol {
 
     private func updateEditButton() {
         let actuallyShowEditButton = showEditButton && categoriesLoaded
-        editCategoriesButton.isHidden = !actuallyShowEditButton
+        editCategoriesButton.isVisible = actuallyShowEditButton
         let rightInset = actuallyShowEditButton ? editCategoriesButton.frame.width * CGFloat(1 - Size.gradientMidpoint) : 0
         categoryCardList.rightInset = rightInset
     }
@@ -290,7 +290,7 @@ class CategoryScreen: HomeSubviewScreen, CategoryScreenProtocol {
     }
 
     func setupNavBar(back backVisible: Bool, animated: Bool) {
-        backButton.isHidden = !backVisible
+        backButton.isVisible = backVisible
         backVisibleConstraint.set(isActivated: backVisible)
         backHiddenConstraint.set(isActivated: !backVisible)
 

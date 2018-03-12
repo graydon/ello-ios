@@ -2,6 +2,9 @@
 ///  DrawerCell.swift
 //
 
+import SnapKit
+
+
 class DrawerCell: TableViewCell {
     static let reuseIdentifier = "DrawerCell"
 
@@ -11,30 +14,71 @@ class DrawerCell: TableViewCell {
         static let lineHeight: CGFloat = 1
     }
 
-    let label: UILabel = StyledLabel(style: .white)
-    let line: UIView = UIView()
+    enum Style {
+        case `default`
+        case version
+    }
+
+    var isLineVisible: Bool {
+        get { return line.isVisible }
+        set { line.isVisible = newValue }
+    }
+    var title: String? {
+        get { return label.text }
+        set { label.text = newValue }
+    }
+    var logo: UIImage? {
+        get { return logoView.image }
+        set {
+            logoView.image = newValue
+        }
+    }
+    var style: Style = .default { didSet { updateStyle() } }
+
+    private let label: UILabel = StyledLabel(style: .white)
+    private let logoView = UIImageView()
+    private let line: UIView = UIView()
 
     override func styleCell() {
         backgroundColor = .grey6
         line.backgroundColor = .grey5
+        selectionStyle = .none
     }
 
     override func arrange() {
         contentView.addSubview(label)
+        contentView.addSubview(logoView)
         contentView.addSubview(line)
 
         contentView.snp.makeConstraints { make in
             make.height.equalTo(Size.height)
         }
 
+        logoView.snp.makeConstraints { make in
+            make.width.height.equalTo(20)
+            make.centerY.equalTo(self)
+            make.leading.equalTo(self).inset(Size.inset)
+        }
+
         label.snp.makeConstraints { make in
             make.centerY.equalTo(self)
-            make.leading.trailing.equalTo(self).inset(Size.inset)
+            make.leading.equalTo(logoView.snp.trailing).offset(Size.inset.left)
         }
 
         line.snp.makeConstraints { make in
             make.bottom.leading.trailing.equalTo(self)
             make.height.equalTo(Size.lineHeight)
+        }
+    }
+
+    private func updateStyle() {
+        if style == .version {
+            label.font = UIFont.defaultFont(12)
+            label.textColor = .greyA
+        }
+        else {
+            label.font = UIFont.defaultFont()
+            label.textColor = .white
         }
     }
 }

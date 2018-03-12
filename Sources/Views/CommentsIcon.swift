@@ -33,7 +33,7 @@ class CommentsIcon: BasicIcon {
     // MARK: Private
     override func updateIcon(selected: Bool, enabled: Bool) {
         super.updateIcon(selected: selected, enabled: enabled)
-        commentTailView.isHidden = !selected
+        commentTailView.isVisible = selected
     }
 }
 

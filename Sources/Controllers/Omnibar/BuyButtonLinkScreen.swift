@@ -31,7 +31,7 @@ class BuyButtonLinkScreen: View, BuyButtonLinkScreenProtocol {
             let hasLink = newValue != nil
             submitButtonTrailingRemove.set(isActivated: hasLink)
             submitButtonTrailingRight.set(isActivated: !hasLink)
-            removeButton.isHidden = !hasLink
+            removeButton.isVisible = hasLink
             productLinkField.text = newValue?.absoluteString
             productLinkDidChange()
         }

@@ -98,8 +98,8 @@ class ProfileScreen: StreamableScreen, ProfileScreenProtocol {
         relationshipControl.isHidden = true
         editButton.isHidden = true
         inviteButton.isHidden = true
-        ghostLeftButton.isHidden = false
-        ghostRightButton.isHidden = false
+        ghostLeftButton.isVisible = true
+        ghostRightButton.isVisible = true
         ghostLeftButton.isEnabled = false
         ghostRightButton.isEnabled = false
     }
@@ -281,11 +281,11 @@ class ProfileScreen: StreamableScreen, ProfileScreenProtocol {
         relationshipCollabConstraint.set(isActivated: !isHireable && isCollaborateable)
         relationshipMentionConstraint.set(isActivated: !(isHireable || isCollaborateable))
 
-        collaborateButton.isHidden = !isCollaborateable
-        hireButton.isHidden = !isHireable
+        collaborateButton.isVisible = isCollaborateable
+        hireButton.isVisible = isHireable
         mentionButton.isHidden = isHireable || isCollaborateable
 
-        relationshipControl.isHidden = false
+        relationshipControl.isVisible = true
         editButton.isHidden = true
         inviteButton.isHidden = true
         ghostLeftButton.isHidden = true
@@ -297,8 +297,8 @@ class ProfileScreen: StreamableScreen, ProfileScreenProtocol {
         hireButton.isHidden = true
         mentionButton.isHidden = true
         relationshipControl.isHidden = true
-        editButton.isHidden = false
-        inviteButton.isHidden = false
+        editButton.isVisible = true
+        inviteButton.isVisible = true
         ghostLeftButton.isHidden = true
         ghostRightButton.isHidden = true
     }

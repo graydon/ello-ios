@@ -65,7 +65,7 @@ class StreamImageCell: StreamRegionableCell {
         get { return !(largeImagePlayButton?.isHidden ?? true) }
         set {
             largeImagePlayButton?.interfaceImage = .videoPlay
-            largeImagePlayButton?.isHidden = !newValue
+            largeImagePlayButton?.isVisible = newValue
         }
     }
     var isGridView: Bool = false {
@@ -229,8 +229,8 @@ class StreamImageCell: StreamRegionableCell {
     private func imageLoadFailed() {
         buyButton?.isHidden = true
         buyButtonGreen?.isHidden = true
-        failImage.isHidden = false
-        failBackgroundView.isHidden = false
+        failImage.isVisible = true
+        failBackgroundView.isVisible = true
         circle.stopPulse()
         largeImagePlayButton?.isHidden = true
         UIView.animate(withDuration: 0.15, animations: {

@@ -108,7 +108,10 @@ extension ArtistInvitesViewController: StreamDestination {
 
             completion()
         }
-        streamViewController.doneLoading()
+
+        if type == .artistInvites {
+            streamViewController.doneLoading()
+        }
     }
 
     func setPlaceholders(items: [StreamCellItem]) {

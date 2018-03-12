@@ -436,6 +436,7 @@
 		1D06D6CA1E43B771004FA878 /* GroupDefaultsSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D06D6C91E43B771004FA878 /* GroupDefaultsSpec.swift */; };
 		1D06D6CC1E43B7DD004FA878 /* AppDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D06D6CB1E43B7DD004FA878 /* AppDefaults.swift */; };
 		1D08320F1AAA54880076C67D /* TypedNotificationSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D08320E1AAA54880076C67D /* TypedNotificationSpec.swift */; };
+		1D0A39032053351100AE9109 /* logo_medium.svg in Resources */ = {isa = PBXBuildFile; fileRef = 1D0A39022053350F00AE9109 /* logo_medium.svg */; };
 		1D0DF8B82021198500019875 /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D0DF8B72021198500019875 /* AuthenticationManager.swift */; };
 		1D0DF8BB20211E8C00019875 /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D0DF8B72021198500019875 /* AuthenticationManager.swift */; };
 		1D0DF8BC20211E8D00019875 /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D0DF8B72021198500019875 /* AuthenticationManager.swift */; };
@@ -1717,6 +1718,7 @@
 		1D06D6C91E43B771004FA878 /* GroupDefaultsSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupDefaultsSpec.swift; sourceTree = "<group>"; };
 		1D06D6CB1E43B7DD004FA878 /* AppDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDefaults.swift; sourceTree = "<group>"; };
 		1D08320E1AAA54880076C67D /* TypedNotificationSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypedNotificationSpec.swift; sourceTree = "<group>"; };
+		1D0A39022053350F00AE9109 /* logo_medium.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = logo_medium.svg; sourceTree = "<group>"; };
 		1D0DF8B72021198500019875 /* AuthenticationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationManager.swift; sourceTree = "<group>"; };
 		1D0DF8C22022394800019875 /* Parser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
 		1D0DF8C32022394900019875 /* PostParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostParser.swift; sourceTree = "<group>"; };
@@ -4202,8 +4204,8 @@
 				76F8DE691B6C0BC4009BCF61 /* circbig_selected.svg */,
 				1DDC23471F32439400E68B0E /* circle_check_green.svg */,
 				1DB390CB2044A5F400A1B7E7 /* circle_check_large_green.svg */,
-				1DB390D92047738700A1B7E7 /* circle_check_large_white.svg */,
 				1DB390CC2044A5F500A1B7E7 /* circle_check_large_normal.svg */,
+				1DB390D92047738700A1B7E7 /* circle_check_large_white.svg */,
 				1DDC23481F32439400E68B0E /* circle_check_normal.svg */,
 				12E2A5A51E5CD386000EFFBA /* create_post_normal.svg */,
 				12241CEE1E60CAC700100C41 /* create_post_selected.svg */,
@@ -4245,6 +4247,7 @@
 				1DF7416A1BFA650E000F5349 /* link_white.svg */,
 				1D242D621DDBCD87000A424C /* list_view_normal.svg */,
 				1D2ED1B31F82EF2700B19052 /* list_view_selected.svg */,
+				1D0A39022053350F00AE9109 /* logo_medium.svg */,
 				1D59EF931D6640C50029C106 /* mail_normal.svg */,
 				1D59EF941D6640C50029C106 /* mail_selected.svg */,
 				1D59EF951D6640C50029C106 /* mail_white.svg */,
@@ -4678,6 +4681,7 @@
 				1D942C091EC3AF8700056761 /* bubble_outline_normal.svg in Resources */,
 				7689B4DA1AD4ED3B00E4A4A3 /* activity_streams__when_a_category_is_specified.json in Resources */,
 				76B53AD61B0AA89B00534548 /* users_searching_without_terms_fails.json in Resources */,
+				1D0A39032053351100AE9109 /* logo_medium.svg in Resources */,
 				76F8DEBC1B6C0BC4009BCF61 /* camera_selected.svg in Resources */,
 				1D6E43171EA68AEA0029C9B1 /* badge_staff_normal.svg in Resources */,
 				7689B4F51AD4ED3B00E4A4A3 /* posts_loading_more_post_comments.json in Resources */,

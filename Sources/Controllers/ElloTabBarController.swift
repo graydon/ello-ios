@@ -15,7 +15,7 @@ class ElloTabBarController: BaseElloViewController, BottomBarController {
 
     let tabBar = ElloTabBar()
     var newNotificationsAvailable: Bool {
-        set { notificationsDot?.isHidden = !newValue }
+        set { notificationsDot?.isVisible = newValue }
         get {
             if let hidden = notificationsDot?.isHidden {
                 return !hidden
@@ -247,7 +247,7 @@ extension ElloTabBarController {
         }
 
         newStreamContentObserver = NotificationObserver(notification: NewContentNotifications.newFollowingContent) { [weak self] in
-            self?.homeDot?.isHidden = false
+            self?.homeDot?.isVisible = true
         }
 
     }

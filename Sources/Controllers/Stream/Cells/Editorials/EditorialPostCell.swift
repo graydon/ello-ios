@@ -37,9 +37,9 @@ class EditorialPostCell: EditorialTitledCell {
     override func updateConfig() {
         super.updateConfig()
 
-        repostButton.isHidden = !(config.post?.author?.hasRepostingEnabled ?? false)
-        commentButton.isHidden = !(config.post?.author?.hasCommentingEnabled ?? false)
-        lovesButton.isHidden = !(config.post?.author?.hasLovesEnabled ?? false)
+        repostButton.isVisible = (config.post?.author?.hasRepostingEnabled ?? false)
+        commentButton.isVisible = (config.post?.author?.hasCommentingEnabled ?? false)
+        lovesButton.isVisible = (config.post?.author?.hasLovesEnabled ?? false)
 
         let loved = config.post?.isLoved ?? false
         lovesButton.isEnabled = true

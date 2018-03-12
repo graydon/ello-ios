@@ -28,9 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 print(sym)
             }
         }
-        #endif
 
-        #if DEBUG
         Tracker.shared.overrideAgent = NullAgent()
         #endif
 

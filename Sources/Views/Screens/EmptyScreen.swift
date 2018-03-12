@@ -10,7 +10,7 @@ class EmptyScreen: Screen {
         get { return !statusBar.isHidden }
         set {
             blackBarHeightConstraint.set(isActivated: !newValue)
-            statusBar.isHidden = !newValue
+            statusBar.isVisible = newValue
         }
     }
     let statusBar = StatusBar()

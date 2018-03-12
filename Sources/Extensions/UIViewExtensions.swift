@@ -3,6 +3,11 @@
 //
 
 extension UIView {
+    var isVisible: Bool {
+        get { return !isHidden }
+        set { isHidden = !newValue}
+    }
+
     var firstResponder: UIView? {
         return findSubview { $0.isFirstResponder }
     }
