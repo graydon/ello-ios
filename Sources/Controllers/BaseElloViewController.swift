@@ -31,7 +31,7 @@ class BaseElloViewController: UIViewController, HasAppController, ControllerThat
     }
 
     func fetchScreen<T>(_ mock: T?) -> T {
-        if !isViewLoaded && Globals.isSimulator { fatalError("should not be accessing 'screen' now") }
+        if !isViewLoaded && Globals.isSimulator && !Globals.isTesting { fatalError("should not be accessing 'screen' now") }
         return mock ?? self.view as! T
     }
 
