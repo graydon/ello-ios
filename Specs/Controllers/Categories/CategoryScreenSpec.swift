@@ -11,6 +11,8 @@ class CategoryScreenSpec: QuickSpec {
     class MockCategoryScreenDelegate: CategoryScreenDelegate {
         var selectedIndex: Int?
         var allCategoriesTappedCount = 0
+        var editCategoriesTappedCount = 0
+        var subscribedCategoryTappedCount = 0
         var gridListToggled = 0
         var searchButtonCount = 0
         var shareCount = 0
@@ -22,6 +24,12 @@ class CategoryScreenSpec: QuickSpec {
         }
         func allCategoriesTapped() {
             allCategoriesTappedCount += 1
+        }
+        func editCategoriesTapped() {
+            editCategoriesTappedCount += 1
+        }
+        func subscribedCategoryTapped() {
+            subscribedCategoryTappedCount += 1
         }
         func gridListToggled(sender: UIButton) {
             gridListToggled += 1
@@ -48,12 +56,12 @@ class CategoryScreenSpec: QuickSpec {
             beforeEach {
                 let infoA = CategoryCardListView.CategoryInfo(
                     title: "Art",
-                    type: .category,
+                    kind: .category,
                     imageURL: URL(string: "https://example.com")
                     )
                 let infoB = CategoryCardListView.CategoryInfo(
                     title: "Lorem ipsum dolor sit amet",
-                    type: .category,
+                    kind: .category,
                     imageURL: URL(string: "https://example.com")
                     )
                 subject = CategoryScreen(usage: .default)

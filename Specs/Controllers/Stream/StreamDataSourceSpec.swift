@@ -560,8 +560,7 @@ class StreamDataSourceSpec: QuickSpec {
                 let zero = IndexPath(item: 0, section: 0)
                 let two = IndexPath(item: 2, section: 0)
                 let tests: [(IndexPath?, StreamKind)] = [
-                    (nil, .discover(type: .featured)),
-                    (nil, .category(slug: "art")),
+                    (nil, .category(.all, .featured)),
                     (zero, .following),
                     (nil, .simpleStream(endpoint: ElloAPI.loves(userId: "12345"), title: "NA")),
                     (nil, .notifications(category: "")),

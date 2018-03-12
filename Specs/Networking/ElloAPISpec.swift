@@ -64,9 +64,6 @@ class ElloAPISpec: QuickSpec {
                         (.deletePost(postId: "666"), "/api/v2/posts/666"),
                         (.deleteSubscriptions(token: Data(base64Encoded: "Zm9v")!), "/api/v2/profile/push_subscriptions/apns/666f6f"),  // Zm9v is base64 of "foo", btw
                         (.deleteWatchPost(postId: "1"), "/api/v2/posts/1/watch"),
-                        (.discover(type: .featured), "/api/v2/categories/posts/recent"),
-                        (.discover(type: .recent), "/api/v2/discover/posts/recent"),
-                        (.discover(type: .trending), "/api/v2/discover/posts/trending"),
                         (.emojiAutoComplete(terms: ""), "/api/v2/emoji/autocomplete"),
                         (.findFriends(contacts: [:]), "/api/v2/profile/find_friends"),
                         (.flagComment(postId: "555", commentId: "666", kind: "some-string"), "/api/v2/posts/555/comments/666/flag/some-string"),
@@ -102,7 +99,7 @@ class ElloAPISpec: QuickSpec {
                         (.searchForUsers(terms: ""), "/api/v2/users"),
                         (.updateComment(postId: "1", commentId: "2", body: [:]), "/api/v2/posts/1/comments/2"),
                         (.updatePost(postId: "1", body: [:]), "/api/v2/posts/1"),
-                        (.userCategories(categoryIds: ["1"]), "/api/v2/profile/followed_categories"),
+                        (.userCategories(categoryIds: ["1"], onboarding: false), "/api/v2/profile/followed_categories"),
                         (.userNameAutoComplete(terms: ""), "/api/v2/users/autocomplete"),
                         (.userStream(userParam: "999"), "/api/v2/users/999"),
                         (.userStreamFollowers(userId: "321"), "/api/v2/users/321/followers"),
@@ -136,9 +133,6 @@ class ElloAPISpec: QuickSpec {
                     (.deleteLove(postId: ""), .noContentType),
                     (.deletePost(postId: ""), .noContentType),
                     (.deleteSubscriptions(token: Data()), .noContentType),
-                    (.discover(type: .featured), .postsType),
-                    (.discover(type: .trending), .postsType),
-                    (.discover(type: .recent), .postsType),
                     (.categoryPosts(slug: "art"), .postsType),
                     (.emojiAutoComplete(terms: ""), .autoCompleteResultType),
                     (.findFriends(contacts: ["": [""]]), .usersType),
@@ -170,7 +164,7 @@ class ElloAPISpec: QuickSpec {
                     (.searchForPosts(terms: ""), .postsType),
                     (.updatePost(postId: "", body: ["": ""]), .postsType),
                     (.updateComment(postId: "", commentId: "", body: ["": ""]), .commentsType),
-                    (.userCategories(categoryIds: [""]), .noContentType),
+                    (.userCategories(categoryIds: [""], onboarding: false), .noContentType),
                     (.userStream(userParam: ""), .usersType),
                     (.userStream(userParam: currentUserId), .usersType),
                     (.userStreamFollowers(userId: ""), .usersType),
@@ -215,7 +209,6 @@ class ElloAPISpec: QuickSpec {
                         .deleteLove(postId: ""),
                         .deletePost(postId: ""),
                         .deleteSubscriptions(token: Data()),
-                        .discover(type: .trending),
                         .categoryPosts(slug: ""),
                         .emojiAutoComplete(terms: ""),
                         .findFriends(contacts: [:]),
@@ -246,7 +239,7 @@ class ElloAPISpec: QuickSpec {
                         .searchForPosts(terms: ""),
                         .searchForUsers(terms: ""),
                         .userNameAutoComplete(terms: ""),
-                        .userCategories(categoryIds: [""]),
+                        .userCategories(categoryIds: [""], onboarding: false),
                         .userStream(userParam: ""),
                         .userStreamFollowers(userId: ""),
                         .userStreamFollowing(userId: ""),
@@ -293,7 +286,6 @@ class ElloAPISpec: QuickSpec {
                         .deleteLove(postId: ""),
                         .deletePost(postId: ""),
                         .deleteSubscriptions(token: Data()),
-                        .discover(type: .trending),
                         .categoryPosts(slug: ""),
                         .emojiAutoComplete(terms: ""),
                         .findFriends(contacts: ["": [""]]),
@@ -319,7 +311,7 @@ class ElloAPISpec: QuickSpec {
                         .relationshipBatch(userIds: [""], relationship: ""),
                         .searchForUsers(terms: ""),
                         .searchForPosts(terms: ""),
-                        .userCategories(categoryIds: [""]),
+                        .userCategories(categoryIds: [""], onboarding: false),
                         .userStream(userParam: ""),
                         .userStreamFollowers(userId: ""),
                         .userStreamFollowing(userId: ""),
@@ -366,11 +358,6 @@ class ElloAPISpec: QuickSpec {
                     expect(ElloAPI.createPost(body: content as [String: Any]).parameters as? [String: String]) == content
                 }
 
-                it("discover") {
-                    let params = ElloAPI.discover(type: .featured).parameters!
-                    expect(params["per_page"] as? Int) == 10
-                }
-
                 it("categoryPosts") {
                     let params = ElloAPI.categoryPosts(slug: "art").parameters!
                     expect(params["per_page"] as? Int) == 10
@@ -387,7 +374,7 @@ class ElloAPISpec: QuickSpec {
 
                 it("infiniteScroll") {
                     let query = URLComponents(string: "ttp://ello.co/api/v2/posts/278/comments?after=2014-06-02T00%3A00%3A00.000000000%2B0000&per_page=2")!
-                    let infiniteScroll = ElloAPI.infiniteScroll(query: query, api: .discover(type: .featured))
+                    let infiniteScroll = ElloAPI.infiniteScroll(query: query, api: .editorials)
                     let params = infiniteScroll.parameters!
                     expect(params["per_page"] as? String) == "2"
                     expect(params["after"]).notTo(beNil())
@@ -510,8 +497,9 @@ class ElloAPISpec: QuickSpec {
                 }
 
                 it("userCategories") {
-                    let params = ElloAPI.userCategories(categoryIds: ["456"]).parameters!
+                    let params = ElloAPI.userCategories(categoryIds: ["456"], onboarding: false).parameters!
                     expect(params["followed_category_ids"] as? [String]) == ["456"]
+                    expect(params["disable_follows"] as? Bool) == true
                 }
             }
 

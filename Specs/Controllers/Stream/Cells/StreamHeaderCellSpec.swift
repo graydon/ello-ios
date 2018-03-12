@@ -124,7 +124,7 @@ class StreamHeaderCellSpec: QuickSpec {
 
                         subject.timeStamp = "1m"
                         subject.setDetails(user: user, repostedBy: repostedBy, category: cellCategory, isSubmission: isSubmission)
-                        subject.avatarButton.setImage(specImage(named: "specs-avatar"), for: .normal)
+                        subject.specs().avatarButton.setImage(specImage(named: "specs-avatar"), for: .normal)
 
                         expectValidSnapshot(subject)
                     }

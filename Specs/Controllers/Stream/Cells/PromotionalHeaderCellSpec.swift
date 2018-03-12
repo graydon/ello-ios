@@ -33,7 +33,7 @@ class PromotionalHeaderCellSpec: QuickSpec {
             var subject: PromotionalHeaderCell!
 
             func setImages() {
-                subject.postedByAvatar.setImage(specImage(named: "specs-avatar"), for: .normal)
+                subject.specs().postedByAvatar.setImage(specImage(named: "specs-avatar"), for: .normal)
                 subject.setImage(specImage(named: "specs-category-image.jpg")!)
             }
 
@@ -101,7 +101,7 @@ class PromotionalHeaderCellSpec: QuickSpec {
                         let height = PromotionalHeaderCellSizeCalculator.calculatePageHeaderHeight(pageHeader, htmlHeight: nil, cellWidth: style.width)
                         subject = PromotionalHeaderCell(frame: style.frame(height))
                         let item = StreamCellItem(jsonable: pageHeader, type: .promotionalHeader)
-                        PromotionalHeaderCellPresenter.configure(subject, streamCellItem: item, streamKind: .category(slug: "Design"), indexPath: IndexPath(item: 0, section: 0), currentUser: nil)
+                        PromotionalHeaderCellPresenter.configure(subject, streamCellItem: item, streamKind: .category(.category("Design"), .featured), indexPath: IndexPath(item: 0, section: 0), currentUser: nil)
                         setImages()
 
                         expectValidSnapshot(subject)

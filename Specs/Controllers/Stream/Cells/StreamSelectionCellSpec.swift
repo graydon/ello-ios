@@ -11,13 +11,11 @@ class StreamSelectionCellSpec: QuickSpec {
 
     class FakeStreamSelectionCellResponder: UIView, StreamSelectionCellResponder {
         var categoryTapped = false
-        var slug: String?
-        var name: String?
+        var stream: String?
 
-        func categoryListCellTapped(slug: String, name: String) {
+        func streamTapped(_ stream: String) {
             categoryTapped = true
-            self.slug = slug
-            self.name = name
+            self.stream = stream
         }
     }
 
@@ -35,26 +33,16 @@ class StreamSelectionCellSpec: QuickSpec {
 
             describe("actions") {
                 it("sends action when tapping on a category") {
-                    subject.categoriesInfo = [
-                        (title: "Featured", slug: "featured"),
-                        (title: "Trending", slug: "trending"),
-                        (title: "Recent", slug: "recent"),
-                    ]
                     let categoryButton: UIButton? = subview(of: subject, thatMatches: { button in
                         button.currentAttributedTitle?.string == "Featured"
                     })
                     categoryButton?.sendActions(for: .touchUpInside)
                     expect(responder.categoryTapped) == true
-                    expect(responder.slug) == "featured"
+                    expect(responder.stream) == "featured"
                 }
             }
 
             it("displays categories") {
-                subject.categoriesInfo = [
-                    (title: "Featured", slug: "featured"),
-                    (title: "Trending", slug: "trending"),
-                    (title: "Recent", slug: "recent"),
-                ]
                 expectValidSnapshot(subject)
             }
         }

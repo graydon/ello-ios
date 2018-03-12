@@ -97,6 +97,11 @@ extension User: Stubbable {
         else {
             user.externalLinksList = [ExternalLink(url: URL(string: "http://ello.co")!, text: "ello.co")]
         }
+
+        if let ids = values["followedCategoryIds"] as? [String] {
+            user.followedCategoryIds = Set(ids)
+        }
+
         user.coverImage = values["coverImage"] as? Asset
         user.onboardingVersion = (values["onboardingVersion"] as? Int)
         // links / nested resources

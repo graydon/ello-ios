@@ -15,7 +15,7 @@ class CategoryCardCellPresenterSpec: QuickSpec {
                 let cell: CategoryCardCell = CategoryCardCell()
                 let item: StreamCellItem = StreamCellItem(jsonable: category, type: .categorySubscribeCard)
 
-                CategoryCardCellPresenter.configure(cell, streamCellItem: item, streamKind: .category(slug: "art"), indexPath: IndexPath(item: 0, section: 0), currentUser: nil)
+                CategoryCardCellPresenter.configure(cell, streamCellItem: item, streamKind: .category(.category("art"), .featured), indexPath: IndexPath(item: 0, section: 0), currentUser: nil)
 
                 expect(cell.title) == "Art"
             }

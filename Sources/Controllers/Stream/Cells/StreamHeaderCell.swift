@@ -322,3 +322,25 @@ extension StreamHeaderCell: ElloTextViewDelegate {
     }
     func textViewTappedDefault() {}
 }
+
+extension StreamHeaderCell {
+    class Specs {
+        weak var target: StreamHeaderCell!
+        var avatarButton: AvatarButton! { return target.avatarButton }
+        var timestampLabel: StyledLabel! { return target.timestampLabel }
+        var usernameButton: StyledButton! { return target.usernameButton }
+        var relationshipControl: RelationshipControl! { return target.relationshipControl }
+        var repostIconView: UIImageView! { return target.repostIconView }
+        var repostedByButton: StyledButton! { return target.repostedByButton }
+        var categoryButton: StyledButton! { return target.categoryButton }
+        var artistInviteSubmissionButton: StyledButton! { return target.artistInviteSubmissionButton }
+
+        init(_ target: StreamHeaderCell) {
+            self.target = target
+        }
+    }
+
+    func specs() -> Specs {
+        return Specs(self)
+    }
+}

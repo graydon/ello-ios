@@ -39,14 +39,14 @@ class StreamHeaderCellPresenterSpec: QuickSpec {
                     expect(cell.timeStamp) == "17m"
                 }
                 it("sets usernameButton title") {
-                    cell.usernameButton.setTitle("", for: .normal)
+                    cell.specs().usernameButton.setTitle("", for: .normal)
                     StreamHeaderCellPresenter.configure(cell, streamCellItem: item, streamKind: .following, indexPath: IndexPath(item: 0, section: 0), currentUser: currentUser)
-                    expect(cell.usernameButton.currentTitle) == "@ello"
+                    expect(cell.specs().usernameButton.currentTitle) == "@ello"
                 }
                 it("hides repostAuthor") {
                     StreamHeaderCellPresenter.configure(cell, streamCellItem: item, streamKind: .following, indexPath: IndexPath(item: 0, section: 0), currentUser: currentUser)
-                    expect(cell.repostedByButton.isHidden) == true
-                    expect(cell.repostIconView.isHidden) == true
+                    expect(cell.specs().repostedByButton.isHidden) == true
+                    expect(cell.specs().repostIconView.isHidden) == true
                 }
 
                 context("gridLayout streamKind") {
@@ -103,13 +103,13 @@ class StreamHeaderCellPresenterSpec: QuickSpec {
                     item = StreamCellItem(jsonable: post, type: .streamHeader)
                 }
                 it("sets relationshipControl properties") {
-                    cell.relationshipControl.userId = ""
-                    cell.relationshipControl.userAtName = ""
-                    cell.relationshipControl.relationshipPriority = RelationshipPriority.null
+                    cell.specs().relationshipControl.userId = ""
+                    cell.specs().relationshipControl.userAtName = ""
+                    cell.specs().relationshipControl.relationshipPriority = RelationshipPriority.null
                     StreamHeaderCellPresenter.configure(cell, streamCellItem: item, streamKind: .following, indexPath: IndexPath(item: 0, section: 0), currentUser: currentUser)
-                    expect(cell.relationshipControl.userId) == "reposterId"
-                    expect(cell.relationshipControl.userAtName) == "@reposter"
-                    expect(cell.relationshipControl.relationshipPriority) == RelationshipPriority.following
+                    expect(cell.specs().relationshipControl.userId) == "reposterId"
+                    expect(cell.specs().relationshipControl.userAtName) == "@reposter"
+                    expect(cell.specs().relationshipControl.relationshipPriority) == RelationshipPriority.following
                 }
                 it("sets followButtonVisible") {
                     cell.followButtonVisible = true
@@ -120,17 +120,17 @@ class StreamHeaderCellPresenterSpec: QuickSpec {
                 context("gridLayout streamKind") {
                     it("shows reposter and author") {
                         StreamHeaderCellPresenter.configure(cell, streamCellItem: item, streamKind: .following, indexPath: IndexPath(item: 0, section: 0), currentUser: currentUser)
-                        expect(cell.repostedByButton.isHidden) == false
-                        expect(cell.repostIconView.isHidden) == false
+                        expect(cell.specs().repostedByButton.isHidden) == false
+                        expect(cell.specs().repostIconView.isHidden) == false
                     }
                 }
 
                 context("not-gridLayout streamKind") {
                     it("shows author and repostAuthor") {
                         StreamHeaderCellPresenter.configure(cell, streamCellItem: item, streamKind: .following, indexPath: IndexPath(item: 0, section: 0), currentUser: currentUser)
-                        expect(cell.repostedByButton.currentTitle) == "by @ello"
-                        expect(cell.repostedByButton.isHidden) == false
-                        expect(cell.repostIconView.isHidden) == false
+                        expect(cell.specs().repostedByButton.currentTitle) == "by @ello"
+                        expect(cell.specs().repostedByButton.isHidden) == false
+                        expect(cell.specs().repostIconView.isHidden) == false
                     }
                 }
             }
@@ -159,9 +159,9 @@ class StreamHeaderCellPresenterSpec: QuickSpec {
                     cell.followButtonVisible = false
                     StreamHeaderCellPresenter.configure(cell, streamCellItem: item, streamKind: .postDetail(postParam: postId), indexPath: IndexPath(item: 0, section: 0), currentUser: currentUser)
                     expect(cell.followButtonVisible) == true
-                    expect(cell.relationshipControl.userId) == "authorId"
-                    expect(cell.relationshipControl.userAtName) == "@author"
-                    expect(cell.relationshipControl.relationshipPriority) == RelationshipPriority.following
+                    expect(cell.specs().relationshipControl.userId) == "authorId"
+                    expect(cell.specs().relationshipControl.userAtName) == "@author"
+                    expect(cell.specs().relationshipControl.relationshipPriority) == RelationshipPriority.following
                 }
             }
 
@@ -185,9 +185,9 @@ class StreamHeaderCellPresenterSpec: QuickSpec {
                     cell.followButtonVisible = false
                     StreamHeaderCellPresenter.configure(cell, streamCellItem: item, streamKind: .postDetail(postParam: postId), indexPath: IndexPath(item: 0, section: 0), currentUser: currentUser)
                     expect(cell.followButtonVisible) == true
-                    expect(cell.relationshipControl.userId) == "reposterId"
-                    expect(cell.relationshipControl.userAtName) == "@reposter"
-                    expect(cell.relationshipControl.relationshipPriority) == RelationshipPriority.following
+                    expect(cell.specs().relationshipControl.userId) == "reposterId"
+                    expect(cell.specs().relationshipControl.userAtName) == "@reposter"
+                    expect(cell.specs().relationshipControl.relationshipPriority) == RelationshipPriority.following
                 }
             }
 
@@ -208,18 +208,18 @@ class StreamHeaderCellPresenterSpec: QuickSpec {
                 }
                 it("sets categoryButton in .Featured stream") {
                     cell.followButtonVisible = false
-                    StreamHeaderCellPresenter.configure(cell, streamCellItem: item, streamKind: .discover(type: .featured), indexPath: IndexPath(item: 0, section: 0), currentUser: currentUser)
+                    StreamHeaderCellPresenter.configure(cell, streamCellItem: item, streamKind: .category(.all, .featured), indexPath: IndexPath(item: 0, section: 0), currentUser: currentUser)
                     expect(cell.followButtonVisible) == false
-                    expect(cell.relationshipControl.isHidden) == true
-                    expect(cell.categoryButton.currentTitle) == "in Art"
-                    expect(cell.categoryButton.isHidden) == false
+                    expect(cell.specs().relationshipControl.isHidden) == true
+                    expect(cell.specs().categoryButton.currentTitle) == "in Art"
+                    expect(cell.specs().categoryButton.isHidden) == false
                 }
                 it("hides categoryButton if not in .Featured stream") {
                     cell.followButtonVisible = false
                     StreamHeaderCellPresenter.configure(cell, streamCellItem: item, streamKind: .postDetail(postParam: ""), indexPath: IndexPath(item: 0, section: 0), currentUser: currentUser)
                     expect(cell.followButtonVisible) == false
-                    expect(cell.relationshipControl.isHidden) == true
-                    expect(cell.categoryButton.isHidden) == true
+                    expect(cell.specs().relationshipControl.isHidden) == true
+                    expect(cell.specs().categoryButton.isHidden) == true
                 }
             }
 
@@ -251,9 +251,9 @@ class StreamHeaderCellPresenterSpec: QuickSpec {
                     item = StreamCellItem(jsonable: post, type: .streamHeader)
                 }
                 it("shows artistInviteSubmissionButton") {
-                    cell.artistInviteSubmissionButton.isHidden = true
-                    StreamHeaderCellPresenter.configure(cell, streamCellItem: item, streamKind: .discover(type: .featured), indexPath: IndexPath(item: 0, section: 0), currentUser: currentUser)
-                    expect(cell.artistInviteSubmissionButton.isHidden) == false
+                    cell.specs().artistInviteSubmissionButton.isHidden = true
+                    StreamHeaderCellPresenter.configure(cell, streamCellItem: item, streamKind: .category(.all, .featured), indexPath: IndexPath(item: 0, section: 0), currentUser: currentUser)
+                    expect(cell.specs().artistInviteSubmissionButton.isHidden) == false
                 }
             }
         }

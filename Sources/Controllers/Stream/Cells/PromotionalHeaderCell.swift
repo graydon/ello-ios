@@ -405,3 +405,18 @@ extension PromotionalHeaderCell.Config {
         self.isSubscribed = isSubscribed
     }
 }
+
+extension PromotionalHeaderCell {
+    class Specs {
+        weak var target: PromotionalHeaderCell!
+        var postedByAvatar: AvatarButton! { return target.postedByAvatar }
+
+        init(_ target: PromotionalHeaderCell) {
+            self.target = target
+        }
+    }
+
+    func specs() -> Specs {
+        return Specs(self)
+    }
+}

@@ -37,7 +37,7 @@ class BlockUserModalScreenSpec: QuickSpec {
     }
 
     override func spec() {
-        fdescribe("BlockUserModalScreen") {
+        describe("BlockUserModalScreen") {
             var subject: BlockUserModalScreen!
             var controller: FakeBlockUserModalController!
             var muteButton: UIButton!
@@ -78,13 +78,13 @@ class BlockUserModalScreenSpec: QuickSpec {
                 describe("@muteButton") {
                     it("not selected") {
                         setupScreen(atName: "@archer", relationshipPriority: .following)
-                        muteButton.sendActions(for: UIControlEvents.touchUpInside)
+                        muteButton.sendActions(for: .touchUpInside)
                         expect(controller.relationshipPriority).to(equal(RelationshipPriority.mute))
                     }
 
                     it("selected") {
                         setupScreen(atName: "@archer", relationshipPriority: .mute)
-                        muteButton.sendActions(for: UIControlEvents.touchUpInside)
+                        muteButton.sendActions(for: .touchUpInside)
                         expect(controller.relationshipPriority).to(equal(RelationshipPriority.inactive))
                     }
                 }
@@ -92,20 +92,20 @@ class BlockUserModalScreenSpec: QuickSpec {
                 describe("@blockButton") {
                     it("not selected") {
                         setupScreen(atName: "@archer", relationshipPriority: .following)
-                        blockButton.sendActions(for: UIControlEvents.touchUpInside)
+                        blockButton.sendActions(for: .touchUpInside)
                         expect(controller.relationshipPriority).to(equal(RelationshipPriority.block))
                     }
 
                     it("selected") {
                         setupScreen(atName: "@archer", relationshipPriority: .block)
-                        blockButton.sendActions(for: UIControlEvents.touchUpInside)
+                        blockButton.sendActions(for: .touchUpInside)
                         expect(controller.relationshipPriority).to(equal(RelationshipPriority.inactive))
                     }
                 }
 
                 describe("@flagButton") {
                     it("triggers") {
-                        flagButton.sendActions(for: UIControlEvents.touchUpInside)
+                        flagButton.sendActions(for: .touchUpInside)
                         expect(controller.calledFlagTapped) == true
                     }
                 }
