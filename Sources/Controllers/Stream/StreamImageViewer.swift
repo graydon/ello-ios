@@ -17,7 +17,6 @@ class StreamImageViewer {
 }
 
 
-// MARK: Public
 extension StreamImageViewer {
     func imageTapped(selected index: Int, allItems: [LightboxViewController.Item], currentUser: User?) {
         guard let streamViewController = streamViewController else { return }

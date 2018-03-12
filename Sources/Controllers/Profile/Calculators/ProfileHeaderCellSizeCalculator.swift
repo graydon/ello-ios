@@ -17,7 +17,6 @@ class ProfileHeaderCellSizeCalculator {
     private var cellItems: [StreamCellItem] = []
     private var completion: Block = {}
 
-// MARK: Public
     init() {}
 
     func processCells(_ cellItems: [StreamCellItem], withWidth width: CGFloat, columnCount: Int, completion: @escaping Block) {

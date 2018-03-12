@@ -83,8 +83,6 @@ class PromotionalHeaderCellSizeCalculator: NSObject {
         return calcHeight
     }
 
-    // MARK: Private
-
     private func processJob(_ job: CellJob) {
         self.completion = {
             if self.cellJobs.count > 0 {

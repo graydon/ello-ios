@@ -30,7 +30,6 @@ class CommentsIcon: BasicIcon {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: Private
     override func updateIcon(selected: Bool, enabled: Bool) {
         super.updateIcon(selected: selected, enabled: enabled)
         commentTailView.isVisible = selected

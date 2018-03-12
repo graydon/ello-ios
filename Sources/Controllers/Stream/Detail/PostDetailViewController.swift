@@ -86,8 +86,6 @@ final class PostDetailViewController: StreamableViewController {
         updateInsets()
     }
 
-    // MARK: private
-
     private func loadEntirePostDetail() {
         generator.load()
     }

@@ -45,7 +45,6 @@ class ShareViewController: SLComposeServiceViewController {
     }
 }
 
-// MARK: Private
 private extension ShareViewController {
 
     func processAttachments() {

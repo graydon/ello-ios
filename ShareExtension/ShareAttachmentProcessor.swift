@@ -36,8 +36,6 @@ class ShareAttachmentProcessor {
 }
 
 
-// MARK: Private
-
 private extension ShareAttachmentProcessor {
 
     static func processAttachments(

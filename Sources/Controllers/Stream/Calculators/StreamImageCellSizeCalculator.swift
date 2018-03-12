@@ -18,8 +18,6 @@ class StreamImageCellSizeCalculator {
         return asset.aspectRatio
     }
 
-// MARK: Public
-
     func processCells(_ cellItems: [StreamCellItem], withWidth width: CGFloat, columnCount: Int, completion: @escaping Block) {
         guard cellItems.count > 0 else {
             completion()
@@ -32,8 +30,6 @@ class StreamImageCellSizeCalculator {
             processJob(job)
         }
     }
-
-// MARK: Private
 
     private func processJob(_ job: CellJob) {
         self.completion = {

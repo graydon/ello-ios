@@ -62,6 +62,4 @@ class ElloPullToRefreshView: UIView, SSPullToRefreshContentView {
         }
     }
 
-// MARK: Private
-
 }

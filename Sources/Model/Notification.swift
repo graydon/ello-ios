@@ -142,8 +142,6 @@ final class Notification: JSONAble, Authorable, Groupable {
         super.encode(with: coder.coder)
     }
 
-// MARK: Private
-
     private func assignRegionsFromContent(_ content: [Regionable], parentSummary: [Regionable]? = nil) {
         // assign textRegion and imageRegion from the post content - finds
         // the first of both kinds of regions

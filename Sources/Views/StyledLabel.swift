@@ -116,7 +116,6 @@ class StyledLabel: UILabel {
     }
 }
 
-// MARK: UIView Overrides
 extension StyledLabel {
     private func heightForWidth(_ width: CGFloat) -> CGFloat {
         return (attributedText?.boundingRect(with: CGSize(width: width, height: CGFloat.greatestFiniteMagnitude),

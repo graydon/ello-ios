@@ -58,13 +58,9 @@ class ElloTextView: UITextView {
         internalInit()
     }
 
-// MARK: Public
-
     func clearText() {
         attributedText = NSAttributedString(string: "")
     }
-
-// MARK: Private
 
     private func defaultAttrs() -> [NSAttributedStringKey: Any]  {
         return [

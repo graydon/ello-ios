@@ -51,8 +51,6 @@ class ImageLabelControl: UIControl {
     let label = UILabel(frame: .zero)
     var icon: ImageLabelAnimatable
 
-    // MARK: Initializers
-
     init(icon: ImageLabelAnimatable, title: String) {
         self.icon = icon
         super.init(frame: .zero)
@@ -65,8 +63,6 @@ class ImageLabelControl: UIControl {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: Public
-
     func animate() {
         self.icon.animate?()
     }
@@ -75,8 +71,6 @@ class ImageLabelControl: UIControl {
         self.icon.finishAnimation?()
     }
 
-    // MARK: IBActions
-
     @IBAction func buttonTouchExit() {
         isHighlighted = false
     }
@@ -84,8 +78,6 @@ class ImageLabelControl: UIControl {
     @IBAction func buttonTouchEnter() {
         isHighlighted = true
     }
-
-    // MARK: Private
 
     private func addSubviews() {
         addSubview(contentContainer)

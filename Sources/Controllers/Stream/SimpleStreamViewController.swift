@@ -53,8 +53,6 @@ class SimpleStreamViewController: StreamableViewController {
         updateInsets()
     }
 
-    // MARK: Private
-
     private func updateInsets() {
         updateInsets(navBar: navigationBar)
     }

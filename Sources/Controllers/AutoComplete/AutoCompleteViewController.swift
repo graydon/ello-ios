@@ -41,7 +41,6 @@ extension AutoCompleteViewController {
     }
 }
 
-// MARK: Public
 extension AutoCompleteViewController {
 
     func load(_ match: AutoCompleteMatch, loaded: @escaping (_ count: Int) -> Void) {
@@ -93,7 +92,6 @@ extension AutoCompleteViewController: UITableViewDelegate {
 }
 
 
-// MARK: Private
 private extension AutoCompleteViewController {
     func registerCells() {
         tableView.register(AutoCompleteCell.self, forCellReuseIdentifier: AutoCompleteCell.reuseIdentifier)

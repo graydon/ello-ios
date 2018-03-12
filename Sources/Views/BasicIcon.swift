@@ -43,7 +43,6 @@ class BasicIcon: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: Private
     func updateIcon(selected: Bool, enabled: Bool) {
         if let disabledIconView = disabledIconView {
             normalIconView.isVisible = (enabled && !selected)
