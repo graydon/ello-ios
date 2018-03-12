@@ -10,6 +10,7 @@ class DrawerCell: TableViewCell {
 
     struct Size {
         static let height: CGFloat = 60
+        static let spacerHeight: CGFloat = 20
         static let inset = UIEdgeInsets(sides: 15)
         static let lineHeight: CGFloat = 1
     }
@@ -31,6 +32,8 @@ class DrawerCell: TableViewCell {
         get { return logoView.image }
         set {
             logoView.image = newValue
+            hasImageConstraint.set(isActivated: newValue != nil)
+            noImageConstraint.set(isActivated: newValue == nil)
         }
     }
     var style: Style = .default { didSet { updateStyle() } }
@@ -38,6 +41,8 @@ class DrawerCell: TableViewCell {
     private let label: UILabel = StyledLabel(style: .white)
     private let logoView = UIImageView()
     private let line: UIView = UIView()
+    private var hasImageConstraint: Constraint!
+    private var noImageConstraint: Constraint!
 
     override func styleCell() {
         backgroundColor = .grey6
@@ -62,7 +67,8 @@ class DrawerCell: TableViewCell {
 
         label.snp.makeConstraints { make in
             make.centerY.equalTo(self)
-            make.leading.equalTo(logoView.snp.trailing).offset(Size.inset.left)
+            hasImageConstraint = make.leading.equalTo(logoView.snp.trailing).offset(Size.inset.left).constraint
+            noImageConstraint = make.leading.equalTo(self).inset(Size.inset).constraint
         }
 
         line.snp.makeConstraints { make in

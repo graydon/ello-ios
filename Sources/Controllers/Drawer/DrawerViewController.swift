@@ -7,8 +7,18 @@ protocol DrawerResponder: class {
 }
 
 class DrawerViewController: BaseElloViewController {
+    struct Size {
+        static let height = calculateHeight()
+        static let headerHeight: CGFloat = 50
+        static let logoSize: CGFloat = 30
+
+        static private func calculateHeight() -> CGFloat {
+            return Size.headerHeight + StatusBar.Size.height
+        }
+    }
+
     let tableView = UITableView()
-    let navigationBar = UIView()
+    let headerView = UIView()
 
     var isLoggingOut = false
 
@@ -40,6 +50,11 @@ class DrawerViewController: BaseElloViewController {
 }
 
 extension DrawerViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        guard let item = dataSource.itemForIndexPath(indexPath) else { return 0 }
+        return item.height
+    }
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let item = dataSource.itemForIndexPath(indexPath) else { return }
 
@@ -95,16 +110,16 @@ extension DrawerViewController: UITableViewDelegate {
 private extension DrawerViewController {
     func arrange() {
         view.addSubview(tableView)
-        view.addSubview(navigationBar)
+        view.addSubview(headerView)
 
-        navigationBar.snp.makeConstraints { make in
+        headerView.snp.makeConstraints { make in
             make.leading.trailing.top.equalTo(self.view)
-            make.height.equalTo(ElloNavigationBar.Size.height)
+            make.height.equalTo(Size.height)
         }
 
         tableView.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalTo(self.view)
-            make.top.equalTo(navigationBar.snp.bottom)
+            make.top.equalTo(headerView.snp.bottom)
         }
     }
 
@@ -117,12 +132,12 @@ private extension DrawerViewController {
     }
 
     func setupNavigationBar() {
-        navigationBar.backgroundColor = .grey6
+        headerView.backgroundColor = .grey6
 
         let logoView = UIImageView(image: InterfaceImage.elloLogo.normalImage)
         let logoY: CGFloat = Globals.statusBarHeight + 10
-        logoView.frame = CGRect(x: 15, y: logoY, width: 24, height: 24)
-        navigationBar.addSubview(logoView)
+        logoView.frame = CGRect(x: 15, y: logoY, width: Size.logoSize, height: Size.logoSize)
+        headerView.addSubview(logoView)
     }
 
     func registerCells() {
