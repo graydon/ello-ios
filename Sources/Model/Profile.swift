@@ -233,8 +233,6 @@ final class Profile: JSONAble {
         super.init(version: Profile.Version)
     }
 
-// MARK: NSCoding
-
     required init(coder: NSCoder) {
         let decoder = Coder(coder)
         self.id = decoder.decodeOptionalKey("id") ?? ""
@@ -386,8 +384,6 @@ final class Profile: JSONAble {
         coder.encodeObject(discoverable, forKey: "discoverable")
         super.encode(with: coder.coder)
     }
-
-// MARK: JSONAble
 
     class func fromJSON(_ data: [String: Any]) -> Profile {
         let json = JSON(data)

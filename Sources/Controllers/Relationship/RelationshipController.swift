@@ -38,7 +38,6 @@ class RelationshipController: UIResponder {
 
 }
 
-// MARK: RelationshipController: RelationshipResponder
 extension RelationshipController: RelationshipResponder {
 
     func relationshipTapped(

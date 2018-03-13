@@ -54,8 +54,6 @@ final class Activity: JSONAble {
         case unknown = "Unknown"
     }
 
-// MARK: Initialization
-
     init(id: String,
         createdAt: Date,
         kind: Kind,
@@ -67,8 +65,6 @@ final class Activity: JSONAble {
         self.subjectType = subjectType
         super.init(version: ActivityVersion)
     }
-
-// MARK: NSCoding
 
     required init(coder: NSCoder) {
         let decoder = Coder(coder)
@@ -89,8 +85,6 @@ final class Activity: JSONAble {
         coder.encodeObject(subjectType.rawValue, forKey: "rawSubjectType")
         super.encode(with: coder.coder)
     }
-
-// MARK: JSONAble
 
     class func fromJSON(_ data: [String: Any]) -> Activity {
         let json = JSON(data)

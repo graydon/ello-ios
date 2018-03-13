@@ -22,7 +22,6 @@ class AutoCompleteViewController: UIViewController {
     }
 }
 
-// MARK: View Lifecycle
 extension AutoCompleteViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,7 +40,6 @@ extension AutoCompleteViewController {
     }
 }
 
-// MARK: Public
 extension AutoCompleteViewController {
 
     func load(_ match: AutoCompleteMatch, loaded: @escaping (_ count: Int) -> Void) {
@@ -83,7 +81,6 @@ extension AutoCompleteViewController {
     }
 }
 
-// MARK: UITableViewDelegate
 extension AutoCompleteViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let item = dataSource.itemForIndexPath(indexPath) {
@@ -93,7 +90,6 @@ extension AutoCompleteViewController: UITableViewDelegate {
 }
 
 
-// MARK: Private
 private extension AutoCompleteViewController {
     func registerCells() {
         tableView.register(AutoCompleteCell.self, forCellReuseIdentifier: AutoCompleteCell.reuseIdentifier)

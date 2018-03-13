@@ -215,7 +215,6 @@ extension LightboxViewController: LightboxScreenDelegate {
     }
 }
 
-// MARK: UIViewControllerTransitioningDelegate
 extension LightboxViewController: UIViewControllerTransitioningDelegate {
     func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
         guard presented == self else { return nil }

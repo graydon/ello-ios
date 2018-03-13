@@ -16,8 +16,6 @@ final class AutoCompleteResult: JSONAble {
     var url: URL?
     var image: UIImage?
 
-    // MARK: Initialization
-
     init(name: String?) {
         self.name = name
         super.init(version: AutoCompleteResultVersion)
@@ -28,7 +26,6 @@ final class AutoCompleteResult: JSONAble {
         self.url = URL(string: url)
     }
 
-    // MARK: NSCoding
     required init(coder: NSCoder) {
         let decoder = Coder(coder)
         self.url = decoder.decodeOptionalKey("url")
@@ -47,8 +44,6 @@ final class AutoCompleteResult: JSONAble {
         coder.encodeObject(image, forKey: "image")
         super.encode(with: coder.coder)
     }
-
-    // MARK: JSONAble
 
     class func fromJSON(_ data: [String: Any]) -> AutoCompleteResult {
         let json = JSON(data)

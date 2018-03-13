@@ -219,7 +219,6 @@ private extension NotificationsViewController {
     }
 }
 
-// MARK: NotificationsViewController: StreamDestination
 extension NotificationsViewController: StreamDestination {
 
     var isPagingEnabled: Bool {
@@ -255,7 +254,6 @@ extension NotificationsViewController: StreamDestination {
     }
 }
 
-// MARK: NotificationsViewController: AnnouncementResponder
 extension NotificationsViewController: AnnouncementResponder {
     func markAnnouncementAsRead(announcement: Announcement) {
         Tracker.shared.announcementDismissed(announcement)

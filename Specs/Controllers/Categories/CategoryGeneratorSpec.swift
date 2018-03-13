@@ -22,7 +22,8 @@ class CategoryGeneratorSpec: QuickSpec {
             beforeEach {
                 category = Ello.Category.stub(["level": "meta", "slug": "recommended"])
                 subject = CategoryGenerator(
-                    slug: category.slug,
+                    selection: .category(category.slug),
+                    stream: .featured,
                     currentUser: currentUser,
                     destination: destination
                 )
@@ -31,29 +32,29 @@ class CategoryGeneratorSpec: QuickSpec {
             describe("load()") {
 
                 it("sets 2 placeholders") {
-                    subject.load()
-                    expect(destination.placeholderItems.count) == 2
+                    subject.load(reloadPosts: false, reloadHeader: false, reloadCategories: false)
+                    expect(destination.placeholderItems.count) == 3
                 }
 
                 it("replaces only CatgoryHeader and CategoryPosts") {
-                    subject.load()
+                    subject.load(reloadPosts: false, reloadHeader: false, reloadCategories: false)
                     expect(destination.headerItems.count) > 0
                     expect(destination.postItems.count) > 0
                     expect(destination.otherPlaceHolderLoaded) == false
                 }
 
                 it("sets the primary jsonable") {
-                    subject.load()
+                    subject.load(reloadPosts: false, reloadHeader: false, reloadCategories: false)
                     expect(destination.pageHeader).toNot(beNil())
                 }
 
                 it("sets the categories") {
-                    subject.load()
+                    subject.load(reloadPosts: false, reloadHeader: false, reloadCategories: false)
                     expect(destination.subscribedCategories.count) > 0
                 }
 
                 it("sets the config response") {
-                    subject.load()
+                    subject.load(reloadPosts: false, reloadHeader: false, reloadCategories: false)
                     expect(destination.responseConfig).toNot(beNil())
                 }
             }
@@ -88,10 +89,6 @@ class CategoryDestination: CategoryStreamDestination {
 
     func setPrimary(jsonable: JSONAble) {
         self.pageHeader = jsonable as? PageHeader
-    }
-
-    func set(category: Ello.Category) {
-        self.category = category
     }
 
     func set(subscribedCategories: [Ello.Category]) {

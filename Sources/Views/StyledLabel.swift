@@ -114,20 +114,19 @@ class StyledLabel: UILabel {
         self.style = style
         updateStyle()
     }
-}
-
-// MARK: UIView Overrides
-extension StyledLabel {
-    private func heightForWidth(_ width: CGFloat) -> CGFloat {
-        return (attributedText?.boundingRect(with: CGSize(width: width, height: CGFloat.greatestFiniteMagnitude),
-            options: [.usesLineFragmentOrigin, .usesFontLeading, .truncatesLastVisibleLine],
-            context: nil).size.height).map(ceil) ?? 0
-    }
 
     override func sizeThatFits(_ size: CGSize) -> CGSize {
         var size = super.sizeThatFits(size)
         size.height = heightForWidth(size.width) + extraBottomMargin
         return size
+    }
+}
+
+extension StyledLabel {
+    private func heightForWidth(_ width: CGFloat) -> CGFloat {
+        return (attributedText?.boundingRect(with: CGSize(width: width, height: CGFloat.greatestFiniteMagnitude),
+            options: [.usesLineFragmentOrigin, .usesFontLeading, .truncatesLastVisibleLine],
+            context: nil).size.height).map(ceil) ?? 0
     }
 }
 

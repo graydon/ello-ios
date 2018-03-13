@@ -86,8 +86,6 @@ final class PostDetailViewController: StreamableViewController {
         updateInsets()
     }
 
-    // MARK: private
-
     private func loadEntirePostDetail() {
         generator.load()
     }
@@ -190,7 +188,6 @@ extension PostDetailViewController: PostCommentsResponder {
     }
 }
 
-// MARK: PostDetailViewController: PostDetailStreamDestination
 extension PostDetailViewController: PostDetailStreamDestination {
 
     var isPagingEnabled: Bool {

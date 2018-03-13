@@ -18,7 +18,6 @@ class StreamKindSpec: QuickSpec {
             describe("name") {
 
                 it("is correct for all cases") {
-                    expect(StreamKind.discover(type: .featured).name) == "Discover"
                     expect(StreamKind.following.name) == "Following"
                     expect(StreamKind.notifications(category: "").name) == "Notifications"
                     expect(StreamKind.postDetail(postParam: "param").name) == ""
@@ -31,13 +30,12 @@ class StreamKindSpec: QuickSpec {
             describe("cacheKey") {
 
                 it("is correct for all cases") {
-                    expect(StreamKind.discover(type: .featured).cacheKey) == "CategoryPosts"
-                    expect(StreamKind.category(slug: "art").cacheKey) == "CategoryPosts"
+                    expect(StreamKind.category(.all, .featured).cacheKey) == "Category"
                     expect(StreamKind.following.cacheKey) == "Following"
                     expect(StreamKind.notifications(category: "").cacheKey) == "Notifications"
                     expect(StreamKind.postDetail(postParam: "param").cacheKey) == "PostDetail"
                     expect(StreamKind.simpleStream(endpoint: ElloAPI.searchForPosts(terms: "meat"), title: "meat").cacheKey) == "SearchForPosts"
-                    expect(StreamKind.simpleStream(endpoint: ElloAPI.searchForUsers(terms: "meat"), title: "meat").cacheKey) == "SimpleStream.meat"
+                    expect(StreamKind.simpleStream(endpoint: ElloAPI.loves(userId: ""), title: "meat").cacheKey) == "SimpleStream.meat"
                     expect(StreamKind.unknown.cacheKey) == "unknown"
                     expect(StreamKind.userStream(userParam: "NA").cacheKey) == "UserStream"
                 }
@@ -46,25 +44,17 @@ class StreamKindSpec: QuickSpec {
             describe("lastViewedCreatedAtKey") {
 
                 it("is correct for all cases") {
-                    expect(StreamKind.discover(type: .featured).lastViewedCreatedAtKey) == "Discover_featured_createdAt"
-                    expect(StreamKind.category(slug: "art").lastViewedCreatedAtKey) == "Category_art_createdAt"
                     expect(StreamKind.following.lastViewedCreatedAtKey) == "Following_createdAt"
                     expect(StreamKind.notifications(category: "").lastViewedCreatedAtKey) == "Notifications_createdAt"
                     expect(StreamKind.postDetail(postParam: "param").lastViewedCreatedAtKey).to(beNil())
-                    expect(StreamKind.simpleStream(endpoint: ElloAPI.searchForPosts(terms: "meat"), title: "meat").lastViewedCreatedAtKey).to(beNil())
-                    expect(StreamKind.simpleStream(endpoint: ElloAPI.searchForUsers(terms: "meat"), title: "meat").lastViewedCreatedAtKey).to(beNil())
                     expect(StreamKind.unknown.lastViewedCreatedAtKey).to(beNil())
-                    expect(StreamKind.userStream(userParam: "NA").lastViewedCreatedAtKey).to(beNil())
                 }
             }
 
             describe("showsCategory") {
                 let expectations: [(StreamKind, Bool)] = [
-                    (.allCategories, false),
-                    (.discover(type: .featured), true),
-                    (.discover(type: .trending), false),
-                    (.discover(type: .recent), false),
-                    (.category(slug: "art"), false),
+                    (.manageCategories, false),
+                    (.category(.category("art"), .featured), false),
                     (.following, false),
                     (.notifications(category: nil), false),
                     (.notifications(category: "comments"), false),
@@ -81,8 +71,7 @@ class StreamKindSpec: QuickSpec {
 
             describe("isProfileStream") {
                 let expectations: [(StreamKind, Bool)] = [
-                    (.discover(type: .featured), false),
-                    (.category(slug: "art"), false),
+                    (.category(.category("art"), .featured), false),
                     (.following, false),
                     (.notifications(category: ""), false),
                     (.postDetail(postParam: "param"), false),
@@ -100,8 +89,7 @@ class StreamKindSpec: QuickSpec {
             describe("endpoint") {
 
                 it("is correct for all cases") {
-                    expect(StreamKind.discover(type: .featured).endpoint.path) == "/api/\(ElloAPI.apiVersion)/categories/posts/recent"
-                    expect(StreamKind.category(slug: "art").endpoint.path) == "/api/\(ElloAPI.apiVersion)/categories/art"
+                    expect(StreamKind.category(.category("art"), .featured).endpoint.path) == "/api/\(ElloAPI.apiVersion)/categories/art"
                     expect(StreamKind.following.endpoint.path) == "/api/\(ElloAPI.apiVersion)/following/posts/recent"
                     expect(StreamKind.notifications(category: "").endpoint.path) == "/api/\(ElloAPI.apiVersion)/notifications"
                     expect(StreamKind.postDetail(postParam: "param").endpoint.path) == "/api/\(ElloAPI.apiVersion)/posts/param"
@@ -113,98 +101,10 @@ class StreamKindSpec: QuickSpec {
                 }
             }
 
-            describe("relationship") {
-
-                it("is correct for all cases") {
-                    expect(StreamKind.discover(type: .featured).relationship) == RelationshipPriority.null
-                    expect(StreamKind.category(slug: "art").relationship) == RelationshipPriority.null
-                    expect(StreamKind.following.relationship) == RelationshipPriority.following
-                    expect(StreamKind.notifications(category: "").relationship) == RelationshipPriority.null
-                    expect(StreamKind.postDetail(postParam: "param").relationship) == RelationshipPriority.null
-                    expect(StreamKind.simpleStream(endpoint: ElloAPI.searchForPosts(terms: "meat"), title: "meat").relationship) == RelationshipPriority.null
-                    expect(StreamKind.unknown.relationship) == RelationshipPriority.null
-                    expect(StreamKind.userStream(userParam: "NA").relationship) == RelationshipPriority.null
-                }
-            }
-
-            describe("filter(_:viewsAdultContent:)") {
-                // important but time consuming to implement this one, little by little!
-                context("Discover") {
-
-                    var postJsonables: [JSONAble] = []
-
-                    beforeEach {
-                        let post1 = Post.stub(["id": "post1", "isAdultContent": true])
-                        let post2 = Post.stub(["id": "post2"])
-                        let post3 = Post.stub(["id": "post3"])
-
-                        postJsonables = [post1, post2, post3]
-                    }
-
-                    context("Discover(recommended)") {
-                        it("returns the correct posts regardless of views adult content") {
-                            let kind = StreamKind.discover(type: .featured)
-                            var filtered = kind.filter(postJsonables, viewsAdultContent: false) as! [Post]
-
-                            expect(filtered.count) == 3
-                            expect(filtered[0].id) == "post1"
-                            expect(filtered[1].id) == "post2"
-                            expect(filtered[2].id) == "post3"
-
-                            filtered = kind.filter(postJsonables, viewsAdultContent: true) as! [Post]
-
-                            expect(filtered.count) == 3
-                            expect(filtered[0].id) == "post1"
-                            expect(filtered[1].id) == "post2"
-                            expect(filtered[2].id) == "post3"
-                        }
-                    }
-
-                    context("Discover(trending)") {
-                        it("returns the correct posts regardless of views adult content") {
-                            let kind = StreamKind.discover(type: .trending)
-                            var filtered = kind.filter(postJsonables, viewsAdultContent: false) as! [Post]
-
-                            expect(filtered.count) == 3
-                            expect(filtered[0].id) == "post1"
-                            expect(filtered[1].id) == "post2"
-                            expect(filtered[2].id) == "post3"
-
-                            filtered = kind.filter(postJsonables, viewsAdultContent: true) as! [Post]
-
-                            expect(filtered.count) == 3
-                            expect(filtered[0].id) == "post1"
-                            expect(filtered[1].id) == "post2"
-                            expect(filtered[2].id) == "post3"
-                        }
-                    }
-
-                    context("Discover(recent)") {
-                        it("returns the correct posts regardless of views adult content") {
-                            let kind = StreamKind.discover(type: .recent)
-                            var filtered = kind.filter(postJsonables, viewsAdultContent: false) as! [Post]
-
-                            expect(filtered.count) == 3
-                            expect(filtered[0].id) == "post1"
-                            expect(filtered[1].id) == "post2"
-                            expect(filtered[2].id) == "post3"
-
-                            filtered = kind.filter(postJsonables, viewsAdultContent: true) as! [Post]
-
-                            expect(filtered.count) == 3
-                            expect(filtered[0].id) == "post1"
-                            expect(filtered[1].id) == "post2"
-                            expect(filtered[2].id) == "post3"
-                        }
-                    }
-                }
-            }
-
             describe("isGridView") {
 
                 beforeEach {
-                    StreamKind.discover(type: .featured).setIsGridView(false)
-                    StreamKind.category(slug: "art").setIsGridView(false)
+                    StreamKind.category(.category("art"), .featured).setIsGridView(false)
                     StreamKind.following.setIsGridView(false)
                     StreamKind.notifications(category: "").setIsGridView(false)
                     StreamKind.postDetail(postParam: "param").setIsGridView(false)
@@ -217,17 +117,11 @@ class StreamKindSpec: QuickSpec {
 
 
                 it("is correct for all cases") {
-                    StreamKind.discover(type: .featured).setIsGridView(true)
-                    expect(StreamKind.discover(type: .featured).isGridView) == true
+                    StreamKind.category(.category("art"), .featured).setIsGridView(true)
+                    expect(StreamKind.category(.category("art"), .featured).isGridView) == true
 
-                    StreamKind.discover(type: .featured).setIsGridView(false)
-                    expect(StreamKind.discover(type: .featured).isGridView) == false
-
-                    StreamKind.category(slug: "art").setIsGridView(true)
-                    expect(StreamKind.category(slug: "art").isGridView) == true
-
-                    StreamKind.category(slug: "art").setIsGridView(false)
-                    expect(StreamKind.category(slug: "art").isGridView) == false
+                    StreamKind.category(.category("art"), .featured).setIsGridView(false)
+                    expect(StreamKind.category(.category("art"), .featured).isGridView) == false
 
                     StreamKind.following.setIsGridView(false)
                     expect(StreamKind.following.isGridView) == false
@@ -259,8 +153,7 @@ class StreamKindSpec: QuickSpec {
             describe("hasGridViewToggle") {
 
                 it("is correct for all cases") {
-                    expect(StreamKind.discover(type: .featured).hasGridViewToggle) == true
-                    expect(StreamKind.category(slug: "art").hasGridViewToggle) == true
+                    expect(StreamKind.category(.category("art"), .featured).hasGridViewToggle) == true
                     expect(StreamKind.following.hasGridViewToggle) == true
                     expect(StreamKind.notifications(category: "").hasGridViewToggle) == false
                     expect(StreamKind.postDetail(postParam: "param").hasGridViewToggle) == false
@@ -275,8 +168,7 @@ class StreamKindSpec: QuickSpec {
             describe("isDetail") {
 
                 it("is correct for all cases") {
-                    expect(StreamKind.discover(type: .featured).isDetail(post: Post.stub([:]))) == false
-                    expect(StreamKind.category(slug: "art").isDetail(post: Post.stub([:]))) == false
+                    expect(StreamKind.category(.category("art"), .featured).isDetail(post: Post.stub([:]))) == false
                     expect(StreamKind.following.isDetail(post: Post.stub([:]))) == false
                     expect(StreamKind.notifications(category: "").isDetail(post: Post.stub([:]))) == false
                     expect(StreamKind.postDetail(postParam: "param").isDetail(post: Post.stub(["token": "param"]))) == true
@@ -291,8 +183,7 @@ class StreamKindSpec: QuickSpec {
             describe("supportsLargeImages") {
 
                 it("is correct for all cases") {
-                    expect(StreamKind.discover(type: .featured).supportsLargeImages) == false
-                    expect(StreamKind.category(slug: "art").supportsLargeImages) == false
+                    expect(StreamKind.category(.category("art"), .featured).supportsLargeImages) == false
                     expect(StreamKind.following.supportsLargeImages) == false
                     expect(StreamKind.notifications(category: "").supportsLargeImages) == false
                     expect(StreamKind.postDetail(postParam: "param").supportsLargeImages) == true

@@ -74,7 +74,7 @@ class DeepLinkingSpec: QuickSpec {
                     let existing = CategoryViewController(currentUser: nil, slug: "art")
                     let art = Category.stub(["slug": "art"])
                     let design = Category.stub(["slug": "design"])
-                    existing.allCategories = [art, design]
+                    existing.subscribedCategories = [art, design]
                     fakeNavController.viewControllers = [existing]
 
                     DeepLinking.showCategory(navVC: fakeNavController, currentUser: fakeCurrentUser, slug: "design")
@@ -84,7 +84,6 @@ class DeepLinkingSpec: QuickSpec {
                     expect(fakeNavController.pushCalled) == false
                     expect(fakeNavController.pushedVC).to(beNil())
                     expect(catVC).to(beAnInstanceOf(CategoryViewController.self))
-                    expect(catVC?.slug) == "design"
                 }
 
                 it("does not push a new CategoryViewController if already on that screen") {

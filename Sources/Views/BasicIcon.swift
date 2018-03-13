@@ -13,8 +13,6 @@ class BasicIcon: UIView {
     private let selectedIconView: UIView
     private let disabledIconView: UIView?
 
-    // MARK: Initializers
-
     init(normalIconView: UIView, selectedIconView: UIView, disabledIconView: UIView? = nil) {
         normalIconView.sizeToFit()
 
@@ -43,7 +41,6 @@ class BasicIcon: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: Private
     func updateIcon(selected: Bool, enabled: Bool) {
         if let disabledIconView = disabledIconView {
             normalIconView.isVisible = (enabled && !selected)

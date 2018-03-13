@@ -195,7 +195,6 @@ private extension CategoryViewController {
     }
 }
 
-// MARK: CategoryViewController: StreamDestination
 extension CategoryViewController: CategoryStreamDestination, StreamDestination {
 
     var isPagingEnabled: Bool {
@@ -217,6 +216,9 @@ extension CategoryViewController: CategoryStreamDestination, StreamDestination {
         if type == .streamItems {
             streamViewController.isPullToRefreshEnabled = true
             streamViewController.doneLoading()
+        }
+        else {
+            streamViewController.hideLoadingSpinner()
         }
     }
 

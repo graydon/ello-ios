@@ -259,8 +259,6 @@ extension SearchScreen {
         delegate?.searchFieldChanged(text, isPostSearch: postsToggleButton.isSelected)
     }
 
-// MARK: actions
-
     @objc
     func onPostsTapped() {
         postsToggleButton.setSelected(true, animated: true)

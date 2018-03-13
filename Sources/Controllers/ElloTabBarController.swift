@@ -124,7 +124,6 @@ extension ElloTabBarController {
 
 }
 
-// MARK: View Lifecycle
 extension ElloTabBarController {
 
     override func viewDidLoad() {

@@ -21,14 +21,10 @@ final class Attachment: JSONAble {
         return type == "image/gif" || url.lastPathComponent.hasSuffix(".gif") == true
     }
 
-// MARK: Initialization
-
     init(url: URL) {
         self.url = url
         super.init(version: AttachmentVersion)
     }
-
-// MARK: NSCoding
 
     required init(coder: NSCoder) {
         let decoder = Coder(coder)
@@ -51,8 +47,6 @@ final class Attachment: JSONAble {
         coder.encodeObject(image, forKey: "image")
         super.encode(with: coder.coder)
     }
-
-// MARK: JSONAble
 
     class func fromJSON(_ data: [String: Any]) -> Attachment {
         let json = JSON(data)

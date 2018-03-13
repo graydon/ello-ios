@@ -31,8 +31,6 @@ final class EmbedRegion: JSONAble, Regionable {
         return service == EmbedType.mixcloud || service == EmbedType.soundcloud || service == EmbedType.bandcamp
     }
 
-    // MARK: Initialization
-
     init(
         id: String,
         service: EmbedType,
@@ -46,8 +44,6 @@ final class EmbedRegion: JSONAble, Regionable {
         self.thumbnailLargeUrl = thumbnailLargeUrl
         super.init(version: EmbedRegionVersion)
     }
-
-    // MARK: NSCoding
 
     required init(coder: NSCoder) {
         let decoder = Coder(coder)
@@ -70,8 +66,6 @@ final class EmbedRegion: JSONAble, Regionable {
         super.encode(with: coder.coder)
     }
 
-    // MARK: JSONAble
-
     class func fromJSON(_ data: [String: Any]) -> EmbedRegion {
         let json = JSON(data)
         let thumbnailLargeUrl = json["data"]["thumbnail_large_url"].string.flatMap { URL(string: $0) }
@@ -85,8 +79,6 @@ final class EmbedRegion: JSONAble, Regionable {
         )
         return embedRegion
     }
-
-// MARK: Regionable
 
     let kind: RegionKind = .embed
 

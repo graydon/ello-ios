@@ -7,10 +7,17 @@ struct DrawerItem: Equatable {
     let type: DrawerItemType
     let tracking: String?
 
-    init(title: String, type: DrawerItemType, tracking: String? = nil) {
+    init(title: String = "", type: DrawerItemType, tracking: String? = nil) {
         self.title = title
         self.type = type
         self.tracking = tracking
+    }
+
+    var height: CGFloat {
+        switch type {
+        case .spacer: return DrawerCell.Size.spacerHeight
+        default: return DrawerCell.Size.height
+        }
     }
 
     var logo: UIImage? {
@@ -42,6 +49,7 @@ enum DrawerItemType {
     case logout
     case version
     case debugger
+    case spacer
 }
 
 class DrawerViewDataSource: NSObject {
@@ -53,13 +61,15 @@ class DrawerViewDataSource: NSObject {
             DrawerItem(title: InterfaceString.Drawer.Invite, type: .invite, tracking: "invite"),
             DrawerItem(title: InterfaceString.Drawer.Store, type: .external("http://store.ello.co/"), tracking: "store"),
             DrawerItem(title: InterfaceString.Drawer.Help, type: .external("https://ello.co/wtf/"), tracking: "help"),
+            DrawerItem(title: InterfaceString.Drawer.Logout, type: .logout, tracking: "logout"),
+            DrawerItem(type: .spacer),
+
             DrawerItem(title: InterfaceString.Drawer.Twitter, type: .twitter, tracking: "twitter"),
             DrawerItem(title: InterfaceString.Drawer.Instagram, type: .instagram, tracking: "instagram"),
             DrawerItem(title: InterfaceString.Drawer.Facebook, type: .facebook, tracking: "facebook"),
             DrawerItem(title: InterfaceString.Drawer.Pinterest, type: .pinterest, tracking: "pinterest"),
             DrawerItem(title: InterfaceString.Drawer.Tumblr, type: .tumblr, tracking: "tumblr"),
             DrawerItem(title: InterfaceString.Drawer.Medium, type: .medium, tracking: "medium"),
-            DrawerItem(title: InterfaceString.Drawer.Logout, type: .logout, tracking: "logout"),
         ]
         if AuthToken().isStaff {
             items.append(DrawerItem(title: "Show Debugger", type: .debugger))
@@ -73,7 +83,6 @@ class DrawerViewDataSource: NSObject {
     }
 }
 
-// MARK: UITableViewDataSource
 extension DrawerViewDataSource: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return items.count

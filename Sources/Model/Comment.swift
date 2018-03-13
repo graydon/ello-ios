@@ -34,8 +34,6 @@ final class ElloComment: JSONAble, Authorable, Groupable {
     // to show hide in the stream, and for comment replies
     var loadedFromPostId: String
 
-// MARK: Initialization
-
     init(id: String,
         createdAt: Date,
         authorId: String,
@@ -51,9 +49,6 @@ final class ElloComment: JSONAble, Authorable, Groupable {
         self.loadedFromPostId = postId
         super.init(version: CommentVersion)
     }
-
-
-// MARK: NSCoding
 
     required init(coder: NSCoder) {
         let decoder = Coder(coder)
@@ -80,8 +75,6 @@ final class ElloComment: JSONAble, Authorable, Groupable {
         coder.encodeObject(summary, forKey: "summary")
         super.encode(with: coder.coder)
     }
-
-// MARK: JSONAble
 
     class func fromJSON(_ data: [String: Any]) -> ElloComment {
         let json = JSON(data)

@@ -100,8 +100,6 @@ class StreamFooterCell: CollectionViewCell {
     var loves: PostToolbar.ImageLabelAccess { return toolbar.loves }
     var reposts: PostToolbar.ImageLabelAccess { return toolbar.reposts }
 
-// MARK: - Private
-
     override func layoutSubviews() {
         super.layoutSubviews()
         toolbar.frame = CGRect(x: 0, y: 0, width: bounds.width, height: 44)

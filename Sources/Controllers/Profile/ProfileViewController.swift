@@ -283,7 +283,6 @@ extension ProfileViewController: ProfileScreenDelegate {
     }
 }
 
-// MARK: Check for cached coverImage and avatar (only for currentUser)
 extension ProfileViewController {
     func cachedImage(_ key: Profile.ImageProperty) -> UIImage? {
         guard user?.id == currentUser?.id else {
@@ -332,7 +331,6 @@ extension ProfileViewController {
     }
 }
 
-// MARK: ProfileViewController: PostsTappedResponder
 extension ProfileViewController: PostsTappedResponder {
     func onPostsTapped() {
         guard
@@ -343,7 +341,6 @@ extension ProfileViewController: PostsTappedResponder {
     }
 }
 
-// MARK: ProfileHeaderResponder
 extension ProfileViewController: ProfileHeaderResponder {
 
     func onCategoryBadgeTapped() {
@@ -416,7 +413,6 @@ extension ProfileViewController: ProfileHeaderResponder {
     }}
 
 
-// MARK: ProfileViewController: EditProfileResponder
 extension ProfileViewController: EditProfileResponder {
 
     func onEditProfile() {
@@ -430,7 +426,6 @@ extension ProfileViewController: EditProfileResponder {
     }
 }
 
-// MARK: ProfileViewController: StreamDestination
 extension ProfileViewController: StreamDestination {
 
     var isPagingEnabled: Bool {

@@ -43,7 +43,7 @@ class JSONAble: NSObject, NSCoding {
     }
 }
 
-// MARK: Links methods to get JSONAbles
+// MARK: get associated JSONAbles via ids in `links`
 
 extension JSONAble {
     func getLinkObject(_ identifier: String) -> JSONAble? {

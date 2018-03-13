@@ -28,7 +28,6 @@ final class ProfileCategoriesViewController: BaseElloViewController {
     }
 }
 
-// MARK: UIViewControllerTransitioningDelegate
 extension ProfileCategoriesViewController: UIViewControllerTransitioningDelegate {
 
     func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {

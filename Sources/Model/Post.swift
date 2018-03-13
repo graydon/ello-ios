@@ -79,8 +79,6 @@ final class Post: JSONAble, Authorable, Groupable {
     private var lovedChangedNotification: NotificationObserver?
     private var commentsCountChangedNotification: NotificationObserver?
 
-// MARK: Initialization
-
     init(id: String,
         createdAt: Date,
         authorId: String,
@@ -124,8 +122,6 @@ final class Post: JSONAble, Authorable, Groupable {
         lovedChangedNotification?.removeObserver()
         commentsCountChangedNotification?.removeObserver()
     }
-
-// MARK: NSCoding
 
     required init(coder: NSCoder) {
         let decoder = Coder(coder)
@@ -186,8 +182,6 @@ final class Post: JSONAble, Authorable, Groupable {
         coder.encodeObject(lovesCount, forKey: "lovesCount")
         super.encode(with: coder.coder)
     }
-
-// MARK: JSONAble
 
     class func fromJSON(_ data: [String: Any]) -> Post {
         let json = JSON(data)

@@ -4,7 +4,7 @@
 
 import ElloUIFonts
 
-class ImageLabelControl: UIControl {
+class ImageLabelControl: Control {
     struct Size {
         static let innerPadding: CGFloat = 5
         static let outerPadding: CGFloat = 5
@@ -51,13 +51,9 @@ class ImageLabelControl: UIControl {
     let label = UILabel(frame: .zero)
     var icon: ImageLabelAnimatable
 
-    // MARK: Initializers
-
     init(icon: ImageLabelAnimatable, title: String) {
         self.icon = icon
         super.init(frame: .zero)
-        addSubviews()
-        addTargets()
         self.title = title
     }
 
@@ -65,7 +61,9 @@ class ImageLabelControl: UIControl {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: Public
+    required init(frame: CGRect) {
+        fatalError("init(frame:) has not been implemented")
+    }
 
     func animate() {
         self.icon.animate?()
@@ -75,25 +73,24 @@ class ImageLabelControl: UIControl {
         self.icon.finishAnimation?()
     }
 
-    // MARK: IBActions
-
-    @IBAction func buttonTouchExit() {
+    @objc
+    func buttonTouchExit() {
         isHighlighted = false
     }
 
-    @IBAction func buttonTouchEnter() {
+    @objc
+    func buttonTouchEnter() {
         isHighlighted = true
     }
 
-    // MARK: Private
-
-    private func addSubviews() {
+    override func arrange() {
         addSubview(contentContainer)
+
         contentContainer.addSubview(icon.view)
         contentContainer.addSubview(label)
     }
 
-    private func addTargets() {
+    override func bindActions() {
         contentContainer.isUserInteractionEnabled = false
         addTarget(self, action: #selector(buttonTouchEnter), for: [.touchDown, .touchDragEnter])
         addTarget(self, action: #selector(buttonTouchExit), for: [.touchCancel, .touchDragExit, .touchUpInside])

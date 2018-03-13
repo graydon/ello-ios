@@ -15,8 +15,6 @@ class ArtistInviteCellSizeCalculator: NSObject {
         self.webView.delegate = self
     }
 
-// MARK: Public
-
     func processCells(_ cellItems: [StreamCellItem], withWidth width: CGFloat, hasCurrentUser: Bool, completion: @escaping Block) {
         guard cellItems.count > 0 else {
             completion()
@@ -29,8 +27,6 @@ class ArtistInviteCellSizeCalculator: NSObject {
             processJob(job)
         }
     }
-
-// MARK: Private
 
     private func processJob(_ job: CellJob) {
         self.completion = {

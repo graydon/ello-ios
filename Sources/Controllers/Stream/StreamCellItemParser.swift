@@ -48,8 +48,6 @@ struct StreamCellItemParser {
         return streamItems
     }
 
-// MARK: - Private
-
     private func typicalCellItems(_ jsonable: JSONAble, type: StreamCellType) -> [StreamCellItem] {
         return [StreamCellItem(jsonable: jsonable, type: type)]
     }

@@ -30,8 +30,6 @@ final class Relationship: JSONAble {
         super.init(version: RelationshipVersion)
     }
 
-// MARK: NSCoding
-
     required init(coder: NSCoder) {
         let decoder = Coder(coder)
         self.id = decoder.decodeKey("id")
@@ -49,8 +47,6 @@ final class Relationship: JSONAble {
         coder.encodeObject(subjectId, forKey: "subjectId")
         super.encode(with: coder.coder)
     }
-
-// MARK: JSONAble
 
     class func fromJSON(_ data: [String: Any]) -> Relationship {
         let json = JSON(data)

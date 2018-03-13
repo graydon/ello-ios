@@ -64,8 +64,6 @@ extension ElloAPI: CustomStringConvertible, CustomDebugStringConvertible {
             return "deleteSubscriptions(tokenData: \(tokenData))"
         case let .deleteWatchPost(postId):
             return "deleteWatchPost(postId: \(postId))"
-        case let .discover(type):
-            return "discover(type: \(type))"
         case let .categoryPosts(slug):
             return "categoryPosts(slug: \(slug))"
         case let .emojiAutoComplete(terms):
@@ -169,7 +167,6 @@ extension ElloAPI: CustomStringConvertible, CustomDebugStringConvertible {
         case .deletePost: return "deletePost"
         case .deleteWatchPost: return "deleteWatchPost"
         case .deleteSubscriptions: return "deleteSubscriptions"
-        case .discover: return "discover"
         case .category: return "category"
         case .categoryPosts: return "categoryPosts"
         case .editorials: return "editorials"

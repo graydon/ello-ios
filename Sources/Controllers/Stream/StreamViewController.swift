@@ -238,8 +238,12 @@ final class StreamViewController: BaseElloViewController {
         collectionView.scrollToItem(at: indexPath, at: .top, animated: animated)
     }
 
-    func doneLoading() {
+    func hideLoadingSpinner() {
         ElloHUD.hideLoadingHudInView(view)
+    }
+
+    func doneLoading() {
+        hideLoadingSpinner()
         internalIsPullToRefreshEnabled = true
         pullToRefreshView?.finishLoading()
         initialDataLoaded = true

@@ -147,7 +147,6 @@ extension OnboardingViewController {
     }
 }
 
-// MARK: Button Actions
 extension OnboardingViewController {
 
     func proceedToNextStep(abort: Bool) {
@@ -192,7 +191,6 @@ extension OnboardingViewController {
 
 }
 
-// MARK: Screen transitions
 extension OnboardingViewController {
 
     private func addOnboardingViewController(_ viewController: UIViewController) {
@@ -220,7 +218,6 @@ extension OnboardingViewController {
 
 }
 
-// MARK: Moving through the screens
 extension OnboardingViewController {
 
     func goToNextStep() {
@@ -270,7 +267,6 @@ extension OnboardingViewController {
 
 }
 
-// MARK: Controller transitions
 extension OnboardingViewController {
 
     private func goToController(_ viewController: UIViewController, direction: OnboardingDirection) {

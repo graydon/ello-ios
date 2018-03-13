@@ -9,8 +9,6 @@ class AnnouncementCellSizeCalculator {
     private var cellJobs: [CellJob] = []
     private var cellItems: [StreamCellItem] = []
 
-// MARK: Public
-
     static func calculateAnnouncementHeight(_ announcement: Announcement, cellWidth: CGFloat) -> CGFloat {
         let attributedTitle = NSAttributedString(label: announcement.header, style: .boldWhite)
         let attributedBody = NSAttributedString(label: announcement.body, style: .white)
@@ -51,8 +49,6 @@ class AnnouncementCellSizeCalculator {
             processJob(job)
         }
     }
-
-// MARK: Private
 
     private func finish() {
         guard let job = cellJobs.first else { return }

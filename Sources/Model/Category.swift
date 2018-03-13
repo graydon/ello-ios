@@ -38,13 +38,6 @@ final class Category: JSONAble, Groupable {
     let level: CategoryLevel
     var isMeta: Bool { return level == .meta }
 
-    var endpoint: ElloAPI {
-        switch level {
-        case .meta: return .discover(type: DiscoverType(rawValue: slug)!)
-        default: return .categoryPosts(slug: slug)
-        }
-    }
-
     var visibleOnSeeMore: Bool {
         return level == .primary || level == .secondary
     }

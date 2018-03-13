@@ -9,14 +9,18 @@ import Nimble
 
 class CategoryViewControllerSpec: QuickSpec {
     class MockCategoryScreen: CategoryScreenProtocol {
+        var showSubscribed: Bool = true
+        var showEditButton: Bool = true
+        var categoriesLoaded: Bool = false
+
         let topInsetView = UIView()
         let streamContainer = UIView()
         var isGridView = true
         var navigationBarTopConstraint: NSLayoutConstraint!
         let navigationBar = ElloNavigationBar()
         var categoryTitles: [String] = []
-        var scrollTo: Int?
-        var select: Int?
+        var scrollTo: CategoryScreen.Selection?
+        var select: CategoryScreen.Selection?
         var showShare: CategoryScreen.NavBarItems = .all
         var showBack = false
 
@@ -24,20 +28,19 @@ class CategoryViewControllerSpec: QuickSpec {
             categoryTitles = categoriesInfo.map { $0.title }
         }
         func toggleCategoriesList(navBarVisible: Bool, animated: Bool) {}
-        func scrollToCategory(index: Int) {
-            scrollTo = index
+        func scrollToCategory(_ selection: CategoryScreen.Selection) {
+            scrollTo = selection
         }
 
-        func selectCategory(index: Int) {
-            select = index
+        func selectCategory(_ selection: CategoryScreen.Selection) {
+            select = selection
         }
 
         func viewForStream() -> UIView {
             return streamContainer
         }
 
-        func setupNavBar(show: CategoryScreen.NavBarItems, back backVisible: Bool, animated: Bool) {
-            self.showShare = show
+        func setupNavBar(back backVisible: Bool, animated: Bool) {
             self.showBack = backVisible
         }
     }
@@ -72,23 +75,35 @@ class CategoryViewControllerSpec: QuickSpec {
                 expect(screen.showBack) == true
             }
 
-            it("restores the previous category") {
-                let slug = subject.allCategories!.first!.slug
-                subject.slug = slug
-                subject.allCategoriesTapped()
-                expect(subject.slug).to(beNil())
-                expect(screen.showBack) == true
-                subject.backButtonTapped()
-                expect(subject.slug) == slug
-                expect(screen.showBack) == false
-            }
-
-            context("setCategories(_:)") {
-                it("accepts meta categories") {
-                    subject.set(categories: [
-                        Category.stub(["name": "Art"])
-                        ])
-                    expect(screen.categoryTitles) == ["Art"]
+            context("set(subscribedCategories:)") {
+                context("builds category list") {
+                    it("is logged out") {
+                        subject = CategoryViewController(currentUser: nil, slug: "art")
+                        screen = MockCategoryScreen()
+                        subject.screen = screen
+                        subject.set(subscribedCategories: [
+                            Category.stub(["name": "Art"])
+                            ])
+                        expect(screen.categoryTitles) == [""]
+                    }
+                    it("is logged in with subscribed categories") {
+                        subject = CategoryViewController(currentUser: User.stub(["followedCategoryIds": ["1"]]), slug: "art")
+                        screen = MockCategoryScreen()
+                        subject.screen = screen
+                        subject.set(subscribedCategories: [
+                            Category.stub(["name": "Art"])
+                            ])
+                        expect(screen.categoryTitles) == [""]
+                    }
+                    it("is logged in with no subscribed categories") {
+                        subject = CategoryViewController(currentUser: User.stub([:]), slug: "art")
+                        screen = MockCategoryScreen()
+                        subject.screen = screen
+                        subject.set(subscribedCategories: [
+                            Category.stub(["name": "Art"])
+                            ])
+                        expect(screen.categoryTitles) == [""]
+                    }
                 }
             }
         }

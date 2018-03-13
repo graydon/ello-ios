@@ -19,8 +19,6 @@ class StreamNotificationCellSizeCalculator: NSObject, UIWebViewDelegate {
         self.webView.delegate = self
     }
 
-// MARK: Public
-
     func processCells(_ cellItems: [StreamCellItem], withWidth width: CGFloat, completion: @escaping Block) {
         guard cellItems.count > 0 else {
             completion()
@@ -33,8 +31,6 @@ class StreamNotificationCellSizeCalculator: NSObject, UIWebViewDelegate {
             processJob(job)
         }
     }
-
-// MARK: Private
 
     private func processJob(_ job: CellJob) {
         self.completion = {
