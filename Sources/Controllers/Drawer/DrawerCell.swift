@@ -38,9 +38,9 @@ class DrawerCell: TableViewCell {
     }
     var style: Style = .default { didSet { updateStyle() } }
 
-    private let label: UILabel = StyledLabel(style: .white)
+    private let label = StyledLabel(style: .white)
     private let logoView = UIImageView()
-    private let line: UIView = UIView()
+    private let line = UIView()
     private var hasImageConstraint: Constraint!
     private var noImageConstraint: Constraint!
 
@@ -79,12 +79,10 @@ class DrawerCell: TableViewCell {
 
     private func updateStyle() {
         if style == .version {
-            label.font = UIFont.defaultFont(12)
-            label.textColor = .greyA
+            label.style = .smallGray
         }
         else {
-            label.font = UIFont.defaultFont()
-            label.textColor = .white
+            label.style = .white
         }
     }
 }
