@@ -265,9 +265,8 @@ class OnboardingCreatorTypeScreen: StreamableScreen {
 
         var paths: [Int] = []
         for (index, view) in creatorButtons.enumerated() {
-            if let button = view as? UIButton, button.isSelected {
-                paths.append(index)
-            }
+            guard let button = view as? UIButton, button.isSelected else { continue }
+            paths.append(index)
         }
         delegate?.creatorTypeChanged(type: .artist(paths))
     }
@@ -297,7 +296,7 @@ class OnboardingCreatorTypeScreen: StreamableScreen {
         artistButton.isSelected = type.isArtist
 
         scrollViewArtistBottom.set(isActivated: type.isArtist)
-        scrollViewFanBottom.set(isActivated: type.isArtist)
+        scrollViewFanBottom.set(isActivated: !type.isArtist)
 
         let creatorTypeMargin: CGFloat
         let creatorTypeIntroMargin: CGFloat
