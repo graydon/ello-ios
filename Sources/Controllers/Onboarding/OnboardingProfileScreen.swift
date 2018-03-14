@@ -146,8 +146,8 @@ class OnboardingProfileScreen: Screen, OnboardingProfileScreenProtocol {
     }
 
     override func setText() {
-        uploadCoverImageButton.setTitle(InterfaceString.Onboard.UploadCoverButton, for: .normal)
-        uploadAvatarButton.setTitle(InterfaceString.Onboard.UploadAvatarButton, for: .normal)
+        uploadCoverImageButton.title = InterfaceString.Onboard.UploadCoverButton
+        uploadAvatarButton.title = InterfaceString.Onboard.UploadAvatarButton
         headerLabel.attributedText = NSAttributedString(
             primaryHeader: InterfaceString.Onboard.CreateProfilePrimary,
             secondaryHeader: InterfaceString.Onboard.CreateProfileSecondary

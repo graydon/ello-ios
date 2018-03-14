@@ -76,7 +76,7 @@ class StreamHeaderCell: CollectionViewCell {
     func setDetails(user: User?, repostedBy: User?, category: Category?, isSubmission: Bool) {
         avatarButton.setUserAvatarURL(user?.avatarURL())
         let username = user?.atName ?? ""
-        usernameButton.setTitle(username, for: .normal)
+        usernameButton.title = username
         usernameButton.sizeToFit()
 
         relationshipControl.relationshipPriority = user?.relationshipPriority ?? .inactive
@@ -86,7 +86,7 @@ class StreamHeaderCell: CollectionViewCell {
         let repostedVisible: Bool
         let aiSubmissionVisible: Bool
         if let atName = repostedBy?.atName {
-            repostedByButton.setTitle("by \(atName)", for: .normal)
+            repostedByButton.title = "by \(atName)"
             repostedByButton.sizeToFit()
 
             repostedVisible = true

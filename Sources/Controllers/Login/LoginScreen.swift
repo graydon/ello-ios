@@ -53,14 +53,14 @@ class LoginScreen: CredentialsScreen {
     private let activatePasswordButton = UIButton()
     private let errorLabel = StyledLabel(style: .smallWhite)
 
-    private let forgotPasswordButton = UIButton()
+    private let forgotPasswordButton = StyledButton(style: .forgotPassword)
 
     override func setText() {
         titleLabel.text = InterfaceString.Startup.Login
         usernameField.placeholder = InterfaceString.Login.UsernamePlaceholder
         passwordField.placeholder = InterfaceString.Login.PasswordPlaceholder
-        continueButton.setTitle(InterfaceString.Login.Continue, for: .normal)
-        forgotPasswordButton.setTitle(InterfaceString.Login.ForgotPassword, for: .normal)
+        continueButton.title = InterfaceString.Login.Continue
+        forgotPasswordButton.title = InterfaceString.Login.ForgotPassword
     }
 
     override func bindActions() {
@@ -85,9 +85,6 @@ class LoginScreen: CredentialsScreen {
         passwordField.hasOnePassword = isOnePasswordAvailable
 
         continueBackground.backgroundColor = .white
-
-        forgotPasswordButton.titleLabel?.font = UIFont.defaultFont(Size.forgotPasswordFontSize)
-        forgotPasswordButton.setTitleColor(.greyA, for: .normal)
     }
 
     override func arrange() {

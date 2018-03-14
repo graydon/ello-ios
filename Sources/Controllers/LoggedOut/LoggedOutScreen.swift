@@ -69,8 +69,8 @@ class LoggedOutScreen: Screen, LoggedOutScreenProtocol {
         tagLabel.isMultiline = true
         bottomBarView.backgroundColor = .greyEF
         bottomBarView.clipsToBounds = true
-        joinButton.setTitle(InterfaceString.Startup.SignUp, for: .normal)
-        loginButton.setTitle(InterfaceString.Startup.Login, for: .normal)
+        joinButton.title = InterfaceString.Startup.SignUp
+        loginButton.title = InterfaceString.Startup.Login
     }
 
     override func arrange() {

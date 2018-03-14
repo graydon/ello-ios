@@ -30,7 +30,7 @@ class HireScreen: StreamableScreen {
     private let successImage = UIImageView()
     private let textView = UITextView()
     private let placeholder = UILabel()
-    private let keyboardSubmitButton = UIButton()
+    private let keyboardSubmitButton = StyledButton()
     private var keyboardBottomConstraint: Constraint!
 
     override func arrange() {
@@ -94,10 +94,6 @@ class HireScreen: StreamableScreen {
         placeholder.font = UIFont.editorFont()
 
         keyboardSubmitButton.isEnabled = false
-        keyboardSubmitButton.backgroundColor = .black
-        keyboardSubmitButton.setTitleColor(.white, for: .normal)
-        keyboardSubmitButton.setTitleColor(.grey6, for: .disabled)
-        keyboardSubmitButton.titleLabel?.font = UIFont.defaultFont()
         keyboardSubmitButton.contentEdgeInsets.left = 10
         keyboardSubmitButton.imageEdgeInsets.right = 20
 
@@ -112,7 +108,7 @@ class HireScreen: StreamableScreen {
         super.setText()
 
         keyboardSubmitButton.setImages(.mail, style: .white)
-        keyboardSubmitButton.setTitle(InterfaceString.Send, for: .normal)
+        keyboardSubmitButton.title = InterfaceString.Send
     }
 
     override func bindActions() {

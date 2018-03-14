@@ -93,8 +93,8 @@ class OnboardingCreatorTypeScreen: StreamableScreen {
         super.setText()
         headerLabel.text = InterfaceString.Onboard.CreatorTypeHeader
         hereAsLabel.text = InterfaceString.Onboard.HereAs
-        artistButton.setTitle(InterfaceString.Onboard.Artist, for: .normal)
-        fanButton.setTitle(InterfaceString.Onboard.Fan, for: .normal)
+        artistButton.title = InterfaceString.Onboard.Artist
+        fanButton.title = InterfaceString.Onboard.Fan
         creatorLabel.text = InterfaceString.Onboard.Interests
     }
 

@@ -94,7 +94,7 @@ class OmnibarScreen: Screen, OmnibarScreenProtocol {
 
     var submitTitle: String = "" {
         didSet {
-            submitButton.setTitle(submitTitle, for: .normal)
+            submitButton.title = submitTitle
         }
     }
 
@@ -365,10 +365,10 @@ class OmnibarScreen: Screen, OmnibarScreenProtocol {
         }
 
         boldButton.addTarget(self, action: #selector(boldButtonTapped), for: .touchUpInside)
-        boldButton.setTitle("B", for: .normal)
+        boldButton.title = "B"
 
         italicButton.addTarget(self, action: #selector(italicButtonTapped), for: .touchUpInside)
-        italicButton.setTitle("I", for: .normal)
+        italicButton.title = "I"
 
         linkButton.addTarget(self, action: #selector(linkButtonTapped), for: .touchUpInside)
         linkButton.isEnabled = false
@@ -377,7 +377,7 @@ class OmnibarScreen: Screen, OmnibarScreenProtocol {
 
         submitButton.setImage(.pencil, imageStyle: .white, for: .normal)
         submitButton.setImage(.pencil, imageStyle: .selected, for: .highlighted)
-        submitButton.setTitle(InterfaceString.Omnibar.CreatePostButton, for: .normal)
+        submitButton.title = InterfaceString.Omnibar.CreatePostButton
         submitButton.contentEdgeInsets.left = -5
         submitButton.imageEdgeInsets.right = 5
         submitButton.addTarget(self, action: #selector(submitButtonTapped), for: .touchUpInside)

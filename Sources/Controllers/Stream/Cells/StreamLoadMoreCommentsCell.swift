@@ -16,7 +16,7 @@ class StreamLoadMoreCommentsCell: CollectionViewCell {
     private let button = StyledButton(style: .roundedGray)
 
     override func style() {
-        button.setTitle(InterfaceString.Post.LoadMoreComments, for: .normal)
+        button.title = InterfaceString.Post.LoadMoreComments
         button.isUserInteractionEnabled = false  // let StreamViewController handle taps
     }
 

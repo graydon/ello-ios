@@ -20,7 +20,7 @@ class NotificationsScreen: UIView, NotificationsScreenProtocol {
 
     private class func filterButton(title: String) -> UIButton {
         let button = StyledButton(style: .notification)
-        button.setTitle(title, for: .normal)
+        button.title = title
         return button
     }
 

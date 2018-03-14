@@ -28,7 +28,7 @@ class OnboardingScreen: EmptyScreen {
     }
     var prompt: String? {
         get { return promptButton.currentTitle }
-        set { promptButton.setTitle(newValue ?? InterfaceString.Onboard.CreateProfile, for: .normal) }
+        set { promptButton.title = newValue ?? InterfaceString.Onboard.CreateProfile }
     }
 
     override func style() {
@@ -45,9 +45,9 @@ class OnboardingScreen: EmptyScreen {
     }
 
     override func setText() {
-        promptButton.setTitle("", for: .normal)
-        nextButton.setTitle("", for: .normal)
-        abortButton.setTitle(InterfaceString.Onboard.ImDone, for: .normal)
+        promptButton.title = ""
+        nextButton.title = ""
+        abortButton.title = InterfaceString.Onboard.ImDone
     }
 
     override func arrange() {
@@ -113,8 +113,8 @@ class OnboardingScreen: EmptyScreen {
         promptButton.isVisible = true
         nextButton.isHidden = true
         abortButton.isHidden = true
-        promptButton.setTitle(nextString, for: .normal)
-        nextButton.setTitle(nextString, for: .normal)
+        promptButton.title = nextString
+        nextButton.title = nextString
     }
 }
 

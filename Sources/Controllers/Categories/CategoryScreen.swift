@@ -99,7 +99,7 @@ class CategoryScreen: HomeSubviewScreen, CategoryScreenProtocol {
 
     override func setText() {
         navigationBar.title = ""
-        editCategoriesButton.setTitle(InterfaceString.Edit, for: .normal)
+        editCategoriesButton.title = InterfaceString.Edit
     }
 
     override func bindActions() {

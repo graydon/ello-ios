@@ -66,7 +66,7 @@ class SearchScreen: StreamableScreen, SearchScreenProtocol {
     override func setText() {
         postsToggleButton.setTitle(InterfaceString.Search.Posts, for: .normal)
         peopleToggleButton.setTitle(InterfaceString.Search.People, for: .normal)
-        findFriendsButton.setTitle(InterfaceString.Friends.FindAndInvite, for: .normal)
+        findFriendsButton.title = InterfaceString.Friends.FindAndInvite
         findFriendsLabel.text = InterfaceString.Search.FindFriendsPrompt
     }
 

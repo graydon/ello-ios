@@ -218,7 +218,7 @@ class CommentHeaderCell: CollectionViewCell {
 
     func updateConfig() {
         avatarButton.setUserAvatarURL(config.author?.avatarURL())
-        usernameButton.setTitle(config.author?.atName, for: .normal)
+        usernameButton.title = config.author?.atName
         if config.canReplyAndFlag {
             replyButtonWidthConstraint.update(offset: Size.buttonWidth)
             replyButton.isVisible = true

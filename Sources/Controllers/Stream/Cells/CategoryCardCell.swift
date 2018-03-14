@@ -66,7 +66,7 @@ class CategoryCardCell: CollectionViewCell {
             subscribedCheckbox.isVisible = isSelected
             subscribeButton.isSelected = isSelected
             subscribeButton.isVisible = true
-            subscribeButton.setTitle(isSelected ? InterfaceString.Discover.Subscribed : InterfaceString.Discover.Subscribe, for: .normal)
+            subscribeButton.title = isSelected ? InterfaceString.Discover.Subscribed : InterfaceString.Discover.Subscribe
             selectedImageView.isHidden = true
             insetConstraint.update(inset: Size.cardMargins)
             mainContentView.alpha = isSelected ? 0.7 : 0.5

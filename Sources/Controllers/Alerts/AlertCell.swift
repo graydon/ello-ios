@@ -38,8 +38,8 @@ class AlertCell: TableViewCell {
     }
 
     override func setText() {
-        okButton.setTitle(InterfaceString.OK, for: .normal)
-        cancelButton.setTitle(InterfaceString.Cancel, for: .normal)
+        okButton.title = InterfaceString.OK
+        cancelButton.title = InterfaceString.Cancel
     }
 
     override func styleCell() {

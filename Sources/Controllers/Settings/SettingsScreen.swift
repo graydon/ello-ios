@@ -132,8 +132,8 @@ class SettingsScreen: Screen, SettingsScreenProtocol {
 
     override func setText() {
         navigationBar.title = InterfaceString.Settings.EditProfile
-        coverImageButton.setTitle(InterfaceString.Settings.TapToEdit, for: .normal)
-        avatarImageButton.setTitle(InterfaceString.Settings.TapToEdit, for: .normal)
+        coverImageButton.title = InterfaceString.Settings.TapToEdit
+        avatarImageButton.title = InterfaceString.Settings.TapToEdit
 
         profileLabel.text = InterfaceString.Settings.Profile
         profileDescription.text = InterfaceString.Settings.ProfileDescription

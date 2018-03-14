@@ -81,7 +81,7 @@ class EditorialJoinCell: EditorialCell {
         passwordField.backgroundColor = .white
         passwordField.placeholder = InterfaceString.Editorials.PasswordPlaceholder
         submitButton.isEnabled = false
-        submitButton.setTitle(InterfaceString.Editorials.SubmitJoin, for: .normal)
+        submitButton.title = InterfaceString.Editorials.SubmitJoin
     }
 
     override func arrange() {

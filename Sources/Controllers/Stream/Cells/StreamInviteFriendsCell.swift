@@ -52,11 +52,11 @@ class StreamInviteFriendsCell: UICollectionViewCell {
     func styleInviteButton(_ invited: Bool? = false) {
         if invited == true {
             inviteButton.style = .invited
-            inviteButton.setTitle(InterfaceString.Friends.Resend, for: .normal)
+            inviteButton.title = InterfaceString.Friends.Resend
         }
         else {
             inviteButton.style = .inviteFriend
-            inviteButton.setTitle(InterfaceString.Friends.Invite, for: .normal)
+            inviteButton.title = InterfaceString.Friends.Invite
         }
     }
 }

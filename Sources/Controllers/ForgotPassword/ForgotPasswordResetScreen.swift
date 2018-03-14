@@ -34,7 +34,7 @@ class ForgotPasswordResetScreen: CredentialsScreen {
 
     override func setText() {
         titleLabel.text = InterfaceString.Startup.ForgotPasswordReset
-        continueButton.setTitle(InterfaceString.Startup.Reset, for: .normal)
+        continueButton.title = InterfaceString.Startup.Reset
         passwordField.placeholder = InterfaceString.Join.PasswordPlaceholder
         failureLabel.text = InterfaceString.Startup.ForgotPasswordResetError
     }

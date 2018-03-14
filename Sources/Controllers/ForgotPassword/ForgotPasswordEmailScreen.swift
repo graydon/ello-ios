@@ -35,7 +35,7 @@ class ForgotPasswordEmailScreen: CredentialsScreen {
     override func setText() {
         titleLabel.text = InterfaceString.Startup.ForgotPasswordEnter
         successLabel.text = InterfaceString.Startup.ForgotPasswordEnterSuccess
-        continueButton.setTitle(InterfaceString.Startup.Reset, for: .normal)
+        continueButton.title = InterfaceString.Startup.Reset
         emailField.placeholder = InterfaceString.Join.EmailPlaceholder
     }
 

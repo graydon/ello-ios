@@ -78,11 +78,11 @@ class ProfileScreen: StreamableScreen, ProfileScreenProtocol {
     weak var delegate: ProfileScreenDelegate?
 
     override func setText() {
-        collaborateButton.setTitle(InterfaceString.Profile.Collaborate, for: .normal)
-        hireButton.setTitle(InterfaceString.Profile.Hire, for: .normal)
-        inviteButton.setTitle(InterfaceString.Profile.Invite, for: .normal)
-        editButton.setTitle(InterfaceString.Profile.EditProfile, for: .normal)
-        mentionButton.setTitle(InterfaceString.Profile.Mention, for: .normal)
+        collaborateButton.title = InterfaceString.Profile.Collaborate
+        hireButton.title = InterfaceString.Profile.Hire
+        inviteButton.title = InterfaceString.Profile.Invite
+        editButton.title = InterfaceString.Profile.EditProfile
+        mentionButton.title = InterfaceString.Profile.Mention
     }
 
     override func style() {

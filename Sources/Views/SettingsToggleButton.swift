@@ -10,7 +10,7 @@ class SettingsToggleButton: StyledButton {
     convenience init() {
         self.init(frame: .zero)
         self.setTitle(InterfaceString.Yes, for: .selected)
-        self.setTitle(InterfaceString.No, for: .normal)
+        self.title = InterfaceString.No
         self.style = StyledButton.Style(
             backgroundColor: .greyA, selectedBackgroundColor: .greenD1,
             titleColor: .white, selectedTitleColor: .white,
