@@ -57,7 +57,10 @@ extension DrawerViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let item = dataSource.itemForIndexPath(indexPath) else { return }
+        nextTick { self.didSelectItem(item) }
+    }
 
+    private func didSelectItem(_ item: DrawerItem) {
         if let tracking = item.tracking {
             Tracker.shared.tappedDrawer(tracking)
         }
@@ -88,20 +91,14 @@ extension DrawerViewController: UITableViewDelegate {
             responder?.onInviteFriends()
         case .logout:
             isLoggingOut = true
-            nextTick {
-                self.dismiss(animated: true, completion: {
-                     postNotification(AuthenticationNotifications.userLoggedOut, value: ())
-                })
-            }
+            dismiss(animated: true) { nextTick {
+                postNotification(AuthenticationNotifications.userLoggedOut, value: ())
+            } }
         case .debugger:
             let appViewController = self.appViewController
-            nextTick {
-                self.dismiss(animated: true, completion: {
-                    nextTick {
-                        appViewController?.showDebugController()
-                    }
-                })
-            }
+            dismiss(animated: true) { nextTick {
+                appViewController?.showDebugController()
+            } }
         default: break
         }
     }

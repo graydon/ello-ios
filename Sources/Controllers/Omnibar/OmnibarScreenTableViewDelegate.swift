@@ -62,13 +62,16 @@ extension OmnibarScreen: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt path: IndexPath) {
-        if let (_, region) = tableViewRegions.safeValue(path.row) {
-            switch region {
-            case .attributedText:
-                startEditingAtPath(path)
-            default:
-                stopEditing()
-            }
+        guard let (_, region) = tableViewRegions.safeValue(path.row) else { return }
+        nextTick { self.didSelectRegion(region, at: path) }
+    }
+
+    private func didSelectRegion(_ region: OmnibarRegion, at path: IndexPath) {
+        switch region {
+        case .attributedText:
+            startEditingAtPath(path)
+        default:
+            stopEditing()
         }
     }
 
