@@ -131,7 +131,7 @@ class CategoryCardView: View {
         else {
             attributedString = NSAttributedString(
                 button: info.title,
-                style: (info.isSubscribed && isSelected) ? .whiteBoldUnderlined : .clearWhite,
+                style: isSelected ? .whiteBoldUnderlined : .clearWhite,
                 state: .normal)
         }
         button.setAttributedTitle(attributedString, for: .normal)
