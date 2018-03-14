@@ -907,15 +907,57 @@ extension AppViewController {
     }
 }
 
-var isShowingDebug = false
+private var isShowingDebug = false
+private var tabKeys: [String: ElloTab] = [
+    "1": .home,
+    "2": .discover,
+    "3": .omnibar,
+    "4": .notifications,
+    "5": .profile,
+]
 
 extension AppViewController {
 
     override var canBecomeFirstResponder: Bool {
-        return debugAllowed
+        return true
     }
 
-    var debugAllowed: Bool {
+    override var keyCommands: [UIKeyCommand]? {
+        guard isFirstResponder else { return nil }
+        return [
+            UIKeyCommand(input: UIKeyInputEscape, modifierFlags: [], action: #selector(escapeKeyPressed), discoverabilityTitle: "Back"),
+            UIKeyCommand(input: "1", modifierFlags: [], action: #selector(tabKeyPressed(_:)), discoverabilityTitle: "Home"),
+            UIKeyCommand(input: "2", modifierFlags: [], action: #selector(tabKeyPressed(_:)), discoverabilityTitle: "Discover"),
+            UIKeyCommand(input: "3", modifierFlags: [], action: #selector(tabKeyPressed(_:)), discoverabilityTitle: "Omnibar"),
+            UIKeyCommand(input: "4", modifierFlags: [], action: #selector(tabKeyPressed(_:)), discoverabilityTitle: "Notifications"),
+            UIKeyCommand(input: "5", modifierFlags: [], action: #selector(tabKeyPressed(_:)), discoverabilityTitle: "Profile"),
+            UIKeyCommand(input: " ", modifierFlags: [], action: #selector(scrollDownOnePage), discoverabilityTitle: "Scroll one page"),
+        ]
+    }
+
+    @objc
+    func escapeKeyPressed() {
+        guard let navigationController: UINavigationController = findChildController() else { return }
+        navigationController.popViewController(animated: true)
+    }
+
+    @objc
+    func tabKeyPressed(_ event: UIKeyCommand) {
+        guard
+            let tabBarController: ElloTabBarController = findChildController(),
+            let tab = event.input.flatMap({ input in return tabKeys[input] })
+        else { return }
+
+        tabBarController.selectedTab = tab
+    }
+
+    @objc
+    func scrollDownOnePage() {
+        guard let streamViewController: StreamViewController = findChildController() else { return }
+        streamViewController.scrollDownOnePage()
+    }
+
+    private var debugAllowed: Bool {
         #if DEBUG
             return true
         #else
@@ -935,6 +977,8 @@ extension AppViewController {
     }
 
     func showDebugController() {
+        guard !isShowingDebug else { return }
+
         isShowingDebug = true
         let ctlr = DebugController()
 
@@ -958,6 +1002,8 @@ extension AppViewController {
     }
 
     func closeDebugController(completion: Block? = nil) {
+        guard isShowingDebug else { return }
+
         isShowingDebug = false
         dismiss(animated: true, completion: completion)
     }
