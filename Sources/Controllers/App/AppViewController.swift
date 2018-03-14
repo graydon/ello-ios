@@ -644,17 +644,17 @@ extension AppViewController {
             showOnboardingScreen(user)
         case .post:
             guard let postId = data else { return }
-            showPostDetailScreen(postParam: postId, path: path)
+            showPostDetailScreen(postParam: postId, isSlug: true, path: path)
         case .pushNotificationComment,
              .pushNotificationPost:
             guard let postId = data else { return }
-            showPostDetailScreen(postParam: postId, path: path, isSlug: false)
+            showPostDetailScreen(postParam: postId, isSlug: false, path: path)
         case .profile:
             guard let userId = data else { return }
-            showProfileScreen(userParam: userId, path: path)
+            showProfileScreen(userParam: userId, isSlug: true, path: path)
         case .pushNotificationUser:
             guard let userId = data else { return }
-            showProfileScreen(userParam: userId, path: path, isSlug: false)
+            showProfileScreen(userParam: userId, isSlug: false, path: path)
         case .profileFollowers,
              .profileFollowing:
             guard let username = data else { return }
@@ -802,7 +802,7 @@ extension AppViewController {
         notificationsVC.activatedCategory(notificationFilterType)
     }
 
-    private func showProfileScreen(userParam: String, path: String, isSlug: Bool = true) {
+    func showProfileScreen(userParam: String, isSlug: Bool, path: String? = nil) {
         let param = isSlug ? "~\(userParam)" : userParam
         let profileVC = ProfileViewController(userParam: param)
         profileVC.deeplinkPath = path
@@ -810,7 +810,7 @@ extension AppViewController {
         pushDeepLinkViewController(profileVC)
     }
 
-    private func showPostDetailScreen(postParam: String, path: String, isSlug: Bool = true) {
+    func showPostDetailScreen(postParam: String, isSlug: Bool, path: String? = nil) {
         let param = isSlug ? "~\(postParam)" : postParam
         let postDetailVC = PostDetailViewController(postParam: param)
         postDetailVC.deeplinkPath = path

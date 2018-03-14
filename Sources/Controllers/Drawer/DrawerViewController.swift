@@ -89,6 +89,11 @@ extension DrawerViewController: UITableViewDelegate {
         case .invite:
             let responder: InviteResponder? = findResponder()
             responder?.onInviteFriends()
+        case .giveaways:
+            let appViewController = self.appViewController
+            dismiss(animated: true) { nextTick {
+                appViewController?.showProfileScreen(userParam: "elloartgiveaways", isSlug: true)
+            } }
         case .logout:
             isLoggingOut = true
             dismiss(animated: true) { nextTick {

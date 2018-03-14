@@ -40,6 +40,7 @@ struct DrawerItem: Equatable {
 enum DrawerItemType {
     case external(String)
     case invite
+    case giveaways
     case twitter
     case instagram
     case facebook
@@ -59,6 +60,7 @@ class DrawerViewDataSource: NSObject {
     private func drawerItems() -> [DrawerItem] {
         var items: [DrawerItem] = [
             DrawerItem(title: InterfaceString.Drawer.Invite, type: .invite, tracking: "invite"),
+            DrawerItem(title: InterfaceString.Drawer.Giveaways, type: .giveaways, tracking: "giveaways"),
             DrawerItem(title: InterfaceString.Drawer.Store, type: .external("http://store.ello.co/"), tracking: "store"),
             DrawerItem(title: InterfaceString.Drawer.Help, type: .external("https://ello.co/wtf/"), tracking: "help"),
             DrawerItem(title: InterfaceString.Drawer.Logout, type: .logout, tracking: "logout"),
