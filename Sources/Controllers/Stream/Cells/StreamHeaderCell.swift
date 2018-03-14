@@ -73,6 +73,50 @@ class StreamHeaderCell: CollectionViewCell {
         return self.deleteItem.customView as! ImageLabelControl
     }
 
+    override func bindActions() {
+        avatarButton.addTarget(self, action: #selector(userTapped), for: .touchUpInside)
+        usernameButton.addTarget(self, action: #selector(userTapped), for: .touchUpInside)
+        repostedByButton.addTarget(self, action: #selector(reposterTapped), for: .touchUpInside)
+        categoryButton.addTarget(self, action: #selector(categoryTapped), for: .touchUpInside)
+        artistInviteSubmissionButton.addTarget(self, action: #selector(artistInviteSubmissionTapped), for: .touchUpInside)
+    }
+
+    override func style() {
+        usernameButton.titleLineBreakMode = .byTruncatingTail
+        usernameButton.contentHorizontalAlignment = .left
+
+        let goToPostTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(postTapped(_:)))
+        contentView.addGestureRecognizer(goToPostTapRecognizer)
+
+        let longPressGesture = UILongPressGestureRecognizer()
+        longPressGesture.addTarget(self, action: #selector(longPressed(_:)))
+        contentView.addGestureRecognizer(longPressGesture)
+
+        repostIconView.setInterfaceImage(.repost, style: .selected)
+
+        let attributedSubmissionTitle = NSAttributedString(string: InterfaceString.ArtistInvites.PostSubmissionHeader, attributes: [
+            .font: UIFont.defaultFont(),
+            .foregroundColor: UIColor.greyA,
+            .underlineStyle: NSUnderlineStyle.styleSingle.rawValue,
+            ])
+        artistInviteSubmissionButton.setAttributedTitle(attributedSubmissionTitle, for: .normal)
+    }
+
+    override func arrange() {
+        super.arrange()
+
+        contentView.addSubview(avatarButton)
+        contentView.addSubview(timestampLabel)
+        contentView.addSubview(usernameButton)
+        contentView.addSubview(relationshipControl)
+        contentView.addSubview(repostIconView)
+        contentView.addSubview(repostedByButton)
+        contentView.addSubview(categoryButton)
+        contentView.addSubview(artistInviteSubmissionButton)
+
+        repostIconView.frame.size = CGSize(width: 20, height: 20)
+    }
+
     func setDetails(user: User?, repostedBy: User?, category: Category?, isSubmission: Bool) {
         avatarButton.setUserAvatarURL(user?.avatarURL())
         let username = user?.atName ?? ""
@@ -117,44 +161,6 @@ class StreamHeaderCell: CollectionViewCell {
         }
 
         setNeedsLayout()
-    }
-
-    override func style() {
-        super.style()
-
-        usernameButton.titleLineBreakMode = .byTruncatingTail
-        usernameButton.contentHorizontalAlignment = .left
-
-        let goToPostTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(postTapped(_:)))
-        contentView.addGestureRecognizer(goToPostTapRecognizer)
-
-        let longPressGesture = UILongPressGestureRecognizer()
-        longPressGesture.addTarget(self, action: #selector(longPressed(_:)))
-        contentView.addGestureRecognizer(longPressGesture)
-
-        repostIconView.setInterfaceImage(.repost, style: .selected)
-
-        let attributedSubmissionTitle = NSAttributedString(string: InterfaceString.ArtistInvites.PostSubmissionHeader, attributes: [
-            .font: UIFont.defaultFont(),
-            .foregroundColor: UIColor.greyA,
-            .underlineStyle: NSUnderlineStyle.styleSingle.rawValue,
-            ])
-        artistInviteSubmissionButton.setAttributedTitle(attributedSubmissionTitle, for: .normal)
-    }
-
-    override func arrange() {
-        super.arrange()
-
-        contentView.addSubview(avatarButton)
-        contentView.addSubview(timestampLabel)
-        contentView.addSubview(usernameButton)
-        contentView.addSubview(relationshipControl)
-        contentView.addSubview(repostIconView)
-        contentView.addSubview(repostedByButton)
-        contentView.addSubview(categoryButton)
-        contentView.addSubview(artistInviteSubmissionButton)
-
-        repostIconView.frame.size = CGSize(width: 20, height: 20)
     }
 
     override func layoutSubviews() {
@@ -287,27 +293,32 @@ class StreamHeaderCell: CollectionViewCell {
         responder?.viewsButtonTapped(cell: self)
     }
 
-    @IBAction func userTapped(_ sender: AvatarButton) {
+    @objc
+    func userTapped() {
         let responder: UserResponder? = findResponder()
         responder?.userTappedAuthor(cell: self)
     }
 
-    @IBAction func categoryTapped(_ sender: UIButton) {
+    @objc
+    func categoryTapped() {
         let responder: CategoryResponder? = findResponder()
         responder?.categoryCellTapped(cell: self)
     }
 
-    @IBAction func artistInviteSubmissionTapped(_ sender: UIButton) {
+    @objc
+    func artistInviteSubmissionTapped() {
         let responder: StreamCellResponder? = findResponder()
         responder?.artistInviteSubmissionTapped(cell: self)
     }
 
-    @IBAction func reposterTapped(_ sender: UIButton) {
+    @objc
+    func reposterTapped() {
         let responder: UserResponder? = findResponder()
         responder?.userTappedReposter(cell: self)
     }
 
-    @IBAction func longPressed(_ gesture: UIGestureRecognizer) {
+    @objc
+    func longPressed(_ gesture: UIGestureRecognizer) {
         guard gesture.state == .began else { return }
 
         let responder: StreamEditingResponder? = findResponder()
