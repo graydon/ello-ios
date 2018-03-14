@@ -188,7 +188,7 @@ class NotificationCell: UICollectionViewCell, UIWebViewDelegate {
         buyButtonImage.layer.cornerRadius = Size.BuyButtonSize / 2
 
         replyButton.isHidden = true
-        replyButton.setTitle(InterfaceString.Notifications.Reply, for: .normal)
+        replyButton.title = InterfaceString.Notifications.Reply
         replyButton.setImage(InterfaceImage.reply.selectedImage, for: .normal)
         replyButton.contentEdgeInsets.left = 10
         replyButton.contentEdgeInsets.right = 10

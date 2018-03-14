@@ -69,8 +69,8 @@ class BuyButtonLinkScreen: View, BuyButtonLinkScreenProtocol {
     override func setText() {
         titleLabel.text = InterfaceString.Omnibar.SellYourWorkTitle
         productLinkField.placeholder = InterfaceString.Omnibar.ProductLinkPlaceholder
-        submitButton.setTitle(InterfaceString.Submit, for: .normal)
-        removeButton.setTitle(InterfaceString.Remove, for: .normal)
+        submitButton.title = InterfaceString.Submit
+        removeButton.title = InterfaceString.Remove
         cancelLabel.text = InterfaceString.Cancel
     }
 

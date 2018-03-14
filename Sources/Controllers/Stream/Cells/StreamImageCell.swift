@@ -34,8 +34,8 @@ class StreamImageCell: StreamRegionableCell {
 
     @IBOutlet weak var imageView: FLAnimatedImageView!
     @IBOutlet weak var imageButton: UIView!
-    @IBOutlet weak var buyButton: UIButton?
-    @IBOutlet weak var buyButtonGreen: UIView?
+    @IBOutlet weak var buyButton: UIButton!
+    @IBOutlet weak var buyButtonGreen: UIView!
     @IBOutlet weak var buyButtonWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var circle: PulsingCircle!
     @IBOutlet weak var failImage: UIImageView!
@@ -125,18 +125,14 @@ class StreamImageCell: StreamRegionableCell {
             playButton.interfaceImage = .videoPlay
         }
 
-        if let buyButton = buyButton, let buyButtonGreen = buyButtonGreen {
-            buyButton.isHidden = true
-            buyButtonGreen.isHidden = true
-            buyButton.setTitle(nil, for: .normal)
-            buyButton.setImage(.buyButton, imageStyle: .normal, for: .normal)
-            buyButtonGreen.backgroundColor = .greenD1
-            buyButtonGreen.setNeedsLayout()
-            buyButtonGreen.layoutIfNeeded()
-            buyButtonGreen.layer.masksToBounds = true
-            buyButtonGreen.layer.cornerRadius = buyButtonGreen.frame.size.width / 2
-
-        }
+        buyButton.isHidden = true
+        buyButtonGreen.isHidden = true
+        buyButton.setImage(.buyButton, imageStyle: .normal, for: .normal)
+        buyButtonGreen.backgroundColor = .greenD1
+        buyButtonGreen.setNeedsLayout()
+        buyButtonGreen.layoutIfNeeded()
+        buyButtonGreen.layer.masksToBounds = true
+        buyButtonGreen.layer.cornerRadius = buyButtonGreen.frame.size.width / 2
 
         let doubleTapGesture = UITapGestureRecognizer()
         doubleTapGesture.numberOfTapsRequired = 2

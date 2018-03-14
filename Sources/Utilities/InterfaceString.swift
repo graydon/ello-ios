@@ -143,6 +143,7 @@ struct InterfaceString {
 
     struct Drawer {
         static let Invite: String = NSLocalizedString("Invite", comment: "")
+        static let Giveaways: String = NSLocalizedString("Giveaways", comment: "")
         static let Twitter: String = NSLocalizedString("Twitter", comment: "")
         static let Instagram: String = NSLocalizedString("Instagram", comment: "")
         static let Facebook: String = NSLocalizedString("Facebook", comment: "")

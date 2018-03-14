@@ -43,7 +43,7 @@ class ProfileBadgeScreen: Screen, ProfileBadgeScreenProtocol {
 
     override func setText() {
         titleLabel.text = title
-        learnMoreButton.setTitle(caption, for: .normal)
+        learnMoreButton.title = caption
     }
 
     override func arrange() {

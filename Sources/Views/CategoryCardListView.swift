@@ -28,9 +28,7 @@ class CategoryCardListView: View {
         let imageURL: URL?
 
         var isAll: Bool { return kind == .all }
-        var isSubscribed: Bool { return kind == .subscribed }
         var isZeroState: Bool { return kind == .zeroState }
-        var isCategory: Bool { return kind == .category }
     }
 
     weak var delegate: CategoryCardListDelegate?

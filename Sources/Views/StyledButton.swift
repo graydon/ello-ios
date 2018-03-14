@@ -220,8 +220,8 @@ extension StyledButton {
 
 extension StyledButton.Style {
     static let `default` = StyledButton.Style(
-        backgroundColor: .black, disabledBackgroundColor: .grey231F20,
-        titleColor: .white, disabledTitleColor: .greyA
+        backgroundColor: .black, disabledBackgroundColor: .black,
+        titleColor: .white, disabledTitleColor: .grey6
         )
 
     static let clearWhite = StyledButton.Style(
@@ -274,6 +274,12 @@ extension StyledButton.Style {
         underline: true
         )
 
+    static let roundedBlackOutline = StyledButton.Style(
+        backgroundColor: .clear, highlightedBackgroundColor: .black, selectedBackgroundColor: .black,
+        titleColor: .black, highlightedTitleColor: .white,
+        borderColor: .black, highlightedBorderColor: .black,
+        cornerRadius: .rounded
+        )
     static let roundedGrayOutline = StyledButton.Style(
         backgroundColor: .clear, selectedBackgroundColor: .black,
         titleColor: .greyA, highlightedTitleColor: .black, unselectHighlightedTitleColor: .greyA, selectedTitleColor: .white,
@@ -337,6 +343,11 @@ extension StyledButton.Style {
     static let subscribed = StyledButton.Style(
         backgroundColor: .greenD1, selectedBackgroundColor: .greyA,
         titleColor: .white, selectedTitleColor: .white
+        )
+    static let forgotPassword = StyledButton.Style(
+        backgroundColor: .clear,
+        titleColor: .greyA,
+        font: .defaultFont(11)
         )
 
     static func byName(_ name: String) -> StyledButton.Style {

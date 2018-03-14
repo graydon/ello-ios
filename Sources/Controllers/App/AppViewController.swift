@@ -644,17 +644,17 @@ extension AppViewController {
             showOnboardingScreen(user)
         case .post:
             guard let postId = data else { return }
-            showPostDetailScreen(postParam: postId, path: path)
+            showPostDetailScreen(postParam: postId, isSlug: true, path: path)
         case .pushNotificationComment,
              .pushNotificationPost:
             guard let postId = data else { return }
-            showPostDetailScreen(postParam: postId, path: path, isSlug: false)
+            showPostDetailScreen(postParam: postId, isSlug: false, path: path)
         case .profile:
             guard let userId = data else { return }
-            showProfileScreen(userParam: userId, path: path)
+            showProfileScreen(userParam: userId, isSlug: true, path: path)
         case .pushNotificationUser:
             guard let userId = data else { return }
-            showProfileScreen(userParam: userId, path: path, isSlug: false)
+            showProfileScreen(userParam: userId, isSlug: false, path: path)
         case .profileFollowers,
              .profileFollowing:
             guard let username = data else { return }
@@ -802,7 +802,7 @@ extension AppViewController {
         notificationsVC.activatedCategory(notificationFilterType)
     }
 
-    private func showProfileScreen(userParam: String, path: String, isSlug: Bool = true) {
+    func showProfileScreen(userParam: String, isSlug: Bool, path: String? = nil) {
         let param = isSlug ? "~\(userParam)" : userParam
         let profileVC = ProfileViewController(userParam: param)
         profileVC.deeplinkPath = path
@@ -810,7 +810,7 @@ extension AppViewController {
         pushDeepLinkViewController(profileVC)
     }
 
-    private func showPostDetailScreen(postParam: String, path: String, isSlug: Bool = true) {
+    func showPostDetailScreen(postParam: String, isSlug: Bool, path: String? = nil) {
         let param = isSlug ? "~\(postParam)" : postParam
         let postDetailVC = PostDetailViewController(postParam: param)
         postDetailVC.deeplinkPath = path
@@ -907,15 +907,57 @@ extension AppViewController {
     }
 }
 
-var isShowingDebug = false
+private var isShowingDebug = false
+private var tabKeys: [String: ElloTab] = [
+    "1": .home,
+    "2": .discover,
+    "3": .omnibar,
+    "4": .notifications,
+    "5": .profile,
+]
 
 extension AppViewController {
 
     override var canBecomeFirstResponder: Bool {
-        return debugAllowed
+        return true
     }
 
-    var debugAllowed: Bool {
+    override var keyCommands: [UIKeyCommand]? {
+        guard isFirstResponder else { return nil }
+        return [
+            UIKeyCommand(input: UIKeyInputEscape, modifierFlags: [], action: #selector(escapeKeyPressed), discoverabilityTitle: "Back"),
+            UIKeyCommand(input: "1", modifierFlags: [], action: #selector(tabKeyPressed(_:)), discoverabilityTitle: "Home"),
+            UIKeyCommand(input: "2", modifierFlags: [], action: #selector(tabKeyPressed(_:)), discoverabilityTitle: "Discover"),
+            UIKeyCommand(input: "3", modifierFlags: [], action: #selector(tabKeyPressed(_:)), discoverabilityTitle: "Omnibar"),
+            UIKeyCommand(input: "4", modifierFlags: [], action: #selector(tabKeyPressed(_:)), discoverabilityTitle: "Notifications"),
+            UIKeyCommand(input: "5", modifierFlags: [], action: #selector(tabKeyPressed(_:)), discoverabilityTitle: "Profile"),
+            UIKeyCommand(input: " ", modifierFlags: [], action: #selector(scrollDownOnePage), discoverabilityTitle: "Scroll one page"),
+        ]
+    }
+
+    @objc
+    func escapeKeyPressed() {
+        guard let navigationController: UINavigationController = findChildController() else { return }
+        navigationController.popViewController(animated: true)
+    }
+
+    @objc
+    func tabKeyPressed(_ event: UIKeyCommand) {
+        guard
+            let tabBarController: ElloTabBarController = findChildController(),
+            let tab = event.input.flatMap({ input in return tabKeys[input] })
+        else { return }
+
+        tabBarController.selectedTab = tab
+    }
+
+    @objc
+    func scrollDownOnePage() {
+        guard let streamViewController: StreamViewController = findChildController() else { return }
+        streamViewController.scrollDownOnePage()
+    }
+
+    private var debugAllowed: Bool {
         #if DEBUG
             return true
         #else
@@ -935,6 +977,8 @@ extension AppViewController {
     }
 
     func showDebugController() {
+        guard !isShowingDebug else { return }
+
         isShowingDebug = true
         let ctlr = DebugController()
 
@@ -958,6 +1002,8 @@ extension AppViewController {
     }
 
     func closeDebugController(completion: Block? = nil) {
+        guard isShowingDebug else { return }
+
         isShowingDebug = false
         dismiss(animated: true, completion: completion)
     }

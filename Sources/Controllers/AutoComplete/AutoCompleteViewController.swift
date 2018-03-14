@@ -83,8 +83,9 @@ extension AutoCompleteViewController {
 
 extension AutoCompleteViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let item = dataSource.itemForIndexPath(indexPath) {
-            delegate?.autoComplete(self, itemSelected: item)
+        guard let item = dataSource.itemForIndexPath(indexPath) else { return }
+        nextTick {
+            self.delegate?.autoComplete(self, itemSelected: item)
         }
     }
 }

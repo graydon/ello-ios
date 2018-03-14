@@ -10,7 +10,7 @@ class NarrationView: UIView {
     }
     private let closeButton: StyledButton = {
         let closeButton = StyledButton()
-        closeButton.setTitle("\u{2573}", for: .normal)
+        closeButton.title = "\u{2573}"
         closeButton.sizeToFit()
         closeButton.isUserInteractionEnabled = false
         return closeButton

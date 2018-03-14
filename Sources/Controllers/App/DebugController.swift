@@ -233,7 +233,7 @@ class DebugController: UIViewController, UITableViewDataSource, UITableViewDeleg
     func tableView(_ tableView: UITableView, didSelectRowAt path: IndexPath) {
         tableView.deselectRow(at: path, animated: true)
         if let action = actions.safeValue(path.row) {
-            action.1()
+            nextTick { action.1() }
         }
     }
 

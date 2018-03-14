@@ -73,55 +73,15 @@ class StreamHeaderCell: CollectionViewCell {
         return self.deleteItem.customView as! ImageLabelControl
     }
 
-    func setDetails(user: User?, repostedBy: User?, category: Category?, isSubmission: Bool) {
-        avatarButton.setUserAvatarURL(user?.avatarURL())
-        let username = user?.atName ?? ""
-        usernameButton.setTitle(username, for: .normal)
-        usernameButton.sizeToFit()
-
-        relationshipControl.relationshipPriority = user?.relationshipPriority ?? .inactive
-        relationshipControl.userId = user?.id ?? ""
-        relationshipControl.userAtName = user?.atName ?? ""
-
-        let repostedVisible: Bool
-        let aiSubmissionVisible: Bool
-        if let atName = repostedBy?.atName {
-            repostedByButton.setTitle("by \(atName)", for: .normal)
-            repostedByButton.sizeToFit()
-
-            repostedVisible = true
-            aiSubmissionVisible = false
-        }
-        else {
-            repostedVisible = false
-            aiSubmissionVisible = isSubmission
-        }
-        let categoryVisible: Bool = category != nil && !repostedVisible && !aiSubmissionVisible
-        repostedByButton.isVisible = repostedVisible
-        repostIconView.isVisible = repostedVisible
-        categoryButton.isVisible = categoryVisible
-        artistInviteSubmissionButton.isVisible = aiSubmissionVisible
-
-        if let category = category, categoryVisible {
-            let attributedString = NSAttributedString(string: "in ", attributes: [
-                .font: UIFont.defaultFont(),
-                .foregroundColor: UIColor.greyA,
-                ])
-            let categoryName = NSAttributedString(string: category.name, attributes: [
-                .font: UIFont.defaultFont(),
-                .foregroundColor: UIColor.greyA,
-                .underlineStyle: NSUnderlineStyle.styleSingle.rawValue,
-                ])
-            categoryButton.setAttributedTitle(attributedString + categoryName, for: .normal)
-            categoryButton.sizeToFit()
-        }
-
-        setNeedsLayout()
+    override func bindActions() {
+        avatarButton.addTarget(self, action: #selector(userTapped), for: .touchUpInside)
+        usernameButton.addTarget(self, action: #selector(userTapped), for: .touchUpInside)
+        repostedByButton.addTarget(self, action: #selector(reposterTapped), for: .touchUpInside)
+        categoryButton.addTarget(self, action: #selector(categoryTapped), for: .touchUpInside)
+        artistInviteSubmissionButton.addTarget(self, action: #selector(artistInviteSubmissionTapped), for: .touchUpInside)
     }
 
     override func style() {
-        super.style()
-
         usernameButton.titleLineBreakMode = .byTruncatingTail
         usernameButton.contentHorizontalAlignment = .left
 
@@ -155,6 +115,52 @@ class StreamHeaderCell: CollectionViewCell {
         contentView.addSubview(artistInviteSubmissionButton)
 
         repostIconView.frame.size = CGSize(width: 20, height: 20)
+    }
+
+    func setDetails(user: User?, repostedBy: User?, category: Category?, isSubmission: Bool) {
+        avatarButton.setUserAvatarURL(user?.avatarURL())
+        let username = user?.atName ?? ""
+        usernameButton.title = username
+        usernameButton.sizeToFit()
+
+        relationshipControl.relationshipPriority = user?.relationshipPriority ?? .inactive
+        relationshipControl.userId = user?.id ?? ""
+        relationshipControl.userAtName = user?.atName ?? ""
+
+        let repostedVisible: Bool
+        let aiSubmissionVisible: Bool
+        if let atName = repostedBy?.atName {
+            repostedByButton.title = "by \(atName)"
+            repostedByButton.sizeToFit()
+
+            repostedVisible = true
+            aiSubmissionVisible = false
+        }
+        else {
+            repostedVisible = false
+            aiSubmissionVisible = isSubmission
+        }
+        let categoryVisible: Bool = category != nil && !repostedVisible && !aiSubmissionVisible
+        repostedByButton.isVisible = repostedVisible
+        repostIconView.isVisible = repostedVisible
+        categoryButton.isVisible = categoryVisible
+        artistInviteSubmissionButton.isVisible = aiSubmissionVisible
+
+        if let category = category, categoryVisible {
+            let attributedString = NSAttributedString(string: "in ", attributes: [
+                .font: UIFont.defaultFont(),
+                .foregroundColor: UIColor.greyA,
+                ])
+            let categoryName = NSAttributedString(string: category.name, attributes: [
+                .font: UIFont.defaultFont(),
+                .foregroundColor: UIColor.greyA,
+                .underlineStyle: NSUnderlineStyle.styleSingle.rawValue,
+                ])
+            categoryButton.setAttributedTitle(attributedString + categoryName, for: .normal)
+            categoryButton.sizeToFit()
+        }
+
+        setNeedsLayout()
     }
 
     override func layoutSubviews() {
@@ -287,27 +293,32 @@ class StreamHeaderCell: CollectionViewCell {
         responder?.viewsButtonTapped(cell: self)
     }
 
-    @IBAction func userTapped(_ sender: AvatarButton) {
+    @objc
+    func userTapped() {
         let responder: UserResponder? = findResponder()
         responder?.userTappedAuthor(cell: self)
     }
 
-    @IBAction func categoryTapped(_ sender: UIButton) {
+    @objc
+    func categoryTapped() {
         let responder: CategoryResponder? = findResponder()
         responder?.categoryCellTapped(cell: self)
     }
 
-    @IBAction func artistInviteSubmissionTapped(_ sender: UIButton) {
+    @objc
+    func artistInviteSubmissionTapped() {
         let responder: StreamCellResponder? = findResponder()
         responder?.artistInviteSubmissionTapped(cell: self)
     }
 
-    @IBAction func reposterTapped(_ sender: UIButton) {
+    @objc
+    func reposterTapped() {
         let responder: UserResponder? = findResponder()
         responder?.userTappedReposter(cell: self)
     }
 
-    @IBAction func longPressed(_ gesture: UIGestureRecognizer) {
+    @objc
+    func longPressed(_ gesture: UIGestureRecognizer) {
         guard gesture.state == .began else { return }
 
         let responder: StreamEditingResponder? = findResponder()

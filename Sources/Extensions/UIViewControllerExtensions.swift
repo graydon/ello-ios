@@ -7,6 +7,31 @@
     func backGestureAction()
 }
 
+private func findTopMostViewController(_ controller: UIViewController) -> UIViewController {
+    if let controller = controller as? UINavigationController {
+        return controller.visibleViewController?.topMostViewController ?? controller
+    }
+    if let controller = controller as? UITabBarController {
+        return controller.selectedViewController?.topMostViewController ?? controller
+    }
+    if let controller = controller as? AppViewController {
+        return controller.visibleViewController?.topMostViewController ?? controller
+    }
+    if let controller = controller as? LoggedOutViewController {
+        return controller.childViewControllers.first?.topMostViewController ?? controller
+    }
+    if let controller = controller as? HomeViewController {
+        return controller.visibleViewController?.topMostViewController ?? controller
+    }
+    if let controller = controller as? OnboardingViewController {
+        return controller.visibleViewController?.topMostViewController ?? controller
+    }
+    if let controller = controller as? ElloTabBarController {
+        return controller.selectedViewController.topMostViewController
+    }
+    return controller
+}
+
 extension UIViewController: GestureNavigation {
     var backGestureEdges: UIRectEdge { return .left }
 
@@ -26,6 +51,36 @@ extension UIViewController: GestureNavigation {
         }
 
         return nil
+    }
+
+    func findChildController<T>(_ test: ((T) -> Bool)? = nil) -> T? {
+        let sanityTest: (UIViewController?) -> T? = { controller in
+            guard
+                let controller = controller,
+                controller.isViewLoaded, controller.view.window != nil,
+                let testType = controller as? T,
+                test?(testType) != false
+            else { return nil }
+            return testType
+        }
+
+        if let controller = sanityTest(self) ?? sanityTest(presentedViewController) {
+            return controller
+        }
+
+        for subcontroller in childViewControllers {
+            guard let subcontroller: T = subcontroller.findChildController(test) else { continue }
+            return subcontroller
+        }
+
+        return nil
+    }
+
+    var topMostViewController: UIViewController {
+        if let presented = presentedViewController {
+            return presented.topMostViewController
+        }
+        return findTopMostViewController(self)
     }
 
 }

@@ -57,9 +57,9 @@ class BlockUserModalScreen: View, BlockUserModalScreenProtocol {
     }
 
     override func setText() {
-        muteButton.setTitle(InterfaceString.Relationship.MuteButton, for: .normal)
-        blockButton.setTitle(InterfaceString.Relationship.BlockButton, for: .normal)
-        flagButton.setTitle(InterfaceString.Relationship.FlagButton, for: .normal)
+        muteButton.title = InterfaceString.Relationship.MuteButton
+        blockButton.title = InterfaceString.Relationship.BlockButton
+        flagButton.title = InterfaceString.Relationship.FlagButton
     }
 
     override func arrange() {
@@ -101,10 +101,10 @@ extension BlockUserModalScreen {
         resetButtons()
         switch relationshipPriority {
         case .mute:
-            muteButton.setTitle(InterfaceString.Relationship.UnmuteButton, for: .normal)
+            muteButton.title = InterfaceString.Relationship.UnmuteButton
             muteButton.isSelected = true
         case .block:
-            blockButton.setTitle(InterfaceString.Relationship.UnblockButton, for: .normal)
+            blockButton.title = InterfaceString.Relationship.UnblockButton
             blockButton.isSelected = true
         default:
             break
@@ -112,8 +112,8 @@ extension BlockUserModalScreen {
     }
 
     private func resetButtons() {
-        muteButton.setTitle(InterfaceString.Relationship.MuteButton, for: .normal)
-        blockButton.setTitle(InterfaceString.Relationship.BlockButton, for: .normal)
+        muteButton.title = InterfaceString.Relationship.MuteButton
+        blockButton.title = InterfaceString.Relationship.BlockButton
         muteButton.isSelected = false
         blockButton.isSelected = false
     }

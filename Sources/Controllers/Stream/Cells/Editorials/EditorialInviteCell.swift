@@ -97,7 +97,7 @@ class EditorialInviteCell: EditorialCell {
         textBg.backgroundColor = .white
         textView.isEditable = true
         submitButton.isEnabled = false
-        submitButton.setTitle(InterfaceString.Editorials.SubmitInvite, for: .normal)
+        submitButton.title = InterfaceString.Editorials.SubmitInvite
     }
 
     override func arrange() {

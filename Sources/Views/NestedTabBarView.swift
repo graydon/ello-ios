@@ -21,12 +21,12 @@ class NestedTabBarView: View {
 
         init(title: String? = nil) {
             button.addSubview(line)
-            button.setTitle(title, for: .normal)
+            button.title = title
         }
 
         var title: String? {
             get { return button.title(for: .normal) }
-            set { button.setTitle(newValue, for: .normal) }
+            set { button.title = newValue }
         }
 
         func addTarget(_ target: Any?, action: Selector) {

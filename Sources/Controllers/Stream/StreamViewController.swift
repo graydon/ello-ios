@@ -224,6 +224,23 @@ final class StreamViewController: BaseElloViewController {
         peformDataDelta(delta)
     }
 
+    func scrollDownOnePage() {
+        guard
+            !scrollToPaginateGuard,
+            collectionView.contentSize.height > collectionView.frame.height
+        else { return }
+
+        let contentHeight = collectionView.frame.height - collectionView.contentInset.top - collectionView.contentInset.bottom
+        var contentOffset = collectionView.contentOffset.y + contentHeight
+        contentOffset = min(contentOffset, collectionView.contentSize.height - contentHeight)
+        if contentOffset != collectionView.contentOffset.y {
+            collectionView.setContentOffset(CGPoint(x: 0, y: contentOffset), animated: true)
+            scrollToPaginateGuard = true
+            scrollViewDidScroll(collectionView)
+            scrollToPaginateGuard = false
+        }
+    }
+
     func scrollToTop(animated: Bool) {
         collectionView.setContentOffset(CGPoint(x: 0, y: -contentInset.top), animated: animated)
     }
@@ -1113,7 +1130,7 @@ extension StreamViewController: UIScrollViewDelegate {
         streamViewDelegate?.streamViewDidScroll(scrollView: scrollView)
 
         if scrollToPaginateGuard {
-            self.maybeLoadNextPage(scrollView: scrollView)
+            maybeLoadNextPage(scrollView: scrollView)
         }
     }
 
@@ -1124,6 +1141,9 @@ extension StreamViewController: UIScrollViewDelegate {
 
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate: Bool) {
         streamViewDelegate?.streamViewDidEndDragging(scrollView: scrollView, willDecelerate: willDecelerate)
+        if !willDecelerate {
+            scrollViewDidEndDecelerating(scrollView)
+        }
     }
 
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {

@@ -51,7 +51,7 @@ class ProfileCategoriesScreen: Screen, ProfileCategoriesProtocol {
         textView.attributedText = NSAttributedString(featuredIn: categories)
         textView.sizeToFit()
 
-        learnMoreButton.setTitle(InterfaceString.Badges.LearnMore, for: .normal)
+        learnMoreButton.title = InterfaceString.Badges.LearnMore
     }
 
     override func arrange() {

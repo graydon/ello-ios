@@ -12,9 +12,15 @@ class StreamSelectionCellPresenter {
     {
         guard
             let cell = cell as? StreamSelectionCell,
-            case let .category(_, stream) = streamKind
+            case let .category(selection, stream) = streamKind
         else { return }
 
+        switch selection {
+        case .all:
+            cell.streams = [.featured, .trending, .recent]
+        default:
+            cell.streams = [.featured, .trending]
+        }
         cell.selectedStream = stream
     }
 }

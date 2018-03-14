@@ -95,7 +95,7 @@ class JoinScreen: CredentialsScreen {
 
     override func setText() {
         titleLabel.text = InterfaceString.Startup.SignUp
-        continueButton.setTitle(InterfaceString.Join.Discover, for: .normal)
+        continueButton.title = InterfaceString.Join.Discover
         emailField.placeholder = InterfaceString.Join.EmailPlaceholder
         usernameField.placeholder = InterfaceString.Join.UsernamePlaceholder
         passwordField.placeholder = InterfaceString.Join.PasswordPlaceholder

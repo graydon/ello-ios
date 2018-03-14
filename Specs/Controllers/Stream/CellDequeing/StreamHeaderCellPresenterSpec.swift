@@ -39,7 +39,7 @@ class StreamHeaderCellPresenterSpec: QuickSpec {
                     expect(cell.timeStamp) == "17m"
                 }
                 it("sets usernameButton title") {
-                    cell.specs().usernameButton.setTitle("", for: .normal)
+                    cell.specs().usernameButton.title = ""
                     StreamHeaderCellPresenter.configure(cell, streamCellItem: item, streamKind: .following, indexPath: IndexPath(item: 0, section: 0), currentUser: currentUser)
                     expect(cell.specs().usernameButton.currentTitle) == "@ello"
                 }
