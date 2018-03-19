@@ -22,6 +22,13 @@ class DynamicSettingCell: TableViewCell {
         get { return toggleButton.isSelected }
         set { toggleButton.isSelected = newValue }
     }
+    var toggleTitle: String? {
+        get { return toggleButton.title }
+        set {
+            toggleButton.setTitle(newValue, for: .selected)
+            toggleButton.setTitle(newValue, for: .normal)
+        }
+    }
     var isEnabled: Bool {
         get { return toggleButton.isEnabled }
         set { toggleButton.isEnabled = newValue }
@@ -91,6 +98,8 @@ class DynamicSettingCell: TableViewCell {
         titleLabel.text = nil
         infoLabel.text = nil
         toggleButton.isEnabled = true
+        toggleButton.setTitle(InterfaceString.Yes, for: .selected)
+        toggleButton.setTitle(InterfaceString.No, for: .normal)
     }
 
     @objc

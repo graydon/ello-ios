@@ -101,9 +101,10 @@ final class CategoryViewController: StreamableViewController {
 
     override func loadView() {
         let screen = CategoryScreen(usage: usage)
-        screen.isGridView = StreamKind.categories.isGridView
         screen.delegate = self
         screen.showEditButton = currentUser != nil
+        screen.isGridView = generator.streamKind.isGridView
+        screen.setupNavBar(back: showBackButton, animated: false)
 
         view = screen
         viewContainer = screen.streamContainer
@@ -111,8 +112,6 @@ final class CategoryViewController: StreamableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        screen.setupNavBar(back: showBackButton, animated: false)
 
         ElloHUD.showLoadingHudInView(streamViewController.view)
 

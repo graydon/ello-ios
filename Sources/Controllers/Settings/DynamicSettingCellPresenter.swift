@@ -29,5 +29,9 @@ struct DynamicSettingCellPresenter {
         cell.info = setting.info
         cell.value = currentUser.propertyForSettingsKey(key: setting.key)
         cell.isEnabled = isVisible(setting: setting, currentUser: currentUser)
+
+        if setting == DynamicSetting.accountDeletionSetting {
+            cell.toggleTitle = InterfaceString.Delete
+        }
     }
 }
