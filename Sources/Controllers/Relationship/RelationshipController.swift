@@ -16,12 +16,6 @@ enum RelationshipRequestStatus: String {
 }
 
 @objc
-protocol RelationshipControllerResponder: class {
-    func shouldSubmitRelationship(_ userId: String, relationshipPriority: RelationshipPriorityWrapper) -> Bool
-    func relationshipChanged(_ userId: String, status: RelationshipRequestStatusWrapper, relationship: Relationship?)
-}
-
-@objc
 protocol RelationshipResponder: class {
     func relationshipTapped(_ userId: String, prev prevRelationshipPriority: RelationshipPriorityWrapper, relationshipPriority: RelationshipPriorityWrapper, complete: @escaping RelationshipChangeCompletion)
     func launchBlockModal(_ userId: String, userAtName: String, relationshipPriority: RelationshipPriorityWrapper, changeClosure: @escaping RelationshipChangeClosure)
@@ -31,6 +25,8 @@ protocol RelationshipResponder: class {
 class RelationshipController: UIResponder {
     var currentUser: User?
     var responderChainable: ResponderChainableController?
+
+    override var canBecomeFirstResponder: Bool { return true }
 
     override var next: UIResponder? {
         return responderChainable?.next()
@@ -52,13 +48,6 @@ extension RelationshipController: RelationshipResponder {
             return
         }
         Tracker.shared.relationshipButtonTapped(relationshipPriority.priority, userId: userId)
-        let responder = self.target(forAction: #selector(RelationshipControllerResponder.shouldSubmitRelationship(_:relationshipPriority:)), withSender: self) as? RelationshipControllerResponder
-        if let shouldSubmit = responder?.shouldSubmitRelationship(userId, relationshipPriority: relationshipPriority), !shouldSubmit {
-            let now = Globals.now
-            let relationship = Relationship(id: UUID().uuidString, createdAt: now, ownerId: "", subjectId: userId)
-            complete(RelationshipRequestStatusWrapper(status: .success), relationship, true)
-            return
-        }
 
         if let currentUserId = currentUser?.id {
             self.updateRelationship(currentUserId, userId: userId, prev: prevRelationshipPriority, relationshipPriority: relationshipPriority, complete: complete)
@@ -83,16 +72,13 @@ extension RelationshipController: RelationshipResponder {
         relationshipPriority newRelationshipPriority: RelationshipPriorityWrapper,
         complete: @escaping RelationshipChangeCompletion)
     {
-        let responder: RelationshipControllerResponder? = self.findResponder()
         let (optimisticRelationship, promise) = RelationshipService().updateRelationship(currentUserId: currentUserId, userId: userId, relationshipPriority: newRelationshipPriority.priority)
         if let relationship = optimisticRelationship {
             complete(RelationshipRequestStatusWrapper(status: .success), relationship, false)
-            responder?.relationshipChanged(userId, status: RelationshipRequestStatusWrapper(status: .success), relationship: relationship)
         }
 
         promise.then { relationship -> Void in
             complete(RelationshipRequestStatusWrapper(status: .success), relationship, true)
-            responder?.relationshipChanged(userId, status: RelationshipRequestStatusWrapper(status: .success), relationship: relationship)
 
             if let relationship = relationship {
                 if let owner = relationship.owner {
@@ -120,11 +106,7 @@ extension RelationshipController: RelationshipResponder {
             }
         }
         .catch { [weak self] _ in
-            guard let `self` = self else { return }
-
             complete(RelationshipRequestStatusWrapper(status: .failure), nil, true)
-            let responder: RelationshipControllerResponder? = self.findResponder()
-            responder?.relationshipChanged(userId, status: RelationshipRequestStatusWrapper(status: .failure), relationship: nil)
         }
     }
 }

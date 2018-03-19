@@ -468,9 +468,9 @@ class StreamDataSource: ElloDataSource {
         var indexPaths = [IndexPath]()
         var changedItems = [StreamCellItem]()
         for (index, item) in visibleCellItems.enumerated() {
-            guard item.type.showsUserRelationship,
-                let itemUserId = (item.jsonable as? User)?.id ?? (item.jsonable as? Authorable)?.author?.id,
-                itemUserId == user.id
+            guard
+                item.type.showsUserRelationship,
+                (item.jsonable as? User)?.id == user.id || (item.jsonable as? Authorable)?.author?.id == user.id || (item.jsonable as? Post)?.repostAuthor?.id == user.id
             else { continue}
 
             indexPaths.append(IndexPath(item: index, section: 0))
@@ -480,27 +480,18 @@ class StreamDataSource: ElloDataSource {
         guard changedItems.count > 0 else { return }
 
         for item in changedItems {
-            if let oldUser = item.jsonable as? User {
-                // relationship changes
-                oldUser.relationshipPriority = user.relationshipPriority
-                oldUser.followersCount = user.followersCount
-                oldUser.followingCount = user.followingCount
-            }
+            let possibleUsers = [
+                item.jsonable as? User,
+                (item.jsonable as? Authorable)?.author,
+                (item.jsonable as? Post)?.repostAuthor,
+            ]
 
-            if let authorable = item.jsonable as? Authorable,
-                let author = authorable.author, author.id == user.id
-            {
-                author.relationshipPriority = user.relationshipPriority
-                author.followersCount = user.followersCount
-                author.followingCount = user.followingCount
-            }
-
-            if let post = item.jsonable as? Post,
-                let repostAuthor = post.repostAuthor, repostAuthor.id == user.id
-            {
-                repostAuthor.relationshipPriority = user.relationshipPriority
-                repostAuthor.followersCount = user.followersCount
-                repostAuthor.followingCount = user.followingCount
+            for foundUser in possibleUsers {
+                guard let foundUser = foundUser, foundUser.id == user.id else { continue }
+                foundUser.relationshipPriority = user.relationshipPriority
+                foundUser.followersCount = user.followersCount
+                foundUser.followingCount = user.followingCount
+                ElloLinkedStore.shared.saveObject(foundUser, id: foundUser.id, type: .usersType)
             }
         }
 
