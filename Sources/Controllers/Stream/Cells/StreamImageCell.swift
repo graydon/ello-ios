@@ -35,9 +35,12 @@ class StreamImageCell: StreamRegionableCell {
 
     @IBOutlet weak var imageView: FLAnimatedImageView!
     @IBOutlet weak var imageButton: UIView!
+
+    // optional because the StreamEmbedCell doesn't have them:
     @IBOutlet weak var buyButton: UIButton?
     @IBOutlet weak var buyButtonGreen: UIView?
     @IBOutlet weak var buyButtonWidthConstraint: NSLayoutConstraint?
+
     @IBOutlet weak var circle: PulsingCircle!
     @IBOutlet weak var failImage: UIImageView!
     @IBOutlet weak var failBackgroundView: UIView!
