@@ -141,7 +141,7 @@ extension ArtistInviteAdminController: StreamDestination {
     func replacePlaceholder(type: StreamCellType.PlaceholderType, items: [StreamCellItem], completion: @escaping Block) {
         streamViewController.replacePlaceholder(type: type, items: items, completion: completion)
 
-        if type == .artistInvites {
+        if type == .streamItems {
             streamViewController.doneLoading()
         }
     }
