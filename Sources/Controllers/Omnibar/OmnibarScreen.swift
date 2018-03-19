@@ -237,7 +237,7 @@ class OmnibarScreen: Screen, OmnibarScreenProtocol {
         buyButton.contentEdgeInsets = UIEdgeInsets(top: 4, left: 7, bottom: 4, right: 7)
         buyButton.adjustsImageWhenDisabled = false
         buyButton.adjustsImageWhenHighlighted = false
-        buyButton.setImages(.addBuyButton)
+        buyButton.setImages(.addBuyButton, style: .selected)
         buyButton.setImage(.addBuyButton, imageStyle: .disabled, for: .disabled)
         buyButton.isEnabled = false
         buyButton.addTarget(self, action: #selector(buyButtonTapped), for: .touchUpInside)
@@ -245,6 +245,7 @@ class OmnibarScreen: Screen, OmnibarScreenProtocol {
         reorderButton.contentEdgeInsets = UIEdgeInsets(tops: 4, sides: 9.5)
         reorderButton.setImages(.reorder, style: .selected)
         reorderButton.addTarget(self, action: #selector(toggleReorderingTable), for: .touchUpInside)
+        reorderButton.isEnabled = false
 
         addImageButton.contentEdgeInsets = UIEdgeInsets(tops: 4, sides: 3.5)
         addImageButton.setImages(.photoPicker, style: .selected)
@@ -600,7 +601,7 @@ class OmnibarScreen: Screen, OmnibarScreenProtocol {
         else {
             submitableRegions = convertReorderableRegions(reorderableRegions)
             editableRegions = generateEditableRegions(submitableRegions)
-            reorderButton.setImages(.reorder)
+            reorderButton.setImages(.reorder, style: .selected)
             reorderButton.isSelected = false
         }
 
@@ -694,9 +695,10 @@ class OmnibarScreen: Screen, OmnibarScreenProtocol {
         let canAddBuyButtonLink = !reordering && hasImage()
         buyButton.isEnabled = canAddBuyButtonLink
         buyButton.isHidden = isComment || isArtistInviteSubmission
+        reorderButton.isEnabled = submitableRegions.count > 1
 
         if buyButtonURL == nil {
-            buyButton.setImages(.addBuyButton)
+            buyButton.setImages(.addBuyButton, style: .selected)
         }
         else {
             buyButton.setImages(.setBuyButton)
