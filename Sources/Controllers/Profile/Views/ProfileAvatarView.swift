@@ -18,10 +18,8 @@ class ProfileAvatarView: ProfileBaseView {
     }
 
     var avatarURL: URL? {
-        get { return _avatarURL }
-        set {
-            _avatarURL = newValue
-            avatarImageView.pin_setImage(from: _avatarURL) { _ in
+        didSet {
+            avatarImageView.pin_setImage(from: avatarURL) { _ in
                 // we may need to notify the cell of this
                 // previously we hid the loader here
             }
@@ -30,7 +28,6 @@ class ProfileAvatarView: ProfileBaseView {
 
     private let avatarImageView = FLAnimatedImageView()
     private let whiteBar = UIView()
-    private var _avatarURL: URL?
 
     var onHeightMismatch: OnHeightMismatch?
 
@@ -78,6 +75,6 @@ extension ProfileAvatarView {
     func prepareForReuse() {
         avatarImageView.pin_cancelImageDownload()
         avatarImageView.image = nil
-        _avatarURL = nil
+        avatarURL = nil
     }
 }

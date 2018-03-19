@@ -198,8 +198,7 @@ final class Asset: JSONAble {
         ]
         for (name, type) in attachments {
             guard let attachment = node[name] as? [String: Any],
-                attachment["url"] as? String != nil,
-                attachment["metadata"] as? [String: Any] != nil
+                attachment["url"] as? String != nil
             else { continue }
             asset.replace(attachmentType: type, with: Attachment.fromJSON(attachment))
         }
