@@ -3,6 +3,7 @@
 //
 
 protocol SettingsGeneratorDelegate: class {
+    func currentUserReloaded(_ currentUser: User)
     func dynamicSettingsLoaded(_ settings: [DynamicSettingCategory])
     func categoriesLoaded(_ categories: [Category])
 }
@@ -23,7 +24,6 @@ protocol SettingsScreenDelegate: class {
 
 protocol SettingsScreenProtocol: class {
     var delegate: SettingsScreenDelegate? { get set }
-    func updateDynamicSettings(_ settings: [DynamicSettingCategory], blockCount: Int, mutedCount: Int)
     var categoriesEnabled: Bool { get set }
     var username: String? { get set }
     var email: String? { get set }
@@ -40,6 +40,8 @@ protocol SettingsScreenProtocol: class {
     func showError(_ error: String?)
     func setImage(_ property: Profile.ImageProperty, url: URL?)
     func setImage(_ property: Profile.ImageProperty, image: UIImage?)
+    func updateDynamicSettings(_ settings: [DynamicSettingCategory], blockCount: Int, mutedCount: Int)
+    func updateAllSettings(blockCount: Int, mutedCount: Int)
 }
 
 protocol SettingsCredentialsScreenDelegate: class {

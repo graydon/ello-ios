@@ -25,9 +25,11 @@ class SettingsViewController: BaseElloViewController {
         }
     }
 
-    var keyboardWillShowObserver: NotificationObserver?
-    var keyboardDidHideObserver: NotificationObserver?
-    var keyboardWillHideObserver: NotificationObserver?
+    private var keyboardWillShowObserver: NotificationObserver?
+    private var keyboardDidHideObserver: NotificationObserver?
+    private var keyboardWillHideObserver: NotificationObserver?
+    private var blockedCountChangedNotification: NotificationObserver?
+    private var mutedCountChangedNotification: NotificationObserver?
 
     init(currentUser: User) {
         generator = SettingsGenerator(currentUser: currentUser)
@@ -46,6 +48,11 @@ class SettingsViewController: BaseElloViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    deinit {
+        blockedCountChangedNotification?.removeObserver()
+        mutedCountChangedNotification?.removeObserver()
+    }
+
     override func loadView() {
         let screen = SettingsScreen()
         screen.delegate = self
@@ -59,13 +66,21 @@ class SettingsViewController: BaseElloViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        generator.loadSettings()
-        generator.loadCategories()
+        generator.load(reload: false)
 
         autoCompleteVC.delegate = self
         autoCompleteVC.view.alpha = 0
 
         updateScreenFromUser()
+
+        blockedCountChangedNotification = NotificationObserver(notification: BlockedCountChangedNotification) { [unowned self] userId, delta in
+            self.blockedMutedCountChanged(deltaBlocked: delta, deltaMuted: 0)
+        }
+        mutedCountChangedNotification = NotificationObserver(notification: MutedCountChangedNotification) { [unowned self] userId, delta in
+            self.blockedMutedCountChanged(deltaBlocked: 0, deltaMuted: delta)
+        }
+
+        ElloHUD.showLoadingHudInView(self.view)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -202,6 +217,11 @@ class SettingsViewController: BaseElloViewController {
         else if let imageURL = currentUser.avatar?.large?.url {
             screen.setImage(.avatar, url: imageURL)
         }
+
+        screen.updateAllSettings(
+            blockCount: profile.blockedCount,
+            mutedCount: profile.mutedCount
+            )
     }
 }
 
@@ -350,6 +370,21 @@ extension SettingsViewController {
 }
 
 extension SettingsViewController: SettingsGeneratorDelegate {
+    func blockedMutedCountChanged(deltaBlocked: Int, deltaMuted: Int) {
+        currentUser?.profile?.blockedCount += deltaBlocked
+        currentUser?.profile?.mutedCount += deltaMuted
+
+        screen.updateAllSettings(
+            blockCount: currentUser?.profile?.blockedCount ?? 0,
+            mutedCount: currentUser?.profile?.mutedCount ?? 0
+            )
+    }
+
+    func currentUserReloaded(_ currentUser: User) {
+        self.appViewController?.currentUser = currentUser
+        ElloHUD.hideLoadingHudInView(self.view)
+    }
+
     func dynamicSettingsLoaded(_ settings: [DynamicSettingCategory]) {
         screen.updateDynamicSettings(settings,
             blockCount: currentUser?.profile?.blockedCount ?? 0,

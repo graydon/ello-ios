@@ -26,6 +26,8 @@ class SettingsScreen: Screen, SettingsScreenProtocol {
         categoriesButton?.isEnabled = categoriesEnabled
         categoriesLabel?.style = categoriesEnabled ? .largeBold : .largeBoldGray
     }}
+
+    private var dynamicSettings: [DynamicSettingCategory]?
     private var categoriesButton: UIControl? { didSet {
         categoriesLabel?.style = categoriesEnabled ? .largeBold : .largeBoldGray
     }}
@@ -349,19 +351,12 @@ class SettingsScreen: Screen, SettingsScreenProtocol {
 
 extension SettingsScreen {
     func updateDynamicSettings(_ dynamicSettings: [DynamicSettingCategory], blockCount: Int, mutedCount: Int) {
-        var otherCategories: [DynamicSettingCategory] = []
+        self.dynamicSettings = dynamicSettings
+        updateAllSettings(blockCount: blockCount, mutedCount: mutedCount)
+    }
 
-        if blockCount > 0 {
-            otherCategories.append(DynamicSettingCategory.blockedCategory)
-        }
-
-        if mutedCount > 0 {
-            otherCategories.append(DynamicSettingCategory.mutedCategory)
-        }
-
-        otherCategories.append(DynamicSettingCategory.accountDeletionCategory)
-
-        let allDynamicSettings = [DynamicSettingCategory.creatorTypeCategory] + dynamicSettings + otherCategories
+    func updateAllSettings(blockCount: Int, mutedCount: Int) {
+        guard let dynamicSettings = dynamicSettings else { return }
 
         if dynamicSettingsSpinner.superview != nil {
             dynamicSettingsSpinner.removeFromSuperview()
@@ -372,6 +367,18 @@ extension SettingsScreen {
             button.removeFromSuperview()
         }
         categoriesButton = nil
+
+        var allDynamicSettings = [DynamicSettingCategory.creatorTypeCategory] + dynamicSettings
+
+        if blockCount > 0 {
+            allDynamicSettings.append(DynamicSettingCategory.blockedCategory)
+        }
+
+        if mutedCount > 0 {
+            allDynamicSettings.append(DynamicSettingCategory.mutedCategory)
+        }
+
+        allDynamicSettings.append(DynamicSettingCategory.accountDeletionCategory)
 
         dynamicSettingsButtons = allDynamicSettings.map { settings in
             let button = SettingsScreen.generateSettingsView(settings: settings)
