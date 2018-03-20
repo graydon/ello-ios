@@ -49,7 +49,7 @@ def common_pods
   pod 'MBProgressHUD', '~> 0.9.0'
   pod 'SVGKit', git: 'https://github.com/ello/SVGKit'
   pod 'FLAnimatedImage', '~> 1.0'
-  pod 'YapDatabase', '2.8.1'
+  pod 'YapDatabase', '~> 3.0'
   pod 'Alamofire', '~> 4.0'
   pod 'Moya', '8.0.3'
   pod 'KeychainAccess', '~> 3.0'
