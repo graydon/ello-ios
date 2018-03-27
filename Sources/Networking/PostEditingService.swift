@@ -105,7 +105,7 @@ class PostEditingService {
         var params: [String: Any]  = ["body": body]
 
         if let categoryId = categoryId {
-            params["category_id"] = categoryId
+            params["category_ids"] = [categoryId]
         }
 
         if let artistInviteId = artistInviteId {
