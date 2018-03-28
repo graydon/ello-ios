@@ -122,6 +122,14 @@ extension User: Stubbable {
         }
 
         ElloLinkedStore.shared.setObject(user, forKey: user.id, type: .usersType)
+
+        if (values["hasProfileData"] as? Bool) == true {
+            user.postsCount = user.postsCount ?? 0
+            user.lovesCount = user.lovesCount ?? 0
+            user.followingCount = user.followingCount ?? 0
+            user.followersCount = user.followersCount ?? "0"
+            user.totalViewsCount = user.totalViewsCount ?? 0
+        }
         return user
     }
 }

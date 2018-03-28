@@ -50,7 +50,10 @@ class ProfileViewControllerSpec: QuickSpec {
                 var screen: ProfileScreen!
 
                 beforeEach {
-                    currentUser = User.stub(["id": "42"])
+                    currentUser = User.stub([
+                        "id": "42",
+                        "hasProfileData": true,
+                        ])
                     subject = ProfileViewController(currentUser: currentUser)
                     subject.currentUser = currentUser
                     let nav = UINavigationController(rootViewController: UIViewController())
@@ -77,9 +80,11 @@ class ProfileViewControllerSpec: QuickSpec {
                     for (isCollaborateable, isHireable) in expectations {
                         context("user \(isCollaborateable ? "is" : "is not") collaborateable and \(isHireable ? "is" : "is not") hireable") {
                             beforeEach {
-                                currentUser = User.stub(["id": "42", "isCollaborateable": isCollaborateable, "isHireable": isHireable])
+                                currentUser = User.stub([
+                                    "id": "42", "isCollaborateable": isCollaborateable, "isHireable": isHireable,
+                                    "hasProfileData": true
+                                    ])
                                 subject = ProfileViewController(currentUser: currentUser)
-                                subject.currentUser = currentUser
                                 showController(subject)
                                 screen = subject.view as! ProfileScreen
                             }

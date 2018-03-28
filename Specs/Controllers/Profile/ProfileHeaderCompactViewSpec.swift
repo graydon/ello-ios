@@ -47,6 +47,7 @@ class ProfileHeaderCompactViewSpec: QuickSpec {
                         "totalViewsCount": hasTotal ? 1 : 0,
                         "externalLinksList": linksHeight > 0 ? [["url": "http://google.com", "text": "google"]] : [],
                     ])
+                    expect(user.hasProfileData) == true
 
                     if hasBadges {
                         user.badges = [Badge.lookup(slug: "featured")!, Badge.lookup(slug: "community")!, Badge.lookup(slug: "experimental")!]

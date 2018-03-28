@@ -50,6 +50,9 @@ final class User: JSONAble {
     var onboardingVersion: Int?
     var totalViewsCount: Int?
     var location: String?
+    var hasProfileData: Bool {
+        return postsCount != nil && lovesCount != nil && followingCount != nil && followersCount != nil && totalViewsCount != nil
+    }
 
     var categories: [Category]? { return getLinkArray("categories") as? [Category] }
     var hasSubscribedCategory: Bool { return followedCategoryIds.count > 0 }
