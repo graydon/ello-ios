@@ -82,12 +82,15 @@ final class StreamViewController: BaseElloViewController {
         return layout.columnCount
     }
 
-    private var actuallyIsPullToRefreshEnabled: Bool { return isPullToRefreshEnabled && internalIsPullToRefreshEnabled }
-    private var internalIsPullToRefreshEnabled: Bool = false {
-        didSet { pullToRefreshView?.isVisible = actuallyIsPullToRefreshEnabled }
+    private var externalIsPullToRefreshEnabled: Bool = true {
+        didSet { pullToRefreshView?.isVisible = isPullToRefreshEnabled }
     }
-    var isPullToRefreshEnabled: Bool = true {
-        didSet { pullToRefreshView?.isVisible = actuallyIsPullToRefreshEnabled }
+    private var internalIsPullToRefreshEnabled: Bool = false {
+        didSet { pullToRefreshView?.isVisible = isPullToRefreshEnabled }
+    }
+    var isPullToRefreshEnabled: Bool {
+        get { return externalIsPullToRefreshEnabled && internalIsPullToRefreshEnabled }
+        set { externalIsPullToRefreshEnabled = newValue }
     }
     var pullToRefreshView: SSPullToRefreshView?
 
@@ -187,7 +190,7 @@ final class StreamViewController: BaseElloViewController {
 
         pullToRefreshView = SSPullToRefreshView(scrollView: collectionView, delegate: self)
         pullToRefreshView?.contentView = ElloPullToRefreshView(frame: .zero)
-        pullToRefreshView?.isVisible = actuallyIsPullToRefreshEnabled
+        pullToRefreshView?.isVisible = isPullToRefreshEnabled
 
         setupCollectionView()
         addNotificationObservers()
@@ -364,6 +367,7 @@ final class StreamViewController: BaseElloViewController {
             initialLoadClosure()
         }
         else {
+            isPagingEnabled = false
             let localToken = loadingToken.resetInitialPageLoadingToken()
             StreamService().loadStream(streamKind: streamKind)
                 .then { response -> Void in
@@ -635,7 +639,7 @@ extension StreamViewController: SimpleStreamResponder {
 extension StreamViewController: SSPullToRefreshViewDelegate {
 
     func pull(toRefreshViewShouldStartLoading view: SSPullToRefreshView!) -> Bool {
-        return actuallyIsPullToRefreshEnabled
+        return isPullToRefreshEnabled
     }
 
     func pull(_ view: SSPullToRefreshView, didTransitionTo toState: SSPullToRefreshViewState, from fromState: SSPullToRefreshViewState, animated: Bool) {
@@ -1309,8 +1313,11 @@ extension StreamViewController {
         case .reload:
             collectionViewDataSource.visibleCellItems = job.newItems
 
+            let prevScrollToPaginateGuard = scrollToPaginateGuard
+            scrollToPaginateGuard = false
             collectionView.reloadData()
             collectionView.layoutIfNeeded()
+            scrollToPaginateGuard = prevScrollToPaginateGuard
 
             job.resolve()
         case let .delta(delta):
