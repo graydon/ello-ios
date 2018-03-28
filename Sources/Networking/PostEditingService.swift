@@ -107,6 +107,9 @@ class PostEditingService {
         if let categoryId = categoryId {
             params["category_ids"] = [categoryId]
         }
+        else {
+            params["category_ids"] = []
+        }
 
         if let artistInviteId = artistInviteId {
             params["artist_invite_id"] = artistInviteId
