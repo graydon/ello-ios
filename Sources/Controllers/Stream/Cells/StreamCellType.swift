@@ -64,7 +64,6 @@ enum StreamCellType: Equatable {
         case streamItems
         case promotionalHeader
 
-        case streamSelection
         case peopleToFollow
 
         case announcements

@@ -118,7 +118,7 @@ class StreamDataSourceSpec: QuickSpec {
                         StreamCellItem(type: .streamHeader),
                         StreamCellItem(type: .streamHeader),
                     ]
-                    subject.replacePlaceholder(type: .streamSelection, items: newItems)
+                    subject.replacePlaceholder(type: .peopleToFollow, items: newItems)
 
                     expect(subject.allStreamCellItems.count) == 1
                     expect(subject.allStreamCellItems[0].type) == StreamCellType.placeholder
@@ -242,7 +242,7 @@ class StreamDataSourceSpec: QuickSpec {
                     let testItem = StreamCellItem(type: .placeholder)
                     testItem.placeholderType = .postHeader
                     let testItem2 = StreamCellItem(type: .placeholder)
-                    testItem2.placeholderType = .streamSelection
+                    testItem2.placeholderType = .peopleToFollow
 
                     subject.appendStreamCellItems([testItem])
 

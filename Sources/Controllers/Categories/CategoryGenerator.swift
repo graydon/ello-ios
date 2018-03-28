@@ -129,7 +129,6 @@ extension CategoryGenerator {
     private func setPlaceHolders() {
         destination?.setPlaceholders(items: [
             StreamCellItem(type: .placeholder, placeholderType: .promotionalHeader),
-            StreamCellItem(type: .placeholder, placeholderType: .streamSelection),
             StreamCellItem(type: .placeholder, placeholderType: .streamItems)
         ])
     }
@@ -205,23 +204,23 @@ extension CategoryGenerator {
                 self.posts = posts
                 var items = self.parse(jsonables: posts)
                 let isPagingEnabled = items.count > 0
+                let metaItem = StreamCellItem(type: .streamSelection)
                 if items.count == 0 {
-                    items = [StreamCellItem(type: .emptyStream(height: 182))]
+                    self.destination?.replacePlaceholder(type: .streamItems, items: [metaItem, StreamCellItem(type: .emptyStream(height: 182))])
+                    self.destination?.isPagingEnabled = isPagingEnabled
+                    displayPostsOperation.run()
                 }
+                else {
+                    displayPostsOperation.run { inForeground {
+                        if isPagingEnabled {
+                            items.insert(metaItem, at: 0)
+                        }
 
-                displayPostsOperation.run { inForeground {
-                    if isPagingEnabled && !reload {
-                        let metaItem = StreamCellItem(type: .streamSelection)
-                        self.destination?.replacePlaceholder(type: .streamSelection, items: [metaItem])
-                    }
-                    else if !isPagingEnabled {
-                        self.destination?.replacePlaceholder(type: .streamSelection, items: [])
-                    }
-
-                    self.destination?.replacePlaceholder(type: .streamItems, items: items) {
-                        self.destination?.isPagingEnabled = isPagingEnabled
-                    }
-                } }
+                        self.destination?.replacePlaceholder(type: .streamItems, items: items) {
+                            self.destination?.isPagingEnabled = isPagingEnabled
+                        }
+                    } }
+                }
             }
             .catch { _ in
                 self.destination?.primaryJSONAbleNotFound()

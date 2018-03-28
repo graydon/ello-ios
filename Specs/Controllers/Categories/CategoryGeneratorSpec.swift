@@ -33,7 +33,7 @@ class CategoryGeneratorSpec: QuickSpec {
 
                 it("sets 2 placeholders") {
                     subject.load(reloadPosts: false, reloadHeader: false, reloadCategories: false)
-                    expect(destination.placeholderItems.count) == 3
+                    expect(destination.placeholderItems.count) == 2
                 }
 
                 it("replaces only CatgoryHeader and CategoryPosts") {
