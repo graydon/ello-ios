@@ -239,12 +239,15 @@ class StreamDataSource: ElloDataSource {
         return nil
     }
 
-    func clientSideLoveInsertIndexPath() -> IndexPath? {
+    func clientSideLoveInsertIndexPath(post: Post) -> IndexPath? {
+        guard indexPath(where: { ($0.jsonable as? Post)?.id == post.id }) == nil else { return nil }
+
         switch streamKind {
         case let .simpleStream(endpoint, _):
             switch endpoint {
-            case .loves:
-                return IndexPath(item: 1, section: 0)
+            case let .loves(userId):
+                guard currentUser?.id == userId else { return nil }
+                return IndexPath(item: 0, section: 0)
             default:
                 break
             }
@@ -316,8 +319,8 @@ class StreamDataSource: ElloDataSource {
                 else if jsonable is Post {
                     indexPath = clientSidePostInsertIndexPath()
                 }
-                else if jsonable is Love {
-                    indexPath = clientSideLoveInsertIndexPath()
+                else if let love = jsonable as? Love, let post = love.post {
+                    indexPath = clientSideLoveInsertIndexPath(post: post)
                 }
 
                 if let indexPath = indexPath {

@@ -554,26 +554,29 @@ class StreamDataSourceSpec: QuickSpec {
                 }
             }
 
-
             describe("clientSidePostInsertIndexPath()") {
-                let user = User.stub(["id": "12345"])
+                var user: User!
                 let zero = IndexPath(item: 0, section: 0)
                 let two = IndexPath(item: 2, section: 0)
+                let userId = "12345"
+                beforeEach {
+                    user = User.stub(["id": userId])
+                }
+
                 let tests: [(IndexPath?, StreamKind)] = [
                     (nil, .category(.all, .featured)),
                     (zero, .following),
-                    (nil, .simpleStream(endpoint: ElloAPI.loves(userId: "12345"), title: "NA")),
+                    (nil, .simpleStream(endpoint: .loves(userId: userId), title: "NA")),
                     (nil, .notifications(category: "")),
                     (nil, .postDetail(postParam: "param")),
-                    (nil, .unknown),
                     (nil, .userStream(userParam: "NA")),
-                    (nil, .simpleStream(endpoint: ElloAPI.searchForPosts(terms: "meat"), title: "meat")),
-                    (nil, .simpleStream(endpoint: ElloAPI.userStreamFollowers(userId: "54321"), title: "")),
-                    (two, .userStream(userParam: user.id)),
-                    (nil, .simpleStream(endpoint: ElloAPI.userStream(userParam: "54321"), title: "")),
+                    (nil, .simpleStream(endpoint: .searchForPosts(terms: "meat"), title: "meat")),
+                    (nil, .simpleStream(endpoint: .userStreamFollowers(userId: "54321"), title: "")),
+                    (two, .userStream(userParam: userId)),
+                    (nil, .simpleStream(endpoint: .userStream(userParam: "54321"), title: "")),
                     ]
                 for (indexPath, streamKind) in tests {
-                    it("is \(String(describing: indexPath)) for \(streamKind)") {
+                    it("is \(indexPath.map { "\($0)" } ?? "nil") for \(streamKind)") {
                         subject.streamKind = streamKind
                         subject.currentUser = user
 
@@ -582,6 +585,44 @@ class StreamDataSourceSpec: QuickSpec {
                         }
                         else {
                             expect(subject.clientSidePostInsertIndexPath()) == indexPath
+                        }
+                    }
+                }
+            }
+
+            describe("clientSideLoveInsertIndexPath(post:)") {
+                var user: User!
+                var post: Post!
+                let zero = IndexPath(item: 0, section: 0)
+                let userId = "12345"
+                beforeEach {
+                    user = User.stub(["id": userId])
+                    post = Post.stub([:])
+                }
+
+                let tests: [(IndexPath?, StreamKind)] = [
+                    (nil, .category(.all, .featured)),
+                    (nil, .following),
+                    (zero, .simpleStream(endpoint: .loves(userId: userId), title: "NA")),
+                    (nil, .simpleStream(endpoint: .loves(userId: "54321"), title: "NA")),
+                    (nil, .notifications(category: "")),
+                    (nil, .postDetail(postParam: "param")),
+                    (nil, .userStream(userParam: "NA")),
+                    (nil, .simpleStream(endpoint: .searchForPosts(terms: "meat"), title: "meat")),
+                    (nil, .simpleStream(endpoint: .userStreamFollowers(userId: "54321"), title: "")),
+                    (nil, .userStream(userParam: userId)),
+                    (nil, .simpleStream(endpoint: .userStream(userParam: "54321"), title: "")),
+                    ]
+                for (indexPath, streamKind) in tests {
+                    it("is \(indexPath.map { "\($0)" } ?? "nil") for \(streamKind)") {
+                        subject.streamKind = streamKind
+                        subject.currentUser = user
+
+                        if indexPath == nil {
+                            expect(subject.clientSideLoveInsertIndexPath(post: post)).to(beNil())
+                        }
+                        else {
+                            expect(subject.clientSideLoveInsertIndexPath(post: post)) == indexPath
                         }
                     }
                 }
@@ -727,7 +768,8 @@ class StreamDataSourceSpec: QuickSpec {
                         context("StreamKind.loves") {
 
                             it("adds the newly loved post") {
-                                subject.streamKind = .simpleStream(endpoint: .loves(userId: "fake-id"), title: "Loves")
+                                subject.currentUser = User.stub(["id": "1"])
+                                subject.streamKind = .simpleStream(endpoint: .loves(userId: "1"), title: "Loves")
                                 let love: Love = stub(["id": "love1", "postId": "post1"])
                                 expect(subject.allStreamCellItems.count) == 20
                                 streamViewController.performDataReload()
