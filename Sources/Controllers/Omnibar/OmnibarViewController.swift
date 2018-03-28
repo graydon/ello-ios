@@ -104,6 +104,27 @@ class OmnibarViewController: BaseElloViewController {
         self.defaultText = defaultText
     }
 
+    override func didSetCurrentUser() {
+        super.didSetCurrentUser()
+
+        if editPost == nil, editComment == nil, parentPostId == nil, self.category == nil,
+            let category = currentUser?.categories?.first
+        {
+            self.category = category
+            if category.tileURL == nil {
+                CategoryService().loadCategory(category.slug)
+                    .then { category -> Void in
+                        guard self.category?.id == category.id else { return }
+                        self.category = category
+                        if self.isViewLoaded {
+                            self.screen.chosenCategory = category
+                        }
+                    }
+                    .ignoreErrors()
+            }
+        }
+    }
+
     func onCommentSuccess(_ listener: @escaping CommentSuccessListener) {
         commentSuccessListener = listener
     }
