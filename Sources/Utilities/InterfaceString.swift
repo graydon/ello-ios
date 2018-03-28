@@ -130,6 +130,7 @@ struct InterfaceString {
         static let Featured: String = NSLocalizedString("Featured", comment: "")
         static let Trending: String = NSLocalizedString("Trending", comment: "")
         static let Recent: String = NSLocalizedString("Recent", comment: "")
+        static let Shop: String = NSLocalizedString("Shop", comment: "")
     }
 
     struct Search {

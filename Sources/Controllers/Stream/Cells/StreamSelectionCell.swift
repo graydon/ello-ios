@@ -18,10 +18,11 @@ class StreamSelectionCell: CollectionViewCell {
             case .featured: tabBar?.select(tab: featuredTab)
             case .trending: tabBar?.select(tab: trendingTab)
             case .recent: tabBar?.select(tab: recentTab)
+            case .shop: tabBar?.select(tab: shopTab)
             }
         }
     }
-    var streams: [DiscoverType] = [.featured, .trending, .recent] {
+    var streams: [DiscoverType] = [.featured, .trending, .recent, .shop] {
         didSet { updateTabs() }
     }
 
@@ -29,6 +30,7 @@ class StreamSelectionCell: CollectionViewCell {
     private var featuredTab: NestedTabBarView.Tab!
     private var trendingTab: NestedTabBarView.Tab!
     private var recentTab: NestedTabBarView.Tab!
+    private var shopTab: NestedTabBarView.Tab!
 
     override func style() {
         backgroundColor = .white
@@ -53,14 +55,19 @@ class StreamSelectionCell: CollectionViewCell {
             case .recent:
                 tab.addTarget(self, action: #selector(recentTapped))
                 recentTab = tab
+            case .shop:
+                tab.addTarget(self, action: #selector(shopTapped))
+                shopTab = tab
             }
             return tab
         }
         for tab in tabs {
             tabBar.addTab(tab)
         }
-        tabBar.select(tab: tabs.first!)
 
+        if let tab = tabs.first {
+            tabBar.select(tab: tab)
+        }
         addSubview(tabBar)
 
         tabBar.snp.makeConstraints { make in
@@ -89,6 +96,13 @@ class StreamSelectionCell: CollectionViewCell {
         tabBar?.select(tab: recentTab)
         let responder: StreamSelectionCellResponder? = findResponder()
         responder?.streamTapped(DiscoverType.recent.slug)
+    }
+
+    @objc
+    func shopTapped() {
+        tabBar?.select(tab: shopTab)
+        let responder: StreamSelectionCellResponder? = findResponder()
+        responder?.streamTapped(DiscoverType.shop.slug)
     }
 
 }
