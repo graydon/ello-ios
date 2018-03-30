@@ -319,3 +319,12 @@ func debounce(_ timeout: TimeInterval) -> ThrottledBlock {
         timer = Timer.scheduledTimer(timeInterval: timeout, target: proc, selector: #selector(Proc.run), userInfo: nil, repeats: false)
     }
 }
+
+@discardableResult
+func every(_ timeout: TimeInterval, _ block: @escaping Block) -> Block {
+    let proc = Proc(block)
+    let timer = Timer.scheduledTimer(timeInterval: timeout, target: proc, selector: #selector(Proc.run), userInfo: nil, repeats: true)
+    return {
+        timer.invalidate()
+    }
+}
