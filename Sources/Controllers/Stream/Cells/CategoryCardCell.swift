@@ -84,19 +84,18 @@ class CategoryCardCell: CollectionViewCell {
     }
 
     override func style() {
+        insetContentView.clipsToBounds = true
         label.isMultiline = true
         label.textAlignment = .center
-
         subscribedCheckbox.isHidden = true
         subscribedCheckbox.setInterfaceImage(.circleCheckLarge, style: .green)
-
+        subscribeButton.isUserInteractionEnabled = false
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         mainContentView.backgroundColor = .black
         mainContentView.alpha = 0.4
         selectedImageView.isHidden = true
         selectedImageView.interfaceImage = .smallCheck
-        insetContentView.clipsToBounds = true
     }
 
     override func arrange() {
