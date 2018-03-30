@@ -9,6 +9,14 @@ struct ProfileStatsPresenter {
         user: User,
         currentUser: User?)
     {
+        guard user.hasProfileData else {
+            view.postsCount = "…"
+            view.followingCount = "…"
+            view.followersCount = "…"
+            view.lovesCount = "…"
+            return
+        }
+
         view.postsCount = (user.postsCount ?? 0).numberToHuman(rounding: 1, showZero: true)
         let followingCount = user.followingCount ?? 0
         view.followingCount = followingCount.numberToHuman(rounding: 1, showZero: true)

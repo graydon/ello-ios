@@ -12,7 +12,13 @@ class ProfileTotalCountPresenterSpec: QuickSpec {
         describe("ProfileTotalCountPresenter") {
 
             it("assigns posts count") {
-                let user = User.stub(["totalViewsCount": 2_401_000])
+                let user = User.stub([
+                    "postsCount": 1,
+                    "followingCount": 1,
+                    "followersCount": 1,
+                    "lovesCount": 1,
+                    "totalViewsCount": 2_401_000,
+                    ])
                 let view = ProfileTotalCountView()
                 ProfileTotalCountPresenter.configure(view, user: user, currentUser: nil)
 

@@ -11,6 +11,7 @@ struct ProfileTotalCountSizeCalculator {
         let (promise, resolve, _) = Promise<CGFloat>.pending()
         guard
             let user = item.jsonable as? User,
+            user.hasProfileData,
             let count = user.totalViewsCount,
             count > 0
         else {

@@ -131,7 +131,7 @@ extension ProfileGenerator {
     }
 
     private func loadUser(_ doneOperation: AsyncOperation, reload: Bool) {
-        guard !doneOperation.isFinished || reload else { return }
+        guard !doneOperation.isFinished || user?.hasProfileData == false || reload else { return }
 
         // load the user with no posts
         UserService().loadUser(streamKind.endpoint)

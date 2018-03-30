@@ -68,6 +68,7 @@ final class ProfileViewController: StreamableViewController {
         initialStreamKind = .userStream(userParam: currentUser.id)
         super.init(nibName: nil, bundle: nil)
 
+        self.currentUser = currentUser
         title = currentUser.atName
         sharedInit()
         currentUserChangedNotification = NotificationObserver(notification: CurrentUserChangedNotification) { [weak self] user in
