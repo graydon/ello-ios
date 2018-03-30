@@ -45,7 +45,7 @@ final class CategoryGenerator: StreamGenerator {
         guard let pageHeader = pageHeader else { return [] }
 
         var items = [StreamCellItem(jsonable: pageHeader, type: .promotionalHeader)]
-        if pageHeader.categoryId != nil {
+        if pageHeader.categoryId != nil, currentUser != nil {
             items.append(StreamCellItem(jsonable: pageHeader, type: .promotionalHeaderSubscription))
         }
         return items
