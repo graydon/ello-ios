@@ -120,8 +120,6 @@ class CategoryDestination: CategoryStreamDestination {
             headerItems = items
         case .streamItems:
             postItems = items
-        case .streamSelection:
-            break
         default:
             otherPlaceHolderLoaded = true
         }
