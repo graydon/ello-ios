@@ -34,7 +34,7 @@ class ElloDataSource: NSObject {
     }
 
     func indexPaths(forPlaceholderType placeholderType: StreamCellType.PlaceholderType) -> [IndexPath] {
-        return (0 ..< visibleCellItems.count).flatMap { index in
+        return (0 ..< visibleCellItems.count).compactMap { index in
             guard visibleCellItems[index].placeholderType == placeholderType else { return nil }
             return IndexPath(item: index, section: 0)
         }

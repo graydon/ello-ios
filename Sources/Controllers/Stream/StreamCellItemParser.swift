@@ -155,7 +155,7 @@ struct StreamCellItemParser {
                 return line + "</p>"
             }
 
-            return truncatedParagraphs.flatMap { (text: String) -> StreamCellType? in
+            return truncatedParagraphs.compactMap { (text: String) -> StreamCellType? in
                 if text == "" {
                     return nil
                 }

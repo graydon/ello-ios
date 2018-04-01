@@ -51,7 +51,7 @@ class NotificationService: UNNotificationServiceExtension {
                     let contentHandler = self.contentHandler
                 else { return }
 
-                let downloadedImages: [URL] = regions.flatMap { region -> URL? in
+                let downloadedImages: [URL] = regions.compactMap { region -> URL? in
                     switch region.kind {
                     case .image:
                         guard let region = region as? ImageRegion else { return nil }
@@ -82,7 +82,7 @@ class NotificationService: UNNotificationServiceExtension {
                     }
                 }
 
-                content.attachments = downloadedImages.flatMap { location -> UNNotificationAttachment? in
+                content.attachments = downloadedImages.compactMap { location -> UNNotificationAttachment? in
                     let identifier = "region-\(location.lastPathComponent)"
                     return try? UNNotificationAttachment(identifier: identifier, url: location, options: nil)
                 }

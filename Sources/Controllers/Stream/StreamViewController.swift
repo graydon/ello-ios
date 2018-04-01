@@ -1014,7 +1014,7 @@ extension StreamViewController: UICollectionViewDelegate {
         var makeSelected = false
         if streamCellItem.type == .onboardingCategoryCard || streamCellItem.type == .categorySubscribeCard {
             let paths = collectionView.indexPathsForSelectedItems
-            let selection = paths?.flatMap { collectionViewDataSource.jsonable(at: $0) as? Category }
+            let selection = paths?.compactMap { collectionViewDataSource.jsonable(at: $0) as? Category }
             let responder: SelectedCategoryResponder? = findResponder()
             responder?.categoriesSelectionChanged(selection: selection ?? [])
         }
@@ -1107,7 +1107,7 @@ extension StreamViewController: UICollectionViewDelegate {
                 keepSelected = true
 
                 let paths = collectionView.indexPathsForSelectedItems
-                let selection = paths?.flatMap { dataSource.jsonable(at: $0) as? Category }
+                let selection = paths?.compactMap { dataSource.jsonable(at: $0) as? Category }
 
                 let responder: SelectedCategoryResponder? = findResponder()
                 responder?.categoriesSelectionChanged(selection: selection ?? [])
@@ -1300,7 +1300,7 @@ extension StreamViewController {
 
     private func appendDataChange(_ change: StreamViewDataChange) -> Promise<Void> {
         let (promise, resolve, _) = Promise<Void>.pending()
-        dataChangeJobs.append((dataSource.visibleCellItems, change, promise, resolve))
+        dataChangeJobs.append((dataSource.visibleCellItems, change, promise, { resolve(()) }))
         runNextDataChangeJob()
         return promise
     }

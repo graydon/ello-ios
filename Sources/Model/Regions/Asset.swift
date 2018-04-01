@@ -53,7 +53,7 @@ final class Asset: JSONAble {
             (.large, large),
             (.regular, regular),
         ]
-        return possibles.flatMap { type, attachment in
+        return possibles.compactMap { type, attachment in
             return attachment.map { (type, $0) }
         }
     }

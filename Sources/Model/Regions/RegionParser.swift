@@ -9,7 +9,7 @@ struct RegionParser {
     static func jsonRegions(json: JSON, isRepostContent: Bool = false) -> [Regionable] {
         guard let content = json.object as? [[String: Any]] else { return [] }
 
-        return content.flatMap { contentDict -> Regionable? in
+        return content.compactMap { contentDict -> Regionable? in
             guard
                 let kindStr = contentDict["kind"] as? String,
                 let kind = RegionKind(rawValue: kindStr)

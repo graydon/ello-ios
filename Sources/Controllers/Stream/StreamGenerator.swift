@@ -5,7 +5,7 @@
 protocol StreamGenerator {
     var currentUser: User? { get }
     var streamKind: StreamKind { get }
-    weak var destination: StreamDestination? { get }
+    var destination: StreamDestination? { get }
 }
 
 extension StreamGenerator {

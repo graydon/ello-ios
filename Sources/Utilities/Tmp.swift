@@ -96,7 +96,7 @@ extension Tmp {
             FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first?.path,
             FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first?.path,
             URL(string: NSTemporaryDirectory())?.path,
-        ].flatMap { path -> Path? in path.map { Path($0) } }
+        ].compactMap { path -> Path? in path.map { Path($0) } }
 
         var text = ""
         var totalSize = 0
