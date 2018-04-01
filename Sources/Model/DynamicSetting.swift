@@ -115,7 +115,7 @@ final class DynamicSetting: JSONAble {
 
         let dependentOn: [String]
         if let jsonDependentOn = json["dependent_on"].array {
-            dependentOn = jsonDependentOn.flatMap { $0.string }
+            dependentOn = jsonDependentOn.compactMap { $0.string }
         }
         else {
             dependentOn = []
@@ -123,7 +123,7 @@ final class DynamicSetting: JSONAble {
 
         let conflictsWith: [String]
         if let jsonConflictsWith = json["conflicts_with"].array {
-            conflictsWith = jsonConflictsWith.flatMap { $0.string }
+            conflictsWith = jsonConflictsWith.compactMap { $0.string }
         }
         else {
             conflictsWith = []
@@ -131,7 +131,7 @@ final class DynamicSetting: JSONAble {
 
         let setsAnother: [DynamicSetAnother]
         if let jsonSetsAnother = json["sets_another"].array {
-            setsAnother = jsonSetsAnother.flatMap { json in
+            setsAnother = jsonSetsAnother.compactMap { json in
                 if let val = json.object as? [String: Any] {
                     return DynamicSetAnother.fromJSON(val)
                 }

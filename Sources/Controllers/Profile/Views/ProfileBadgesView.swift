@@ -55,7 +55,7 @@ class ProfileBadgesView: ProfileBaseView {
             view.removeFromSuperview()
         }
 
-        badgeButtons = badges.safeRange(0 ..< ProfileBadgesView.maxBadges).flatMap { (badge: Badge) -> UIButton? in
+        badgeButtons = badges.safeRange(0 ..< ProfileBadgesView.maxBadges).compactMap { (badge: Badge) -> UIButton? in
             guard let imageURL = badge.imageURL else { return nil }
 
             let button = UIButton()

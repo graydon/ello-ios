@@ -126,7 +126,7 @@ final class ArtistInviteSubmission: JSONAble, Groupable, PostActionable {
         }
         status = Status(rawValue: decoder.decodeKey("status") as String) ?? .unspecified
         let actions: [[String: Any]] = decoder.decodeKey("actions")
-        self.actions = actions.flatMap { Action.decode($0, version: version) }
+        self.actions = actions.compactMap { Action.decode($0, version: version) }
         super.init(coder: coder)
     }
 
@@ -159,7 +159,7 @@ final class ArtistInviteSubmission: JSONAble, Groupable, PostActionable {
         let submission = ArtistInviteSubmission(id: id, artistInviteId: artistInviteId, postId: postId, status: status)
         submission.links = data["links"] as? [String: Any]
         if let actions = data["actions"] as? [String: Any] {
-            submission.actions = actions.flatMap { key, value in
+            submission.actions = actions.compactMap { key, value in
                 return Action(name: key, json: JSON(value))
             }.sorted { a, b in
                 return a.order < b.order

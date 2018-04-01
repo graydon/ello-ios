@@ -262,7 +262,7 @@ extension NotificationsViewController: AnnouncementResponder {
     }
 
     public func track(jsonables: [JSONAble]) {
-        let announcements: [Announcement] = jsonables.flatMap { $0 as? Announcement }
+        let announcements: [Announcement] = jsonables.compactMap { $0 as? Announcement }
         for announcement in announcements {
             Tracker.shared.announcementViewed(announcement)
         }

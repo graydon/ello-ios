@@ -15,7 +15,7 @@ class EditorialDownloader {
             return
         }
 
-        let editorials = editorialItems.flatMap { item -> Editorial? in
+        let editorials = editorialItems.compactMap { item -> Editorial? in
             guard
                 let editorial = item.jsonable as? Editorial,
                 editorial.kind == .postStream,

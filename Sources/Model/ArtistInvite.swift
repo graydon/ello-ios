@@ -175,8 +175,8 @@ final class ArtistInvite: JSONAble, Groupable {
             artistInvite.declinedSubmissionsStream = stream
         }
 
-        if let guide = json["guide"].array?.flatMap({ $0.object as? [String: String] }) {
-            artistInvite.guide = guide.flatMap { g -> Guide? in
+        if let guide = json["guide"].array?.compactMap({ $0.object as? [String: String] }) {
+            artistInvite.guide = guide.compactMap { g -> Guide? in
                 guard let title = g["title"], let html = g["rendered_body"] else { return nil }
                 return Guide(title: title, html: html)
             }

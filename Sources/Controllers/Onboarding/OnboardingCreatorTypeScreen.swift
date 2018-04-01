@@ -332,7 +332,7 @@ class OnboardingCreatorTypeScreen: StreamableScreen {
     }
 
     func unselectAllCategories() {
-        creatorButtons.flatMap({ (button: UIView) -> UIButton? in return button as? UIButton }).forEach { button in
+        creatorButtons.compactMap({ (button: UIView) -> UIButton? in return button as? UIButton }).forEach { button in
             button.isSelected = false
         }
     }
@@ -350,7 +350,7 @@ extension OnboardingCreatorTypeScreen: OnboardingCreatorTypeScreenProtocol {
             unselectAllCategories()
         case let .artist(categories):
             updateButtons(type: .artist([]), animated: false)
-            creatorButtons.flatMap({ (button: UIView) -> UIButton? in return button as? UIButton }).forEach { button in
+            creatorButtons.compactMap({ (button: UIView) -> UIButton? in return button as? UIButton }).forEach { button in
                 button.isSelected = categories.any({ button.title(for: .normal) == $0.name })
             }
         }

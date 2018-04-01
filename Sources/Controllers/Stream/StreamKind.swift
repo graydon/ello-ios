@@ -152,7 +152,7 @@ enum StreamKind {
                 return jsonables
             }
         case .editorials:
-            return jsonables.flatMap { jsonable -> Editorial? in
+            return jsonables.compactMap { jsonable -> Editorial? in
                 guard
                     let editorial = jsonable as? Editorial,
                     editorial.kind != .unknown

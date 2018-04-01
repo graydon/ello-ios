@@ -10,7 +10,7 @@ extension UIImage {
         (imageData as NSData).getBytes(buffer, length: imageData.count)
 
         defer {
-            buffer.deallocate(capacity: imageData.count)
+            buffer.deallocate()
         }
 
         if length >= 4 {

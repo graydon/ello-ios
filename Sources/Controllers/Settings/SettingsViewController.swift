@@ -292,7 +292,7 @@ extension SettingsViewController: SettingsScreenDelegate {
                 let categories = categories
             else { return }
 
-            let creatorCategories = categoryIds.flatMap { id -> Category? in
+            let creatorCategories = categoryIds.compactMap { id -> Category? in
                 return categories.find { $0.id == id }
             }
 

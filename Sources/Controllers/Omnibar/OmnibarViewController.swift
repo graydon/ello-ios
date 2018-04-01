@@ -191,7 +191,7 @@ class OmnibarViewController: BaseElloViewController {
                 let data: Data = Tmp.read(fileName), (defaultText ?? "") == ""
             {
                 if let omnibarData = NSKeyedUnarchiver.unarchiveObject(with: data) as? OmnibarCacheData {
-                    let regions: [OmnibarRegion] = omnibarData.regions.flatMap { obj in
+                    let regions: [OmnibarRegion] = omnibarData.regions.compactMap { obj in
                         if let region = OmnibarRegion.fromRaw(obj) {
                             return region
                         }
