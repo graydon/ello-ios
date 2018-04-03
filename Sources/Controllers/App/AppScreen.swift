@@ -21,11 +21,11 @@ class AppScreen: EmptyScreen {
 
 extension AppScreen: AppScreenProtocol {
     func animateLogo() {
-        logoImage.animateLogo()
+        logoImage.startAnimating()
     }
 
     func stopAnimatingLogo() {
-        logoImage.stopAnimatingLogo()
+        logoImage.stopAnimating()
     }
 
     func hide() {

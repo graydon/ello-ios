@@ -43,10 +43,10 @@ class ElloPullToRefreshView: UIView, SSPullToRefreshContentView {
         switch state {
         case .loading:
             loading = true
-            elloLogo.animateLogo()
+            elloLogo.startAnimating()
         case .closing:
             loading = false
-            elloLogo.stopAnimatingLogo()
+            elloLogo.stopAnimating()
         default:
             loading = false
         }

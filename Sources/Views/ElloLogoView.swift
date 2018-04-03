@@ -37,13 +37,18 @@ class ElloLogoView: UIImageView {
     private var _isAnimating = false
     private let style: ElloLogoView.Style
 
-    required init?(coder: NSCoder) {
-        self.style = .normal
-        super.init(coder: coder)
+    override var intrinsicContentSize: CGSize {
+        return style.size
     }
 
     convenience init() {
         self.init(frame: .zero)
+    }
+
+    required init?(coder: NSCoder) {
+        self.style = .normal
+        super.init(coder: coder)
+        privateInit()
     }
 
     init(style: Style) {
@@ -66,11 +71,11 @@ class ElloLogoView: UIImageView {
     override func didMoveToWindow() {
         super.didMoveToWindow()
         if window != nil && _isAnimating {
-            animateLogo()
+            startAnimating()
         }
     }
 
-    func animateLogo() {
+    func startAnimating() {
         _isAnimating = true
 
         self.layer.removeAnimation(forKey: "logo-spin")
@@ -83,7 +88,7 @@ class ElloLogoView: UIImageView {
         self.layer.add(rotate, forKey: "logo-spin")
     }
 
-    func stopAnimatingLogo() {
+    func stopAnimating() {
         _isAnimating = false
 
         self.layer.removeAllAnimations()
@@ -99,7 +104,4 @@ class ElloLogoView: UIImageView {
         self.layer.add(endAnimation, forKey: "logo-spin")
     }
 
-    override var intrinsicContentSize: CGSize {
-        return style.size
-    }
 }
