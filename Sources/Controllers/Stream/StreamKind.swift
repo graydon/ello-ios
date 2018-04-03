@@ -7,7 +7,7 @@ import SwiftyUserDefaults
 
 enum StreamKind {
     case announcements
-    case category(Category.Selection, DiscoverType)
+    case category(Category.Selection, CategoryFilter)
     case onboardingCategories
     case manageCategories
     case chooseCategory

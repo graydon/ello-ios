@@ -33,12 +33,12 @@ struct API {
         }
     }
 
-    func globalPostStream(stream: DiscoverType, before: String? = nil) -> GraphQLRequest<(PageConfig, [Post])> {
+    func globalPostStream(filter: CategoryFilter, before: String? = nil) -> GraphQLRequest<(PageConfig, [Post])> {
         let request = GraphQLRequest(
             endpointName: "globalPostStream",
             parser: PageParser<Post>("posts", PostParser()).parse,
             variables: [
-                (.enum("kind", "StreamKind", stream.graphQL)),
+                (.enum("kind", "StreamKind", filter.graphQL)),
                 (.optionalString("before", before)),
             ],
             fragments: [Fragment.postStream],
@@ -47,12 +47,12 @@ struct API {
         return request
     }
 
-    func categoryPostStream(categorySlug: String, stream: DiscoverType, before: String? = nil) -> GraphQLRequest<(PageConfig, [Post])> {
+    func categoryPostStream(categorySlug: String, filter: CategoryFilter, before: String? = nil) -> GraphQLRequest<(PageConfig, [Post])> {
         let request = GraphQLRequest(
             endpointName: "categoryPostStream",
             parser: PageParser<Post>("posts", PostParser()).parse,
             variables: [
-                (.enum("kind", "StreamKind", stream.graphQL)),
+                (.enum("kind", "StreamKind", filter.graphQL)),
                 (.string("slug", categorySlug)),
                 (.optionalString("before", before)),
             ],
@@ -62,12 +62,12 @@ struct API {
         return request
     }
 
-    func subscribedPostStream(stream: DiscoverType, before: String? = nil) -> GraphQLRequest<(PageConfig, [Post])> {
+    func subscribedPostStream(filter: CategoryFilter, before: String? = nil) -> GraphQLRequest<(PageConfig, [Post])> {
         let request = GraphQLRequest(
             endpointName: "subscribedPostStream",
             parser: PageParser<Post>("posts", PostParser()).parse,
             variables: [
-                (.enum("kind", "StreamKind", stream.graphQL)),
+                (.enum("kind", "StreamKind", filter.graphQL)),
                 (.optionalString("before", before)),
             ],
             fragments: [Fragment.postStream],
