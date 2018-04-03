@@ -97,6 +97,7 @@ class StyledButton: UIButton {
         }
     }
 
+    var didOverrideTitle = false
     var style: Style = .default {
         didSet { updateStyle() }
     }
@@ -114,10 +115,13 @@ class StyledButton: UIButton {
         didSet { updateStyle() }
     }
     var title: String? {
-        get { return currentTitle }
+        get { return currentTitle ?? currentAttributedTitle?.string }
         set { setTitle(newValue, for: .normal) }
     }
     var titleLineBreakMode: NSLineBreakMode = .byWordWrapping {
+        didSet { updateStyle() }
+    }
+    var titleAlignment: NSTextAlignment = .center {
         didSet { updateStyle() }
     }
 
@@ -161,13 +165,15 @@ class StyledButton: UIButton {
             layer.borderWidth = 0
         }
 
-        titleLabel?.font = style.font
+        if !didOverrideTitle {
+            titleLabel?.font = style.font
 
-        if let defaultTitle = self.title(for: .normal) {
-            let states: [UIControlState] = [.normal, .highlighted, .selected, .disabled]
-            for state in states {
-                let title = self.title(for: state) ?? defaultTitle
-                setAttributedTitle(NSAttributedString(button: title, style: style, state: state, selected: isSelected, lineBreakMode: titleLineBreakMode), for: state)
+            if let defaultTitle = self.title(for: .normal) {
+                let states: [UIControlState] = [.normal, .highlighted, .selected, .disabled]
+                for state in states {
+                    let title = self.title(for: state) ?? defaultTitle
+                    super.setAttributedTitle(NSAttributedString(button: title, style: style, state: state, selected: isSelected, alignment: titleAlignment, lineBreakMode: titleLineBreakMode), for: state)
+                }
             }
         }
     }
@@ -206,6 +212,12 @@ extension StyledButton {
 
     override func setTitle(_ title: String?, for state: UIControlState) {
         super.setTitle(title, for: state)
+        updateStyle()
+    }
+
+    override func setAttributedTitle(_ title: NSAttributedString?, for state: UIControlState) {
+        super.setAttributedTitle(title, for: state)
+        didOverrideTitle = title != nil
         updateStyle()
     }
 
@@ -321,6 +333,7 @@ extension StyledButton.Style {
         titleColor: .white,
         cornerRadius: .pill
         )
+
     static let inviteFriend = StyledButton.Style(
         backgroundColor: .greyA,
         titleColor: .white,

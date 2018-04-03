@@ -30,7 +30,7 @@ class StreamHeaderCell: CollectionViewCell {
     private let repostIconView = UIImageView()
     private let repostedByButton = StyledButton(style: .clearGray)
     private let categoryButton = StyledButton(style: .clearGray)
-    private let artistInviteSubmissionButton = StyledButton(style: .clearGray)
+    private let artistInviteSubmissionButton = StyledButton(style: .grayUnderlined)
 
     var isGridLayout = false
     var showUsername = true {
@@ -82,6 +82,12 @@ class StreamHeaderCell: CollectionViewCell {
     }
 
     override func style() {
+        contentView.backgroundColor = .white
+
+        categoryButton.titleLineBreakMode = .byTruncatingTail
+        repostedByButton.titleLineBreakMode = .byTruncatingTail
+        artistInviteSubmissionButton.titleLineBreakMode = .byTruncatingTail
+        artistInviteSubmissionButton.contentHorizontalAlignment = .left
         usernameButton.titleLineBreakMode = .byTruncatingTail
         usernameButton.contentHorizontalAlignment = .left
 
@@ -94,12 +100,7 @@ class StreamHeaderCell: CollectionViewCell {
 
         repostIconView.setInterfaceImage(.repost, style: .selected)
 
-        let attributedSubmissionTitle = NSAttributedString(string: InterfaceString.ArtistInvites.PostSubmissionHeader, attributes: [
-            .font: UIFont.defaultFont(),
-            .foregroundColor: UIColor.greyA,
-            .underlineStyle: NSUnderlineStyle.styleSingle.rawValue,
-            ])
-        artistInviteSubmissionButton.setAttributedTitle(attributedSubmissionTitle, for: .normal)
+        artistInviteSubmissionButton.setTitle(InterfaceString.ArtistInvites.PostSubmissionHeader, for: .normal)
     }
 
     override func arrange() {
@@ -147,16 +148,10 @@ class StreamHeaderCell: CollectionViewCell {
         artistInviteSubmissionButton.isVisible = aiSubmissionVisible
 
         if let category = category, categoryVisible {
-            let attributedString = NSAttributedString(string: "in ", attributes: [
-                .font: UIFont.defaultFont(),
-                .foregroundColor: UIColor.greyA,
-                ])
-            let categoryName = NSAttributedString(string: category.name, attributes: [
-                .font: UIFont.defaultFont(),
-                .foregroundColor: UIColor.greyA,
-                .underlineStyle: NSUnderlineStyle.styleSingle.rawValue,
-                ])
+            let attributedString = NSAttributedString(label: "in ", style: .gray, lineBreakMode: .byTruncatingTail)
+            let categoryName = NSAttributedString(button: category.name, style: .grayUnderlined, alignment: .left, lineBreakMode: .byTruncatingTail)
             categoryButton.setAttributedTitle(attributedString + categoryName, for: .normal)
+            categoryButton.titleLineBreakMode = .byTruncatingTail
             categoryButton.sizeToFit()
         }
 
@@ -220,9 +215,9 @@ class StreamHeaderCell: CollectionViewCell {
         let repostedWidth = max(minimumRepostedWidth, min(repostedByButton.frame.width, maxRepostedWidth))
         let categoryWidth = max(minimumRepostedWidth, min(categoryButton.frame.width, maxUsernameWidth))
 
-        let hasRepostAuthor = !repostedByButton.isHidden
-        let hasCategory = !categoryButton.isHidden
-        let hasAISubmission = !artistInviteSubmissionButton.isHidden
+        let hasRepostAuthor = repostedByButton.isVisible
+        let hasCategory = categoryButton.isVisible
+        let hasAISubmission = artistInviteSubmissionButton.isVisible
         let usernameButtonHeight: CGFloat
         let usernameButtonY: CGFloat
 
@@ -274,6 +269,7 @@ class StreamHeaderCell: CollectionViewCell {
             x: usernameX,
             y: secondaryLabelY
             )
+        artistInviteSubmissionButton.frame.size.width = maxUsernameWidth
         artistInviteSubmissionButton.frame.size.height = usernameButtonHeight
     }
 

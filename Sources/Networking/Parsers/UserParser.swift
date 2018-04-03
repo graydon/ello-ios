@@ -41,13 +41,13 @@ class UserParser: IdParser {
         user.location = json["location"].string
 
         if let links = json["externalLinksList"].array {
-            let externalLinks = links.flatMap { $0.dictionaryObject as? [String: String] }
-            user.externalLinksList = externalLinks.flatMap { ExternalLink.fromDict($0) }
+            let externalLinks = links.compactMap { $0.dictionaryObject as? [String: String] }
+            user.externalLinksList = externalLinks.compactMap { ExternalLink.fromDict($0) }
         }
 
-        if let badgeNames: [String] = json["badges"].array?.flatMap({ $0.string }) {
+        if let badgeNames: [String] = json["badges"].array?.compactMap({ $0.string }) {
             user.badges = badgeNames
-                .flatMap { Badge.lookup(slug: $0) }
+                .compactMap { Badge.lookup(slug: $0) }
         }
 
         if relationshipPriority == .me, json["profile"].exists() {

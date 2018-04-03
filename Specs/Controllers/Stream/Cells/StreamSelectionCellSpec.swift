@@ -33,12 +33,12 @@ class StreamSelectionCellSpec: QuickSpec {
 
             describe("actions") {
                 it("sends action when tapping on a category") {
-                    let categoryButton: UIButton? = subview(of: subject, thatMatches: { button in
+                    let categoryButton: UIButton? = subject.findSubview { button in
                         button.currentAttributedTitle?.string == "Featured"
-                    })
+                    }
                     categoryButton?.sendActions(for: .touchUpInside)
                     expect(responder.categoryTapped) == true
-                    expect(responder.stream) == "featured"
+                    expect(responder.stream) == DiscoverType.featured.rawValue
                 }
             }
 

@@ -58,7 +58,7 @@ final class User: JSONAble {
     var hasSubscribedCategory: Bool { return followedCategoryIds.count > 0 }
     var followedCategoryIds: Set<String> = []
     var followedCategories: [Category] {
-        return followedCategoryIds.flatMap { id -> Category? in
+        return followedCategoryIds.compactMap { id -> Category? in
             var category: Category?
             ElloLinkedStore.shared.readConnection.read { transaction in
                 category = transaction.object(forKey: id, inCollection: "categories") as? Category
@@ -159,7 +159,7 @@ final class User: JSONAble {
         }
 
         if let badgeNames: [String] = decoder.decodeOptionalKey("badges") {
-            self._badges = badgeNames.flatMap { Badge.lookup(slug: $0) }
+            self._badges = badgeNames.compactMap { Badge.lookup(slug: $0) }
         }
 
         self.avatar = decoder.decodeOptionalKey("avatar")
@@ -170,7 +170,7 @@ final class User: JSONAble {
         self.followingCount = decoder.decodeOptionalKey("followingCount")
         self.formattedShortBio = decoder.decodeOptionalKey("formattedShortBio")
         if let externalLinksList: [[String: String]] = decoder.decodeOptionalKey("externalLinksList") {
-            self.externalLinksList = externalLinksList.flatMap { ExternalLink.fromDict($0) }
+            self.externalLinksList = externalLinksList.compactMap { ExternalLink.fromDict($0) }
         }
         self.coverImage = decoder.decodeOptionalKey("coverImage")
         self.onboardingVersion = decoder.decodeOptionalKey("onboardingVersion")
@@ -286,17 +286,17 @@ final class User: JSONAble {
         user.location = json["location"].string
 
         if let ids = json["followed_category_ids"].array {
-            user.followedCategoryIds = Set(ids.flatMap { $0.id })
+            user.followedCategoryIds = Set(ids.compactMap { $0.id })
         }
 
         if let links = json["external_links_list"].array {
-            let externalLinks = links.flatMap { $0.dictionaryObject as? [String: String] }
-            user.externalLinksList = externalLinks.flatMap { ExternalLink.fromDict($0) }
+            let externalLinks = links.compactMap { $0.dictionaryObject as? [String: String] }
+            user.externalLinksList = externalLinks.compactMap { ExternalLink.fromDict($0) }
         }
 
-        if let badgeNames: [String] = json["badges"].array?.flatMap({ $0.string }) {
+        if let badgeNames: [String] = json["badges"].array?.compactMap({ $0.string }) {
             user.badges = badgeNames
-                .flatMap { Badge.lookup(slug: $0) }
+                .compactMap { Badge.lookup(slug: $0) }
         }
 
         user.links = data["links"] as? [String: Any]
@@ -355,7 +355,7 @@ extension User {
         return id == comment.authorId
     }
 
-    func isAuthorOfParentPost(comment: ElloComment) -> Bool {
+    func isAuthorOfOriginalPost(comment: ElloComment) -> Bool {
         if let repostAuthor = comment.loadedFromPost?.repostAuthor {
             return id == repostAuthor.id
         }

@@ -13,35 +13,31 @@ extension CGRect {
 
 // MARK: convenience
     init(x: CGFloat, y: CGFloat, right: CGFloat, bottom: CGFloat) {
-        self.origin = CGPoint(x: x, y: y)
-        self.size = CGSize(width: right - x, height: bottom - y)
+        self.init(x: x, y: y, width: right - x, height: bottom - y)
     }
 
     init(x: CGFloat, y: CGFloat) {
-        self.origin = CGPoint(x: x, y: y)
-        self.size = .zero
+        self.init(x: x, y: y, width: 0, height: 0)
     }
 
     init(origin: CGPoint) {
-        self.origin = origin
-        self.size = .zero
+        self.init(origin: origin, size: .zero)
     }
 
     init(width: CGFloat, height: CGFloat) {
-        self.origin = .zero
-        self.size = CGSize(width: width, height: height)
+        self.init(origin: .zero, size: CGSize(width: width, height: height))
     }
 
     init(size: CGSize) {
-        self.origin = .zero
-        self.size = size
+        self.init(origin: .zero, size: size)
     }
 
 // MARK: helpers
     var x: CGFloat { return self.origin.x }
     var y: CGFloat { return self.origin.y }
     var center: CGPoint {
-        return CGPoint(x: self.midX, y: self.midY)
+        get { return CGPoint(x: self.midX, y: self.midY) }
+        set { origin = CGPoint(x: newValue.x - width / 2, y: newValue.y - height / 2) }
     }
 
 // MARK: dimension setters

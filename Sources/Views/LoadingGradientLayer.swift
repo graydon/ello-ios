@@ -40,6 +40,7 @@ class LoadingGradientLayer: CAGradientLayer {
     }
 
     func startAnimating() {
+        removeAnimation(forKey: "colors")
         add(animation, forKey: "colors")
     }
 

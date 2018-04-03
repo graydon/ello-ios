@@ -32,26 +32,25 @@ class StreamImageCell: StreamRegionableCell {
         static let singleColumnBuyButtonWidth: CGFloat = 40
     }
 
-
-    @IBOutlet weak var imageView: FLAnimatedImageView!
-    @IBOutlet weak var imageButton: UIView!
+    @IBOutlet var imageView: FLAnimatedImageView!
+    @IBOutlet var imageButton: UIView!
 
     // optional because the StreamEmbedCell doesn't have them:
-    @IBOutlet weak var buyButton: UIButton?
-    @IBOutlet weak var buyButtonGreen: UIView?
-    @IBOutlet weak var buyButtonWidthConstraint: NSLayoutConstraint?
+    @IBOutlet var buyButton: UIButton?
+    @IBOutlet var buyButtonGreen: UIView?
+    @IBOutlet var buyButtonWidthConstraint: NSLayoutConstraint?
 
-    @IBOutlet weak var circle: PulsingCircle!
-    @IBOutlet weak var failImage: UIImageView!
-    @IBOutlet weak var failBackgroundView: UIView!
-    @IBOutlet weak var leadingConstraint: NSLayoutConstraint!
-    @IBOutlet weak var failWidthConstraint: NSLayoutConstraint!
-    @IBOutlet weak var failHeightConstraint: NSLayoutConstraint!
+    @IBOutlet var circle: ElloLogoView!
+    @IBOutlet var failImage: UIImageView!
+    @IBOutlet var failBackgroundView: UIView!
+    @IBOutlet var leadingConstraint: NSLayoutConstraint!
+    @IBOutlet var failWidthConstraint: NSLayoutConstraint!
+    @IBOutlet var failHeightConstraint: NSLayoutConstraint!
     private var foregroundObserver: NotificationObserver?
 
     // not used in StreamEmbedCell
-    @IBOutlet weak var largeImagePlayButton: UIImageView?
-    @IBOutlet weak var imageRightConstraint: NSLayoutConstraint!
+    @IBOutlet var largeImagePlayButton: UIImageView?
+    @IBOutlet var imageRightConstraint: NSLayoutConstraint!
 
     var isGif = false
     var onHeightMismatch: OnHeightMismatch?
@@ -66,7 +65,7 @@ class StreamImageCell: StreamRegionableCell {
     }
     var serverProvidedAspectRatio: CGFloat?
     var isLargeImage: Bool {
-        get { return !(largeImagePlayButton?.isHidden ?? true) }
+        get { return largeImagePlayButton?.isVisible ?? false }
         set {
             largeImagePlayButton?.interfaceImage = .videoPlay
             largeImagePlayButton?.isVisible = newValue
@@ -125,6 +124,9 @@ class StreamImageCell: StreamRegionableCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
+
+        reset()
+
         if let playButton = largeImagePlayButton {
             playButton.interfaceImage = .videoPlay
         }
@@ -160,10 +162,9 @@ class StreamImageCell: StreamRegionableCell {
     func setImageURL(_ url: URL) {
         imageView.image = nil
         imageView.alpha = 0
-        circle.pulse()
+        circle.startAnimating()
         failImage.isHidden = true
         failImage.alpha = 0
-        imageView.backgroundColor = UIColor.white
         loadImage(url)
     }
 
@@ -173,7 +174,6 @@ class StreamImageCell: StreamRegionableCell {
         imageView.alpha = 1
         failImage.isHidden = true
         failImage.alpha = 0
-        imageView.backgroundColor = UIColor.white
     }
 
     override func layoutSubviews() {
@@ -217,12 +217,12 @@ class StreamImageCell: StreamRegionableCell {
                 elloAnimate {
                     self.imageView.alpha = 1
                 }.always {
-                    self.circle.stopPulse()
+                    self.circle.stopAnimating()
                 }
             }
             else {
                 self.imageView.alpha = 1.0
-                self.circle.stopPulse()
+                self.circle.stopAnimating()
             }
 
             self.layoutIfNeeded()
@@ -233,20 +233,24 @@ class StreamImageCell: StreamRegionableCell {
         buyButton?.isHidden = true
         buyButtonGreen?.isHidden = true
         failImage.isVisible = true
-        failBackgroundView.isVisible = true
-        circle.stopPulse()
+        circle.stopAnimating()
         largeImagePlayButton?.isHidden = true
         UIView.animate(withDuration: 0.15, animations: {
             self.failImage.alpha = 1.0
-            self.imageView.backgroundColor = UIColor.greyF1
-            self.failBackgroundView.backgroundColor = UIColor.greyF1
-            self.imageView.alpha = 1.0
+            self.failBackgroundView.backgroundColor = .greyF1
             self.failBackgroundView.alpha = 1.0
         })
     }
 
     override func prepareForReuse() {
         super.prepareForReuse()
+        reset()
+    }
+
+    private func reset() {
+        failBackgroundView.alpha = 0
+
+        contentView.backgroundColor = .white
         mode = .image
         marginType = .post
         imageButton.isUserInteractionEnabled = true
@@ -264,7 +268,6 @@ class StreamImageCell: StreamRegionableCell {
         isLargeImage = false
         failImage.isHidden = true
         failImage.alpha = 0
-        failBackgroundView.isHidden = true
         failBackgroundView.alpha = 0
     }
 

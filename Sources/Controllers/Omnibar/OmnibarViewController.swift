@@ -29,6 +29,7 @@ class OmnibarViewController: BaseElloViewController {
     var editComment: ElloComment?
     var rawEditBody: [Regionable]?
     var defaultText: String?
+    var category: Category?
     var canGoBack: Bool = true {
         didSet {
             if canGoBack {
@@ -81,8 +82,13 @@ class OmnibarViewController: BaseElloViewController {
         PostService().loadPost(post.id)
             .then { post -> Void in
                 self.rawEditBody = post.body
-                if let body = post.body, self.isViewLoaded {
-                    self.prepareScreenForEditing(body, isComment: false)
+                self.category = post.category
+
+                if self.isViewLoaded {
+                    if let body = post.body {
+                        self.prepareScreenForEditing(body, isComment: false)
+                    }
+                    self.screen.chosenCategory = post.category
                 }
             }
             .ignoreErrors()
@@ -98,6 +104,27 @@ class OmnibarViewController: BaseElloViewController {
         self.defaultText = defaultText
     }
 
+    override func didSetCurrentUser() {
+        super.didSetCurrentUser()
+
+        if editPost == nil, editComment == nil, parentPostId == nil, self.category == nil,
+            let category = currentUser?.categories?.first
+        {
+            self.category = category
+            if category.tileURL == nil {
+                CategoryService().loadCategory(category.slug)
+                    .then { category -> Void in
+                        guard self.category?.id == category.id else { return }
+                        self.category = category
+                        if self.isViewLoaded {
+                            self.screen.chosenCategory = category
+                        }
+                    }
+                    .ignoreErrors()
+            }
+        }
+    }
+
     func onCommentSuccess(_ listener: @escaping CommentSuccessListener) {
         commentSuccessListener = listener
     }
@@ -110,12 +137,10 @@ class OmnibarViewController: BaseElloViewController {
         self.view = OmnibarScreen(frame: UIScreen.main.bounds)
 
         screen.canGoBack = canGoBack
-        var defaultRegions: [Regionable] = []
-        if let text = defaultText {
-            defaultRegions = [TextRegion(content: text)]
-        }
 
+        let communityPickerVisible: Bool
         if editPost != nil {
+            communityPickerVisible = true
             screen.title = InterfaceString.Omnibar.EditPostTitle
             screen.submitTitle = InterfaceString.Omnibar.EditPostButton
             screen.isEditing = true
@@ -124,6 +149,7 @@ class OmnibarViewController: BaseElloViewController {
             }
         }
         else if editComment != nil {
+            communityPickerVisible = false
             screen.title = InterfaceString.Omnibar.EditCommentTitle
             screen.submitTitle = InterfaceString.Omnibar.EditCommentButton
             screen.isEditing = true
@@ -134,19 +160,30 @@ class OmnibarViewController: BaseElloViewController {
         else {
             let isComment: Bool
             if parentPostId != nil {
+                communityPickerVisible = false
                 screen.title = InterfaceString.Omnibar.CreateCommentTitle
                 screen.submitTitle = InterfaceString.Omnibar.CreateCommentButton
                 isComment = true
             }
             else if let artistInvite = artistInvite {
+                communityPickerVisible = false
                 screen.title = InterfaceString.Omnibar.CreateArtistInviteSubmission(title: artistInvite.title)
                 screen.submitTitle = InterfaceString.Omnibar.CreatePostButton
                 isComment = false
             }
             else {
+                communityPickerVisible = true
                 screen.title = ""
                 screen.submitTitle = InterfaceString.Omnibar.CreatePostButton
                 isComment = false
+            }
+
+            let defaultRegions: [Regionable]
+            if let text = defaultText {
+                defaultRegions = [TextRegion(content: text)]
+            }
+            else {
+                defaultRegions = []
             }
             prepareScreenForEditing(defaultRegions, isComment: isComment)
 
@@ -154,7 +191,7 @@ class OmnibarViewController: BaseElloViewController {
                 let data: Data = Tmp.read(fileName), (defaultText ?? "") == ""
             {
                 if let omnibarData = NSKeyedUnarchiver.unarchiveObject(with: data) as? OmnibarCacheData {
-                    let regions: [OmnibarRegion] = omnibarData.regions.flatMap { obj in
+                    let regions: [OmnibarRegion] = omnibarData.regions.compactMap { obj in
                         if let region = OmnibarRegion.fromRaw(obj) {
                             return region
                         }
@@ -165,6 +202,9 @@ class OmnibarViewController: BaseElloViewController {
                 }
             }
         }
+
+        screen.communityPickerVisible = communityPickerVisible
+        screen.chosenCategory = self.category
         screen.delegate = self
     }
 
@@ -291,9 +331,29 @@ extension OmnibarViewController {
 }
 
 
+extension OmnibarViewController: ChooseCategoryControllerDelegate {
+    func categoryChosen(_ category: Category) {
+        self.category = category
+        screen.chosenCategory = category
+    }
+}
+
 extension OmnibarViewController: OmnibarScreenDelegate {
 
-    func omnibarCancel() {
+    func clearCommunityTapped() {
+        screen.chosenCategory = nil
+        category = nil
+    }
+
+    func chooseCommunityTapped() {
+        guard let currentUser = currentUser else { return }
+
+        let controller = ChooseCategoryViewController(currentUser: currentUser, category: category)
+        controller.delegate = self
+        navigationController?.pushViewController(controller, animated: true)
+    }
+
+    func cancelTapped() {
         if canGoBack {
             if let fileName = omnibarDataName() {
                 var dataRegions = [NSObject]()
@@ -340,7 +400,7 @@ extension OmnibarViewController: OmnibarScreenDelegate {
         self.dismiss(animated: true, completion: nil)
     }
 
-    func omnibarSubmitted(_ regions: [OmnibarRegion], buyButtonURL: URL?) {
+    func submitted(regions: [OmnibarRegion], buyButtonURL: URL?) {
         let content = generatePostRegions(regions)
         guard content.count > 0 else {
             return
@@ -425,6 +485,7 @@ extension OmnibarViewController {
         service.create(
             content: content,
             buyButtonURL: buyButtonURL,
+            categoryId: category?.id,
             artistInviteId: artistInvite?.id
             )
             .then { postOrComment -> Void in

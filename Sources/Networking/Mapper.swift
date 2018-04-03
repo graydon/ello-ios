@@ -5,7 +5,7 @@
 struct Mapper {
 
     static func mapToObjectArray(_ dicts: [[String: Any]], type mappingType: MappingType) -> [JSONAble] {
-        return dicts.flatMap { object in
+        return dicts.compactMap { object in
             return mapToObject(object, type: mappingType)
         }
     }

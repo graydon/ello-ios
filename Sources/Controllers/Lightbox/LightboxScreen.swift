@@ -305,7 +305,7 @@ class LightboxScreen: Screen, LightboxScreenProtocol {
 
             elloAnimate {
                 if shouldLoadMore {
-                    self.nextPageView.animateLogo()
+                    self.nextPageView.startAnimating()
                     self.gestureDeltaX = -self.maxX
                 }
                 else {
@@ -345,7 +345,7 @@ class LightboxScreen: Screen, LightboxScreenProtocol {
                 self.setNeedsLayout()
                 self.layoutIfNeeded()
             }.always {
-                self.nextPageView.stopAnimatingLogo()
+                self.nextPageView.stopAnimating()
                 self.enableGestures()
             }
         }

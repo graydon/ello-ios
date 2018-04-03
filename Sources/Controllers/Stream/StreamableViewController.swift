@@ -90,12 +90,12 @@ class StreamableViewController: BaseElloViewController {
         super.trackScreenAppeared()
 
         guard let (streamKind, streamId) = trackerStreamInfo() else { return }
-        let posts = streamViewController.collectionViewDataSource.visibleCellItems.flatMap { streamCellItem in
+        let posts = streamViewController.collectionViewDataSource.visibleCellItems.compactMap { streamCellItem in
             return streamCellItem.jsonable as? Post
         }
         PostService().sendPostViews(posts: posts, streamId: streamId, streamKind: streamKind, userId: currentUser?.id)
 
-        let comments = streamViewController.collectionViewDataSource.visibleCellItems.flatMap { streamCellItem -> ElloComment? in
+        let comments = streamViewController.collectionViewDataSource.visibleCellItems.compactMap { streamCellItem -> ElloComment? in
             guard streamCellItem.type != .createComment else { return nil }
             return streamCellItem.jsonable as? ElloComment
         }

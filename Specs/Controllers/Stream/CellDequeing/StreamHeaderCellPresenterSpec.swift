@@ -29,7 +29,7 @@ class StreamHeaderCellPresenterSpec: QuickSpec {
                         "createdAt": Date(timeIntervalSinceNow: -1000),
                     ])
 
-                    cell = StreamHeaderCell.loadFromNib() as StreamHeaderCell
+                    cell = StreamHeaderCell()
                     item = StreamCellItem(jsonable: post, type: .streamHeader)
                 }
 
@@ -99,7 +99,7 @@ class StreamHeaderCellPresenterSpec: QuickSpec {
                         "repostAuthor": repostAuthor,
                     ])
 
-                    cell = StreamHeaderCell.loadFromNib() as StreamHeaderCell
+                    cell = StreamHeaderCell()
                     item = StreamCellItem(jsonable: post, type: .streamHeader)
                 }
                 it("sets relationshipControl properties") {
@@ -152,7 +152,7 @@ class StreamHeaderCellPresenterSpec: QuickSpec {
                         "lovesCount": 14,
                     ])
 
-                    cell = StreamHeaderCell.loadFromNib() as StreamHeaderCell
+                    cell = StreamHeaderCell()
                     item = StreamCellItem(jsonable: post, type: .streamHeader)
                 }
                 it("sets followButtonVisible") {
@@ -178,7 +178,7 @@ class StreamHeaderCellPresenterSpec: QuickSpec {
                         "repostAuthor": repostAuthor,
                     ])
 
-                    cell = StreamHeaderCell.loadFromNib() as StreamHeaderCell
+                    cell = StreamHeaderCell()
                     item = StreamCellItem(jsonable: post, type: .streamHeader)
                 }
                 it("sets followButtonVisible") {
@@ -203,7 +203,7 @@ class StreamHeaderCellPresenterSpec: QuickSpec {
                         "categories": [category],
                     ])
 
-                    cell = StreamHeaderCell.loadFromNib() as StreamHeaderCell
+                    cell = StreamHeaderCell()
                     item = StreamCellItem(jsonable: post, type: .streamHeader)
                 }
                 it("sets categoryButton in .Featured stream") {
@@ -211,7 +211,7 @@ class StreamHeaderCellPresenterSpec: QuickSpec {
                     StreamHeaderCellPresenter.configure(cell, streamCellItem: item, streamKind: .category(.all, .featured), indexPath: IndexPath(item: 0, section: 0), currentUser: currentUser)
                     expect(cell.followButtonVisible) == false
                     expect(cell.specs().relationshipControl.isHidden) == true
-                    expect(cell.specs().categoryButton.currentTitle) == "in Art"
+                    expect(cell.specs().categoryButton.title) == "in Art"
                     expect(cell.specs().categoryButton.isHidden) == false
                 }
                 it("hides categoryButton if not in .Featured stream") {
@@ -233,7 +233,7 @@ class StreamHeaderCellPresenterSpec: QuickSpec {
                         "lovesCount": 14,
                         ])
 
-                    cell = StreamHeaderCell.loadFromNib() as StreamHeaderCell
+                    cell = StreamHeaderCell()
                     item = StreamCellItem(jsonable: post, type: .streamHeader)
                 }
                 it("sets followButtonVisible") {
@@ -247,7 +247,7 @@ class StreamHeaderCellPresenterSpec: QuickSpec {
                 beforeEach {
                     let post: Post = stub(["artistInviteId": "12345"])
 
-                    cell = StreamHeaderCell.loadFromNib() as StreamHeaderCell
+                    cell = StreamHeaderCell()
                     item = StreamCellItem(jsonable: post, type: .streamHeader)
                 }
                 it("shows artistInviteSubmissionButton") {

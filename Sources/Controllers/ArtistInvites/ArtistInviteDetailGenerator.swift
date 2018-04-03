@@ -102,7 +102,7 @@ private extension ArtistInviteDetailGenerator {
 
                 self.destination?.setPagingConfig(responseConfig: responseConfig)
 
-                let posts = submissions.flatMap { $0.post }
+                let posts = submissions.compactMap { $0.post }
                 if posts.count == 0 {
                     self.showEmptySubmissions()
                 }
@@ -159,7 +159,7 @@ private extension ArtistInviteDetailGenerator {
             selectedButton,
             declinedButton,
             spacer,
-        ].flatMap { $0 }
+        ].compactMap { $0 }
         self.destination?.replacePlaceholder(type: .artistInviteAdmin, items: items)
     }
 }
