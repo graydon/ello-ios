@@ -40,7 +40,7 @@ class StreamImageCell: StreamRegionableCell {
     @IBOutlet var buyButtonGreen: UIView?
     @IBOutlet var buyButtonWidthConstraint: NSLayoutConstraint?
 
-    @IBOutlet var circle: PulsingCircle!
+    @IBOutlet var circle: ElloLogoView!
     @IBOutlet var failImage: UIImageView!
     @IBOutlet var failBackgroundView: UIView!
     @IBOutlet var leadingConstraint: NSLayoutConstraint!
@@ -162,7 +162,7 @@ class StreamImageCell: StreamRegionableCell {
     func setImageURL(_ url: URL) {
         imageView.image = nil
         imageView.alpha = 0
-        circle.pulse()
+        circle.startAnimating()
         failImage.isHidden = true
         failImage.alpha = 0
         loadImage(url)
@@ -217,12 +217,12 @@ class StreamImageCell: StreamRegionableCell {
                 elloAnimate {
                     self.imageView.alpha = 1
                 }.always {
-                    self.circle.stopPulse()
+                    self.circle.stopAnimating()
                 }
             }
             else {
                 self.imageView.alpha = 1.0
-                self.circle.stopPulse()
+                self.circle.stopAnimating()
             }
 
             self.layoutIfNeeded()

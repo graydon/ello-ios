@@ -21,7 +21,7 @@ class SimpleMessageCell: CollectionViewCell {
     }
 
     private let label = UILabel()
-    private let logo = ElloLogoView(style: .grey)
+    private let logo = ElloLogoView(style: .normal)
 
     override func style() {
         contentView.backgroundColor = .white

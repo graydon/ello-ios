@@ -74,7 +74,7 @@ class EditorialCell: CollectionViewCell {
     private var gradientLayer = EditorialCell.generateGradientLayer()
     private let imageView = FLAnimatedImageView()
     private let loadingView = UIView()
-    private let spinner = ElloLogoView(style: .grey)
+    private let spinner = ElloLogoView(style: .normal)
     var editorialContentView: UIView { return bg }
     let doubleTapGesture = UITapGestureRecognizer()
     let singleTapGesture = UITapGestureRecognizer()

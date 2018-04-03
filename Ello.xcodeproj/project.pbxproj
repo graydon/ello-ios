@@ -535,6 +535,8 @@
 		1D2B50BB1D272A6400F6CE90 /* StatusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D2B50BA1D272A6400F6CE90 /* StatusBar.swift */; };
 		1D2B50BD1D2C2FC000F6CE90 /* CategoryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D2B50BC1D2C2FC000F6CE90 /* CategoryService.swift */; };
 		1D2B6A7C1BE3FB0900D27DC9 /* AvatarButtonSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D2B6A7B1BE3FB0900D27DC9 /* AvatarButtonSpec.swift */; };
+		1D2C09D02072A63C00DEE61A /* LoadingGradientLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DF4908C1FD08B9900C0ACAC /* LoadingGradientLayer.swift */; };
+		1D2C09D12072A63D00DEE61A /* LoadingGradientLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DF4908C1FD08B9900C0ACAC /* LoadingGradientLayer.swift */; };
 		1D2C12AA1D4FD727007C4981 /* OmnibarScreenSnapshotSpecs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D2C12A91D4FD727007C4981 /* OmnibarScreenSnapshotSpecs.swift */; };
 		1D2D18651AC322070078AA05 /* UIWebViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D2D18641AC322070078AA05 /* UIWebViewExtensions.swift */; };
 		1D2ED1B41F82EF2800B19052 /* grid_view_selected.svg in Resources */ = {isa = PBXBuildFile; fileRef = 1D2ED1B21F82EF2600B19052 /* grid_view_selected.svg */; };
@@ -5222,6 +5224,7 @@
 				1D2F65AA1D185B120099D036 /* DiscoverType.swift in Sources */,
 				1D9309D81EC1134D0099FCF8 /* Editorial.swift in Sources */,
 				1D104FD31F3CEC7800B5487A /* ElloHUD.swift in Sources */,
+				1D2C09D02072A63C00DEE61A /* LoadingGradientLayer.swift in Sources */,
 				1D5A901E1D3D749B00C2AEFF /* ShareExtensionHeaders.swift in Sources */,
 				1D0DF8F6202384BF00019875 /* AssetParser.swift in Sources */,
 				122B30B31C6A3FBB00C1B9D8 /* Availability.swift in Sources */,
@@ -6231,6 +6234,7 @@
 				1D447ED71F3BC6E900013384 /* Post.swift in Sources */,
 				1D447EED1F3BC7FD00013384 /* Notification.swift in Sources */,
 				1D447EBB1F3BC5C800013384 /* NumberExtensions.swift in Sources */,
+				1D2C09D12072A63D00DEE61A /* LoadingGradientLayer.swift in Sources */,
 				1D0DF8EC202384BE00019875 /* CategoryParser.swift in Sources */,
 				1D447EEE1F3BC80000013384 /* Box.swift in Sources */,
 				1D447EF71F3BC92900013384 /* Groupable.swift in Sources */,
