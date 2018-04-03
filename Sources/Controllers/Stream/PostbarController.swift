@@ -306,7 +306,7 @@ class PostbarController: UIResponder {
         spinner.center = spinnerContainer.bounds.center
         spinnerContainer.addSubview(spinner)
         alertController.contentView = spinnerContainer
-        spinner.animateLogo()
+        spinner.startAnimating()
         if let user = currentUser, let userPostsCount = user.postsCount {
             user.postsCount = userPostsCount + 1
             postNotification(CurrentUserChangedNotification, value: user)

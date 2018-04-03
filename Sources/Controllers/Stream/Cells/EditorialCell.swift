@@ -97,7 +97,7 @@ class EditorialCell: CollectionViewCell {
         gradientView.layer.addSublayer(gradientLayer)
         imageView.contentMode = .scaleAspectFill
         loadingView.backgroundColor = .greyA
-        spinner.animateLogo()
+        spinner.startAnimating()
     }
 
     override func bindActions() {
@@ -158,9 +158,9 @@ class EditorialCell: CollectionViewCell {
     func updateConfig() {
         if let url = config.imageURL {
             self.spinner.isVisible = true
-            self.spinner.animateLogo()
+            self.spinner.startAnimating()
             imageView.pin_setImage(from: url) { result in
-                self.spinner.stopAnimatingLogo()
+                self.spinner.stopAnimating()
             }
         }
         else {

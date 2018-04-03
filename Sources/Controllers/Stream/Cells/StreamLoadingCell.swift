@@ -35,10 +35,10 @@ protocol LoadingCell {
 
 extension StreamLoadingCell: LoadingCell {
     func startAnimating() {
-        elloLogo.animateLogo()
+        elloLogo.startAnimating()
     }
 
     func stopAnimating() {
-        elloLogo.stopAnimatingLogo()
+        elloLogo.stopAnimating()
     }
 }
