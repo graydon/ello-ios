@@ -12,7 +12,7 @@ class ElloPullToRefreshView: UIView, SSPullToRefreshContentView {
     private let toValue = (360.0 * Double.pi) / 180.0
 
     lazy var elloLogo: ElloLogoView = {
-        let logo = ElloLogoView()
+        let logo = ElloLogoView(style: .loading)
         logo.transform = CGAffineTransform(rotationAngle: CGFloat.pi)
         logo.bounds = CGRect(x: 0, y: 0, width: 30, height: 30)
         return logo
@@ -54,12 +54,6 @@ class ElloPullToRefreshView: UIView, SSPullToRefreshContentView {
 
     func setPullProgress(_ pullProgress: CGFloat) {
         self.pullProgress = pullProgress
-        if !loading {
-            let progress = min(Double(pullProgress), 1.0)
-            let rotation = interpolate(from: Double.pi, to: Double.pi * 2, at: progress)
-            elloLogo.transform = CGAffineTransform( rotationAngle: CGFloat(rotation) )
-            setNeedsDisplay()
-        }
     }
 
 }
