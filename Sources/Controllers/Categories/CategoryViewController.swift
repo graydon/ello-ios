@@ -28,7 +28,7 @@ final class CategoryViewController: StreamableViewController {
 
     var category: Category?
     var categorySelection: Category.Selection = .all
-    var stream: DiscoverType = .featured
+    var filter: CategoryFilter = .featured
     private var prevSelection: Category.Selection?
     var subscribedCategories: [Category]?
     var pageHeader: PageHeader?
@@ -72,7 +72,7 @@ final class CategoryViewController: StreamableViewController {
 
         self.generator = CategoryGenerator(
             selection: categorySelection,
-            stream: stream,
+            filter: filter,
             currentUser: currentUser,
             destination: self
         )
@@ -183,8 +183,8 @@ private extension CategoryViewController {
         streamViewController.isPullToRefreshEnabled = false
     }
 
-    func loadStream(_ stream: DiscoverType) {
-        generator.reset(stream: stream)
+    func loadStream(_ filter: CategoryFilter) {
+        generator.reset(filter: filter)
         streamViewController.streamKind = generator.streamKind
         generator.load(reloadPosts: true, reloadHeader: false, reloadCategories: false)
         streamViewController.isPullToRefreshEnabled = false
@@ -449,9 +449,9 @@ extension CategoryViewController: PromotionalHeaderResponder {
 
 extension CategoryViewController: StreamSelectionCellResponder {
 
-    func streamTapped(_ slug: String) {
-        let stream: DiscoverType! = DiscoverType(rawValue: slug)
-        loadStream(stream)
+    func streamTapped(_ filterName: String) {
+        let filter: CategoryFilter! = CategoryFilter(rawValue: filterName)
+        loadStream(filter)
 
         trackScreenAppeared()
     }

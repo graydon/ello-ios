@@ -22,9 +22,9 @@ final class CategoryGenerator: StreamGenerator {
     }
 
     private var subscribedCategories: [Category]?
-    private var streamSelection: (Category.Selection, DiscoverType)
+    private var streamSelection: (Category.Selection, CategoryFilter)
     private var categorySelection: Category.Selection { return streamSelection.0 }
-    private var stream: DiscoverType { return streamSelection.1 }
+    private var filter: CategoryFilter { return streamSelection.1 }
     private var pageHeader: PageHeader?
     private var posts: [Post]?
     private var localToken: String = ""
@@ -34,9 +34,9 @@ final class CategoryGenerator: StreamGenerator {
     private var nextPageRequest: GraphQLRequest<(PageConfig, [Post])>?
     private var nextRequestGenerator: ((String) -> GraphQLRequest<(PageConfig, [Post])>)?
 
-    init(selection: Category.Selection, stream: DiscoverType, currentUser: User?, destination: StreamDestination) {
-        self.streamKind = .category(selection, stream)
-        self.streamSelection = (selection, stream)
+    init(selection: Category.Selection, filter: CategoryFilter, currentUser: User?, destination: StreamDestination) {
+        self.streamKind = .category(selection, filter)
+        self.streamSelection = (selection, filter)
         self.currentUser = currentUser
         self.destination = destination
     }
@@ -51,12 +51,12 @@ final class CategoryGenerator: StreamGenerator {
         return items
     }
 
-    func reset(selection _selection: Category.Selection? = nil, stream _stream: DiscoverType? = nil) {
+    func reset(selection _selection: Category.Selection? = nil, filter _filter: CategoryFilter? = nil) {
         let selection = _selection ?? self.categorySelection
-        let stream = _stream ?? self.stream
-        self.streamSelection = (selection, stream)
+        let filter = _filter ?? self.filter
+        self.streamSelection = (selection, filter)
         self.pageHeader = nil
-        self.streamKind = .category(selection, stream)
+        self.streamKind = .category(selection, filter)
     }
 
     func load(reloadPosts: Bool, reloadHeader: Bool, reloadCategories: Bool) {
@@ -177,18 +177,18 @@ extension CategoryGenerator {
 
     private func loadCategoryPosts(_ doneOperation: AsyncOperation, reload: Bool) {
         let request: GraphQLRequest<(PageConfig, [Post])>
-        let stream = self.stream
+        let filter = self.filter
 
         switch categorySelection {
         case .all:
-            request = API().globalPostStream(stream: stream)
-            nextRequestGenerator = { next in return API().globalPostStream(stream: stream, before: next) }
+            request = API().globalPostStream(filter: filter)
+            nextRequestGenerator = { next in return API().globalPostStream(filter: filter, before: next) }
         case .subscribed:
-            request = API().subscribedPostStream(stream: stream)
-            nextRequestGenerator = { next in return API().subscribedPostStream(stream: stream, before: next) }
+            request = API().subscribedPostStream(filter: filter)
+            nextRequestGenerator = { next in return API().subscribedPostStream(filter: filter, before: next) }
         case let .category(slug):
-            request = API().categoryPostStream(categorySlug: slug, stream: stream)
-            nextRequestGenerator = { next in return API().categoryPostStream(categorySlug: slug, stream: stream, before: next) }
+            request = API().categoryPostStream(categorySlug: slug, filter: filter)
+            nextRequestGenerator = { next in return API().categoryPostStream(categorySlug: slug, filter: filter, before: next) }
         }
 
         let displayPostsOperation = AsyncOperation()

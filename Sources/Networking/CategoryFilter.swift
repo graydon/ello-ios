@@ -1,8 +1,8 @@
 ////
-///  DiscoverType.swift
+///  CategoryFilter.swift
 //
 
-enum DiscoverType: String {
+enum CategoryFilter: String {
     case featured = "recommended"
     case trending = "trending"
     case recent = "recent"
