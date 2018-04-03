@@ -31,12 +31,11 @@ class NotificationsScreen: UIView, NotificationsScreenProtocol {
     var navBarVisible = true
 
     override init(frame: CGRect) {
+        super.init(frame: frame)
 
         filterMentionButton.titleLabel!.font = .defaultFont(16)
-
-        super.init(frame: frame)
         backgroundColor = .white
-        self.addSubview(streamContainer)
+        addSubview(streamContainer)
 
         for (button, action) in [
             (filterAllButton, #selector(allButtonTapped(_:))),
@@ -50,7 +49,8 @@ class NotificationsScreen: UIView, NotificationsScreenProtocol {
             button.addTarget(self, action: action, for: .touchUpInside)
         }
         filterBar.selectButton(filterAllButton)
-        self.addSubview(filterBar)
+        addSubview(filterBar)
+        positionFilterBar()
     }
 
     required init?(coder: NSCoder) {
