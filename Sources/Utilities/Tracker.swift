@@ -351,6 +351,33 @@ extension Tracker {
         screen("Web View", properties: ["url": url])
     }
 
+    func allCategoriesTapped() {
+        track("all categories tapped")
+    }
+
+    func editCategoriesTapped() {
+        track("edit categories tapped")
+    }
+
+    func categoriesEdited() {
+        track("subscribed categories edited")
+    }
+
+    func subscribedCategoryTapped() {
+        track("subscribed category tapped")
+    }
+
+    func categoryFilterChanged(_ filterName: String, on selection: Category.Selection) {
+        let selectionDesc: String
+        switch selection {
+        case .all: selectionDesc = "all"
+        case .subscribed: selectionDesc = "subscribed"
+        case let .category(slug): selectionDesc = "category \(slug)"
+        }
+
+        track("category filter changed", properties: ["category": selectionDesc, "filter": filterName])
+    }
+
     func categoryOpened(_ categorySlug: String) {
         track("category opened", properties: ["category": categorySlug])
     }

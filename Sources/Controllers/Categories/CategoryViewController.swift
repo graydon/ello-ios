@@ -332,18 +332,21 @@ extension CategoryViewController: CategoryScreenDelegate {
     }
 
     func allCategoriesTapped() {
+        Tracker.shared.allCategoriesTapped()
         selectAllCategories()
     }
 
     func editCategoriesTapped() {
         guard let currentUser = currentUser else { return }
 
+        Tracker.shared.editCategoriesTapped()
         let vc = ManageCategoriesViewController(currentUser: currentUser)
         vc.currentUser = currentUser
         navigationController?.pushViewController(vc, animated: true)
     }
 
     func subscribedCategoryTapped() {
+        Tracker.shared.subscribedCategoryTapped()
         selectSubscribedCategory()
     }
 
@@ -450,6 +453,7 @@ extension CategoryViewController: PromotionalHeaderResponder {
 extension CategoryViewController: StreamSelectionCellResponder {
 
     func streamTapped(_ filterName: String) {
+        Tracker.shared.categoryFilterChanged(filterName, on: categorySelection)
         let filter: CategoryFilter! = CategoryFilter(rawValue: filterName)
         loadStream(filter)
 

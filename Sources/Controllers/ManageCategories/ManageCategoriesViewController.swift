@@ -70,6 +70,7 @@ class ManageCategoriesViewController: StreamableViewController {
             return
         }
 
+        Tracker.shared.categoriesEdited()
         saveAndExit()
     }
 
