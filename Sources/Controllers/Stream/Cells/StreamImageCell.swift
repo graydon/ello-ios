@@ -124,6 +124,9 @@ class StreamImageCell: StreamRegionableCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
+
+        reset()
+
         if let playButton = largeImagePlayButton {
             playButton.interfaceImage = .videoPlay
         }
@@ -162,7 +165,6 @@ class StreamImageCell: StreamRegionableCell {
         circle.pulse()
         failImage.isHidden = true
         failImage.alpha = 0
-        imageView.backgroundColor = UIColor.white
         loadImage(url)
     }
 
@@ -172,7 +174,6 @@ class StreamImageCell: StreamRegionableCell {
         imageView.alpha = 1
         failImage.isHidden = true
         failImage.alpha = 0
-        imageView.backgroundColor = UIColor.white
     }
 
     override func layoutSubviews() {
@@ -232,20 +233,24 @@ class StreamImageCell: StreamRegionableCell {
         buyButton?.isHidden = true
         buyButtonGreen?.isHidden = true
         failImage.isVisible = true
-        failBackgroundView.isVisible = true
-        circle.stopPulse()
+        circle.stopAnimating()
         largeImagePlayButton?.isHidden = true
         UIView.animate(withDuration: 0.15, animations: {
             self.failImage.alpha = 1.0
-            self.imageView.backgroundColor = UIColor.greyF1
-            self.failBackgroundView.backgroundColor = UIColor.greyF1
-            self.imageView.alpha = 1.0
+            self.failBackgroundView.backgroundColor = .greyF1
             self.failBackgroundView.alpha = 1.0
         })
     }
 
     override func prepareForReuse() {
         super.prepareForReuse()
+        reset()
+    }
+
+    private func reset() {
+        failBackgroundView.alpha = 0
+
+        contentView.backgroundColor = .white
         mode = .image
         marginType = .post
         imageButton.isUserInteractionEnabled = true
@@ -263,7 +268,6 @@ class StreamImageCell: StreamRegionableCell {
         isLargeImage = false
         failImage.isHidden = true
         failImage.alpha = 0
-        failBackgroundView.isHidden = true
         failBackgroundView.alpha = 0
     }
 
