@@ -188,9 +188,10 @@ final class StreamViewController: BaseElloViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        pullToRefreshView = SSPullToRefreshView(scrollView: collectionView, delegate: self)
-        pullToRefreshView?.contentView = ElloPullToRefreshView(frame: .zero)
-        pullToRefreshView?.isVisible = isPullToRefreshEnabled
+        let pullToRefreshView = SSPullToRefreshView(scrollView: collectionView, delegate: self)!
+        pullToRefreshView.contentView = ElloPullToRefreshView()
+        pullToRefreshView.isVisible = isPullToRefreshEnabled
+        self.pullToRefreshView = pullToRefreshView
 
         setupCollectionView()
         addNotificationObservers()

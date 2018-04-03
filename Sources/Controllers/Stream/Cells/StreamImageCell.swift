@@ -32,26 +32,25 @@ class StreamImageCell: StreamRegionableCell {
         static let singleColumnBuyButtonWidth: CGFloat = 40
     }
 
-
-    @IBOutlet weak var imageView: FLAnimatedImageView!
-    @IBOutlet weak var imageButton: UIView!
+    @IBOutlet var imageView: FLAnimatedImageView!
+    @IBOutlet var imageButton: UIView!
 
     // optional because the StreamEmbedCell doesn't have them:
-    @IBOutlet weak var buyButton: UIButton?
-    @IBOutlet weak var buyButtonGreen: UIView?
-    @IBOutlet weak var buyButtonWidthConstraint: NSLayoutConstraint?
+    @IBOutlet var buyButton: UIButton?
+    @IBOutlet var buyButtonGreen: UIView?
+    @IBOutlet var buyButtonWidthConstraint: NSLayoutConstraint?
 
-    @IBOutlet weak var circle: PulsingCircle!
-    @IBOutlet weak var failImage: UIImageView!
-    @IBOutlet weak var failBackgroundView: UIView!
-    @IBOutlet weak var leadingConstraint: NSLayoutConstraint!
-    @IBOutlet weak var failWidthConstraint: NSLayoutConstraint!
-    @IBOutlet weak var failHeightConstraint: NSLayoutConstraint!
+    @IBOutlet var circle: PulsingCircle!
+    @IBOutlet var failImage: UIImageView!
+    @IBOutlet var failBackgroundView: UIView!
+    @IBOutlet var leadingConstraint: NSLayoutConstraint!
+    @IBOutlet var failWidthConstraint: NSLayoutConstraint!
+    @IBOutlet var failHeightConstraint: NSLayoutConstraint!
     private var foregroundObserver: NotificationObserver?
 
     // not used in StreamEmbedCell
-    @IBOutlet weak var largeImagePlayButton: UIImageView?
-    @IBOutlet weak var imageRightConstraint: NSLayoutConstraint!
+    @IBOutlet var largeImagePlayButton: UIImageView?
+    @IBOutlet var imageRightConstraint: NSLayoutConstraint!
 
     var isGif = false
     var onHeightMismatch: OnHeightMismatch?

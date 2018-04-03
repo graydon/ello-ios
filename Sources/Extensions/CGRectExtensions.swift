@@ -36,7 +36,8 @@ extension CGRect {
     var x: CGFloat { return self.origin.x }
     var y: CGFloat { return self.origin.y }
     var center: CGPoint {
-        return CGPoint(x: self.midX, y: self.midY)
+        get { return CGPoint(x: self.midX, y: self.midY) }
+        set { origin = CGPoint(x: newValue.x - width / 2, y: newValue.y - height / 2) }
     }
 
 // MARK: dimension setters
