@@ -18,13 +18,13 @@
                 <rect key="frame" x="0.0" y="0.0" width="587" height="119"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oJN-Vf-OgU" userLabel="circle" customClass="PulsingCircle" customModule="Ello" customModuleProvider="target">
-                        <rect key="frame" x="0.0" y="0.0" width="587" height="109"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <view contentMode="scaleToFill" placeholderIntrinsicWidth="60" placeholderIntrinsicHeight="60" translatesAutoresizingMaskIntoConstraints="NO" id="oJN-Vf-OgU" userLabel="circle" customClass="ElloLogoView" customModule="Ello" customModuleProvider="target">
+                        <rect key="frame" x="263.5" y="29.5" width="60" height="60"/>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Mxq-aT-kg1" userLabel="failBackgroundView">
                         <rect key="frame" x="0.0" y="0.0" width="587" height="109"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
                     <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="gia-lK-VuN" userLabel="imageView" customClass="FLAnimatedImageView">
                         <rect key="frame" x="0.0" y="0.0" width="587" height="109"/>
@@ -43,18 +43,18 @@
                         <rect key="frame" x="0.0" y="0.0" width="587" height="109"/>
                     </button>
                 </subviews>
-                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             </view>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="cba-zi-ctG" firstAttribute="leading" secondItem="miB-hg-eZF" secondAttribute="leading" id="1Pe-ua-Fx2" userLabel="imageButton Left"/>
+                <constraint firstItem="oJN-Vf-OgU" firstAttribute="centerX" secondItem="miB-hg-eZF" secondAttribute="centerX" id="3rf-9g-52t"/>
                 <constraint firstItem="bZx-ho-rW6" firstAttribute="top" secondItem="miB-hg-eZF" secondAttribute="top" id="7Q4-ga-Jt9" userLabel="playIcon - top"/>
                 <constraint firstItem="gia-lK-VuN" firstAttribute="bottom" secondItem="Mxq-aT-kg1" secondAttribute="bottom" id="87s-n8-hEW"/>
-                <constraint firstItem="oJN-Vf-OgU" firstAttribute="trailing" secondItem="gia-lK-VuN" secondAttribute="trailing" id="Fnq-8H-pKy"/>
                 <constraint firstAttribute="trailing" secondItem="Mxq-aT-kg1" secondAttribute="trailing" id="Kib-HU-7lQ"/>
                 <constraint firstItem="cba-zi-ctG" firstAttribute="top" secondItem="miB-hg-eZF" secondAttribute="top" id="NiB-iX-BJq" userLabel="imageButton Top"/>
                 <constraint firstAttribute="bottom" secondItem="gia-lK-VuN" secondAttribute="bottom" constant="10" id="Oan-UI-8ly" userLabel="imageView Bottom"/>
                 <constraint firstAttribute="bottom" secondItem="bZx-ho-rW6" secondAttribute="bottom" id="Vw7-4w-Frd" userLabel="playIcon - bottom"/>
+                <constraint firstItem="oJN-Vf-OgU" firstAttribute="centerY" secondItem="miB-hg-eZF" secondAttribute="centerY" id="W1l-Hi-DXQ"/>
                 <constraint firstAttribute="trailing" secondItem="bZx-ho-rW6" secondAttribute="trailing" id="eW4-8l-pnA" userLabel="playIcon - right"/>
                 <constraint firstItem="gia-lK-VuN" firstAttribute="leading" secondItem="miB-hg-eZF" secondAttribute="leading" id="fgY-B3-cIH" userLabel="imageView Left"/>
                 <constraint firstAttribute="trailing" secondItem="cba-zi-ctG" secondAttribute="trailing" id="hZc-Jx-yHS" userLabel="imageButton Right"/>
@@ -62,9 +62,6 @@
                 <constraint firstItem="gia-lK-VuN" firstAttribute="top" secondItem="miB-hg-eZF" secondAttribute="top" id="k2F-Aw-sEU" userLabel="imageView Top"/>
                 <constraint firstItem="bZx-ho-rW6" firstAttribute="leading" secondItem="miB-hg-eZF" secondAttribute="leading" id="koL-pi-aMc" userLabel="playIcon - left"/>
                 <constraint firstAttribute="bottom" secondItem="cba-zi-ctG" secondAttribute="bottom" constant="10" id="laR-DL-WFc" userLabel="imageButton Bottom"/>
-                <constraint firstItem="oJN-Vf-OgU" firstAttribute="top" secondItem="gia-lK-VuN" secondAttribute="top" id="ldy-Lp-cGf"/>
-                <constraint firstItem="oJN-Vf-OgU" firstAttribute="leading" secondItem="gia-lK-VuN" secondAttribute="leading" id="pxC-Kc-Blg"/>
-                <constraint firstItem="oJN-Vf-OgU" firstAttribute="bottom" secondItem="gia-lK-VuN" secondAttribute="bottom" id="qHP-Rx-9dH"/>
                 <constraint firstAttribute="centerX" secondItem="AvW-Mf-4pn" secondAttribute="centerX" id="s9l-2m-EyR"/>
                 <constraint firstItem="Mxq-aT-kg1" firstAttribute="top" secondItem="miB-hg-eZF" secondAttribute="top" id="vkF-fd-FXe"/>
                 <constraint firstItem="Mxq-aT-kg1" firstAttribute="leading" secondItem="miB-hg-eZF" secondAttribute="leading" id="wdI-nd-FgH"/>

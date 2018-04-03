@@ -19,11 +19,11 @@
                 <rect key="frame" x="0.0" y="0.0" width="587" height="119"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oJN-Vf-OgU" userLabel="circle" customClass="PulsingCircle" customModule="Ello" customModuleProvider="target">
-                        <rect key="frame" x="0.0" y="0.0" width="587" height="119"/>
+                    <view contentMode="scaleToFill" placeholderIntrinsicWidth="60" placeholderIntrinsicHeight="60" translatesAutoresizingMaskIntoConstraints="NO" id="oJN-Vf-OgU" userLabel="circle" customClass="ElloLogoView" customModule="Ello" customModuleProvider="target">
+                        <rect key="frame" x="263.5" y="29.5" width="60" height="60"/>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dCD-fe-L2b" userLabel="failBackgroundView">
+                    <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dCD-fe-L2b" userLabel="failBackgroundView">
                         <rect key="frame" x="0.0" y="0.0" width="587" height="119"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
@@ -70,17 +70,18 @@
             <constraints>
                 <constraint firstItem="dCD-fe-L2b" firstAttribute="leading" secondItem="miB-hg-eZF" secondAttribute="leading" id="1sP-s0-8fy"/>
                 <constraint firstItem="gia-lK-VuN" firstAttribute="trailing" secondItem="y6x-Lt-XSe" secondAttribute="trailing" constant="10" id="DJB-JZ-6b0"/>
-                <constraint firstItem="oJN-Vf-OgU" firstAttribute="trailing" secondItem="gia-lK-VuN" secondAttribute="trailing" id="Fnq-8H-pKy"/>
                 <constraint firstItem="rkb-Ls-8Ph" firstAttribute="trailing" secondItem="gia-lK-VuN" secondAttribute="trailing" id="G6D-7n-Sp9"/>
                 <constraint firstItem="rkb-Ls-8Ph" firstAttribute="top" secondItem="gia-lK-VuN" secondAttribute="top" id="H69-zr-fGU"/>
                 <constraint firstAttribute="trailing" secondItem="dCD-fe-L2b" secondAttribute="trailing" id="JXF-eS-GVu"/>
                 <constraint firstItem="qxJ-iY-xGS" firstAttribute="top" secondItem="miB-hg-eZF" secondAttribute="top" id="KIA-Af-0Ti" userLabel="Image Button.top"/>
                 <constraint firstAttribute="bottom" secondItem="gia-lK-VuN" secondAttribute="bottom" constant="10" id="Oan-UI-8ly" userLabel="imageView Bottom"/>
+                <constraint firstItem="oJN-Vf-OgU" firstAttribute="centerX" secondItem="miB-hg-eZF" secondAttribute="centerX" id="QyA-k4-waf"/>
                 <constraint firstItem="qxJ-iY-xGS" firstAttribute="leading" secondItem="miB-hg-eZF" secondAttribute="leading" id="T34-EX-cFO" userLabel="Image Button.leading"/>
                 <constraint firstItem="y6x-Lt-XSe" firstAttribute="top" secondItem="gia-lK-VuN" secondAttribute="top" constant="10" id="TO0-EK-CDt"/>
                 <constraint firstAttribute="bottom" secondItem="qxJ-iY-xGS" secondAttribute="bottom" constant="10" id="WQQ-vD-g3W" userLabel="Image Button.bottom"/>
                 <constraint firstItem="rkb-Ls-8Ph" firstAttribute="bottom" secondItem="gia-lK-VuN" secondAttribute="bottom" constant="10" id="WWI-Th-9Du"/>
                 <constraint firstAttribute="centerY" secondItem="dZ3-hW-f3i" secondAttribute="centerY" id="XON-R3-iBY"/>
+                <constraint firstItem="oJN-Vf-OgU" firstAttribute="centerY" secondItem="miB-hg-eZF" secondAttribute="centerY" id="c0U-2U-VyA"/>
                 <constraint firstItem="y6x-Lt-XSe" firstAttribute="centerY" secondItem="kSa-cX-STU" secondAttribute="centerY" id="cDJ-Zv-GLx"/>
                 <constraint firstAttribute="trailing" secondItem="qxJ-iY-xGS" secondAttribute="trailing" id="d2S-3w-LCR" userLabel="Image Button.trailing"/>
                 <constraint firstItem="gia-lK-VuN" firstAttribute="leading" secondItem="miB-hg-eZF" secondAttribute="leading" id="fgY-B3-cIH" userLabel="imageView Left"/>
@@ -88,10 +89,7 @@
                 <constraint firstItem="rkb-Ls-8Ph" firstAttribute="leading" secondItem="gia-lK-VuN" secondAttribute="leading" id="h5N-ki-gYL"/>
                 <constraint firstAttribute="trailing" secondItem="gia-lK-VuN" secondAttribute="trailing" id="hhW-aX-ev5" userLabel="imageView Right"/>
                 <constraint firstItem="gia-lK-VuN" firstAttribute="top" secondItem="miB-hg-eZF" secondAttribute="top" id="k2F-Aw-sEU" userLabel="imageView Top"/>
-                <constraint firstItem="oJN-Vf-OgU" firstAttribute="top" secondItem="gia-lK-VuN" secondAttribute="top" id="ldy-Lp-cGf"/>
                 <constraint firstAttribute="centerX" secondItem="dZ3-hW-f3i" secondAttribute="centerX" id="p9H-76-dWp"/>
-                <constraint firstItem="oJN-Vf-OgU" firstAttribute="leading" secondItem="gia-lK-VuN" secondAttribute="leading" id="pxC-Kc-Blg"/>
-                <constraint firstItem="oJN-Vf-OgU" firstAttribute="bottom" secondItem="gia-lK-VuN" secondAttribute="bottom" constant="10" id="qHP-Rx-9dH"/>
                 <constraint firstItem="y6x-Lt-XSe" firstAttribute="centerX" secondItem="kSa-cX-STU" secondAttribute="centerX" id="se5-Nm-ycy"/>
                 <constraint firstItem="dCD-fe-L2b" firstAttribute="bottom" secondItem="gia-lK-VuN" secondAttribute="bottom" constant="10" id="tfd-76-g2u"/>
             </constraints>
