@@ -82,8 +82,9 @@ class ElloLogoView: UIView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        loadingLayer.cornerRadius = min(bounds.height, bounds.width) / 2
-        loadingLayer.frame.size = intrinsicContentSize
+        let loadingSize = intrinsicContentSize
+        loadingLayer.cornerRadius = min(loadingSize.height, loadingSize.width) / 2
+        loadingLayer.frame.size = loadingSize
         loadingLayer.frame.center = bounds.center
     }
 }
