@@ -5,7 +5,7 @@
 class StreamEmbedCell: StreamImageCell {
     static let reuseEmbedIdentifier = "StreamEmbedCell"
 
-    @IBOutlet weak var playIcon: UIImageView!
+    @IBOutlet var playIcon: UIImageView!
     var embedUrl: URL?
 
     @IBAction override func imageTapped() {
