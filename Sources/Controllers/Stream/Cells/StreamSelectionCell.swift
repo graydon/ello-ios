@@ -12,9 +12,9 @@ class StreamSelectionCell: CollectionViewCell {
         static let spacing: CGFloat = 1
     }
 
-    var selectedStream: DiscoverType = .featured {
+    var selectedFilter: CategoryFilter = .featured {
         didSet {
-            switch selectedStream {
+            switch selectedFilter {
             case .featured: tabBar?.select(tab: featuredTab)
             case .trending: tabBar?.select(tab: trendingTab)
             case .recent: tabBar?.select(tab: recentTab)
@@ -22,7 +22,7 @@ class StreamSelectionCell: CollectionViewCell {
             }
         }
     }
-    var streams: [DiscoverType] = [.featured, .trending, .recent, .shop] {
+    var filters: [CategoryFilter] = [.featured, .trending, .recent, .shop] {
         didSet { updateTabs() }
     }
 
@@ -43,9 +43,9 @@ class StreamSelectionCell: CollectionViewCell {
         }
 
         let tabBar = NestedTabBarView()
-        let tabs: [NestedTabBarView.Tab] = streams.map { stream in
-            let tab = tabBar.createTab(title: stream.name)
-            switch stream {
+        let tabs: [NestedTabBarView.Tab] = filters.map { filter in
+            let tab = tabBar.createTab(title: filter.name)
+            switch filter {
             case .featured:
                 tab.addTarget(self, action: #selector(featuredTapped))
                 featuredTab = tab
@@ -81,28 +81,28 @@ class StreamSelectionCell: CollectionViewCell {
     func featuredTapped() {
         tabBar?.select(tab: featuredTab)
         let responder: StreamSelectionCellResponder? = findResponder()
-        responder?.streamTapped(DiscoverType.featured.slug)
+        responder?.streamTapped(CategoryFilter.featured.slug)
     }
 
     @objc
     func trendingTapped() {
         tabBar?.select(tab: trendingTab)
         let responder: StreamSelectionCellResponder? = findResponder()
-        responder?.streamTapped(DiscoverType.trending.slug)
+        responder?.streamTapped(CategoryFilter.trending.slug)
     }
 
     @objc
     func recentTapped() {
         tabBar?.select(tab: recentTab)
         let responder: StreamSelectionCellResponder? = findResponder()
-        responder?.streamTapped(DiscoverType.recent.slug)
+        responder?.streamTapped(CategoryFilter.recent.slug)
     }
 
     @objc
     func shopTapped() {
         tabBar?.select(tab: shopTab)
         let responder: StreamSelectionCellResponder? = findResponder()
-        responder?.streamTapped(DiscoverType.shop.slug)
+        responder?.streamTapped(CategoryFilter.shop.slug)
     }
 
 }

@@ -12,9 +12,9 @@ class StreamSelectionCellPresenter {
     {
         guard
             let cell = cell as? StreamSelectionCell,
-            case let .category(_, stream) = streamKind
+            case let .category(_, filter) = streamKind
         else { return }
 
-        cell.selectedStream = stream
+        cell.selectedFilter = filter
     }
 }
