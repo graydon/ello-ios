@@ -54,6 +54,8 @@ class ElloPullToRefreshView: UIView, SSPullToRefreshContentView {
 
     func setPullProgress(_ pullProgress: CGFloat) {
         self.pullProgress = pullProgress
+        let alpha = max(0, (pullProgress- 0.5) * 2)
+        elloLogo.alpha = alpa
     }
 
 }
