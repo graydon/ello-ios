@@ -1175,7 +1175,7 @@ extension StreamViewController: UIScrollViewDelegate {
 
     private func maybeLoadNextPage(scrollView: UIScrollView) {
         guard
-            scrollView.contentOffset.y + (view.frame.height * 1.666) > scrollView.contentSize.height &&
+            (scrollView.contentOffset.y + view.frame.height) > scrollView.contentSize.height * 0.75,
             canLoadNextPage()
         else { return }
 
