@@ -18,7 +18,7 @@ class ProfileLinksPresenterSpec: QuickSpec {
                 let user: User = stub(["externalLinksList": links])
                 let view = ProfileLinksView()
                 ProfileLinksPresenter.configure(view, user: user, currentUser: nil)
-                expect(view.externalLinks).to(equal(links.flatMap { ExternalLink.fromDict($0) }))
+                expect(view.externalLinks).to(equal(links.compactMap { ExternalLink.fromDict($0) }))
             }
         }
     }
