@@ -83,11 +83,11 @@ final class StreamViewController: BaseElloViewController {
     }
 
     private var externalIsPullToRefreshEnabled: Bool = true {
-        didSet { pullToRefreshView?.isVisible = isPullToRefreshEnabled }
+        didSet { pullToRefreshView?.isVisible = isPullToRefreshVisible }
     }
-    private var internalIsPullToRefreshEnabled: Bool = false {
-        didSet { pullToRefreshView?.isVisible = isPullToRefreshEnabled }
-    }
+    private var internalIsPullToRefreshEnabled: Bool = false
+
+    var isPullToRefreshVisible: Bool { return externalIsPullToRefreshEnabled }
     var isPullToRefreshEnabled: Bool {
         get { return externalIsPullToRefreshEnabled && internalIsPullToRefreshEnabled }
         set { externalIsPullToRefreshEnabled = newValue }
@@ -190,7 +190,7 @@ final class StreamViewController: BaseElloViewController {
 
         let pullToRefreshView = SSPullToRefreshView(scrollView: collectionView, delegate: self)!
         pullToRefreshView.contentView = ElloPullToRefreshView()
-        pullToRefreshView.isVisible = isPullToRefreshEnabled
+        pullToRefreshView.isVisible = isPullToRefreshVisible
         self.pullToRefreshView = pullToRefreshView
 
         setupCollectionView()
@@ -645,19 +645,20 @@ extension StreamViewController: SSPullToRefreshViewDelegate {
     }
 
     func pull(_ view: SSPullToRefreshView, didTransitionTo toState: SSPullToRefreshViewState, from fromState: SSPullToRefreshViewState, animated: Bool) {
-        if toState == .loading {
-            if isPullToRefreshEnabled && internalIsPullToRefreshEnabled {
-                streamViewDelegate?.streamWillPullToRefresh()
+        guard toState == .loading else { return }
 
-                if let controller = parent as? BaseElloViewController {
-                    controller.trackScreenAppeared()
-                }
-                self.loadInitialPage(reload: true)
-            }
-            else {
-                pullToRefreshView?.finishLoading()
-            }
+        guard isPullToRefreshEnabled else {
+            pullToRefreshView?.finishLoading()
+            return
         }
+
+        streamViewDelegate?.streamWillPullToRefresh()
+
+        if let controller = parent as? BaseElloViewController {
+            controller.trackScreenAppeared()
+        }
+
+        loadInitialPage(reload: true)
     }
 
 }

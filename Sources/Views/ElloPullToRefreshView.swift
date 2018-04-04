@@ -7,14 +7,10 @@ import QuartzCore
 
 class ElloPullToRefreshView: UIView, SSPullToRefreshContentView {
 
-    private var pullProgress: CGFloat = 0
-    private var loading = false
-    private let toValue = (360.0 * Double.pi) / 180.0
-
     lazy var elloLogo: ElloLogoView = {
         let logo = ElloLogoView(style: .loading)
-        logo.transform = CGAffineTransform(rotationAngle: CGFloat.pi)
-        logo.bounds = CGRect(x: 0, y: 0, width: 30, height: 30)
+        logo.alpha = 0
+        logo.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
         return logo
     }()
 
@@ -41,21 +37,23 @@ class ElloPullToRefreshView: UIView, SSPullToRefreshContentView {
 
     func setState(_ state: SSPullToRefreshViewState, with view: SSPullToRefreshView!) {
         switch state {
+        case .ready:
+            break
+        case .normal:
+            elloLogo.alpha = 0
         case .loading:
-            loading = true
             elloLogo.startAnimating()
         case .closing:
-            loading = false
             elloLogo.stopAnimating()
-        default:
-            loading = false
+            elloAnimate {
+                self.elloLogo.alpha = 0
+            }
         }
     }
 
     func setPullProgress(_ pullProgress: CGFloat) {
-        self.pullProgress = pullProgress
-        let alpha = max(0, (pullProgress- 0.5) * 2)
-        elloLogo.alpha = alpa
+        let alpha: CGFloat = clip(map(pullProgress, fromInterval: (0.25, 0.8), toInterval: (0, 1)), min: 0, max: 1)
+        elloLogo.alpha = alpha
     }
 
 }
