@@ -333,6 +333,7 @@ extension OmnibarViewController {
 
 extension OmnibarViewController: ChooseCategoryControllerDelegate {
     func categoryChosen(_ category: Category) {
+        Tracker.shared.postIntoCommunityChosen(category)
         self.category = category
         screen.chosenCategory = category
     }
@@ -341,6 +342,7 @@ extension OmnibarViewController: ChooseCategoryControllerDelegate {
 extension OmnibarViewController: OmnibarScreenDelegate {
 
     func clearCommunityTapped() {
+        Tracker.shared.postIntoCommunityChosen(nil)
         screen.chosenCategory = nil
         category = nil
     }
@@ -556,7 +558,7 @@ extension OmnibarViewController {
         stopSpinner()
 
         if editPost != nil {
-            Tracker.shared.postEdited(post)
+            Tracker.shared.postEdited(post, category: category)
             postNotification(PostChangedNotification, value: (post, .replaced))
         }
         else {
@@ -565,7 +567,7 @@ extension OmnibarViewController {
                 postNotification(CurrentUserChangedNotification, value: user)
             }
 
-            Tracker.shared.postCreated(post)
+            Tracker.shared.postCreated(post, category: category)
             if let artistInviteSlug = artistInvite?.slug {
                 Tracker.shared.artistInviteSubmitted(slug: artistInviteSlug)
             }
