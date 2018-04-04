@@ -109,17 +109,18 @@ final class CategoryGenerator: StreamGenerator {
 
         return nextPageRequest
             .execute()
-            .then { pageConfig, posts -> [JSONAble] in
+            .map { pageConfig, posts -> [JSONAble] in
                 self.setNextPageConfig(pageConfig)
                 if posts.count == 0 {
                     self.destination?.isPagingEnabled = false
                 }
                 return posts
             }
-            .catch { error in
+            .recover { error -> Promise<[JSONAble]> in
                 let errorConfig = PageConfig(next: nil, isLastPage: true)
                 self.destination?.setPagingConfig(responseConfig: ResponseConfig(pageConfig: errorConfig))
                 self.destination?.isPagingEnabled = false
+                throw error
             }
     }
 }
@@ -144,7 +145,7 @@ extension CategoryGenerator {
 
         API().pageHeaders(kind: kind)
             .execute()
-            .then { pageHeaders -> Void in
+            .done { pageHeaders in
                 guard self.loadingToken.isValidInitialPageLoadingToken(self.localToken) else { return }
 
                 if let pageHeader = pageHeaders.randomItem() {
@@ -160,7 +161,7 @@ extension CategoryGenerator {
             .catch { _ in
                 self.destination?.primaryJSONAbleNotFound()
             }
-            .always {
+            .finally {
                 doneOperation.run()
             }
     }
@@ -168,7 +169,7 @@ extension CategoryGenerator {
     private func loadSubscribedCategories() {
         API().subscribedCategories()
             .execute()
-            .then { subscribedCategories -> Void in
+            .done { subscribedCategories in
                 self.subscribedCategories = subscribedCategories
                 self.categoryStreamDestination?.set(subscribedCategories: subscribedCategories)
             }
@@ -196,7 +197,7 @@ extension CategoryGenerator {
         queue.addOperation(displayPostsOperation)
 
         request.execute()
-            .then { pageConfig, posts -> Void in
+            .done { pageConfig, posts in
                 guard self.loadingToken.isValidInitialPageLoadingToken(self.localToken) else { return }
 
                 self.setNextPageConfig(pageConfig)

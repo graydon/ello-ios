@@ -11,7 +11,7 @@
 //  contentType: "text/plain"
 //   )
 //   .start()
-//   .then { response -> Void in }
+//   .done { response in }
 //   .catch { error in }
 
 import PromiseKit
@@ -22,7 +22,7 @@ class ElloS3 {
     let data: Data
     let contentType: String
     let credentials: AmazonCredentials
-    let (promise, resolve, reject) = Promise<Data>.pending()
+    let (promise, seal) = Promise<Data>.pending()
 
     init(credentials: AmazonCredentials, filename: String, data: Data, contentType: String) {
         self.filename = filename
@@ -58,20 +58,20 @@ class ElloS3 {
         let task = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) in
             let httpResponse = response as? HTTPURLResponse
             if let error = error {
-                self.reject(error)
+                self.seal.reject(error)
             }
             else if let statusCode = httpResponse?.statusCode,
                 statusCode >= 200 && statusCode < 300
             {
                 if let data = data {
-                    self.resolve(data)
+                    self.seal.fulfill(data)
                 }
                 else {
-                    self.reject(NSError(domain: ElloErrorDomain, code: 0, userInfo: [NSLocalizedFailureReasonErrorKey: "failure"]))
+                    self.seal.reject(NSError(domain: ElloErrorDomain, code: 0, userInfo: [NSLocalizedFailureReasonErrorKey: "failure"]))
                 }
             }
             else {
-                self.reject(NSError(domain: ElloErrorDomain, code: 0, userInfo: [NSLocalizedFailureReasonErrorKey: "failure"]))
+                self.seal.reject(NSError(domain: ElloErrorDomain, code: 0, userInfo: [NSLocalizedFailureReasonErrorKey: "failure"]))
             }
         })
         task.resume()

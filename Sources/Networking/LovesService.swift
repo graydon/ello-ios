@@ -10,7 +10,7 @@ struct LovesService {
     func lovePost(postId: String) -> Promise<Love> {
         let endpoint = ElloAPI.createLove(postId: postId)
         return ElloProvider.shared.request(endpoint)
-            .then { response -> Love in
+            .map { response -> Love in
                 guard let love = response.0 as? Love else {
                     throw NSError.uncastableJSONAble()
                 }

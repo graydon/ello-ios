@@ -24,7 +24,7 @@ struct UserService {
                 }
 
                 let promise: Promise<User> = CredentialsAuthService().authenticate(email: email, password: password)
-                    .then { _ -> User in
+                    .map { _ -> User in
                         return user
                     }
                 return promise
@@ -38,7 +38,7 @@ struct UserService {
 
     func resetPassword(password: String, authToken: String) -> Promise<User> {
         return ElloProvider.shared.request(.resetPassword(password: password, authToken: authToken))
-            .then { user, _ -> User in
+            .map { user, _ -> User in
                 guard let user = user as? User else {
                     throw NSError.uncastableJSONAble()
                 }
@@ -48,7 +48,7 @@ struct UserService {
 
     func loadUser(_ endpoint: ElloAPI) -> Promise<User> {
         return ElloProvider.shared.request(endpoint)
-            .then { data, responseConfig -> User in
+            .map { data, responseConfig -> User in
                 guard let user = data as? User else {
                     throw NSError.uncastableJSONAble()
                 }
@@ -59,7 +59,7 @@ struct UserService {
 
     func loadUserPosts(_ userId: String) -> Promise<([Post], ResponseConfig)> {
         return ElloProvider.shared.request(.userStreamPosts(userId: userId))
-            .then { data, responseConfig -> ([Post], ResponseConfig) in
+            .map { data, responseConfig -> ([Post], ResponseConfig) in
                 let posts: [Post]?
                 if data as? String == "" {
                     posts = []

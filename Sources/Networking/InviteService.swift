@@ -27,7 +27,7 @@ struct InviteService {
         }
 
         return ElloProvider.shared.request(.findFriends(contacts: contacts))
-            .then { data, _ -> FindSuccess in
+            .map { data, _ -> FindSuccess in
                 guard let data = data as? [User] else {
                     throw NSError.uncastableJSONAble()
                 }

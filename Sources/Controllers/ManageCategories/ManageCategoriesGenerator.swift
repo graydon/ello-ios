@@ -33,7 +33,7 @@ extension ManageCategoriesGenerator {
     private func loadAllCategories() {
         API().allCategories()
             .execute()
-            .then { allCategories -> Void in
+            .done { allCategories in
                 guard let currentUser = self.currentUser else { return }
 
                 let subscribedCategories: [Category] = allCategories.filter { category in

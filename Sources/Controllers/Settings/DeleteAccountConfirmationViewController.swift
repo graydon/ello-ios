@@ -76,15 +76,16 @@ class DeleteAccountConfirmationViewController: BaseElloViewController {
         ElloHUD.showLoadingHudInView(self.view)
 
         ProfileService().deleteAccount()
-            .then { _ -> Void in
+            .done { _ in
                 Tracker.shared.userDeletedAccount()
                 self.dismiss(animated: true) {
                     postNotification(AuthenticationNotifications.userLoggedOut, value: ())
                 }
             }
-            .always {
+            .ensure {
                 ElloHUD.hideLoadingHudInView(self.view)
             }
+            .ignoreErrors()
     }
 
     @IBAction func yesButtonTapped() {

@@ -80,7 +80,7 @@ private extension ShareViewController {
 
     func postContent(_ content: [PostEditingService.PostContentRegion]) {
         PostEditingService().create(content: content)
-            .then { post -> Void in
+            .done { post in
                 Tracker.shared.shareSuccessful()
                 self.dismissPostingForm()
             }
@@ -88,7 +88,7 @@ private extension ShareViewController {
                 Tracker.shared.shareFailed()
                 self.showFailedToPost()
             }
-            .always {
+            .finally {
                 self.donePosting()
             }
     }

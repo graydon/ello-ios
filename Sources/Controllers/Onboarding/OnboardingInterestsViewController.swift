@@ -69,7 +69,7 @@ extension OnboardingInterestsViewController: OnboardingStepController {
         }
 
         ProfileService().update(categories: selectedCategories, onboarding: true)
-            .then { _ -> Void in
+            .done { _ in
                 proceedClosure(.continue)
             }
             .catch { [weak self] _ in

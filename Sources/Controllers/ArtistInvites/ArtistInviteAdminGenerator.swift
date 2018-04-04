@@ -40,7 +40,7 @@ private extension ArtistInviteAdminGenerator {
 
     func loadArtistInvites() {
         StreamService().loadStream(endpoint: stream.endpoint)
-            .then { response -> Void in
+            .done { response in
                 guard self.loadingToken.isValidInitialPageLoadingToken(self.localToken) else { return }
 
                 if case .empty = response {

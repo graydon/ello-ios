@@ -32,7 +32,7 @@ class ContentFlagger {
             }
 
             ContentFlaggingService().flagContent(endPoint)
-                .then { _ -> Void in
+                .done { _ in
                     Tracker.shared.contentFlagged(self.contentType, flag: option, contentId: self.flaggableId)
                     self.isContentFlagged = true
                 }

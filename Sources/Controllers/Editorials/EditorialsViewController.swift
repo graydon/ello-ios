@@ -137,7 +137,7 @@ extension EditorialsViewController: EditorialToolsResponder {
                 username: username,
                 password: password
                 )
-                .then { user -> Void in
+                .done { user in
                     Tracker.shared.joinSuccessful()
                     self.appViewController?.showOnboardingScreen(user)
                 }

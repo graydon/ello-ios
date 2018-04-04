@@ -34,13 +34,14 @@ final class EditorialsGenerator: StreamGenerator {
 
             let next = afterAll()
             ElloProvider.shared.request(.custom(url: path, mimics: .categoryPosts(slug: "")))
-                .then { data, responseConfig -> Void in
+                .done { data, responseConfig in
                     guard let posts = data as? [Post] else { return }
                     editorial.posts = posts
                 }
-                .always {
+                .ensure {
                     next()
                 }
+                .ignoreErrors()
         }
     }
 
@@ -58,7 +59,7 @@ private extension EditorialsGenerator {
     func loadEditorialPromotionals() {
         API().pageHeaders(kind: .editorials)
             .execute()
-            .then { pageHeaders -> Void in
+            .done { pageHeaders in
                 guard let pageHeader = pageHeaders.randomItem() else { return }
 
                 self.destination?.replacePlaceholder(type: .promotionalHeader, items: [
@@ -79,7 +80,7 @@ private extension EditorialsGenerator {
 
         let receivedEditorials = afterAll()
         StreamService().loadStream(streamKind: streamKind)
-            .then { response -> Void in
+            .done { response in
                 guard
                     case let .jsonables(jsonables, responseConfig) = response,
                     let editorials = jsonables as? [Editorial]
@@ -94,7 +95,7 @@ private extension EditorialsGenerator {
             .catch { _ in
                 self.destination?.primaryJSONAbleNotFound()
             }
-            .always {
+            .finally {
                 receivedEditorials()
             }
         done()

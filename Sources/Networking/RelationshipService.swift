@@ -38,12 +38,13 @@ class RelationshipService: NSObject {
         return (
             returnedRelationship,
             ElloProvider.shared.request(endpoint)
-                .then { response -> Relationship? in
+                .map { response -> Relationship? in
                     Tracker.shared.relationshipStatusUpdated(relationshipPriority, userId: userId)
                     return response.0 as? Relationship
                 }
-                .catch { (error) in
+                .recover { error -> Promise<Relationship?> in
                     Tracker.shared.relationshipStatusUpdateFailed(relationshipPriority, userId: userId)
+                    throw error
                 }
             )
     }

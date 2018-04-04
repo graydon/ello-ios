@@ -137,7 +137,7 @@ class AppViewController: BaseElloViewController {
         }
 
         return ProfileService().loadCurrentUser()
-            .then { user -> User in
+            .map { user -> User in
                 self.logInNewUser()
                 JWT.refresh()
 
@@ -155,11 +155,12 @@ class AppViewController: BaseElloViewController {
 
                 return user
             }
-            .catch { _ in
+            .recover { error -> Promise<User> in
                 if animateLogo {
                     self.showStartupScreen()
                     self.screen.stopAnimatingLogo()
                 }
+                throw error
             }
     }
 
@@ -227,7 +228,7 @@ extension AppViewController {
 
         let parentNavController = ElloNavigationController(rootViewController: loggedOutController)
 
-        swapViewController(parentNavController).always {
+        swapViewController(parentNavController).done {
             guard let deepLinkPath = self.deepLinkPath else { return }
 
             self.navigateToDeepLink(deepLinkPath)
@@ -318,21 +319,21 @@ extension AppViewController {
 
     func doneOnboarding() {
         Onboarding.shared.updateVersionToLatest()
-        self.showMainScreen(currentUser!).always {
+        self.showMainScreen(currentUser!).done {
             guard let didJoinHandler = self.didJoinHandler else { return }
             didJoinHandler()
         }
     }
 
     @discardableResult
-    func showMainScreen(_ user: User) -> Promise<Void> {
+    func showMainScreen(_ user: User) -> Guarantee<Void> {
         Tracker.shared.identify(user: user)
 
         let vc = ElloTabBarController()
         ElloWebBrowserViewController.elloTabBarController = vc
         vc.currentUser = user
 
-        return swapViewController(vc).always {
+        return swapViewController(vc).done {
             if let payload = self.pushPayload {
                 self.navigateToDeepLink(payload.applicationTarget)
                 self.pushPayload = nil
@@ -382,8 +383,8 @@ extension AppViewController {
 extension AppViewController {
 
     @discardableResult
-    func swapViewController(_ newViewController: UIViewController) -> Promise<Void> {
-        let (promise, resolve, _) = Promise<Void>.pending()
+    func swapViewController(_ newViewController: UIViewController) -> Guarantee<Void> {
+        let (promise, fulfill) = Guarantee<Void>.pending()
         newViewController.view.alpha = 0
 
         visibleViewController?.willMove(toParentViewController: nil)
@@ -395,11 +396,11 @@ extension AppViewController {
             tabBarController.deactivateTabBar()
         }
 
-        UIView.animate(withDuration: 0.2, animations: {
+        animate {
             self.visibleViewController?.view.alpha = 0
             newViewController.view.alpha = 1
             self.screen.hide()
-        }, completion: { _ in
+        }.done {
             self.visibleViewController?.view.removeFromSuperview()
             self.visibleViewController?.removeFromParentViewController()
 
@@ -409,8 +410,8 @@ extension AppViewController {
             newViewController.didMove(toParentViewController: self)
 
             self.visibleViewController = newViewController
-            resolve(Void())
-        })
+            fulfill(Void())
+        }
 
         return promise
     }
@@ -547,13 +548,15 @@ extension AppViewController: InviteResponder {
         else {
             Tracker.shared.friendInvited()
         }
+
         ElloHUD.showLoadingHudInView(view)
         InviteService().invite(email)
-            .always { [weak self] in
+            .ensure { [weak self] in
                 guard let `self` = self else { return }
                 ElloHUD.hideLoadingHudInView(self.view)
                 completion()
             }
+            .ignoreErrors()
     }
 }
 

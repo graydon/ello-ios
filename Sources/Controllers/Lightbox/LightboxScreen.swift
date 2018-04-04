@@ -319,8 +319,7 @@ class LightboxScreen: Screen, LightboxScreenProtocol {
                 self.prevImageView.alpha = 0.5
                 self.currImageView.alpha = 1
                 self.nextImageView.alpha = 0.5
-            }
-            .always {
+            }.done {
                 self.enableGestures()
             }
 
@@ -339,12 +338,12 @@ class LightboxScreen: Screen, LightboxScreenProtocol {
     }
 
     private func loadMoreImages() {
-        delegate.loadMoreImages().always {
+        delegate.loadMoreImages().ensure {
             elloAnimate {
                 self.gestureDeltaX = 0
                 self.setNeedsLayout()
                 self.layoutIfNeeded()
-            }.always {
+            }.done {
                 self.nextPageView.stopAnimating()
                 self.enableGestures()
             }
@@ -381,7 +380,7 @@ class LightboxScreen: Screen, LightboxScreenProtocol {
     private func toggleToolbar() {
         elloAnimate {
             self.hideToolbar()
-        }.always {
+        }.done {
             delay(0.3) {
                 self.delegate.configureToolbar(self.toolbar)
                 self.toolbar.layoutIfNeeded()

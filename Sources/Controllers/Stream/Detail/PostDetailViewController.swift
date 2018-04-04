@@ -305,7 +305,7 @@ extension PostDetailViewController: HasDeleteButton {
 
             postNotification(PostChangedNotification, value: (post, .delete))
             PostService().deletePost(post.id)
-                .then {
+                .done {
                     Tracker.shared.postDeleted(post)
                 }
                 .catch { error in

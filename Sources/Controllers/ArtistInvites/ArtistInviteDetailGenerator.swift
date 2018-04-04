@@ -51,7 +51,7 @@ private extension ArtistInviteDetailGenerator {
 
     func loadArtistInvite() {
         ArtistInviteService().load(id: artistInviteId)
-            .then { artistInvite -> Void in
+            .done { artistInvite in
                 guard
                     self.loadingToken.isValidInitialPageLoadingToken(self.localToken)
                 else { return }
@@ -85,7 +85,7 @@ private extension ArtistInviteDetailGenerator {
         }
 
         StreamService().loadStream(endpoint: endpoint)
-            .then { response -> Void in
+            .done { response in
                 guard
                     self.loadingToken.isValidInitialPageLoadingToken(self.localToken)
                 else { return }
@@ -122,7 +122,7 @@ private extension ArtistInviteDetailGenerator {
             .catch { _ in
                 self.showSubmissionsError()
             }
-            .always {
+            .finally {
                 self.loadAdminTools(artistInvite)
                 self.destination?.replacePlaceholder(type: .artistInviteDetails, items: self.artistInviteDetails)
             }

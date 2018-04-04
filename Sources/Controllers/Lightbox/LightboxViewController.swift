@@ -202,12 +202,11 @@ extension LightboxViewController: LightboxScreenDelegate {
 
     func loadMoreImages() -> Promise<Void> {
         guard let streamViewController = streamViewController else {
-            let promise = Promise(value: Void())
-            return promise
+            return .value(Void())
         }
 
         return streamViewController.actuallyLoadNextPage()
-            .then { _ -> Void in
+            .done { _ in
                 let (_, imageItems) = streamViewController.gatherLightboxItems()
                 self.allItems = imageItems
                 self.screen.updateImages(updateToolbar: false)

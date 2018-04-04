@@ -116,7 +116,7 @@ class PostbarController: UIResponder {
             imageLabelControl.animate()
 
             PostService().loadMoreCommentsForPost(post.id)
-                .then { [weak self] comments -> Void in
+                .done { [weak self] comments in
                     guard
                         let `self` = self,
                         let updatedIndexPath = self.collectionViewDataSource.indexPath(forItem: item)
@@ -153,7 +153,7 @@ class PostbarController: UIResponder {
             ContentChange.updateCommentCount(comment, delta: -1)
 
             PostService().deleteComment(comment.postId, commentId: comment.id)
-                .then {
+                .done {
                     Tracker.shared.commentDeleted(comment)
                 }.ignoreErrors()
         }
@@ -222,7 +222,7 @@ class PostbarController: UIResponder {
         }
 
         LovesService().unlovePost(postId: post.id)
-            .then { _ -> Void in
+            .done { _ in
                 guard let currentUser = self.currentUser else { return }
 
                 let now = Globals.now
@@ -232,9 +232,10 @@ class PostbarController: UIResponder {
                 )
                 postNotification(JSONAbleChangedNotification, value: (love, .delete))
             }
-            .always {
+            .ensure {
                 cell?.toggleLoveControl(enabled: true)
             }
+            .ignoreErrors()
     }
 
     private func lovePost(_ post: Post, cell: LoveableCell?, via: String) {
@@ -255,12 +256,13 @@ class PostbarController: UIResponder {
         postNotification(HapticFeedbackNotifications.successfulUserEvent, value: ())
 
         LovesService().lovePost(postId: post.id)
-            .then { love -> Void in
+            .done { love in
                 postNotification(JSONAbleChangedNotification, value: (love, .create))
             }
-            .always {
+            .ensure {
                 cell?.toggleLoveControl(enabled: true)
             }
+            .ignoreErrors()
     }
 
     func repostButtonTapped(cell: UICollectionViewCell) {
@@ -323,7 +325,7 @@ class PostbarController: UIResponder {
         postNotification(PostChangedNotification, value: (post, .reposted))
 
         RePostService().repost(post: post)
-            .then { repost -> Void in
+            .done { repost in
                 postNotification(PostChangedNotification, value: (repost, .create))
                 postNotification(HapticFeedbackNotifications.successfulUserEvent, value: ())
                 alertController.contentView = nil
@@ -423,7 +425,7 @@ class PostbarController: UIResponder {
 
         let postId = comment.loadedFromPostId
         PostService().loadReplyAll(postId)
-            .then { [weak self] usernames -> Void in
+            .done { [weak self] usernames in
                 guard let `self` = self else { return }
                 let usernamesText = usernames.reduce("") { memo, username in
                     return memo + "@\(username) "
@@ -454,7 +456,7 @@ class PostbarController: UIResponder {
         cell.isWatching = isWatching
         cell.isUserInteractionEnabled = false
         PostService().toggleWatchPost(post, isWatching: isWatching)
-            .then { post -> Void in
+            .done { post in
                 cell.isUserInteractionEnabled = true
                 if isWatching {
                     Tracker.shared.postWatched(post)

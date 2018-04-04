@@ -125,7 +125,10 @@ class SettingsCredentialsViewController: BaseElloViewController {
         ElloHUD.showLoadingHudInView(self.view)
 
         ProfileService().updateUserProfile(profileUpdates)
-            .then { user -> Void in
+            .ensure {
+                ElloHUD.hideLoadingHudInView(self.view)
+            }
+            .done { user in
                 self.appViewController?.currentUser = user
                 super.backButtonTapped()
             }
@@ -141,9 +144,6 @@ class SettingsCredentialsViewController: BaseElloViewController {
                 }
 
                 self.view.isUserInteractionEnabled = true
-            }
-            .always {
-                ElloHUD.hideLoadingHudInView(self.view)
             }
     }
 }

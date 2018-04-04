@@ -15,7 +15,7 @@ class ProfileStatsSizeCalculatorSpec: QuickSpec {
                 let calc = ProfileStatsSizeCalculator()
                 var height: CGFloat!
                 calc.calculate(StreamCellItem(jsonable: user, type: .streamHeader))
-                    .then { h -> Void in height = h }
+                    .done { h in height = h }
                     .catch { _ in }
                 expect(height) == 60
             }

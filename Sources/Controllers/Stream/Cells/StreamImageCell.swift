@@ -216,7 +216,7 @@ class StreamImageCell: StreamRegionableCell {
                 self.imageView.alpha = 0
                 elloAnimate {
                     self.imageView.alpha = 1
-                }.always {
+                }.done {
                     self.circle.stopAnimating()
                 }
             }

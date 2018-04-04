@@ -17,7 +17,7 @@ class LoveAnimation {
         // fade in, then fade out
         animate(duration: halfDuration) {
             imageView.alpha = 0.5
-        }.always {
+        }.done {
             animate(duration: halfDuration) {
                 imageView.alpha = 0
             }
@@ -26,7 +26,7 @@ class LoveAnimation {
         // grow throughout the animation
         animate(duration: fullDuration) {
             imageView.transform = CGAffineTransform(scaleX: 1, y: 1)
-        }.always {
+        }.done {
             imageView.removeFromSuperview()
         }
         window.addSubview(imageView)

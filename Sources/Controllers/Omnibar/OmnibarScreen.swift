@@ -1030,7 +1030,7 @@ class OmnibarScreen: Screen, OmnibarScreenProtocol {
         stopEditing()
 
         UIImagePickerController.requestStatus()
-            .then { status -> Void in
+            .done { status in
                 self.showKeyboardImages(isAuthorized: status == .authorized)
             }
             .ignoreErrors()
