@@ -77,7 +77,7 @@ extension RelationshipController: RelationshipResponder {
             complete(RelationshipRequestStatusWrapper(status: .success), relationship, false)
         }
 
-        promise.then { relationship -> Void in
+        promise.done { relationship in
             complete(RelationshipRequestStatusWrapper(status: .success), relationship, true)
 
             if let relationship = relationship {

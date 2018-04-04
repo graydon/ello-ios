@@ -60,7 +60,7 @@ final class StreamViewController: BaseElloViewController {
     private var dataChangeJobs: [(
         newItems: [StreamCellItem],
         change: StreamViewDataChange,
-        promise: Promise<Void>,
+        promise: Guarantee<Void>,
         resolve: Block)] = []
     private var isRunningDataChangeJobs = false
 
@@ -288,7 +288,7 @@ final class StreamViewController: BaseElloViewController {
             let indexPaths = self.dataSource.appendStreamCellItems(items)
             self.performDataChange { collectionView in
                 collectionView.insertItems(at: indexPaths)
-            }.always {
+            }.done {
                 completion?()
             }
         }
@@ -305,7 +305,7 @@ final class StreamViewController: BaseElloViewController {
             let indexPaths = self.dataSource.insertStreamCellItems(cellItems, startingIndexPath: startingIndexPath)
             self.performDataChange { collectionView in
                 collectionView.insertItems(at: indexPaths)
-            }.always {
+            }.done {
                 completion()
             }
         }
@@ -332,7 +332,7 @@ final class StreamViewController: BaseElloViewController {
         dataSource.calculateCellItems(streamCellItems, withWidth: width) {
             self.dataSource.replacePlaceholder(type: placeholderType, items: streamCellItems)
             self.performDataReload()
-                .always {
+                .done {
                     completion()
                 }
         }
@@ -371,7 +371,7 @@ final class StreamViewController: BaseElloViewController {
             isPagingEnabled = false
             let localToken = loadingToken.resetInitialPageLoadingToken()
             StreamService().loadStream(streamKind: streamKind)
-                .then { response -> Void in
+                .done { response in
                     guard self.loadingToken.isValidInitialPageLoadingToken(localToken) else { return }
 
                     switch response {
@@ -595,7 +595,7 @@ extension StreamViewController: HasGridListButton {
         else {
             animate {
                 self.collectionView.alpha = 0
-            }.always {
+            }.done {
                 self.toggleGrid(isGridView: isGridView)
             }
         }
@@ -1196,7 +1196,7 @@ extension StreamViewController: UIScrollViewDelegate {
     func actuallyLoadNextPage() -> Promise<Void> {
         guard
             canLoadNextPage()
-        else { return Promise(value: Void()) }
+        else { return .value(Void()) }
 
         let lastPlaceholderType = dataSource.visibleCellItems.last?.placeholderType
         appendStreamCellItems([StreamCellItem(type: .streamPageLoading)])
@@ -1208,10 +1208,10 @@ extension StreamViewController: UIScrollViewDelegate {
             infiniteScrollGenerator = delegateScrollGenerator
         }
         else {
-            guard let nextQuery = responseConfig?.nextQuery else { return Promise(value: Void()) }
+            guard let nextQuery = responseConfig?.nextQuery else { return .value(Void()) }
             let scrollAPI = ElloAPI.infiniteScroll(query: nextQuery, api: streamKind.endpoint)
             infiniteScrollGenerator = StreamService().loadStream(endpoint: scrollAPI, streamKind: streamKind)
-                .then { response -> [JSONAble] in
+                .map { response -> [JSONAble] in
                     let scrollJsonables: [JSONAble]
                     switch response {
                     case let .jsonables(jsonables, responseConfig):
@@ -1230,7 +1230,7 @@ extension StreamViewController: UIScrollViewDelegate {
                 self.allOlderPagesLoaded = jsonables.count == 0
                 return self.scrollLoaded(jsonables: jsonables, placeholderType: lastPlaceholderType)
             }
-            .catch { error in
+            .ensure {
                 self.scrollLoaded()
             }
     }
@@ -1239,7 +1239,7 @@ extension StreamViewController: UIScrollViewDelegate {
     private func scrollLoaded(jsonables: [JSONAble] = [], placeholderType: StreamCellType.PlaceholderType? = nil) -> Promise<Void> {
         guard
             let lastIndexPath = collectionView.lastIndexPathForSection(0)
-        else { return Promise(value: Void()) }
+        else { return .value(Void()) }
 
         if jsonables.count > 0 {
             if let controller = parent as? BaseElloViewController {
@@ -1250,18 +1250,18 @@ extension StreamViewController: UIScrollViewDelegate {
             for item in items {
                 item.placeholderType = placeholderType
             }
-            let (promise, fulfill, _) = Promise<Void>.pending()
+            let (promise, seal) = Promise<Void>.pending()
             insertUnsizedCellItems(items, startingIndexPath: lastIndexPath) {
                 self.removeLoadingCell()
                 self.doneLoading()
-                fulfill(Void())
+                seal.fulfill(Void())
             }
             return promise
         }
         else {
             removeLoadingCell()
             self.doneLoading()
-            return Promise(value: Void())
+            return .value(Void())
         }
     }
 
@@ -1282,27 +1282,27 @@ extension StreamViewController {
     typealias CollectionViewChange = (UICollectionView) -> Void
 
     @discardableResult
-    func peformDataDelta(_ delta: Delta) -> Promise<Void> {
+    func peformDataDelta(_ delta: Delta) -> Guarantee<Void> {
         return appendDataChange(.delta(delta))
     }
 
     @discardableResult
-    func performDataUpdate(_ block: @escaping CollectionViewChange) -> Promise<Void> {
+    func performDataUpdate(_ block: @escaping CollectionViewChange) -> Guarantee<Void> {
         return appendDataChange(.update(block))
     }
 
     @discardableResult
-    func performDataReload() -> Promise<Void> {
+    func performDataReload() -> Guarantee<Void> {
         return appendDataChange(.reload)
     }
 
     @discardableResult
-    func performDataChange(_ block: @escaping CollectionViewChange) -> Promise<Void> {
+    func performDataChange(_ block: @escaping CollectionViewChange) -> Guarantee<Void> {
         return appendDataChange(.batch(block))
     }
 
-    private func appendDataChange(_ change: StreamViewDataChange) -> Promise<Void> {
-        let (promise, resolve, _) = Promise<Void>.pending()
+    private func appendDataChange(_ change: StreamViewDataChange) -> Guarantee<Void> {
+        let (promise, resolve) = Guarantee<Void>.pending()
         dataChangeJobs.append((dataSource.visibleCellItems, change, promise, { resolve(()) }))
         runNextDataChangeJob()
         return promise
@@ -1324,7 +1324,7 @@ extension StreamViewController {
         isRunningDataChangeJobs = true
 
         let job = dataChangeJobs.removeFirst()
-        job.promise.always {
+        job.promise.done { _ in
             self.isRunningDataChangeJobs = false
             self.runNextDataChangeJob()
         }

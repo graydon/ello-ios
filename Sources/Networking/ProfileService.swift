@@ -12,7 +12,7 @@ struct ProfileService {
 
     func loadCurrentUser() -> Promise<User> {
         return ElloProvider.shared.request(.currentUserProfile)
-            .then { response -> User in
+            .map { response -> User in
                 guard let user = response.0 as? User else {
                     throw NSError.uncastableJSONAble()
                 }
@@ -35,7 +35,7 @@ struct ProfileService {
             content[key.rawValue] = value
         }
         return ElloProvider.shared.request(.profileUpdate(body: content))
-            .then { response -> User in
+            .map { response -> User in
                 guard let user = response.0 as? User else {
                     throw NSError.uncastableJSONAble()
                 }
@@ -49,7 +49,7 @@ struct ProfileService {
         }
 
         return updateUserImage(imageRegion, key: prop, properties: [:])
-            .then { (url, user) -> UploadSuccess in
+            .map { (url, user) -> UploadSuccess in
                 if prop == .coverImage {
                     user.updateDefaultImages(avatarURL: nil, coverImageURL: url)
                 }
@@ -73,11 +73,11 @@ struct ProfileService {
         var avatarURL: URL?
         var coverImageURL: URL?
         var error: Error?
-        let (promise, resolve, reject) = Promise<UploadBothSuccess>.pending()
+        let (promise, seal) = Promise<UploadBothSuccess>.pending()
 
         let bothImages = after(2) {
             if let error = error {
-                reject(error)
+                seal.reject(error)
             }
             else {
                 var mergedProperties: [Profile.Property: Any] = properties
@@ -93,24 +93,24 @@ struct ProfileService {
                 }
 
                 self.updateUserProfile(mergedProperties)
-                    .then { user -> UploadBothSuccess in
+                    .map { user -> UploadBothSuccess in
                         user.updateDefaultImages(avatarURL: avatarURL, coverImageURL: coverImageURL)
                         return (avatarURL, coverImageURL, user)
                     }
-                    .then(execute: resolve)
-                    .catch(execute: reject)
+                    .done { uploadSuccess in seal.fulfill(uploadSuccess) }
+                    .catch(seal.reject)
             }
         }
 
         if let avatarImage = avatarImage {
             S3UploadingService().upload(imageRegionData: avatarImage)
-                .then { url in
+                .done { url in
                     avatarURL = url
                 }
                 .catch { uploadError in
                     error = error ?? uploadError
                 }
-                .always {
+                .finally {
                     bothImages()
                 }
         }
@@ -120,13 +120,13 @@ struct ProfileService {
 
         if let coverImage = coverImage {
             S3UploadingService().upload(imageRegionData: coverImage)
-                .then { url in
+                .done { url in
                     coverImageURL = url
                 }
                 .catch { uploadError in
                     error = error ?? uploadError
                 }
-                .always {
+                .finally {
                     bothImages()
                 }
         }
@@ -166,7 +166,7 @@ struct ProfileService {
                 ]
 
                 return self.updateUserProfile(mergedProperties)
-                    .then { user -> UploadSuccess in
+                    .map { user -> UploadSuccess in
                         return (url, user)
                     }
             }

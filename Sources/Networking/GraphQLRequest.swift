@@ -66,7 +66,7 @@ class GraphQLRequest<T>: AuthenticationEndpoint {
         }
     }
 
-    let (promise, resolve, reject) = Promise<T>.pending()
+    let (promise, seal) = Promise<T>.pending()
 
     var requiresAnyToken: Bool = true
     var supportsAnonymousToken: Bool = true
@@ -100,24 +100,24 @@ class GraphQLRequest<T>: AuthenticationEndpoint {
                     .then { data, statusCode -> Promise<JSON> in
                         return self.handleResponse(data: data, statusCode: statusCode)
                     }
-                    .then { json -> Void in
+                    .done { json in
                         let result = try self.parseJSON(data: json)
-                        self.resolve(result)
+                        self.seal.fulfill(result)
                     }
                     .catch { error in
-                        self.reject(error)
+                        self.seal.reject(error)
                     }
             },
             cancel: {
                 let elloError = NSError(domain: ElloErrorDomain, code: 401, userInfo: [NSLocalizedFailureReasonErrorKey: "Logged Out"])
-                self.reject(elloError)
+                self.seal.reject(elloError)
             })
 
         return self.promise
     }
 
     private func sendRequest() -> Promise<(Data, Int)> {
-        let (promise, resolve, reject) = Promise<(Data, Int)>.pending()
+        let (promise, seal) = Promise<(Data, Int)>.pending()
 
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "POST"
@@ -128,10 +128,10 @@ class GraphQLRequest<T>: AuthenticationEndpoint {
 
             let task = manager.request(urlRequest, sender: self) { response in
                 if let data = response.data, let statusCode = response.response?.statusCode {
-                    resolve((data, statusCode))
+                    seal.fulfill((data, statusCode))
                 }
                 else if let error = response.error {
-                    reject(error)
+                    seal.reject(error)
                 }
                 else {
                     delay(1) {
@@ -143,24 +143,24 @@ class GraphQLRequest<T>: AuthenticationEndpoint {
             task.resume()
         }
         catch {
-            reject(error)
+            seal.reject(error)
         }
 
         return promise
     }
 
     private func handleResponse(data: Data, statusCode: Int) -> Promise<JSON> {
-        let (promise, resolve, reject) = Promise<JSON>.pending()
+        let (promise, seal) = Promise<JSON>.pending()
 
         switch statusCode {
         case 200...299, 300...399:
-            handleSuccess(data: data, resolve: resolve, reject: reject)
+            handleSuccess(data: data, resolve: seal.fulfill, reject: seal.reject)
         case 410:
-            handleServerOutOfDate(reject: reject)
+            handleServerOutOfDate(reject: seal.reject)
         case 401:
-            handleUserUnauthenticated(data: data, statusCode: statusCode, reject: reject)
+            handleUserUnauthenticated(data: data, statusCode: statusCode, reject: seal.reject)
         default:
-            handleServerError(data: data, statusCode: statusCode, reject: reject)
+            handleServerError(data: data, statusCode: statusCode, reject: seal.reject)
         }
 
         return promise
@@ -169,7 +169,7 @@ class GraphQLRequest<T>: AuthenticationEndpoint {
     private func handleServerOutOfDate(reject: (Error) -> Void) {
         postNotification(AuthenticationNotifications.outOfDateAPI, value: ())
         let elloError = NSError(domain: ElloErrorDomain, code: 410, userInfo: [NSLocalizedFailureReasonErrorKey: "Server Out of Date"])
-        self.reject(elloError)
+        reject(elloError)
     }
 
     private func handleUserUnauthenticated(data: Data, statusCode: Int, reject: @escaping (Error) -> Void) {

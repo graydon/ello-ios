@@ -18,7 +18,7 @@ class ReauthenticationSpec: QuickSpec {
                 var succeeded = false
                 var failed = false
                 ElloProvider.shared.request(.following)
-                    .then { _ in
+                    .done { _ in
                         succeeded = true
                     }
                     .catch { _ in
@@ -38,7 +38,7 @@ class ReauthenticationSpec: QuickSpec {
                 var succeeded = false
                 var failed = false
                 ElloProvider.shared.request(.following)
-                    .then { _ in
+                    .done { _ in
                         succeeded = true
                     }
                     .catch { _ in
@@ -60,7 +60,7 @@ class ReauthenticationSpec: QuickSpec {
                 var succeeded = false
                 var failed = false
                 ElloProvider.shared.request(.following)
-                    .then { _ in
+                    .done { _ in
                         succeeded = true
                     }
                     .catch { _ in
@@ -81,7 +81,7 @@ class ReauthenticationSpec: QuickSpec {
                 var succeeded = false
                 var failed = false
                 ElloProvider.shared.request(.following)
-                    .then { _ in
+                    .done { _ in
                         succeeded = true
                     }
                     .catch { _ in

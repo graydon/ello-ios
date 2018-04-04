@@ -7,8 +7,8 @@ import PromiseKit
 
 struct ProfileStatsSizeCalculator {
 
-    func calculate(_ item: StreamCellItem) -> Promise<CGFloat> {
+    func calculate(_ item: StreamCellItem) -> Guarantee<CGFloat> {
         let height = ProfileStatsView.Size.height
-        return Promise<CGFloat>.resolve(height)
+        return .value(height)
     }
 }

@@ -68,7 +68,7 @@ final class PostDetailGenerator: StreamGenerator {
 
         let scrollAPI = ElloAPI.infiniteScroll(query: nextQuery, api: .postComments(postId: postId))
         StreamService().loadStream(endpoint: scrollAPI, streamKind: .postDetail(postParam: postId))
-            .then { response -> Void in
+            .done { response in
                 switch response {
                 case let .jsonables(jsonables, responseConfig):
                     self.destination?.setPagingConfig(responseConfig: responseConfig)
@@ -144,7 +144,7 @@ private extension PostDetailGenerator {
 
         // load the post with no comments
         PostService().loadPost(postParam)
-            .then { post -> Void in
+            .done { post in
                 guard self.loadingToken.isValidInitialPageLoadingToken(self.localToken) else { return }
                 self.post = post
                 self.destination?.setPrimary(jsonable: post)
@@ -199,7 +199,7 @@ private extension PostDetailGenerator {
         queue.addOperation(displayCommentsOperation)
 
         PostService().loadPostComments(postParam)
-            .then { comments, responseConfig -> Void in
+            .done { comments, responseConfig in
                 guard self.loadingToken.isValidInitialPageLoadingToken(self.localToken) else { return }
 
                 let commentItems = self.parse(jsonables: comments)
@@ -225,7 +225,7 @@ private extension PostDetailGenerator {
         queue.addOperation(displayLoversOperation)
 
         PostService().loadPostLovers(postParam)
-            .then { users -> Void in
+            .done { users in
                 guard self.loadingToken.isValidInitialPageLoadingToken(self.localToken) else { return }
                 guard users.count > 0 else { return }
 
@@ -252,7 +252,7 @@ private extension PostDetailGenerator {
         queue.addOperation(displayRepostersOperation)
 
         PostService().loadPostReposters(postParam)
-            .then { users -> Void in
+            .done { users in
                 guard self.loadingToken.isValidInitialPageLoadingToken(self.localToken) else { return }
                 guard users.count > 0 else { return }
 
@@ -279,7 +279,7 @@ private extension PostDetailGenerator {
         queue.addOperation(displayRelatedPostsOperation)
 
         PostService().loadRelatedPosts(postParam)
-            .then { relatedPosts -> Void in
+            .done { relatedPosts in
                 guard self.loadingToken.isValidInitialPageLoadingToken(self.localToken) else { return }
                 guard relatedPosts.count > 0 else { return }
 

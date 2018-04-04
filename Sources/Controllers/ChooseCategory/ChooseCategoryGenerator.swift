@@ -41,7 +41,7 @@ extension ChooseCategoryGenerator {
 
         API().allCategories()
             .execute()
-            .then { allCategories -> Void in
+            .done { allCategories in
                 guard let currentUser = self.currentUser else { return }
 
                 // put all subscribed categories first, then unsubscribed, preserving order

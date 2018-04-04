@@ -58,16 +58,14 @@ PODS:
   - PINRemoteImage/PINCache (3.0.0-beta.8):
     - PINCache (= 3.0.1-beta.4)
     - PINRemoteImage/Core
-  - PromiseKit (4.1.7):
-    - PromiseKit/Foundation (= 4.1.7)
-    - PromiseKit/QuartzCore (= 4.1.7)
-    - PromiseKit/UIKit (= 4.1.7)
-  - PromiseKit/CorePromise (4.1.7)
-  - PromiseKit/Foundation (4.1.7):
+  - PromiseKit (6.2.3):
+    - PromiseKit/CorePromise (= 6.2.3)
+    - PromiseKit/Foundation (= 6.2.3)
+    - PromiseKit/UIKit (= 6.2.3)
+  - PromiseKit/CorePromise (6.2.3)
+  - PromiseKit/Foundation (6.2.3):
     - PromiseKit/CorePromise
-  - PromiseKit/QuartzCore (4.1.7):
-    - PromiseKit/CorePromise
-  - PromiseKit/UIKit (4.1.7):
+  - PromiseKit/UIKit (6.2.3):
     - PromiseKit/CorePromise
   - Quick (1.2.0)
   - Result (3.2.1)
@@ -265,7 +263,7 @@ SPEC CHECKSUMS:
   PINCache: a89c8f609232afac77128557bd12c861844423d7
   PINOperation: ac23db44796d4a564ecf9b5ea7163510f579b71d
   PINRemoteImage: c4f9f16932840c597f32e69dd288e10e111a1929
-  PromiseKit: 779f2e41faf62d854e7593026ddbcb0bb5c5002d
+  PromiseKit: 62f37bb4900a9b0b7550d017e41497171d93face
   Quick: 58d203b1c5e27fff7229c4c1ae445ad7069a7a08
   Result: 2453a22e5c5b11c0c3a478736e82cd02f763b781
   SnapKit: 66bf0e9c5e02fdb6d2a549adb845ab4440d3ccfe

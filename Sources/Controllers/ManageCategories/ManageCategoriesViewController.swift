@@ -106,7 +106,7 @@ class ManageCategoriesViewController: StreamableViewController {
         ElloHUD.showLoadingHudInView(self.view)
 
         ProfileService().update(categoryIds: selectedIds, onboarding: false)
-            .then { _ -> Void in
+            .done { _ in
                 if let currentUser = self.currentUser {
                     currentUser.followedCategoryIds = selectedIds
                     self.appViewController?.currentUser = currentUser
@@ -116,7 +116,7 @@ class ManageCategoriesViewController: StreamableViewController {
             .catch { _ in
                 self.view.isUserInteractionEnabled = true
             }
-            .always {
+            .finally {
                 ElloHUD.hideLoadingHudInView(self.view)
             }
     }

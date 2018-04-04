@@ -45,14 +45,14 @@ extension UIImagePickerController {
     }
 
     @discardableResult
-    static func requestStatus() -> Promise<PHAuthorizationStatus> {
-        let (promise, resolve, _) = Promise<PHAuthorizationStatus>.pending()
+    static func requestStatus() -> Guarantee<PHAuthorizationStatus> {
+        let (promise, fulfill) = Guarantee<PHAuthorizationStatus>.pending()
         if let status = alreadyDeterminedStatus() {
-            resolve(status)
+            fulfill(status)
         }
         else {
             PHPhotoLibrary.requestAuthorization { status in
-                resolve(status)
+                fulfill(status)
             }
         }
         return promise

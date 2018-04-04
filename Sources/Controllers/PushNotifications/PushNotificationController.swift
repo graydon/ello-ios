@@ -190,7 +190,7 @@ extension PushNotificationController {
 
     private func actionMessageUser(userId: String, text: String, payload: PushPayload) {
         UserService().loadUser(.userStream(userParam: userId))
-            .then { user -> Void in
+            .done { user in
                 let postText: String
                 if text =~ "\(user.atName)\\b" {
                     postText = text
@@ -205,7 +205,7 @@ extension PushNotificationController {
 
     private func actionSendMessage(text: String, postEditingService: PostEditingService, payload: PushPayload) {
         postEditingService.create(content: [.text(text)])
-            .then { _ -> Void in
+            .done { _ in
                 let message: String
                 if postEditingService.parentPostId == nil {
                     message = InterfaceString.Omnibar.CreatedPost
@@ -222,20 +222,20 @@ extension PushNotificationController {
                     NotificationBanner.displayAlert(message: InterfaceString.Omnibar.CannotComment)
                 }
             }
-            .ignoreErrors()
     }
 
     private func actionFollowUser(userId: String, payload: PushPayload) {
         let (_, promise) = RelationshipService().updateRelationship(userId: userId, relationshipPriority: .following)
-        promise.always {
+        promise.ensure {
             postNotification(PushNotificationNotifications.interactedWithPushNotification, value: payload)
-        }
+        }.ignoreErrors()
     }
 
     private func actionLovePost(postId: String, payload: PushPayload) {
-        LovesService().lovePost(postId: postId).always {
-            postNotification(PushNotificationNotifications.interactedWithPushNotification, value: payload)
-        }
+        LovesService().lovePost(postId: postId)
+            .ensure {
+                postNotification(PushNotificationNotifications.interactedWithPushNotification, value: payload)
+            }.ignoreErrors()
     }
 
     func updateBadgeCount(_ userInfo: [AnyHashable: Any]) {

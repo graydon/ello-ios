@@ -130,7 +130,7 @@ class PostEditingService {
         }
 
         return ElloProvider.shared.request(endpoint)
-            .then { response -> Any in
+            .map { response -> Any in
                 let data = response.0
                 let post: Any = data
 
@@ -173,14 +173,14 @@ class PostEditingService {
         var anyError: Error?
 
         let operationQueue = OperationQueue.main
-        let (promise, resolve, reject) = Promise<[(Int, ImageRegion)]>.pending()
+        let (promise, seal) = Promise<[(Int, ImageRegion)]>.pending()
 
         let doneOperation = BlockOperation(block: {
             if let error = anyError {
-                reject(error)
+                seal.reject(error)
             }
             else {
-                resolve(uploaded)
+                seal.fulfill(uploaded)
             }
         })
         var prevUploadOperation: Operation?
@@ -210,7 +210,7 @@ class PostEditingService {
                 }
 
                 promise
-                    .then { url -> Void in
+                    .done { url in
                         let imageRegion = ImageRegion(url: url)
                         imageRegion.buyButtonURL = buyButtonURL
 
@@ -231,7 +231,7 @@ class PostEditingService {
                         done()
 
                     }
-                    .catch(execute: failureHandler)
+                    .catch(failureHandler)
             })
 
             doneOperation.addDependency(uploadOperation)

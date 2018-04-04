@@ -111,7 +111,7 @@ extension ProfileHeaderCellSizeCalculator {
             linksSizeCalculator,
         ]
 
-        let promises: [(CalculatedCellHeights.Prop, Promise<CGFloat>)] = [
+        let promises: [(CalculatedCellHeights.Prop, Guarantee<CGFloat>)] = [
             (.profileAvatar, avatarSizeCalculator.calculate(item, maxWidth: maxWidth)),
             (.profileNames, namesSizeCalculator.calculate(item, maxWidth: maxWidth)),
             (.profileTotalCount, totalCountSizeCalculator.calculate(item)),
@@ -129,10 +129,10 @@ extension ProfileHeaderCellSizeCalculator {
 
         for (calcType, promise) in promises {
             promise
-                .then { height -> Void in
+                .done { height in
                     item.calculatedCellHeights.assign(calcType, height: height)
+                    done()
                 }
-                .always { done() }
         }
     }
 }

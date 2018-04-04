@@ -8,7 +8,7 @@ import PromiseKit
 class SettingsService {
     func dynamicSettings(currentUser: User) -> Promise<[DynamicSettingCategory]> {
         return ElloProvider.shared.request(.profileToggles)
-            .then { jsonables, _ -> [DynamicSettingCategory] in
+            .map { jsonables, _ -> [DynamicSettingCategory] in
                 guard let categories = jsonables as? [DynamicSettingCategory]
                 else {
                     throw NSError.uncastableJSONAble()

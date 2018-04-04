@@ -66,7 +66,7 @@ class OmnibarViewController: BaseElloViewController {
         self.init(nibName: nil, bundle: nil)
         editComment = comment
         PostService().loadComment(comment.postId, commentId: comment.id)
-            .then { [weak self] comment -> Void in
+            .done { [weak self] comment in
                 guard let `self` = self else { return }
                 self.rawEditBody = comment.body
                 if let body = comment.body, self.isViewLoaded {
@@ -80,7 +80,7 @@ class OmnibarViewController: BaseElloViewController {
         self.init(nibName: nil, bundle: nil)
         editPost = post
         PostService().loadPost(post.id)
-            .then { post -> Void in
+            .done { post in
                 self.rawEditBody = post.body
                 self.category = post.category
 
@@ -113,7 +113,7 @@ class OmnibarViewController: BaseElloViewController {
             self.category = category
             if category.tileURL == nil {
                 CategoryService().loadCategory(category.slug)
-                    .then { category -> Void in
+                    .done { category in
                         guard self.category?.id == category.id else { return }
                         self.category = category
                         if self.isViewLoaded {
@@ -490,7 +490,7 @@ extension OmnibarViewController {
             categoryId: category?.id,
             artistInviteId: artistInvite?.id
             )
-            .then { postOrComment -> Void in
+            .done { postOrComment in
                 if self.editPost != nil || self.editComment != nil {
                     URLCache.shared.removeAllCachedResponses()
                 }
@@ -505,7 +505,7 @@ extension OmnibarViewController {
                     vc.selectedTab = .omnibar
                 }
             }
-            .always {
+            .finally {
                 log(comment: "authtoken", object: AuthToken().token)
                 postNotification(NewContentNotifications.resume, value: ())
             }
@@ -535,7 +535,7 @@ extension OmnibarViewController {
 
             if let post = comment.parentPost {
                 PostService().loadPost(post.id)
-                    .then { post -> Void in
+                    .done { post in
                         ElloLinkedStore.shared.setObject(post, forKey: post.id, type: .postsType)
                         postNotification(PostChangedNotification, value: (post, .watching))
                         self.stopSpinner()

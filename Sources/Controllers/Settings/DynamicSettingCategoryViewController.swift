@@ -100,7 +100,7 @@ extension DynamicSettingCategoryViewController: DynamicSettingCellResponder {
         }
 
         ProfileService().updateUserProfile(updatedValues)
-            .then { [weak self] user -> Void in
+            .done { [weak self] user in
                 guard let `self` = self else { return }
 
                 self.delegate?.dynamicSettingsUserChanged(user)

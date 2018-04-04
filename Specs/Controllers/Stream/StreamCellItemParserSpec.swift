@@ -118,7 +118,7 @@ class StreamCellItemParserSpec: QuickSpec {
                 it("returns an array with the proper count of stream cell items when parsing friends.json's activities") {
                     var loadedNotifications = [StreamCellItem]()
                     StreamService().loadStream(endpoint: .notificationsStream(category: nil))
-                        .then { response -> Void in
+                        .done { response in
                             if case let .jsonables(jsonables, _) = response {
                                 loadedNotifications = subject.parse(jsonables, streamKind: .notifications(category: nil))
                             }

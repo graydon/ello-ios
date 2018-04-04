@@ -9,7 +9,7 @@ class NotificationService {
 
     func loadAnnouncements() -> Promise<Announcement?> {
         return ElloProvider.shared.request(.announcements)
-            .then { data, _ -> Announcement? in
+            .map { data, _ -> Announcement? in
                 if let results = data as? Announcement {
                     return results
                 }
@@ -24,7 +24,7 @@ class NotificationService {
 
     func markAnnouncementAsRead(_ announcement: Announcement) -> Promise<Announcement> {
         return ElloProvider.shared.request(.markAnnouncementAsRead)
-            .then { _ -> Announcement in
+            .map { _ -> Announcement in
                 return announcement
             }
     }

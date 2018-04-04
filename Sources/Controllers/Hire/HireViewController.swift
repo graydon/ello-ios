@@ -113,7 +113,7 @@ extension HireViewController: HireScreenDelegate {
         }
 
         endpoint
-            .then { _ -> Void in
+            .done { _ in
                 Tracker.shared.hiredUser(self.user)
                 hireSuccess()
             }

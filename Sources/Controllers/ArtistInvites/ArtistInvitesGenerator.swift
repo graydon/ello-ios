@@ -38,7 +38,7 @@ private extension ArtistInvitesGenerator {
     func loadArtistInvitePromotionals() {
         API().pageHeaders(kind: .artistInvites)
             .execute()
-            .then { pageHeaders -> Void in
+            .done { pageHeaders in
                 guard let pageHeader = pageHeaders.randomItem() else { return }
 
                 self.destination?.replacePlaceholder(type: .promotionalHeader, items: [
@@ -51,7 +51,7 @@ private extension ArtistInvitesGenerator {
 
     func loadArtistInvites() {
         StreamService().loadStream(streamKind: streamKind)
-            .then { response -> Void in
+            .done { response in
                 guard
                     self.loadingToken.isValidInitialPageLoadingToken(self.localToken),
                     case let .jsonables(jsonables, responseConfig) = response,

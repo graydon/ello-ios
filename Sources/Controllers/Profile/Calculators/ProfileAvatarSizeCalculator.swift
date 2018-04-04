@@ -11,8 +11,8 @@ struct ProfileAvatarSizeCalculator {
         return ceil(maxWidth / ProfileHeaderCellSizeCalculator.ratio) + ProfileAvatarView.Size.whiteBarHeight
     }
 
-    func calculate(_ item: StreamCellItem, maxWidth: CGFloat) -> Promise<CGFloat> {
+    func calculate(_ item: StreamCellItem, maxWidth: CGFloat) -> Guarantee<CGFloat> {
         let height = ProfileAvatarSizeCalculator.calculateHeight(maxWidth: maxWidth)
-        return Promise<CGFloat>.resolve(height)
+        return .value(height)
     }
 }

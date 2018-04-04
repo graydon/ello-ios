@@ -167,7 +167,7 @@ class SettingsViewController: BaseElloViewController {
         ElloHUD.showLoadingHudInView(view)
 
         ProfileService().updateUserProfile(profileUpdates)
-            .then { user -> Void in
+            .done { user in
                 self.appViewController?.currentUser = user
                 super.backButtonTapped()
             }
@@ -184,7 +184,7 @@ class SettingsViewController: BaseElloViewController {
 
                 self.view.isUserInteractionEnabled = true
             }
-            .always {
+            .finally {
                 ElloHUD.hideLoadingHudInView(self.view)
             }
     }
@@ -237,7 +237,7 @@ extension SettingsViewController: SettingsScreenDelegate {
     func saveImage(_ imageRegion: ImageRegionData, property: Profile.ImageProperty) {
         ElloHUD.showLoadingHudInView(view)
         ProfileService().updateUserImage(property, imageRegion: imageRegion)
-            .then { [weak self] url, _ -> Void in
+            .done { [weak self] url, _ in
                 guard let `self` = self else { return }
 
                 if let user = self.currentUser {
@@ -265,9 +265,10 @@ extension SettingsViewController: SettingsScreenDelegate {
                 let alertController = AlertViewController(confirmation: message)
                 self.present(alertController, animated: true, completion: nil)
             }
-            .always {
+            .ensure {
                 ElloHUD.hideLoadingHudInView(self.view)
             }
+            .ignoreErrors()
     }
 
     func logoutTapped() {

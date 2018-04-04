@@ -7,17 +7,17 @@ import PromiseKit
 
 struct ProfileLinksSizeCalculator {
 
-    func calculate(_ item: StreamCellItem, maxWidth: CGFloat) -> Promise<CGFloat> {
-        let (promise, resolve, _) = Promise<CGFloat>.pending()
+    func calculate(_ item: StreamCellItem, maxWidth: CGFloat) -> Guarantee<CGFloat> {
+        let (promise, fulfill) = Guarantee<CGFloat>.pending()
         guard
             let user = item.jsonable as? User,
             let externalLinks = user.externalLinksList, externalLinks.count > 0
         else {
-            resolve(0)
+            fulfill(0)
             return promise
         }
 
-        resolve(ProfileLinksSizeCalculator.calculateHeight(externalLinks, maxWidth: maxWidth))
+        fulfill(ProfileLinksSizeCalculator.calculateHeight(externalLinks, maxWidth: maxWidth))
         return promise
     }
 
