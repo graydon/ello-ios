@@ -5,7 +5,7 @@
 class StreamLoadingCell: CollectionViewCell {
     static let reuseIdentifier = "StreamLoadingCell"
     struct Size {
-        static let height: CGFloat = 50
+        static let height: CGFloat = 90
     }
 
     let elloLogo = ElloLogoView(style: .loading)
