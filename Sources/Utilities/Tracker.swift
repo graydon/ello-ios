@@ -460,13 +460,28 @@ extension Tracker {
         track("related post tapped", properties: properties)
     }
 
-    func postCreated(_ post: Post) {
-        let properties = regionDetails(post.content)
+    func postIntoCommunityChosen(_ category: Category?) {
+        if let category = category {
+            track("Post into Community chosen", properties: ["category": category.id])
+        }
+        else {
+            track("Post into Community removed")
+        }
+    }
+
+    func postCreated(_ post: Post, category: Category?) {
+        var properties = regionDetails(post.content)
+        if let category = category {
+            properties["community"] = category.id
+        }
         track("Post created", properties: properties)
     }
 
-    func postEdited(_ post: Post) {
-        let properties = regionDetails(post.content)
+    func postEdited(_ post: Post, category: Category?) {
+        var properties = regionDetails(post.content)
+        if let category = category {
+            properties["community"] = category.id
+        }
         track("Post edited", properties: properties)
     }
 
