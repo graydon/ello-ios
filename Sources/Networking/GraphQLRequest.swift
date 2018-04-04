@@ -66,7 +66,8 @@ class GraphQLRequest<T>: AuthenticationEndpoint {
         }
     }
 
-    let (promise, seal) = Promise<T>.pending()
+    var prevPromise: Promise<T>?
+    var prevSeal: Resolver<T>?
 
     var requiresAnyToken: Bool = true
     var supportsAnonymousToken: Bool = true
@@ -92,6 +93,18 @@ class GraphQLRequest<T>: AuthenticationEndpoint {
     }
 
     func execute() -> Promise<T> {
+        let promise: Promise<T>
+        let seal: Resolver<T>
+        if let prevPromise = prevPromise, let prevSeal = prevSeal {
+            promise = prevPromise
+            seal = prevSeal
+        }
+        else {
+            (promise, seal) = Promise<T>.pending()
+            self.prevPromise = promise
+            self.prevSeal = seal
+        }
+
         AuthenticationManager.shared.attemptRequest(self,
             retry: { _ = self.execute() },
             proceed: { uuid in
@@ -102,18 +115,18 @@ class GraphQLRequest<T>: AuthenticationEndpoint {
                     }
                     .done { json in
                         let result = try self.parseJSON(data: json)
-                        self.seal.fulfill(result)
+                        seal.fulfill(result)
                     }
                     .catch { error in
-                        self.seal.reject(error)
+                        seal.reject(error)
                     }
             },
             cancel: {
                 let elloError = NSError(domain: ElloErrorDomain, code: 401, userInfo: [NSLocalizedFailureReasonErrorKey: "Logged Out"])
-                self.seal.reject(elloError)
+                seal.reject(elloError)
             })
 
-        return self.promise
+        return promise
     }
 
     private func sendRequest() -> Promise<(Data, Int)> {
