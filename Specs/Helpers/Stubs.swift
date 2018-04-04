@@ -75,7 +75,7 @@ extension User: Stubbable {
             user.badges = badges
         }
         else if let badgeNames = values["badges"] as? [String] {
-            user.badges = badgeNames.flatMap { Badge.lookup(slug: $0) }
+            user.badges = badgeNames.compactMap { Badge.lookup(slug: $0) }
         }
 
         if let count = values["followersCount"] as? Int {
@@ -89,7 +89,7 @@ extension User: Stubbable {
         }
 
         if let linkValues = (values["externalLinksList"] as? [[String:String]]) {
-            user.externalLinksList = linkValues.flatMap { ExternalLink.fromDict($0) }
+            user.externalLinksList = linkValues.compactMap { ExternalLink.fromDict($0) }
         }
         else if let externalLinks = (values["externalLinksList"] as? [ExternalLink]) {
             user.externalLinksList = externalLinks

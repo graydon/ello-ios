@@ -22,7 +22,7 @@ class ElloLogoView: UIView {
 
     struct Size {
         static let natural = CGSize(width: 60, height: 60)
-        static let loading = CGSize(width: 30, height: 30)
+        static let loading = CGSize(width: 60, height: 60)
     }
 
     var isLogoAnimating: Bool { return _isAnimating }
