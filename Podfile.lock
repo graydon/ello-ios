@@ -58,15 +58,7 @@ PODS:
   - PINRemoteImage/PINCache (3.0.0-beta.8):
     - PINCache (= 3.0.1-beta.4)
     - PINRemoteImage/Core
-  - PromiseKit (6.2.3):
-    - PromiseKit/CorePromise (= 6.2.3)
-    - PromiseKit/Foundation (= 6.2.3)
-    - PromiseKit/UIKit (= 6.2.3)
-  - PromiseKit/CorePromise (6.2.3)
-  - PromiseKit/Foundation (6.2.3):
-    - PromiseKit/CorePromise
-  - PromiseKit/UIKit (6.2.3):
-    - PromiseKit/CorePromise
+  - PromiseKit/CorePromise (6.2.4)
   - Quick (1.2.0)
   - Result (3.2.1)
   - SnapKit (3.1.2)
@@ -160,7 +152,7 @@ DEPENDENCIES:
   - Nimble-Snapshots (~> 4.4)
   - PINCache (from `https://github.com/ello/PINCache`, commit `78c3461`)
   - PINRemoteImage (= 3.0.0-beta.8)
-  - PromiseKit
+  - PromiseKit/CorePromise
   - Quick (~> 1.0)
   - SnapKit (from `https://github.com/ello/SnapKit`)
   - SSPullToRefresh (~> 1.2)
@@ -263,7 +255,7 @@ SPEC CHECKSUMS:
   PINCache: a89c8f609232afac77128557bd12c861844423d7
   PINOperation: ac23db44796d4a564ecf9b5ea7163510f579b71d
   PINRemoteImage: c4f9f16932840c597f32e69dd288e10e111a1929
-  PromiseKit: 62f37bb4900a9b0b7550d017e41497171d93face
+  PromiseKit: 625b1fc69944fc839503748101c5968cf54b527b
   Quick: 58d203b1c5e27fff7229c4c1ae445ad7069a7a08
   Result: 2453a22e5c5b11c0c3a478736e82cd02f763b781
   SnapKit: 66bf0e9c5e02fdb6d2a549adb845ab4440d3ccfe
@@ -275,6 +267,6 @@ SPEC CHECKSUMS:
   WebLinking: 3f71787c14a225148e8be29fe6e7c98597cbc459
   YapDatabase: 299a32de9d350d37a9ac5b0532609d87d5d2a5de
 
-PODFILE CHECKSUM: 23a17ab0650b008b48420aee6f839553b2443274
+PODFILE CHECKSUM: 6b8117b5a819a7e510662ed0142db488bb50927b
 
 COCOAPODS: 1.1.1
