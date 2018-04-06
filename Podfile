@@ -45,7 +45,7 @@ def common_pods
   else
     pod 'ElloOSSCerts', '~> 2.0'
   end
-  pod 'PromiseKit'
+  pod 'PromiseKit/CorePromise'
   pod 'MBProgressHUD', '~> 0.9.0'
   pod 'SVGKit', git: 'https://github.com/ello/SVGKit'
   pod 'FLAnimatedImage', '~> 1.0'
