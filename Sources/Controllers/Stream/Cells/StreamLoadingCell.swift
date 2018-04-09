@@ -8,7 +8,7 @@ class StreamLoadingCell: CollectionViewCell {
         static let height: CGFloat = 90
     }
 
-    let elloLogo = ElloLogoView(style: .loading)
+    let elloLogo = GradientLoadingView()
 
     override func arrange() {
         addSubview(elloLogo)

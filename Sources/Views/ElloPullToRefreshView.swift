@@ -7,8 +7,8 @@ import QuartzCore
 
 class ElloPullToRefreshView: UIView, SSPullToRefreshContentView {
 
-    lazy var elloLogo: ElloLogoView = {
-        let logo = ElloLogoView(style: .loading)
+    lazy var elloLogo: GradientLoadingView = {
+        let logo = GradientLoadingView()
         logo.alpha = 0
         logo.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
         return logo
