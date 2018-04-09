@@ -60,7 +60,7 @@ class LightboxScreen: Screen, LightboxScreenProtocol {
     private var nextURL: URL?
 
     private var isLoadingMore: Bool { return nextPageView.isLogoAnimating }
-    private let nextPageView = ElloLogoView()
+    private let nextPageView = GradientLoadingView()
     private var nextPageViewWidth: CGFloat!
     private var minX: CGFloat!
     private var maxX: CGFloat!

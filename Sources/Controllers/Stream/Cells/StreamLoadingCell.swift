@@ -5,16 +5,21 @@
 class StreamLoadingCell: CollectionViewCell {
     static let reuseIdentifier = "StreamLoadingCell"
     struct Size {
-        static let height: CGFloat = 90
+        static let topMargin: CGFloat = 50
+        static let bottomMargin: CGFloat = 15
+        static var height: CGFloat {
+            return GradientLoadingView.Size.size.height + topMargin + bottomMargin
+        }
     }
 
-    let elloLogo = ElloLogoView(style: .loading)
+    let elloLogo = GradientLoadingView()
 
     override func arrange() {
         addSubview(elloLogo)
 
         elloLogo.snp.makeConstraints { make in
-            make.center.equalTo(self)
+            make.top.equalTo(self).offset(Size.topMargin)
+            make.centerX.equalTo(self)
         }
     }
 

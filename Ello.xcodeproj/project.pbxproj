@@ -931,6 +931,8 @@
 		1DA9AA7C1C694F32000562E4 /* profile__no_sharing.json in Resources */ = {isa = PBXBuildFile; fileRef = 1DA9AA7B1C694F32000562E4 /* profile__no_sharing.json */; };
 		1DA9AA7E1C6A81AB000562E4 /* emojis.json in Resources */ = {isa = PBXBuildFile; fileRef = 1DA9AA7D1C6A81AB000562E4 /* emojis.json */; };
 		1DAA161A1F6B22E600E79CC0 /* ElloWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DAA16191F6B22E500E79CC0 /* ElloWebView.swift */; };
+		1DABC71120779F1800F7B782 /* GradientLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DABC71020779F1800F7B782 /* GradientLoadingView.swift */; };
+		1DABC7142077A02300F7B782 /* GradientLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DABC71020779F1800F7B782 /* GradientLoadingView.swift */; };
 		1DADA1661A96DC130000DDA1 /* NotificationsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DADA1651A96DC130000DDA1 /* NotificationsScreen.swift */; };
 		1DADC57A1AF449B3000DAC88 /* ElloWebBrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DADC5791AF449B3000DAC88 /* ElloWebBrowserViewController.swift */; };
 		1DB17B981AAA70B200DCF59E /* MultipartRequestBuilderSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DB17B961AAA70B200DCF59E /* MultipartRequestBuilderSpec.swift */; };
@@ -2067,6 +2069,7 @@
 		1DA9AA7B1C694F32000562E4 /* profile__no_sharing.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = profile__no_sharing.json; sourceTree = "<group>"; };
 		1DA9AA7D1C6A81AB000562E4 /* emojis.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = emojis.json; sourceTree = "<group>"; };
 		1DAA16191F6B22E500E79CC0 /* ElloWebView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ElloWebView.swift; sourceTree = "<group>"; };
+		1DABC71020779F1800F7B782 /* GradientLoadingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientLoadingView.swift; sourceTree = "<group>"; };
 		1DADA1651A96DC130000DDA1 /* NotificationsScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationsScreen.swift; sourceTree = "<group>"; };
 		1DADC5791AF449B3000DAC88 /* ElloWebBrowserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ElloWebBrowserViewController.swift; sourceTree = "<group>"; };
 		1DB17B961AAA70B200DCF59E /* MultipartRequestBuilderSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultipartRequestBuilderSpec.swift; sourceTree = "<group>"; };
@@ -3489,6 +3492,7 @@
 				767399801AA679CB00C4222C /* ElloTextView.swift */,
 				12F6AE681A4339EF00493660 /* ElloUnderlinedTextButton.swift */,
 				1DAA16191F6B22E500E79CC0 /* ElloWebView.swift */,
+				1DABC71020779F1800F7B782 /* GradientLoadingView.swift */,
 				1289F3951AF17901008A938C /* ImageLabelAnimatable.swift */,
 				1289F3911AF1468B008A938C /* ImageLabelControl.swift */,
 				1D59EF841D5CFC480029C106 /* InterpolatedLoadingView.swift */,
@@ -5215,6 +5219,7 @@
 				1D447F111F3BCA4800013384 /* ShareExtensionOverrides.swift in Sources */,
 				1D447F151F3BCAD700013384 /* ImageRegionData.swift in Sources */,
 				122B30E41C6A3FC400C1B9D8 /* Asset.swift in Sources */,
+				1DABC7142077A02300F7B782 /* GradientLoadingView.swift in Sources */,
 				1D0DF8F4202384BF00019875 /* ArtistInviteParser.swift in Sources */,
 				126F2C011C5C1D7400D22BAB /* DateExtensions.swift in Sources */,
 				1DB390D12045DC0000A1B7E7 /* SwiftyJSONExtensions.swift in Sources */,
@@ -5940,6 +5945,7 @@
 				1D7152B81D6E50CD005998FE /* LoginProtocols.swift in Sources */,
 				1DDC23391F30EB2D00E68B0E /* ArtistInviteAdminController.swift in Sources */,
 				1D06D6C41E3BAFA9004FA878 /* LoggedOutScreen.swift in Sources */,
+				1DABC71120779F1800F7B782 /* GradientLoadingView.swift in Sources */,
 				1D313F701F267FCF00953EE2 /* ArtistInviteDetailController.swift in Sources */,
 				1D313F661F264BB200953EE2 /* ArtistInviteCellSizeCalculator.swift in Sources */,
 				1DB271111F509D9F0044D475 /* CollectionViewDataSource.swift in Sources */,

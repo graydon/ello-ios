@@ -40,7 +40,7 @@ class StreamImageCell: StreamRegionableCell {
     @IBOutlet var buyButtonGreen: UIView?
     @IBOutlet var buyButtonWidthConstraint: NSLayoutConstraint?
 
-    @IBOutlet var circle: ElloLogoView!
+    @IBOutlet var circle: GradientLoadingView!
     @IBOutlet var failImage: UIImageView!
     @IBOutlet var failBackgroundView: UIView!
     @IBOutlet var leadingConstraint: NSLayoutConstraint!

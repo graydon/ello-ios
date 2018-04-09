@@ -6,7 +6,7 @@ import SnapKit
 
 
 class AppScreen: EmptyScreen {
-    private var logoImage = ElloLogoView()
+    private var logoImage = GradientLoadingView()
 
     override func arrange() {
         super.arrange()
