@@ -20,7 +20,7 @@ class AnonymousAuthenticationSpec: QuickSpec {
                 var succeeded = false
                 var failed = false
                 ElloProvider.shared.request(.availability(content: [:]))
-                    .then { _ in
+                    .done { _ in
                         succeeded = true
                     }
                     .catch { _ in
@@ -38,7 +38,7 @@ class AnonymousAuthenticationSpec: QuickSpec {
                 var succeeded = false
                 var failed = false
                 ElloProvider.shared.request(.availability(content: [:]))
-                    .then { _ in
+                    .done { _ in
                         succeeded = true
                     }
                     .catch { _ in
@@ -56,7 +56,7 @@ class AnonymousAuthenticationSpec: QuickSpec {
                 var succeeded = false
                 var failed = false
                 ElloProvider.shared.request(.following)
-                    .then { _ in
+                    .done { _ in
                         succeeded = true
                     }
                     .catch { _ in
@@ -75,7 +75,7 @@ class AnonymousAuthenticationSpec: QuickSpec {
                 var succeeded = false
                 var failed = false
                 ElloProvider.shared.request(.availability(content: [:]))
-                    .then { _ in
+                    .done { _ in
                         succeeded = true
                     }
                     .catch { _ in

@@ -7,12 +7,12 @@ import PromiseKit
 
 struct ProfileNamesSizeCalculator {
 
-    func calculate(_ item: StreamCellItem, maxWidth: CGFloat) -> Promise<CGFloat> {
-        let (promise, resolve, _) = Promise<CGFloat>.pending()
+    func calculate(_ item: StreamCellItem, maxWidth: CGFloat) -> Guarantee<CGFloat> {
+        let (promise, fulfill) = Guarantee<CGFloat>.pending()
         guard
             let user = item.jsonable as? User
         else {
-            resolve(0)
+            fulfill(0)
             return promise
         }
 
@@ -42,7 +42,7 @@ struct ProfileNamesSizeCalculator {
 
         let (height, _) = ProfileNamesView.preferredHeight(nameSize: nameSize, usernameSize: usernameSize, maxWidth: maxWidth)
         let totalHeight = height + ProfileNamesView.Size.outerMargins.tops
-        resolve(totalHeight)
+        fulfill(totalHeight)
         return promise
     }
 }

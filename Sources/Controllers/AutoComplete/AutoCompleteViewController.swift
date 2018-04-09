@@ -51,7 +51,7 @@ extension AutoCompleteViewController {
             loaded(self.dataSource.items.count)
         case .username:
             service.loadUsernameResults(match.text)
-                .then { results -> Void in
+                .done { results in
                     self.dataSource.items = results.map { AutoCompleteItem(result: $0, type: match.type, match: match) }
                     self.tableView.reloadData()
                     loaded(self.dataSource.items.count)
@@ -61,7 +61,7 @@ extension AutoCompleteViewController {
                 }
         case .location:
             service.loadLocationResults(match.text)
-                .then { results -> Void in
+                .done { results in
                     self.dataSource.items = results.map { AutoCompleteItem(result: $0, type: match.type, match: match) }
                     self.tableView.reloadData()
                     loaded(self.dataSource.items.count)

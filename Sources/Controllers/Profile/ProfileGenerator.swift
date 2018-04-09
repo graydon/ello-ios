@@ -88,13 +88,14 @@ final class ProfileGenerator: StreamGenerator {
 
         return nextPageRequest
             .execute()
-            .then { pageConfig, posts -> [JSONAble] in
+            .map { (pageConfig, posts) -> [JSONAble] in
                 self.setNextPageConfig(pageConfig)
                 return posts
             }
-            .catch { error in
+            .recover { error -> Promise<[JSONAble]> in
                 let errorConfig = PageConfig(next: nil, isLastPage: true)
                 self.destination?.setPagingConfig(responseConfig: ResponseConfig(pageConfig: errorConfig))
+                throw error
             }
     }
 
@@ -135,7 +136,7 @@ extension ProfileGenerator {
 
         // load the user with no posts
         UserService().loadUser(streamKind.endpoint)
-            .then { user -> Void in
+            .done { user in
                 guard self.loadingToken.isValidInitialPageLoadingToken(self.localToken) else { return }
 
                 self.user = user
@@ -158,7 +159,7 @@ extension ProfileGenerator {
 
         API().userPosts(username: username)
             .execute()
-            .then { pageConfig, posts -> Void in
+            .done { pageConfig, posts in
                 guard self.loadingToken.isValidInitialPageLoadingToken(self.localToken) else { return }
 
                 self.setNextPageConfig(pageConfig)
@@ -198,7 +199,7 @@ extension ProfileGenerator {
         queue.addOperation(displayPostsOperation)
 
         UserService().loadUserPosts(userParam)
-            .then { posts, responseConfig -> Void in
+            .done { posts, responseConfig in
                 guard self.loadingToken.isValidInitialPageLoadingToken(self.localToken) else { return }
 
                 self.destination?.setPagingConfig(responseConfig: responseConfig)

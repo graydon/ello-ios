@@ -89,7 +89,7 @@ extension LoginViewController: LoginScreenDelegate {
             screen.loadingHUD(visible: true)
 
             CredentialsAuthService().authenticate(email: username, password: password)
-                .then { _ -> Void in
+                .done { _ in
                     Tracker.shared.loginSuccessful()
                     self.loadCurrentUser()
                 }

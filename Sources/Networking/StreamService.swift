@@ -22,7 +22,7 @@ class StreamService {
 
     func loadStream(endpoint: ElloAPI, streamKind: StreamKind? = nil) -> Promise<StreamResponse> {
         return ElloProvider.shared.request(endpoint)
-            .then { (data, responseConfig) -> StreamResponse in
+            .map { (data, responseConfig) -> StreamResponse in
                 if let streamKind = streamKind {
                     nextTick {
                         postNotification(StreamLoadedNotifications.streamLoaded, value: streamKind)

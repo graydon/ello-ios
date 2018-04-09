@@ -97,7 +97,7 @@ class DebugAgent: AnalyticsAgent {
     private func dismiss() {
         animate {
             self.logView.frame.origin.y = -self.logView.frame.height
-        }.always {
+        }.done {
             self.logTextView.text = ""
         }
 

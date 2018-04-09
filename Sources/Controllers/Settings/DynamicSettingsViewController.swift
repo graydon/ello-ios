@@ -58,14 +58,15 @@ extension DynamicSettingsViewController: DynamicSettingCellResponder {
         }
 
         ProfileService().updateUserProfile(updatedValues)
-            .then { [weak self] user -> Void in
+            .done { [weak self] user in
                 guard let `self` = self else { return }
 
                 self.appViewController?.currentUser = user
             }
-            .always { [weak self] in
+            .ensure { [weak self] in
                 self?.screen.reload()
             }
+            .ignoreErrors()
     }
 
     func deleteAccount() {

@@ -222,7 +222,7 @@ class CategoryScreen: HomeSubviewScreen, CategoryScreenProtocol {
         elloAnimate {
             self.editCategoriesButton.frame.origin.y = editCategoriesButtonY
             self.categoryCardList.frame.origin.y = originalY
-        }.always(completion)
+        }.done(completion)
     }
 
     private func updateEditButton() {

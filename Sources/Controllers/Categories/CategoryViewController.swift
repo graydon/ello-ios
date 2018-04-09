@@ -439,10 +439,10 @@ extension CategoryViewController: PromotionalHeaderResponder {
         newCategoryIds.insert(categoryId)
         ElloHUD.showLoadingHudInView(streamViewController.view)
         ProfileService().update(categoryIds: newCategoryIds, onboarding: false)
-            .always {
+            .ensure {
                 ElloHUD.hideLoadingHudInView(self.streamViewController.view)
             }
-            .then { _ -> Void in
+            .done { _ in
                 currentUser.followedCategoryIds = newCategoryIds
                 self.appViewController?.currentUser = currentUser
             }

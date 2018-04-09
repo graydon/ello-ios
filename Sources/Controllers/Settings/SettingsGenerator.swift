@@ -17,7 +17,7 @@ class SettingsGenerator {
 
     func loadCurrentUser() {
         ProfileService().loadCurrentUser()
-            .then { user -> Void in
+            .done { user in
                 self.delegate?.currentUserReloaded(user)
             }
             .ignoreErrors
@@ -25,7 +25,7 @@ class SettingsGenerator {
 
     func loadSettings() {
         SettingsService().dynamicSettings(currentUser: currentUser)
-            .then { settingsCategories -> Void in
+            .done { settingsCategories in
                 self.delegate?.dynamicSettingsLoaded(settingsCategories)
             }
             .ignoreErrors()
@@ -33,7 +33,7 @@ class SettingsGenerator {
 
     func loadCategories() {
         CategoryService().loadCreatorCategories()
-            .then { categories -> Void in
+            .done { categories in
                 self.delegate?.categoriesLoaded(categories)
             }
             .ignoreErrors()

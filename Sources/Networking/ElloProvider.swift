@@ -42,8 +42,8 @@ class ElloProvider {
     }
 
     func request(_ target: ElloAPI) -> Promise<Response> {
-        let (promise, resolve, reject) = Promise<Response>.pending()
-        sendRequest((target, resolve: resolve, reject: reject))
+        let (promise, seal) = Promise<Response>.pending()
+        sendRequest((target, resolve: seal.fulfill, reject: seal.reject))
         return promise
     }
 

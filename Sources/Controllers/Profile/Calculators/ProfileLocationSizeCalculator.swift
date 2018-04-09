@@ -7,17 +7,17 @@ import PromiseKit
 
 struct ProfileLocationSizeCalculator {
 
-    func calculate(_ item: StreamCellItem, maxWidth: CGFloat) -> Promise<CGFloat> {
-        let (promise, resolve, _) = Promise<CGFloat>.pending()
+    func calculate(_ item: StreamCellItem, maxWidth: CGFloat) -> Guarantee<CGFloat> {
+        let (promise, fulfill) = Guarantee<CGFloat>.pending()
         guard
             let user = item.jsonable as? User,
             let location = user.location, !location.isEmpty
         else {
-            resolve(0)
+            fulfill(0)
             return promise
         }
 
-        resolve(ProfileLocationView.Size.height)
+        fulfill(ProfileLocationView.Size.height)
         return promise
     }
 }

@@ -52,7 +52,7 @@ final class NotificationsGenerator: StreamGenerator {
 
     func markAnnouncementAsRead(_ announcement: Announcement) {
         NotificationService().markAnnouncementAsRead(announcement)
-            .then { _ -> Void in
+            .done { _ in
                 self.announcements = []
             }
             .ignoreErrors()
@@ -65,7 +65,7 @@ final class NotificationsGenerator: StreamGenerator {
         }
 
         NotificationService().loadAnnouncements()
-            .then { announcement -> Void in
+            .done { announcement in
                 guard self.loadingToken.isValidInitialPageLoadingToken(self.localToken) else { return }
 
                 if let announcement = announcement {
@@ -96,7 +96,7 @@ final class NotificationsGenerator: StreamGenerator {
 
     func loadNotifications() {
         StreamService().loadStream(streamKind: streamKind)
-            .then { response -> Void in
+            .done { response in
                 guard self.loadingToken.isValidInitialPageLoadingToken(self.localToken) else { return }
 
                 switch response {
@@ -109,7 +109,7 @@ final class NotificationsGenerator: StreamGenerator {
                     self.destination?.setPagingConfig(responseConfig: responseConfig)
 
                     self.loadExtraNotificationContent(notificationActivities)
-                        .then { _ -> Void in
+                        .done { _ in
                             let notificationItems = self.parse(jsonables: notificationActivities)
                             if notificationItems.count == 0 {
                                 let noContentItem = StreamCellItem(type: .emptyStream(height: 282))
@@ -138,20 +138,21 @@ final class NotificationsGenerator: StreamGenerator {
             }
     }
 
-    private func loadExtraNotificationContent(_ notificationActivities: [Activity]) -> Promise<Void> {
-        let (promise, resolve, _) = Promise<Void>.pending()
+    private func loadExtraNotificationContent(_ notificationActivities: [Activity]) -> Guarantee<Void> {
+        let (promise, fulfill) = Guarantee<Void>.pending()
         let (afterAll, done) = afterN {
-            resolve(Void())
+            fulfill(Void())
         }
         for activity in notificationActivities {
             guard let submission = activity.subject as? ArtistInviteSubmission, submission.artistInvite == nil else { continue }
 
             let next = afterAll()
             ArtistInviteService().load(id: submission.artistInviteId)
-                .then { artistInvite -> Void in
+                .done { artistInvite in
                     ElloLinkedStore.shared.setObject(artistInvite, forKey: submission.artistInviteId, type: .artistInvitesType)
                 }
-                .always {  next() }
+                .ensure { next() }
+                .ignoreErrors()
         }
         done()
         return promise

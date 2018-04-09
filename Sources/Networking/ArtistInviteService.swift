@@ -9,7 +9,7 @@ class ArtistInviteService {
 
     func load(id: String) -> Promise<ArtistInvite> {
         return ElloProvider.shared.request(.artistInviteDetail(id: id))
-            .then { data, _ -> ArtistInvite in
+            .map { data, _ -> ArtistInvite in
                 if let artistInvite = data as? ArtistInvite {
                     return artistInvite
                 }
@@ -21,7 +21,7 @@ class ArtistInviteService {
 
     func performAction(action: ArtistInviteSubmission.Action) -> Promise<ArtistInviteSubmission> {
         return ElloProvider.shared.request(action.endpoint)
-            .then { data, _ -> ArtistInviteSubmission in
+            .map { data, _ -> ArtistInviteSubmission in
                 if let submission = data as? ArtistInviteSubmission {
                     return submission
                 }

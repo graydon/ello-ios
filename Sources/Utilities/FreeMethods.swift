@@ -49,7 +49,7 @@ class AnimationPromise {
         completionBlock = block
     }
 
-    func always(_ block: @escaping Block) {
+    func done(_ block: @escaping Block) {
         if resolved != nil {
             block()
             return

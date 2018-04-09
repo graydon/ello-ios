@@ -72,7 +72,7 @@ extension NewContentService {
         let check2 = checkForNewAnnouncements()
         let check3 = checkForNewFollowingContent()
         when(resolved: [check1, check2, check3])
-            .always {
+            .done { _ in
                 guard self.stillPolling() else { return }
                 self.restartPolling()
             }
@@ -113,7 +113,7 @@ private extension NewContentService {
         let storedDate = GroupDefaults[storedKey].date
 
         return ElloProvider.shared.request(.notificationsNewContent(createdAt: storedDate))
-            .then { response -> Void in
+            .done { response in
                 guard
                     let statusCode = response.1.statusCode,
                     statusCode == 204
@@ -128,7 +128,7 @@ private extension NewContentService {
         let storedDate = GroupDefaults[storedKey].date
 
          return ElloProvider.shared.request(.announcementsNewContent(createdAt: storedDate))
-             .then { response -> Void in
+             .done { response in
                 guard
                     let statusCode = response.1.statusCode,
                     statusCode == 204
@@ -143,7 +143,7 @@ private extension NewContentService {
         let storedDate = GroupDefaults[storedKey].date
 
         return ElloProvider.shared.request(.followingNewContent(createdAt: storedDate))
-            .then { response -> Void in
+            .done { response in
                 let responseConfig = response.1
                 if let lastModified = responseConfig.lastModified {
                     GroupDefaults[storedKey] = lastModified.toDate(HTTPDateFormatter)

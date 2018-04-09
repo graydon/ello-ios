@@ -11,7 +11,7 @@ struct PostService {
         _ postParam: String) -> Promise<Post>
     {
         return ElloProvider.shared.request(.postDetail(postParam: postParam))
-            .then { data, responseConfig -> Post in
+            .map { (data, responseConfig) -> Post in
                 guard let post = data as? Post else {
                     throw NSError.uncastableJSONAble()
                 }
@@ -37,7 +37,7 @@ struct PostService {
 
     func loadPostComments(_ postId: String) -> Promise<([ElloComment], ResponseConfig)> {
         return ElloProvider.shared.request(.postComments(postId: postId))
-            .then { (data, responseConfig) -> ([ElloComment], ResponseConfig) in
+            .map { (data, responseConfig) -> ([ElloComment], ResponseConfig) in
                 if let comments = data as? [ElloComment] {
                     Preloader().preloadImages(comments)
                     for comment in comments {
@@ -56,7 +56,7 @@ struct PostService {
 
     func loadPostLovers(_ postId: String) -> Promise<[User]> {
         return ElloProvider.shared.request(.postLovers(postId: postId))
-            .then { (data, responseConfig) -> [User] in
+            .map { (data, responseConfig) -> [User] in
                 if let users = data as? [User] {
                     Preloader().preloadImages(users)
                     return users
@@ -72,7 +72,7 @@ struct PostService {
 
     func loadPostReposters(_ postId: String) -> Promise<[User]> {
         return ElloProvider.shared.request(.postReposters(postId: postId))
-            .then { (data, responseConfig) -> [User] in
+            .map { (data, responseConfig) -> [User] in
                 if let users = data as? [User] {
                     Preloader().preloadImages(users)
                     return users
@@ -88,7 +88,7 @@ struct PostService {
 
     func loadRelatedPosts(_ postId: String)  -> Promise<[Post]> {
         return ElloProvider.shared.request(.postRelatedPosts(postId: postId))
-            .then { (data, _) -> [Post] in
+            .map { (data, _) -> [Post] in
                 if let posts = data as? [Post] {
                     Preloader().preloadImages(posts)
                     return posts
@@ -104,7 +104,7 @@ struct PostService {
 
     func loadComment(_ postId: String, commentId: String) -> Promise<ElloComment> {
         return ElloProvider.shared.request(.commentDetail(postId: postId, commentId: commentId))
-            .then { (data, _) -> ElloComment in
+            .map { (data, _) -> ElloComment in
                 guard let comment = data as? ElloComment else {
                     throw NSError.uncastableJSONAble()
                 }
@@ -116,7 +116,7 @@ struct PostService {
 
     func loadReplyAll(_ postId: String) -> Promise<[String]> {
         return ElloProvider.shared.request(.postReplyAll(postId: postId))
-            .then { (usernames, _) -> [String] in
+            .map { (usernames, _) -> [String] in
                 guard let usernames = usernames as? [Username] else {
                     throw NSError.uncastableJSONAble()
                 }
@@ -130,7 +130,7 @@ struct PostService {
 
     func deletePost(_ postId: String) -> Promise<()> {
         return ElloProvider.shared.request(.deletePost(postId: postId))
-            .then { _ -> Void in
+            .done { _ in
                 URLCache.shared.removeAllCachedResponses()
             }
     }
@@ -150,7 +150,7 @@ struct PostService {
         }
 
         return ElloProvider.shared.request(api)
-            .then { data, _ -> Post in
+            .map { data, _ -> Post in
                 if isWatching,
                     let watch = data as? Watch,
                     let post = watch.post
@@ -170,7 +170,7 @@ struct PostService {
 
     func loadMoreCommentsForPost(_ postId: String) -> Promise<[ElloComment]> {
         return ElloProvider.shared.request(.postComments(postId: postId))
-            .then { data, responseConfig -> [ElloComment] in
+            .map { data, responseConfig -> [ElloComment] in
                 if let comments: [ElloComment] = data as? [ElloComment] {
                     for comment in comments {
                         comment.loadedFromPostId = postId

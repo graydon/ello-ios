@@ -328,7 +328,7 @@ class OnboardingCreatorTypeScreen: StreamableScreen {
             self.creatorTypeContainer.frame.origin.y = creatorTypeY
             self.creatorButtonsContainer.frame.origin.y = creatorTypeY + self.creatorTypeContainer.frame.height + Size.containerOffset
             self.creatorButtonsContainer.alpha = creatorButtonsAlpha
-        }.always(completion)
+        }.done(completion)
     }
 
     func unselectAllCategories() {

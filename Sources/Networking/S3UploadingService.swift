@@ -23,17 +23,17 @@ class S3UploadingService {
     }
 
     func upload(_ image: UIImage) -> Promise<URL?> {
-        let (promise, resolve, reject) = Promise<URL?>.pending()
+        let (promise, seal) = Promise<URL?>.pending()
         inBackground {
             if let data = UIImageJPEGRepresentation(image, Globals.imageQuality) {
                 // Head back to the thread the original caller was on before heading into the service calls. I may be overthinking it.
                 nextTick {
-                    self.upload(data, contentType: "image/jpeg").then(execute: resolve).catch(execute: reject)
+                    self.upload(data, contentType: "image/jpeg").done(seal.fulfill).catch(seal.reject)
                 }
             }
             else {
                 let error = NSError(domain: ElloErrorDomain, code: 500, userInfo: [NSLocalizedFailureReasonErrorKey: InterfaceString.Error.JPEGCompress])
-                reject(error)
+                seal.reject(error)
             }
         }
         return promise
@@ -74,7 +74,7 @@ class S3UploadingService {
 
                 return ElloS3(credentials: credentials, filename: filename, data: data, contentType: contentType)
                     .start()
-                    .then { data -> URL? in
+                    .map { data -> URL? in
                         let endpoint: String = credentials.endpoint
                         let prefix: String = credentials.prefix
                         return URL(string: "\(endpoint)/\(prefix)/\(filename)")
