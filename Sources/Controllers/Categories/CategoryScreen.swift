@@ -73,10 +73,10 @@ class CategoryScreen: HomeSubviewScreen, CategoryScreenProtocol {
     private var navBarVisible = true
     private var categoryCardListTop: CGFloat {
         if navBarVisible && usage == .largeNav {
-            return ElloNavigationBar.Size.discoverLargeHeight
+            return ElloNavigationBar.Size.discoverLargeHeight - 1
         }
         else if navBarVisible {
-            return ElloNavigationBar.Size.height
+            return ElloNavigationBar.Size.height - 1
         }
         else if Globals.isIphoneX {
             return Globals.statusBarHeight
