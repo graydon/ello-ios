@@ -35,10 +35,7 @@ final class EditorialsGenerator: StreamGenerator {
             let next = afterAll()
             ElloProvider.shared.request(.custom(url: path, mimics: .categoryPosts(slug: "")))
                 .then { data, responseConfig -> Void in
-                    guard let posts = data as? [Post] else {
-                        next()
-                        return
-                    }
+                    guard let posts = data as? [Post] else { return }
                     editorial.posts = posts
                 }
                 .always {
