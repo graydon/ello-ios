@@ -23,7 +23,7 @@ class CategoryGeneratorSpec: QuickSpec {
                 category = Ello.Category.stub(["level": "meta", "slug": "recommended"])
                 subject = CategoryGenerator(
                     selection: .category(category.slug),
-                    stream: .featured,
+                    filter: .featured,
                     currentUser: currentUser,
                     destination: destination
                 )
