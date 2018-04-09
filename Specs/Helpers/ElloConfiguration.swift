@@ -19,7 +19,7 @@ class ElloConfiguration: QuickConfiguration {
 
         config.beforeSuite {
             // make sure the promise `then` blocks are run synchronously
-            // PromiseKit.conf.Q = zalgo
+            PromiseKit.conf.Q = (map: nil, return: nil)
 
             ElloLinkedStore.databaseName = "ello-test-v2.sqlite"
             Badge.badges = [
