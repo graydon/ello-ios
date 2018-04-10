@@ -83,6 +83,7 @@ struct Fragment: Equatable {
           createdAt
           summary { ...contentProps }
           author { ...authorProps }
+          artistInviteSubmission { id artistInvite { id } }
           assets { ...assetProps }
           postStats { lovesCount commentsCount viewsCount repostsCount }
           currentUserState { watching loved reposted }

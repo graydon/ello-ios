@@ -417,6 +417,7 @@ final class StreamViewController: BaseElloViewController {
 
     func clearForInitialLoad(newItems: [StreamCellItem] = []) {
         allOlderPagesLoaded = false
+        dataChangeJobs = []
         dataSource.removeAllCellItems()
         if newItems.count > 0 {
             dataSource.appendStreamCellItems(newItems)
@@ -1283,7 +1284,7 @@ extension StreamViewController {
 
     private func appendDataChange(_ change: StreamViewDataChange) -> Promise<Void> {
         let (promise, resolve, _) = Promise<Void>.pending()
-        dataChangeJobs.append((dataSource.visibleCellItems, change, promise, resolve))
+        dataChangeJobs.append((dataSource.visibleCellItems, change, promise, { resolve(()) }))
         runNextDataChangeJob()
         return promise
     }

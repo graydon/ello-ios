@@ -91,7 +91,7 @@ enum StreamKind {
 
     var showsSubmission: Bool {
         switch self {
-        case .category: return true
+        case .following, .category: return true
         default: return false
         }
     }
