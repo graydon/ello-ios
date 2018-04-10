@@ -1284,7 +1284,7 @@ extension StreamViewController {
 
     private func appendDataChange(_ change: StreamViewDataChange) -> Promise<Void> {
         let (promise, resolve, _) = Promise<Void>.pending()
-        dataChangeJobs.append((dataSource.visibleCellItems, change, promise, resolve))
+        dataChangeJobs.append((dataSource.visibleCellItems, change, promise, { resolve(()) }))
         runNextDataChangeJob()
         return promise
     }
