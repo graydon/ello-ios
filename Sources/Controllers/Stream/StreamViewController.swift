@@ -417,6 +417,7 @@ final class StreamViewController: BaseElloViewController {
 
     func clearForInitialLoad(newItems: [StreamCellItem] = []) {
         allOlderPagesLoaded = false
+        dataChangeJobs = []
         dataSource.removeAllCellItems()
         if newItems.count > 0 {
             dataSource.appendStreamCellItems(newItems)
