@@ -173,7 +173,8 @@ struct InterfaceString {
     }
 
     struct Community {
-        static let Choose: String = NSLocalizedString("Choose Community", comment: "")
+        static let Choose: String = NSLocalizedString("Choose Category", comment: "")
+        static let Search: String = NSLocalizedString("Search Categories", comment: "")
     }
 
     struct Category {
@@ -274,7 +275,7 @@ struct InterfaceString {
             return String.localizedStringWithFormat("Submit to %@", title)
         }
         static let CreatePostButton: String = NSLocalizedString("Post", comment: "")
-        static let ChooseCommunity: String = NSLocalizedString("Choose Community", comment: "")
+        static let ChooseCommunity: String = NSLocalizedString("Choose Category", comment: "")
         static let EditPostTitle: String = NSLocalizedString("Edit this post", comment: "")
         static let EditPostButton: String = NSLocalizedString("Edit Post", comment: "")
         static let EditCommentTitle: String = NSLocalizedString("Edit this comment", comment: "")

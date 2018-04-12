@@ -58,7 +58,7 @@ extension ChooseCategoryGenerator {
     }
 
     private func processCategories(_ categories: [Category]) {
-        let items = [StreamCellItem(jsonable: self.searchString, type: .search(placeholder: "Search Communities"))] + categories.map { category in
+        let items = [StreamCellItem(jsonable: self.searchString, type: .search(placeholder: InterfaceString.Community.Search))] + categories.map { category in
             let isSubscribed = currentUser?.subscribedTo(categoryId: category.id) == true
             let isSelected = self.category?.id == category.id
             return StreamCellItem(jsonable: category, type: .categoryChooseCard(isSubscribed: isSubscribed, isSelected: isSelected))
