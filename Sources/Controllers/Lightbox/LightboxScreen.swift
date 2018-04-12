@@ -347,7 +347,7 @@ class LightboxScreen: Screen, LightboxScreenProtocol {
                 self.nextPageView.stopAnimating()
                 self.enableGestures()
             }
-        }
+        }.ignoreErrors()
     }
 
     private func enableGestures() {

@@ -105,7 +105,7 @@ extension RelationshipController: RelationshipResponder {
                 }
             }
         }
-        .catch { [weak self] _ in
+        .catch { _ in
             complete(RelationshipRequestStatusWrapper(status: .failure), nil, true)
         }
     }
