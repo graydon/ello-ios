@@ -9,7 +9,6 @@ class LoginScreen: CredentialsScreen {
     struct Size {
         static let fieldsTopMargin: CGFloat = 55
         static let fieldsInnerMargin: CGFloat = 30
-        static let forgotPasswordFontSize: CGFloat = 11
     }
 
     weak var delegate: LoginScreenDelegate?
