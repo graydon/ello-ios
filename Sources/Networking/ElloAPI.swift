@@ -681,6 +681,7 @@ extension ElloAPI: Moya.TargetType {
                 "If-Modified-Since": createdAtHeader
             ]
         }
+
         return assigned
     }
 
@@ -690,7 +691,7 @@ extension ElloAPI: Moya.TargetType {
             return [
                 "client_id": APIKeys.shared.key,
                 "client_secret": APIKeys.shared.secret,
-                "grant_type": "client_credentials"
+                "grant_type": "client_credentials",
             ]
         case let .auth(email, password):
             return [
@@ -698,7 +699,7 @@ extension ElloAPI: Moya.TargetType {
                 "client_secret": APIKeys.shared.secret,
                 "email": email,
                 "password": password,
-                "grant_type": "password"
+                "grant_type": "password",
             ]
         case let .availability(content):
             return content as [String: Any]?
