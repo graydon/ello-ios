@@ -506,7 +506,6 @@ extension OmnibarViewController {
                 }
             }
             .finally {
-                log(comment: "authtoken", object: AuthToken().token)
                 postNotification(NewContentNotifications.resume, value: ())
             }
     }
