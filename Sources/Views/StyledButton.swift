@@ -288,8 +288,8 @@ extension StyledButton.Style {
 
     static let roundedBlackOutline = StyledButton.Style(
         backgroundColor: .clear, highlightedBackgroundColor: .black, selectedBackgroundColor: .black,
-        titleColor: .black, highlightedTitleColor: .white,
-        borderColor: .black, highlightedBorderColor: .black,
+        titleColor: .black, highlightedTitleColor: .white, disabledTitleColor: .greyA,
+        borderColor: .black, highlightedBorderColor: .black, disabledBorderColor: .greyA,
         cornerRadius: .rounded
         )
     static let roundedGrayOutline = StyledButton.Style(

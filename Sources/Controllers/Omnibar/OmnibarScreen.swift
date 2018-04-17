@@ -477,12 +477,13 @@ class OmnibarScreen: Screen, OmnibarScreenProtocol {
         communityButtonVisibleConstraint.set(isActivated: communityPickerVisible)
         communityButtonsStackedConstraint.set(isActivated: communityPickerVisible)
         communityButtonHiddenConstraint.set(isActivated: !communityPickerVisible)
+        currentCommunityButton.isEnabled = communityPickerEditable
         chooseCommunityButton.isEnabled = communityPickerEditable
         clearCommunityButton.isEnabled = communityPickerEditable
 
         if let chosenCategory = chosenCategory {
             chooseCommunityButton.isHidden = true
-            clearCommunityButton.isVisible = true
+            clearCommunityButton.isVisible = communityPickerEditable
             currentCommunityButton.isVisible = true
             currentCommunityButton.pin_setImage(from: chosenCategory.tileURL)
             currentCommunityLabel.text = chosenCategory.name

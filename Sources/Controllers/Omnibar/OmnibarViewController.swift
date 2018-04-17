@@ -139,8 +139,13 @@ class OmnibarViewController: BaseElloViewController {
         screen.canGoBack = canGoBack
 
         let communityPickerEditability: OmnibarScreen.CommunityPickerEditability
-        if editPost != nil {
-            communityPickerEditability = .visible
+        if let editPost = editPost {
+            if editPost.category != nil {
+                communityPickerEditability = .visible
+            }
+            else {
+                communityPickerEditability = .hidden
+            }
             screen.title = InterfaceString.Omnibar.EditPostTitle
             screen.submitTitle = InterfaceString.Omnibar.EditPostButton
             screen.isEditing = true
