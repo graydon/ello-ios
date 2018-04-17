@@ -16,15 +16,13 @@ extension ElloProvider {
             print("error: \(string)")
         }
 
-        let errorCodeType = (statusCode == nil) ? ElloErrorCode.data : ElloErrorCode.statusCode
-        let elloError = NSError.networkError(elloNetworkError, code: errorCodeType)
-
-        return elloError
+        let errorCodeType: ElloErrorCode = statusCode.map { .statusCode($0) } ?? .data
+        return NSError.networkError(elloNetworkError, code: errorCodeType)
     }
 
     static func failedToMapObjects(_ reject: ErrorBlock) {
         let jsonMappingError = ElloNetworkError(attrs: nil, code: ElloNetworkError.CodeType.unknown, detail: "Failed to map objects", messages: nil, status: nil, title: "Failed to map objects")
-        let elloError = NSError.networkError(jsonMappingError, code: ElloErrorCode.jsonMapping)
+        let elloError = NSError.networkError(jsonMappingError, code: .jsonMapping)
         reject(elloError)
     }
 }

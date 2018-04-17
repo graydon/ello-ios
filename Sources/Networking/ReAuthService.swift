@@ -62,7 +62,7 @@ class ReAuthService {
             }
         }
         else {
-            let elloError = NSError.networkError("Failed to send request", code: ElloErrorCode.networkFailure)
+            let elloError = NSError.networkError("Failed to send request", code: .networkFailure)
             failure(elloError)
         }
     }

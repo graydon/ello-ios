@@ -51,7 +51,7 @@ class ReauthenticationSpec: QuickSpec {
             }
 
             it("should reauth with token after NetworkFailure") {
-                let networkError = NSError.networkError("Failed to send request", code: ElloErrorCode.networkFailure)
+                let networkError = NSError.networkError("Failed to send request", code: .networkFailure)
                 ElloProvider.moya = ElloProvider.RecordedStubbingProvider([
                     RecordedResponse(endpoint: .following, response: .networkResponse(401, Data())),
                     RecordedResponse(endpoint: .reAuth(token: ""), response: .networkError(networkError)),

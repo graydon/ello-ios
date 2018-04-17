@@ -8,7 +8,7 @@ extension NSError {
     }
 
     static func uncastableJSONAble() -> NSError {
-        return NSError.networkError(nil, code: ElloErrorCode.jsonMapping)
+        return NSError.networkError(nil, code: .jsonMapping)
     }
 
 }
