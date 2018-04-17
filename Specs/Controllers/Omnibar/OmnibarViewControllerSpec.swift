@@ -9,7 +9,7 @@ import Nimble
 
 class OmnibarMockScreen: OmnibarScreenProtocol {
     var chosenCategory: Ello.Category?
-    var communityPickerVisible: Bool = true
+    var communityPickerEditability: OmnibarScreen.CommunityPickerEditability
     var delegate: OmnibarScreenDelegate?
     var isEditing: Bool = false
     var isComment: Bool = false

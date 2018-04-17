@@ -39,6 +39,12 @@ class OmnibarScreen: Screen, OmnibarScreenProtocol {
         return false
     }
 
+    enum CommunityPickerEditability {
+        case editable
+        case visible
+        case hidden
+    }
+
     weak var delegate: OmnibarScreenDelegate?
 
     var isComment: Bool = false {
@@ -49,7 +55,7 @@ class OmnibarScreen: Screen, OmnibarScreenProtocol {
     }
     var isEditing = false
     var isReordering = false
-    var communityPickerVisible: Bool = true {
+    var communityPickerEditability: CommunityPickerEditability = .editable {
         didSet { updateChooseCommunityButton() }
     }
     var chosenCategory: Category? {
@@ -466,9 +472,13 @@ class OmnibarScreen: Screen, OmnibarScreenProtocol {
     }
 
     private func updateChooseCommunityButton() {
+        let communityPickerVisible = communityPickerEditability != .hidden
+        let communityPickerEditable = communityPickerEditability == .editable
         communityButtonVisibleConstraint.set(isActivated: communityPickerVisible)
         communityButtonsStackedConstraint.set(isActivated: communityPickerVisible)
         communityButtonHiddenConstraint.set(isActivated: !communityPickerVisible)
+        chooseCommunityButton.isEnabled = communityPickerEditable
+        clearCommunityButton.isEnabled = communityPickerEditable
 
         if let chosenCategory = chosenCategory {
             chooseCommunityButton.isHidden = true
@@ -731,11 +741,11 @@ class OmnibarScreen: Screen, OmnibarScreenProtocol {
         }
 
         let keyboardContainerHeight: CGFloat
-        if communityPickerVisible {
-            keyboardContainerHeight = Size.keyboardContainerMargin.tops + 2 * Size.keyboardButtonSize.height + Size.keyboardContainerSpacing
+        if communityPickerEditability == .hidden {
+            keyboardContainerHeight = Size.keyboardContainerMargin.tops + Size.keyboardButtonSize.height
         }
         else {
-            keyboardContainerHeight = Size.keyboardContainerMargin.tops + Size.keyboardButtonSize.height
+            keyboardContainerHeight = Size.keyboardContainerMargin.tops + 2 * Size.keyboardButtonSize.height + Size.keyboardContainerSpacing
         }
         bottomInset += keyboardContainerHeight
 

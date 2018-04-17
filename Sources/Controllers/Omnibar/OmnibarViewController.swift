@@ -138,9 +138,9 @@ class OmnibarViewController: BaseElloViewController {
 
         screen.canGoBack = canGoBack
 
-        let communityPickerVisible: Bool
+        let communityPickerEditability: OmnibarScreen.CommunityPickerEditability
         if editPost != nil {
-            communityPickerVisible = true
+            communityPickerEditability = .visible
             screen.title = InterfaceString.Omnibar.EditPostTitle
             screen.submitTitle = InterfaceString.Omnibar.EditPostButton
             screen.isEditing = true
@@ -149,7 +149,7 @@ class OmnibarViewController: BaseElloViewController {
             }
         }
         else if editComment != nil {
-            communityPickerVisible = false
+            communityPickerEditability = .hidden
             screen.title = InterfaceString.Omnibar.EditCommentTitle
             screen.submitTitle = InterfaceString.Omnibar.EditCommentButton
             screen.isEditing = true
@@ -160,19 +160,19 @@ class OmnibarViewController: BaseElloViewController {
         else {
             let isComment: Bool
             if parentPostId != nil {
-                communityPickerVisible = false
+                communityPickerEditability = .hidden
                 screen.title = InterfaceString.Omnibar.CreateCommentTitle
                 screen.submitTitle = InterfaceString.Omnibar.CreateCommentButton
                 isComment = true
             }
             else if let artistInvite = artistInvite {
-                communityPickerVisible = false
+                communityPickerEditability = .hidden
                 screen.title = InterfaceString.Omnibar.CreateArtistInviteSubmission(title: artistInvite.title)
                 screen.submitTitle = InterfaceString.Omnibar.CreatePostButton
                 isComment = false
             }
             else {
-                communityPickerVisible = true
+                communityPickerEditability = .editable
                 screen.title = ""
                 screen.submitTitle = InterfaceString.Omnibar.CreatePostButton
                 isComment = false
@@ -203,7 +203,7 @@ class OmnibarViewController: BaseElloViewController {
             }
         }
 
-        screen.communityPickerVisible = communityPickerVisible
+        screen.communityPickerEditability = communityPickerEditability
         screen.chosenCategory = self.category
         screen.delegate = self
     }
